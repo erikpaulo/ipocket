@@ -1,0 +1,35 @@
+[
+    {
+        "id": "dashboard", 
+		"name":"Dashboard", 
+		"icon": "icon-custom-home",
+		"originalPath": "/dashboard", 	
+		"templateUrl": "modules/dashboard/views/dashboard.html",
+		"dependencies": ["modules/dashboard/controllers/index"]
+
+    },
+    {
+        "id": "account", 
+		"name":"Contas", 
+		"icon": "glyphicon glyphicon-usd",
+		"originalPath": "/account", 	
+		"templateUrl": "modules/account/views/accounts.html",
+		"dependencies": ["modules/account/controllers/account-controller", "app", "layout-form"]
+    },
+    {
+        "id": "configuration", 
+		"name":"Configurações", 
+		"icon": "glyphicon glyphicon-cog",
+		"hasSubMenu": true,
+		"items" : [
+        	{
+	    	"id": "category",
+			"name": "Categorias",
+			"originalPath": "/configuration", 	
+			"templateUrl": "modules/account/views/category.html",
+			"visible": true,
+			"dependencies": ["modules/account/controllers/category-controller", "app", "layout-form"]
+	        }      
+        ]
+    }
+]

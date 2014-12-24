@@ -1,0 +1,23 @@
+.table-bordered{
+	border-color:#E8EDF1 !important;
+}
+.table-bordered th{
+	background-color:#ecf0f2;
+   border:0 !important;
+}
+.table-bordered td{
+	 border: 1px solid #E8EDF1 !important;
+	 height: 45px;
+
+}
+.table-bordered td:first-child{
+	border-radius: 0px;
+}
+.table-bordered  td:last-child{
+	border-radius: 0px;
+}
+
+/* sobreescreve bootstrap para centralizar conteúdo no meio. */
+ .table>tbody>tr>td {    
+	vertical-align: middle;
+}

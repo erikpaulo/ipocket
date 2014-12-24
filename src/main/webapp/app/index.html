@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+<head >
+<meta charset="utf-8" />
+<link rel="shortcut icon" href="resources/img/favicon.png" type="image/png">
+<title translate="global.title">iPocket</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<meta content="" name="description" />
+<meta content="" name="author" />
+
+<meta http-equiv="cache-control" content="max-age=0" />
+<meta http-equiv="cache-control" content="no-cache" />
+<meta http-equiv="expires" content="0" />
+<meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT" />
+<meta http-equiv="pragma" content="no-cache" />
+
+<!-- BEGIN CORE CSS FRAMEWORK -->
+
+<link href="resources/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+
+
+<link href="resources/legacy/pace/pace-theme-flash.css" rel="stylesheet" type="text/css" media="screen" /> <!-- usado no load flash da aplicacao -->
+<link href="resources/legacy/font-awesome/css/font-awesome.css" rel="stylesheet" type="text/css" />   <!-- usado nos icones-->
+<!-- END CORE CSS FRAMEWORK -->
+
+<link href="resources/styles/animate.min.css" rel="stylesheet" type="text/css" />
+<link href="resources/lib/select2/select2.css" rel="stylesheet" type="text/css" />
+
+<!-- BEGIN CSS TEMPLATE -->
+<link href="resources/styles/index.css" rel="stylesheet" type="text/css" />
+<link href="resources/styles/style.css" rel="stylesheet" type="text/css" />
+<link href="resources/styles/forms.css" rel="stylesheet" type="text/css" />
+<link href="resources/styles/slider.css" rel="stylesheet" type="text/css" />
+<link href="resources/styles/form-elements.css" rel="stylesheet" type="text/css" />
+<link href="resources/styles/table.css" rel="stylesheet" type="text/css" />
+<link href="resources/styles/responsive.css" rel="stylesheet" type="text/css" />
+<link href="resources/styles/custom-icon-set.css" rel="stylesheet" type="text/css" />
+<link href="resources/styles/famfamfam-flags.css" rel="stylesheet" type="text/css" />
+<!-- END CSS TEMPLATE -->
+
+</head>
+<!-- END HEAD -->
+
+<!-- BEGIN BODY -->
+<body ng-controller="IndexController">
+	<!-- BEGIN HEADER -->
+	<div class="header navbar navbar-inverse ">
+		<!-- BEGIN TOP NAVIGATION BAR -->
+		<div class="navbar-inner">
+			<div class="header-seperation" style="display: none">
+				<ul class="nav pull-left notifcation-center" id="main-menu-toggle-wrapper" style="display: none">
+					<li class="dropdown"><a id="main-menu-toggle" href="#main-menu" class="">
+							<div class="iconset top-menu-toggle-white"></div>
+					</a></li>
+				</ul>
+				<!-- BEGIN LOGO -->
+				<a href="/"> 
+					<img class="logo" data-src="resources/images/logo2x.png" data-src-retina="resources/images/logo2x.png" width="106" height="21" />
+				</a>
+				<!-- END LOGO -->
+				<ul class="nav pull-right notifcation-center">
+					<li class="dropdown" >
+						<a href="#/home" >
+							<div class="iconset top-home"></div>
+						</a>
+					</li>					
+				</ul>
+			</div>
+			<!-- END RESPONSIVE MENU TOGGLER -->
+
+			<div class="header-quick-nav">
+				<!-- BEGIN TOP NAVIGATION MENU -->
+				<div class="pull-left">
+					<ul class="nav quick-section">
+						<li class="quicklinks"><a href="" class="" id="layout-condensed-toggle">
+								<div class="iconset top-menu-toggle-dark"></div>
+						</a></li>
+					</ul>
+					<ul class="nav quick-section">
+						<li class="quicklinks"><a href="#" class=""><div class="iconset top-reload"></div> </a></li>
+						<li class="quicklinks"><span class="h-seperate"></span></li>
+						<li class="quicklinks"><a href="#" class=""><div class="iconset top-tiles"></div></a></li>
+						<div class="input-prepend inside search-form no-boarder">
+							<span class="add-on"> <a href="#" class=""><div class="iconset top-search"></div></a></span> <input name="" type="text" class="no-boarder " placeholder="Search Dashboard"
+								style="width: 250px; height: 35px !important">
+						</div>
+					</ul>
+				</div>
+				<!-- END TOP NAVIGATION MENU -->
+
+				<!-- BEGIN CHAT TOGGLER -->
+				<div class="pull-right">
+					<div class="nav quick-section">
+						<ul id="headmenu" class="nav pull-right">
+							<li class="quicklinks" id="homemenu"><a href="#/" ><i class="fa fa-home"></i> <span translate="global.menu.home">Home</span></a></li>
+							<li class="quicklinks" id="homemenu"><a href="#/about"><i class="fa fa-info-circle"></i> <span translate="global.menu.about">About</span></a></li>
+							
+							<li class="quicklinks"><span class="h-seperate"></span></li>
+							
+							<li class="quicklinks" ng-show="!currentUser.authenticated"> 
+								<a dclass="pull-right" href="#/login"> 
+									<i class="fa fa-sign-in"></i> Login
+								</a>							
+							</li>
+							<li class="quicklinks" ng-show="currentUser.authenticated"> 
+								<a data-toggle="dropdown" class="dropdown-toggle pull-right" href=""> 
+									<i class="{{adminMenu.iconClass}}"></i> {{adminMenu.title}} <b class="caret"></b>
+								</a>							
+
+								<ul class="dropdown-menu  pull-right" role="menu" aria-labelledby="dropdownMenu">
+									<li ng-repeat="item in adminMenu.items" class="{{item.dividerClass}}">
+										<a ng-show="item.menu" href="{{item.url}}" ><i class="{{item.iconClass}}"></i>{{item.title}}</a>
+									</li>
+									<li>
+										<a href="signout" ng-click="logout()"><i class="fa fa-sign-out"></i>Logout</a>
+									</li>										
+								</ul>
+							</li>
+							<li class="quicklinks">
+									<div class="profile-pic" ng-show="currentUser.authenticated">
+										<img alt="" data-src="{{currentUser.imageUrl}}" data-src-retina="{{currentUser.imageUrl}}" width="35" height="35" />
+									</div>
+							</li>
+							<li class="quicklinks"><span class="h-seperate"></span></li>
+							
+	                        <li class="quicklinks" >
+	                            <a data-toggle="dropdown" class="dropdown-toggle pull-right" href="">
+	                                <span>
+	                                    <span class="glyphicon glyphicon-flag"></span>
+	                                    <span class="hidden-tablet" translate="global.menu.language">Language</span>
+	                                    <b class="caret"></b>
+	                                </span>
+	                            </a>
+	                            <ul class="dropdown-menu">
+	                                <li active-menu="en">
+	                                    <a href="" ng-click="changeLanguage(&apos;en&apos;)">
+	                                    	<span class="famfamfam-flag-gb"></span>&nbsp;<span translate="global.language.en">English</span>
+										</a>
+	                                </li>
+	                                <li active-menu="br">
+	                                    <a href="" ng-click="changeLanguage(&apos;br&apos;)">
+	                                    	<span class="famfamfam-flag-br"></span>&nbsp;<span translate="global.language.br">French</span>
+                                    	</a>
+	                                </li>
+	                            </ul>
+	                        </li>														
+						</ul>
+					</div>	
+
+				</div>
+				<!-- END CHAT TOGGLER -->
+
+			</div>
+			<!-- END TOP NAVIGATION MENU -->
+		</div>
+		<!-- END TOP NAVIGATION BAR -->
+	</div>
+	<!-- END HEADER -->
+
+	<!-- BEGIN CONTAINER -->
+	<div class="page-container row">
+		<!-- BEGIN SIDEBAR -->
+		<div class="page-sidebar mini" id="main-menu">
+			<!-- BEGIN MINI-PROFILE -->
+			<div class="user-info-wrapper" ng-show="currentUser.authenticated">
+				<div class="profile-wrapper" >
+					<img data-src="{{currentUser.imageUrl}}" data-src-retina="{{currentUser.imageUrl}}" width="69" height="69" />
+				</div>
+				<div class="user-info">
+					<div class="greeting">Bem vindo</div>
+					<div class="username">{{currentUser.displayName}}</div>
+				</div>
+			</div>
+			<!-- END MINI-PROFILE -->
+
+			<!-- BEGIN SIDEBAR MENU -->
+			<p class="menu-title">
+				MENU <span class="pull-right"><a href="javascript:;"><i class="fa fa-refresh"></i></a></span>
+			</p>
+			<ul>
+				<li class="start" ng-class="{active: appContext.modules[module.id]}" ng-repeat="module in modules | hasPermission:currentUser">
+					<a id="menu-{{module.id}} " href="{{module.originalPath != undefined ? '#' + module.originalPath : 'javascript:;'}}"  ng-click="handleMenuClick($event, module.id)"> 
+						<i class="{{module.icon}}" ></i> 
+						<span class="title">{{module.name}}</span> 
+						<span ng-class="{selected: appContext.modules[module.id]}"></span> 
+						<!-- <span class="badge badge-important pull-right">5</span> -->
+					</a>
+					<ul class="sub-menu" ng-show="module.items != undefined" style="display: none;">
+						<li ng-repeat="item in module.items | filter:{ visible:true }">
+							<a id="submenu-{{item.id}}" class="item-menu" ng-click="handleSubMenuClick($event, item.id)" href="#{{item.originalPath}}">{{item.name}}</a>
+						</li>
+					</ul>					
+				</li>
+			</ul>
+
+			<a href="#" class="scrollup to-edge">Scroll</a>
+			<div class="clearfix"></div>
+			<!-- END SIDEBAR MENU -->
+		</div>
+
+		<!-- END SIDEBAR -->
+
+		<!-- BEGIN PAGE CONTAINER-->
+		<div class="page-content condensed">
+			<div class="clearfix"></div>
+
+			<div ng-view></div>
+
+			<!-- END PAGE -->
+		</div>
+	</div>
+
+	<!-- END CONTAINER -->
+
+	<script type="text/javascript" src="resources/lib/requirejs/require.js" data-main="system/main.js"></script>	
+
+</body>
+</html>

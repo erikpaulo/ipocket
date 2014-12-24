@@ -1,0 +1,14 @@
+<section ng-controller="HomeViewController">
+<div class="content">
+	<div class="row">
+
+		<div class="post" ng-show="currentUser.authenticated">
+			<p translate="global.title">Usuário já está autenticado!!!!</p>
+		</div>
+
+		<div class="post" ng-show="!currentUser.authenticated">
+			<h1>Usuário não autenticado. Autentique-se para ter acesso as funcionalidades do sistema!!!!</h1>
+		</div>
+	</div>
+</div>    
+</section>

@@ -1,0 +1,84 @@
+<link href="resources/lib/angular-xeditable/dist/css/xeditable.css" rel="stylesheet" type="text/css" />
+
+<section ng-controller="CategoryController">
+	<div class="content">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="grid simple ">
+					<div class="grid-title">
+						<h3>
+							Gerenciamento de <span class="semi-bold">Categorias</span>
+						</h3>
+					</div>
+					<div class="grid-body">
+						<div class="row">
+							<div class="col-md-10">
+
+								<table class="table table-bordered no-more-tables" style="margin-top: 30px" ng-show="categories.length == 0">
+									<tr>
+										<td>Não existem categorias cadastradas no sistema.</td>
+									</tr>
+								</table>
+								<table class="table table-bordered no-more-tables" style="margin-top: 30px" ng-show="categories.length > 0">
+									<thead>
+										<tr>
+											<th style="width: 30%">Categoria</th>
+											<th style="width: 34%">SubCategoria</th>
+											<th class="text-center" style="width: 10%">Custo Fixo</th>
+											<th class="text-center" style="width: 10%">Natureza</th>
+											<th class="text-center" style="width: 16%">Controles</th>
+										</tr>
+									</thead>
+									<tr ng-repeat="category in categories">
+										<td>
+											<span editable-text="category.id" e-type="hidden" e-name="id" e-form="rowform" e-required ng-show="false" shown="false">
+												{{ category.id || '-' }} 
+											</span>
+											<!-- editable username (text with validation) --> 
+											<span editable-text="category.name" e-name="name" e-form="rowform" e-ng-required>
+												{{ category.name || '-' }} 
+											</span>
+										</td>
+										<td>
+											<!-- editable username (text with validation) --> 
+											<span editable-text="category.subCategoryName" e-name="subCategoryName" e-form="rowform" e-required>
+												{{ category.subCategoryName || '-' }} 
+											</span>
+										</td>
+										<td class="text-center" >
+											<!-- editable status (select-local) --> 
+											<span editable-select="category.fixedCost" e-name="fixedCost" e-form="rowform" e-ng-options="fc.value as fc.text for fc in fixedCosts"> 
+												{{showFixedCost(category) }} 
+											</span>
+										</td>
+										<td class="text-center; vertical-align: middle" >
+											<!-- editable group (select-local) --> 
+											<span editable-select="category.kind" e-name="kind"	e-form="rowform" e-ng-options="k.value as k.text for k in kinds"> 
+												{{showKind(category)}} 
+											</span>
+										</td>
+										<td style="white-space: nowrap;text-align: center;">
+											<!-- form -->
+											<form editable-form name="rowform"	onbeforesave="saveCategory($data, $index)" oncancel="cancel($index)" ng-show="rowform.$visible" class="form-buttons form-inline" shown="inserted == category">
+												<button type="submit" ng-disabled="rowform.$waiting" class="btn btn-primary btn-sm btn-small">salvar</button>
+												<button type="button" ng-disabled="rowform.$waiting" ng-click="rowform.$cancel()" class="btn btn-default btn-sm btn-small">cancelar</button>
+											</form>
+											<div class="buttons" ng-show="!rowform.$visible">
+												<button class="btn btn-primary btn-sm btn-small" ng-click="rowform.$show()">editar</button>
+												<button class="btn btn-danger btn-sm btn-small" ng-click="removeCategory($index)">deletar</button>
+											</div>
+										</td>
+									</tr>
+								</table>
+
+								<button class="btn btn-default" ng-click="addCategory()">Add
+									row</button>
+
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>

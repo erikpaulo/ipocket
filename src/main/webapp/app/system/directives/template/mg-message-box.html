@@ -1,0 +1,6 @@
+
+<div class="alert" ng-class="item.style" ng-repeat="item in handler.getErrors()">
+	<!-- data-dismiss="alert" -->
+	<button class="close" ng-click="handler.removeError($index)" ng-show="enableRemove"/>
+	{{item.message}}
+</div>

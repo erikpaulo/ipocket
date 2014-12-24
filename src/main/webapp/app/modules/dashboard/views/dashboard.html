@@ -1,0 +1,56 @@
+<!-- CALENDAR LIBS BEGIN -->
+<link href="resources/legacy/fullcalendar/fullcalendar.css" rel="stylesheet" type="text/css" media="screen" />
+<link href="resources/legacy/qtip/jquery.qtip.css" rel="stylesheet" type="text/css" media="screen" />
+<!-- CALENDAR LIBS END -->
+
+<section ng-controller="DashboardController">
+
+<div class="content">  
+	<div class="page-title">
+		<h3>Dashboard </h3>
+	</div>
+	<div id="container">
+		<div class="row">	
+          <div class="col-md-8 tiles white no-padding">
+            <div class="tiles-body">
+              <div id='calendar'></div>
+            </div>
+          </div>
+
+		<div class="col-md-4">
+				<div class="row">
+					<div class="col-md-12 col-sm-6 spacing-bottom">				
+						<div class="widget">
+							<div class="widget-title dark">
+								<div class="pull-left ">									
+									<button class="btn  btn-dark  btn-small" type="button"><i class="icon-plus"></i></button>
+								</div>
+								Próximos Eventos Críticos
+								<div class="controller">								
+									<a href="javascript:;" class="reload"></a>
+									<a href="javascript:;" class="remove"></a>									
+								</div>
+							</div>
+							<div class="widget-body">	
+								<div class="col-md-12">
+									<input type="text" ng-model="searchString" placeholder="Enter your search terms" class="form-control dark" id="date">
+								</div>													
+								<br>
+								<!-- Render elements for every entry in the itens array from rest response -->
+								
+								<div class="row-fluid" ng-repeat="i in items | filter:searchString">
+									<div class="checkbox check-success 	">
+										<input type="checkbox" value="1" ng-checked=i.critical id="chk_todo{{i.id}}" class="todo-list">
+										<label for="chk_todo{{i.id}}">{{i.title}} ({{i.title}}) </label>
+									</div>
+								</div>
+							</div>
+						</div>			
+					</div>				
+				</div>
+			</div>
+		</div> 
+	</div>
+</div> 
+
+</section>

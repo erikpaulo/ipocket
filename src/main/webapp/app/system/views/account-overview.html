@@ -1,0 +1,145 @@
+<link href="resources/styles/forms.css" rel="stylesheet" type="text/css"/>
+
+<section ng-controller="AccountController">
+
+<div class="content">
+
+	<mg-content-header business-component='Usuário' story-name='Configurações'></mg-content-header>
+	
+	<div message-box handler="messageHandler" enable-remove="true" style="margin-bottom: 10px"></div>
+
+	<div class="row">
+		<div class="col-md-3">
+			<img ng-src="{{myAccount.imageUrl}}" class="img img-portrait" /> <br /> 
+			<span ng-show="myAccount.admin" class="badge badge-important">ADMIN</span> 
+			<span ng-show="myAccount.trustedAccount" class="label label-success">Trusted</span> 
+			<span ng-show="myAccount.accountLocked" class="label label-warning">Locked</span>
+		</div>
+		
+		<div class="col-md-9">
+		
+			<div class="form-group">
+				<div class="grid simple">
+					<!-- form para visualização -->
+					<div class="grid-body no-border" style="overflow: hidden;" ng-hide="editAccount" > <br> 
+						<!-- Linha 01 -->
+						<div class="row">
+							<div class="col-md-2">
+								<label class="form-label pull-right">Nome:</label>
+							</div>
+							<div class="col-md-10 controls">
+								<input type="text" name="myAccount.email" class="form-control" ng-model="myAccount.displayName" disabled="disabled">
+							</div>
+						</div>						
+						
+						<div class="row">
+							<div class="col-md-2">
+								<label class="form-label pull-right">Email:</label>
+							</div>
+							<div class="col-md-10 controls">
+								<input type="text" name="myAccount.email" class="form-control" ng-model="myAccount.email" disabled="disabled">
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-md-2">
+								<label class="form-label pull-right">Web Site:</label>
+							</div>
+							<div class="col-md-10 controls">
+								<a href="{{myAccount.webSite | ExternalURL}}" target="_blank">{{myAccount.webSite}}</a>
+							</div>
+						</div>
+						
+						<div class="form-actions">  
+							<div class="pull-right">
+							  <button type="submit" class="btn btn-success btn-cons" ng-click= "enableEdit()" ><i class="icon-ok"></i> Editar</button>
+							</div>
+						</div>						
+					</div>
+					
+					<!-- form para editação -->
+					<div class="grid-body no-border" style="overflow: hidden;" ng-show="editAccount" > <br>
+						<!-- Linha 01 -->
+						<div class="row">
+							<div class="col-md-2">
+								<label class="form-label pull-right">Nome:</label>
+							</div>
+							<div class="col-md-10 controls">
+								<input type="text" name="myAccount.email" class="form-control" ng-model="editAccount.displayName">
+							</div>
+						</div>						
+						
+						<div class="row">
+							<div class="col-md-2">
+								<label class="form-label pull-right">Email:</label>
+							</div>
+							<div class="col-md-10 controls">
+								<input type="text" name="myAccount.email" class="form-control" ng-model="editAccount.email">
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-md-2">
+								<label class="form-label pull-right">Web Site:</label>
+							</div>
+							<div class="col-md-10 controls">
+								<input type="text" name="myAccount.webSite" class="form-control" ng-model="editAccount.webSite">
+							</div>
+						</div>
+						
+						<div class="form-actions">  
+							<div class="pull-right">
+							  <button type="button" class="btn btn-white btn-cons" ng-click="cancelEdit()">Cancelar</button>							
+							  <button type="submit" class="btn btn-success btn-cons" ng-click= "updateProfile()" ><i class="icon-ok"></i> Salvar</button>
+							</div>
+						</div>						
+					</div>					
+				</div>
+			</div>
+			
+		</div>		
+
+	</div>
+
+	<hr />
+	<h2>Integração Google</h2>
+	<div class="alert alert-error" ng-show="duplicateConnectionError">
+		<button type="button" class="close" data-dismiss="alert">&times;</button>
+		<p>You have other account that already connected to it!</p>
+		<p>
+			Please <a href="/signout"><i class="icon-signout"></i> Sign out</a> and sign in again with other social account.
+		</p>
+	</div>
+
+ 	<div>
+		<table class="table table-striped table-bordered bootstrap-datatable">
+			<tbody>
+				<tr>
+					<td><a rel="tooltip" title="Google+" class="sb no-shadow googleplus"></a></td>
+					<td>
+						<div ng-show="!myAccount.socialConnections['google']">
+							<form action="connect/google" method="POST">
+								<input type="hidden" name="scope" value="https://www.googleapis.com/auth/userinfo.profile" />
+								<button type="submit" class="btn">
+									<i class="icon-google-plus"></i> Connect with Google
+								</button>
+							</form>
+						</div>
+						<div ng-show="myAccount.socialConnections['google']">
+							<a href="{{myAccount.socialConnections['google'].profileUrl}}" target="_blank"> <img ng-src="{{myAccount.socialConnections['google'].imageUrl}}"
+								class="img dashboard-member-activity-avatar" /> {{myAccount.socialConnections['google'].displayName}}
+							</a>
+							<div class="comment-toolbar">
+								<button ng-click="useSocialImage('google')">
+									<i class="icon-google-plus-sign"></i> Use Google+ Image
+								</button>
+							</div>
+						</div>
+
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+</section>

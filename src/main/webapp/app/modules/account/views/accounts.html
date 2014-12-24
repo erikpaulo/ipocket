@@ -1,0 +1,72 @@
+<section ng-controller="AccountController">
+	<div class="content">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="grid simple ">
+					<div class="grid-title">
+						<h3>
+							Gerenciamento de <span class="semi-bold">Contas</span>
+						</h3>
+						<div class="tools">
+							<button ng-click="insert()" type="button" class="btn btn-info btn-cons">
+								<i class="fa fa-paste"></i> Novo
+							</button>
+						</div>
+					</div>
+					<div class="grid-body">
+						<div class="row">
+							<div class="col-md-7">
+								<div ng-repeat="accountType in accountAggregation">
+									<h4>
+										Conta<span class="semi-bold"> {{accountType.name}}</span>
+									</h4>
+									<div class="color-bands red"></div>
+									<br>
+									<table class="table table-hover table-no-header">
+										<tbody>
+											<tr ng-repeat="account in accountType.accounts">
+												<td>{{account.name}}</td>
+												<td style="text-align: right;">R$ 9.043,99</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+							<div class="col-md-1"></div>
+							<div class="col-md-4">
+								<div class="grid solid" style="margin-top: 25px">
+									<div class="grid-body light-grey">
+										<h3>
+											Resumo
+											<!-- <span class="semi-bold">Resumo</span> -->
+										</h3>
+										<table class="table table-no-header">
+											<tbody>
+												<tr ng-repeat="accountType in accountAggregation">
+													<td>Conta {{accountType.name}}</td>
+													<td style="text-align: right;">{{accountType.total | currency:"R$ ": 2}}</td>
+												</tr>
+											</tbody>
+										</table>
+										<table class="table table-no-border">
+											<tbody>
+												<tr>
+													<td><h4>
+															<span class="semi-bold">Total Geral</span>
+														</h4></td>
+													<td style="text-align: right;"><h4>
+															<span class="semi-bold">R$ 11.704,33</span>
+														</h4></td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>

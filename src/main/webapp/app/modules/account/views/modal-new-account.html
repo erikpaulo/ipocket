@@ -1,0 +1,91 @@
+<!-- BEGIN PAGE LEVEL STYLES -->
+<link href="resources/lib/hint.css/hint.min.css" rel="stylesheet"
+	type="text/css" />
+<link href="resources/styles/forms.css" rel="stylesheet" type="text/css" />
+<!-- END PAGE LEVEL STYLESE -->
+<div class="content">
+
+	<div class="page-title">
+		<div class="modaltitle">
+			<h3>
+				Nova <span class="semi-bold">Conta</span>
+			</h3>
+		</div>
+	</div>
+
+	<div message-box handler="messageHandler" enable-remove="true"
+		style="margin-bottom: 10px"></div>
+
+	<div class="form-group">
+		<div class="grid simple">
+			<div class="grid-body no-border"
+				style="overflow: hidden; display: block;">
+				<br>
+				<form name="form_new_account" novalidate="novalidate">
+
+					<!-- Linha 01-->
+					<div class="row form-row">
+						<div class="col-md-2">
+							<label class="form-label">Agência</label>
+							<div class="controls">
+								<input type="text" name="account.branch"
+									ng-model="account.branch" class="form-control"
+									ng-required="false" ng-class="" mg-validation-alert>
+							</div>
+						</div>
+						<div class="col-md-2">
+							<label class="form-label">Número</label>
+							<div class="controls">
+								<input type="text" name="account.number"
+									ng-model="account.number" class="form-control"
+									ng-required="false" ng-class="" mg-validation-alert>
+							</div>
+						</div>
+						<div class="col-md-3">
+							<label class="form-label">Tipo</label> <select
+								ui-select2="{minimumResultsForSearch: -1}" name="account.type"
+								ng-model="account.type" class="select2 form-control"
+								data-placeholder="Selecione" ng-required="true" ng-class="" mg-validation-alert>
+								<option value=""></option>
+								<option value="CH">Corrente</option>
+								<option value="CR">Crédito</option>
+								<option value="SA">Poupança</option>
+								<option value="IN">Investimento</option>
+							</select>
+						</div>
+						<div class="col-md-3">
+							<label class="form-label">Saldo Inicial</label>
+							<div class="controls">
+								<input type="text" name="account.startBalance"
+									ng-model="account.startBalance" class="form-control"
+									ng-required="true" ng-class="" mg-validation-alert>
+							</div>
+						</div>
+					</div>
+
+					<!-- Linha 02 -->
+					<div class="row form-row">
+						<div class="col-md-10">
+							<label class="form-label">Nome</label>
+							<div class="controls">
+								<input type="text" name="account.name" ng-model="account.name"
+									class="form-control" ng-required="true" ng-class=""
+									mg-validation-alert>
+							</div>
+						</div>
+					</div>
+					<div class="form-actions">
+						<div class="pull-right">
+							<button type="button" class="btn btn-white btn-cons"
+								ng-click="cancel()">Cancelar</button>
+							<button type="submit" class="btn btn-success btn-cons"
+								ng-click="ok(form_new_account)">
+								<i class="icon-ok"></i> Incluir
+							</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>

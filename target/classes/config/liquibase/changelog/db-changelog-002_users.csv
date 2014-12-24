@@ -1,0 +1,3 @@
+id;account_locked;display_name;email;image_url;password;trusted_account;web_site
+10;false;Administrator;admin@system.com;resources/images/avatar.jpg;admin;true;null
+11;false;User;user@system.com;resources/images/avatar.jpg;user;true;null

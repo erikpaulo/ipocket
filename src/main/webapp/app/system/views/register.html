@@ -1,0 +1,53 @@
+<section ng-controller="AuthController">
+	<link href="resources/styles/login.css" rel="stylesheet" type="text/css" />
+
+	<div class="content error-body no-top">
+		<!-- Display messagens from error-handler.js -->
+		<div message-box handler="messageHandler" enable-remove="true" style="margin-bottom: 10px"></div>
+
+		<div class="container">
+			<div class="row login-container column-seperation">
+				<div class="col-md-5 col-md-offset-1">
+					<h2>Cadastre-se</h2>
+					<p>
+						Você pode cadastrar o seu usuário utilizando o formulário ao lado. <br> Caso já possua um usuário, <a href="#/login"><b>conecte-se agora!</b></a> ..
+					</p>
+				</div>
+				<div class="col-md-5 ">
+				<form name="registerForm" ng-submit="register()" novalidate>
+					<div class="row">
+						<div class="form-group col-md-10">
+							<label class="form-label">Nome*</label>
+							<div class="controls">
+									<input id="displayName" name="displayName" ng-model="displayName" type="text" class="form-control" ng-class  mg-validation-alert required/>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="form-group col-md-10">
+							<label class="form-label">Email*</label>
+							<div class="controls">
+									<input id="email" name="email" ng-model="email" type="email" class="form-control" ng-class mg-validation-alert mg-validation-message="Email informado não é válido" required/>
+							</div>
+						</div>
+					</div>
+					
+					<div class="row">
+						<div class="form-group col-md-10">
+							<label class="form-label">Senha*</label>
+							<div class="controls">
+									<input id="password" name="password" ng-model="password" type="password" class="form-control" ng-class  mg-validation-alert required mg-validation-message="Campo senha é obrigatório"/>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-10">
+							<button class="btn btn-primary btn-cons pull-right" type="submit">Cadastrar</button>
+						</div>
+					</div>
+				</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>

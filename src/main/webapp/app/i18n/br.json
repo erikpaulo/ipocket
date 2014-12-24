@@ -1,0 +1,38 @@
+{
+    "global": {
+        "title": "Needs - Sua Plataforma de Colaboracao",
+        "menu": {
+            "home": "Principal",
+            "about": "Sobre",
+            "account": {
+                "main": "Account",
+                "settings": "Settings",
+                "password": "Password",
+                "sessions": "Sessions",
+                "tracker": "User tracker",
+                "metrics": "Metrics",
+                "logs": "Logs",
+                "audits": "Audits",
+                "login": "Authenticate",
+                "logout": "Log out",
+                "apidocs": "API",
+                "register": "Register"
+            },
+            "admin": "Administração",
+            "language": "Idioma"
+        },
+        "language": {
+            "br": "Brasil",
+            "en": "Inglês"
+        }
+    },
+    "logs": {
+        "title": "Logs",
+        "nbloggers": "Existem {{ total }} contextos de log.",
+        "filter": "Filtro",
+        "table": {
+            "name": "Nome",
+            "level": "Nível"
+        }
+    }    
+}

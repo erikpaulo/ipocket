@@ -1,0 +1,64 @@
+<!-- BEGIN PAGE LEVEL STYLES -->
+<link href="resources/lib/hint.css/hint.min.css" rel="stylesheet" type="text/css" />
+<link href="resources/styles/forms.css" rel="stylesheet" type="text/css" />
+<!-- END PAGE LEVEL STYLESE -->
+
+<section ng-controller="AuthController">
+	<link href="resources/styles/login.css" rel="stylesheet" type="text/css" />
+
+	<div class="content error-body no-top">
+		<!-- Display messagens from error-handler.js -->
+		<div message-box handler="messageHandler" enable-remove="true" style="margin-bottom: 10px"></div>
+
+		<div class="container">
+			<div class="row login-container column-seperation">
+				<div class="col-md-5 col-md-offset-1">
+					<h2>Login</h2>
+					<p>
+						Você pode utilizar o Google ou o seu email para se conectar no sistema.<br> Caso não possua um usuário, <a href="#/register"><b>crie um agora!</b>...</a>
+					</p>
+					<br>
+					<button class="btn btn-block btn-gplus col-md-8" type="button" ng-click="go('signin/google?scope=https://www.googleapis.com/auth/userinfo.profile')">
+						<div class="pull-left">
+							<i class="fa fa-google-plus"></i>
+						</div>
+						<span class="bold">Entrar com Google</span>
+					</button>
+				</div>
+				<div class="col-md-5 ">
+				<form name="loginForm" ng-submit="login()" novalidate>
+					<div class="row">
+						<div class="form-group col-md-10">
+							<label class="form-label">Email*</label>
+							<div class="controls">
+								<input id="email" name="email" ng-model="email" type="email" class="form-control" ng-class mg-validation-alert mg-validation-message="Email informado não é válido" required/>
+							</div>
+						</div>
+					</div>
+					
+					<div class="row">
+						<div class="form-group col-md-10">
+							<label class="form-label">Senha*</label>
+							<div class="controls">
+								<input id="password" name="password" ng-model="password" type="password" class="form-control" ng-class  mg-validation-alert required mg-validation-message="Campo senha é obrigatório"/>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="control-group  col-md-10">
+							<div class="checkbox checkbox check-success">
+								<input type="checkbox" id="checkbox1" ng-model="rememberMe"> <label for="checkbox1">Lembrar meu login </label>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-10">
+							<button class="btn btn-primary btn-cons pull-right" type="submit" >Login</button>
+						</div>
+					</div>
+				</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
