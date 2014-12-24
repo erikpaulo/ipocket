@@ -1,0 +1,11 @@
+/target
+
+.classpath
+
+.project
+
+*.prefs
+
+target/classes/META-INF/maven/com.softb/ipocket/pom.properties
+
+target/tomcat/work/Tomcat/localhost/ipocket/SESSIONS.ser
