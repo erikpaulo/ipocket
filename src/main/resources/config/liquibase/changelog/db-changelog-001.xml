@@ -26,7 +26,7 @@
 			referencedColumnNames="id" referencedTableName="user_account" />
 
 		<createTable tableName="CATEGORY">
-			<column name="ID" type="integer" />
+			<column name="ID" type="identity" />
 			<column name="NAME" type="varchar(255)" />
 			<column name="SUBCATEGORY_NAME" type="varchar(255)" />
 			<column name="FIXED_COST" type="varchar(1)" />
