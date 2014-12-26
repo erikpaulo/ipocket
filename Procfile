@@ -1,1 +1,1 @@
-web:    java -cp target/classes/* Application
+web: java -Dserver.port=$PORT -jar target/ipocket-0.0.1.jar
