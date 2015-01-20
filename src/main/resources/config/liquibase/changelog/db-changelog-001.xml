@@ -95,7 +95,7 @@
 
 
 		<createTable tableName="ACCOUNT_ENTRY">
-			<column name="ID" type="identity" />
+			<column name="ID" type="integer" />
 			<column name="ACCOUNT_ID" type="integer" />
 			<column name="DESC" type="varchar(255)" />
 			<column name="CATEGORY_ID" type="integer" />
@@ -104,6 +104,8 @@
 			<column name="AMOUNT" type="decimal" />
 			<column name="USER_ID" type="integer" />
 		</createTable>
+		<addPrimaryKey columnNames="ID" tableName="ACCOUNT_ENTRY" />
+		<addAutoIncrement catalogName="iPocket"	columnDataType="integer" columnName="ID" incrementBy="1" schemaName="public" startWith="16" tableName="ACCOUNT_ENTRY" />
 		<addForeignKeyConstraint baseColumnNames="ACCOUNT_ID" baseTableName="ACCOUNT_ENTRY" constraintName="ACCOUNT_ENTRY_ACCOUNT_ID_FK" referencedColumnNames="ID" referencedTableName="ACCOUNT" />
 		<addForeignKeyConstraint baseColumnNames="USER_ID" baseTableName="ACCOUNT_ENTRY" constraintName="ACCOUNT_ENTRY_USER_ID_FK" referencedColumnNames="id" referencedTableName="user_account" />
 		<addForeignKeyConstraint baseColumnNames="CATEGORY_ID" baseTableName="ACCOUNT_ENTRY" constraintName="ACCOUNT_ENTRY_CATEGORY_ID_FK" referencedColumnNames="id" referencedTableName="CATEGORY" />
