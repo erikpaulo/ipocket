@@ -81,13 +81,14 @@
 
 
 		<createTable tableName="CATEGORY">
-			<column name="ID" type="identity" />
+			<column name="ID" type="integer" />
 			<column name="NAME" type="varchar(255)" />
 			<column name="SUBCATEGORY_NAME" type="varchar(255)" />
 			<column name="FIXED_COST" type="varchar(1)" />
 			<column name="KIND" type="varchar(255)" />
 			<column name="USER_ID" type="integer" />
 		</createTable>
+		<addPrimaryKey columnNames="ID" tableName="CATEGORY" />
 		<addAutoIncrement catalogName="iPocket"	columnDataType="integer" columnName="ID" incrementBy="1" schemaName="public" startWith="16" tableName="CATEGORY" />
 		<addForeignKeyConstraint baseColumnNames="USER_ID"	baseTableName="CATEGORY" constraintName="CATEGORY_USER_ID_FK" referencedColumnNames="id" referencedTableName="user_account" />
 		<addUniqueConstraint columnNames="USER_ID,NAME,SUBCATEGORY_NAME" tableName="CATEGORY" />
