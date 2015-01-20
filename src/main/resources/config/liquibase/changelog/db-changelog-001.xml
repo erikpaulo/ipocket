@@ -15,112 +15,112 @@
 		<addAutoIncrement catalogName="iPocket"	columnDataType="integer" columnName="id" incrementBy="1" schemaName="public" startWith="1" tableName="remember_me_token" />
 
 
-		<createTable tableName="user_account">
-			<column name="id" type="integer"/>
-			<column name="account_locked" type="boolean"/>
-			<column name="display_name" type="varchar(255)"/>
-			<column name="email" type="varchar(255)"/>
-			<column name="image_url" type="varchar(255)"/>
-			<column name="password" type="varchar(64)"/>
-			<column name="trusted_account" type="boolean"/>
-			<column name="web_site" type="varchar(255)"/>
-		</createTable>
-		<addPrimaryKey columnNames="id" tableName="user_account" />
-		<addAutoIncrement catalogName="iPocket"	columnDataType="integer" columnName="id" incrementBy="1" schemaName="public" startWith="100" tableName="user_account" />
-		<addUniqueConstraint columnNames="email" tableName="user_account"/>
+<!-- 		<createTable tableName="user_account"> -->
+<!-- 			<column name="id" type="integer"/> -->
+<!-- 			<column name="account_locked" type="boolean"/> -->
+<!-- 			<column name="display_name" type="varchar(255)"/> -->
+<!-- 			<column name="email" type="varchar(255)"/> -->
+<!-- 			<column name="image_url" type="varchar(255)"/> -->
+<!-- 			<column name="password" type="varchar(64)"/> -->
+<!-- 			<column name="trusted_account" type="boolean"/> -->
+<!-- 			<column name="web_site" type="varchar(255)"/> -->
+<!-- 		</createTable> -->
+<!-- 		<addPrimaryKey columnNames="id" tableName="user_account" /> -->
+<!-- 		<addAutoIncrement catalogName="iPocket"	columnDataType="integer" columnName="id" incrementBy="1" schemaName="public" startWith="100" tableName="user_account" /> -->
+<!-- 		<addUniqueConstraint columnNames="email" tableName="user_account"/> -->
 
 
-		<createTable tableName="user_social_connection">
-			<column name="id" type="integer"/>
-			<column name="access_token" type="varchar(255)"/>
-			<column name="display_name" type="varchar(255)"/>
-			<column name="expire_time" type="bigint"/>
-			<column name="image_url" type="varchar(255)"/>
-			<column name="profile_url" type="varchar(255)"/>
-			<column name="provider_id" type="varchar(255)"/>
-			<column name="provider_user_id" type="varchar(255)"/>
-			<column name="rank" type="integer"/>
-			<column name="refresh_token" type="varchar(255)"/>
-			<column name="secret" type="varchar(255)"/>
-			<column name="user_id" type="varchar(255)"/>
-		</createTable>
-		<addPrimaryKey columnNames="id" tableName="user_social_connection" />
-		<addAutoIncrement catalogName="iPocket"	columnDataType="integer" columnName="id" incrementBy="1" schemaName="public" startWith="1" tableName="user_social_connection" />
+<!-- 		<createTable tableName="user_social_connection"> -->
+<!-- 			<column name="id" type="integer"/> -->
+<!-- 			<column name="access_token" type="varchar(255)"/> -->
+<!-- 			<column name="display_name" type="varchar(255)"/> -->
+<!-- 			<column name="expire_time" type="bigint"/> -->
+<!-- 			<column name="image_url" type="varchar(255)"/> -->
+<!-- 			<column name="profile_url" type="varchar(255)"/> -->
+<!-- 			<column name="provider_id" type="varchar(255)"/> -->
+<!-- 			<column name="provider_user_id" type="varchar(255)"/> -->
+<!-- 			<column name="rank" type="integer"/> -->
+<!-- 			<column name="refresh_token" type="varchar(255)"/> -->
+<!-- 			<column name="secret" type="varchar(255)"/> -->
+<!-- 			<column name="user_id" type="varchar(255)"/> -->
+<!-- 		</createTable> -->
+<!-- 		<addPrimaryKey columnNames="id" tableName="user_social_connection" /> -->
+<!-- 		<addAutoIncrement catalogName="iPocket"	columnDataType="integer" columnName="id" incrementBy="1" schemaName="public" startWith="1" tableName="user_social_connection" /> -->
 
 
-    	<createTable tableName="user_role">
-    		<column name="user_id" type="integer"/>
-    		<column name="role" type="varchar(255)"/>
-    	</createTable>
-    	<addPrimaryKey columnNames="user_id, role" tableName="user_role"/>
-        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="user_role" constraintName="user_role_fk" referencedColumnNames="id" referencedTableName="user_account"/>
+<!--     	<createTable tableName="user_role"> -->
+<!--     		<column name="user_id" type="integer"/> -->
+<!--     		<column name="role" type="varchar(255)"/> -->
+<!--     	</createTable> -->
+<!--     	<addPrimaryKey columnNames="user_id, role" tableName="user_role"/> -->
+<!--         <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="user_role" constraintName="user_role_fk" referencedColumnNames="id" referencedTableName="user_account"/> -->
     	
-        <loadData encoding="UTF-8"
-                  file="config/liquibase/changelog/db-changelog-002_users.csv"
-                  separator=";"
-                  tableName="user_account"/>
+<!--         <loadData encoding="UTF-8" -->
+<!--                   file="config/liquibase/changelog/db-changelog-002_users.csv" -->
+<!--                   separator=";" -->
+<!--                   tableName="user_account"/> -->
                   
-        <loadData encoding="UTF-8" 
-                  file="config/liquibase/changelog/db-changelog-002_roles.csv"
-                  separator=";"
-                  tableName="user_role"/>
+<!--         <loadData encoding="UTF-8"  -->
+<!--                   file="config/liquibase/changelog/db-changelog-002_roles.csv" -->
+<!--                   separator=";" -->
+<!--                   tableName="user_role"/> -->
 
 
-		<createTable tableName="ACCOUNT">
-			<column name="ID" type="integer" />
-			<column name="NAME" type="varchar(255)" />
-			<column name="TYPE" type="varchar(255)" />
-			<column name="USER_ID" type="integer" />
-			<column name="BRANCH" type="varchar(255)" />
-			<column name="NUMBER" type="varchar(255)" />
-			<column name="START_BALANCE" type="decimal" />
-		</createTable>
-		<addPrimaryKey columnNames="ID" tableName="ACCOUNT" />
-		<addAutoIncrement catalogName="iPocket" columnDataType="integer" columnName="ID" incrementBy="1" schemaName="public" startWith="6" tableName="ACCOUNT" />
-		<addForeignKeyConstraint baseColumnNames="USER_ID" baseTableName="ACCOUNT" constraintName="ACCOUNT_USER_ID_FK" referencedColumnNames="id" referencedTableName="user_account" />
+<!-- 		<createTable tableName="ACCOUNT"> -->
+<!-- 			<column name="ID" type="integer" /> -->
+<!-- 			<column name="NAME" type="varchar(255)" /> -->
+<!-- 			<column name="TYPE" type="varchar(255)" /> -->
+<!-- 			<column name="USER_ID" type="integer" /> -->
+<!-- 			<column name="BRANCH" type="varchar(255)" /> -->
+<!-- 			<column name="NUMBER" type="varchar(255)" /> -->
+<!-- 			<column name="START_BALANCE" type="decimal" /> -->
+<!-- 		</createTable> -->
+<!-- 		<addPrimaryKey columnNames="ID" tableName="ACCOUNT" /> -->
+<!-- 		<addAutoIncrement catalogName="iPocket" columnDataType="integer" columnName="ID" incrementBy="1" schemaName="public" startWith="6" tableName="ACCOUNT" /> -->
+<!-- 		<addForeignKeyConstraint baseColumnNames="USER_ID" baseTableName="ACCOUNT" constraintName="ACCOUNT_USER_ID_FK" referencedColumnNames="id" referencedTableName="user_account" /> -->
 
 
-		<createTable tableName="CATEGORY">
-			<column name="ID" type="integer" />
-			<column name="NAME" type="varchar(255)" />
-			<column name="SUBCATEGORY_NAME" type="varchar(255)" />
-			<column name="FIXED_COST" type="varchar(1)" />
-			<column name="KIND" type="varchar(255)" />
-			<column name="USER_ID" type="integer" />
-		</createTable>
-		<addPrimaryKey columnNames="ID" tableName="CATEGORY" />
-		<addAutoIncrement catalogName="iPocket"	columnDataType="integer" columnName="ID" incrementBy="1" schemaName="public" startWith="16" tableName="CATEGORY" />
-		<addForeignKeyConstraint baseColumnNames="USER_ID"	baseTableName="CATEGORY" constraintName="CATEGORY_USER_ID_FK" referencedColumnNames="id" referencedTableName="user_account" />
-		<addUniqueConstraint columnNames="USER_ID,NAME,SUBCATEGORY_NAME" tableName="CATEGORY" />
+<!-- 		<createTable tableName="CATEGORY"> -->
+<!-- 			<column name="ID" type="integer" /> -->
+<!-- 			<column name="NAME" type="varchar(255)" /> -->
+<!-- 			<column name="SUBCATEGORY_NAME" type="varchar(255)" /> -->
+<!-- 			<column name="FIXED_COST" type="varchar(1)" /> -->
+<!-- 			<column name="KIND" type="varchar(255)" /> -->
+<!-- 			<column name="USER_ID" type="integer" /> -->
+<!-- 		</createTable> -->
+<!-- 		<addPrimaryKey columnNames="ID" tableName="CATEGORY" /> -->
+<!-- 		<addAutoIncrement catalogName="iPocket"	columnDataType="integer" columnName="ID" incrementBy="1" schemaName="public" startWith="16" tableName="CATEGORY" /> -->
+<!-- 		<addForeignKeyConstraint baseColumnNames="USER_ID"	baseTableName="CATEGORY" constraintName="CATEGORY_USER_ID_FK" referencedColumnNames="id" referencedTableName="user_account" /> -->
+<!-- 		<addUniqueConstraint columnNames="USER_ID,NAME,SUBCATEGORY_NAME" tableName="CATEGORY" /> -->
 
 
-		<createTable tableName="ACCOUNT_ENTRY">
-			<column name="ID" type="integer" />
-			<column name="ACCOUNT_ID" type="integer" />
-			<column name="DESC" type="varchar(255)" />
-			<column name="CATEGORY_ID" type="integer" />
-			<column name="DATE" type="date" />
-			<column name="RECONCILED" type="varchar(1)" />
-			<column name="AMOUNT" type="decimal" />
-			<column name="USER_ID" type="integer" />
-		</createTable>
-		<addPrimaryKey columnNames="ID" tableName="ACCOUNT_ENTRY" />
-		<addAutoIncrement catalogName="iPocket"	columnDataType="integer" columnName="ID" incrementBy="1" schemaName="public" startWith="16" tableName="ACCOUNT_ENTRY" />
-		<addForeignKeyConstraint baseColumnNames="ACCOUNT_ID" baseTableName="ACCOUNT_ENTRY" constraintName="ACCOUNT_ENTRY_ACCOUNT_ID_FK" referencedColumnNames="ID" referencedTableName="ACCOUNT" />
-		<addForeignKeyConstraint baseColumnNames="USER_ID" baseTableName="ACCOUNT_ENTRY" constraintName="ACCOUNT_ENTRY_USER_ID_FK" referencedColumnNames="id" referencedTableName="user_account" />
-		<addForeignKeyConstraint baseColumnNames="CATEGORY_ID" baseTableName="ACCOUNT_ENTRY" constraintName="ACCOUNT_ENTRY_CATEGORY_ID_FK" referencedColumnNames="id" referencedTableName="CATEGORY" />
+<!-- 		<createTable tableName="ACCOUNT_ENTRY"> -->
+<!-- 			<column name="ID" type="integer" /> -->
+<!-- 			<column name="ACCOUNT_ID" type="integer" /> -->
+<!-- 			<column name="DESC" type="varchar(255)" /> -->
+<!-- 			<column name="CATEGORY_ID" type="integer" /> -->
+<!-- 			<column name="DATE" type="date" /> -->
+<!-- 			<column name="RECONCILED" type="varchar(1)" /> -->
+<!-- 			<column name="AMOUNT" type="decimal" /> -->
+<!-- 			<column name="USER_ID" type="integer" /> -->
+<!-- 		</createTable> -->
+<!-- 		<addPrimaryKey columnNames="ID" tableName="ACCOUNT_ENTRY" /> -->
+<!-- 		<addAutoIncrement catalogName="iPocket"	columnDataType="integer" columnName="ID" incrementBy="1" schemaName="public" startWith="16" tableName="ACCOUNT_ENTRY" /> -->
+<!-- 		<addForeignKeyConstraint baseColumnNames="ACCOUNT_ID" baseTableName="ACCOUNT_ENTRY" constraintName="ACCOUNT_ENTRY_ACCOUNT_ID_FK" referencedColumnNames="ID" referencedTableName="ACCOUNT" /> -->
+<!-- 		<addForeignKeyConstraint baseColumnNames="USER_ID" baseTableName="ACCOUNT_ENTRY" constraintName="ACCOUNT_ENTRY_USER_ID_FK" referencedColumnNames="id" referencedTableName="user_account" /> -->
+<!-- 		<addForeignKeyConstraint baseColumnNames="CATEGORY_ID" baseTableName="ACCOUNT_ENTRY" constraintName="ACCOUNT_ENTRY_CATEGORY_ID_FK" referencedColumnNames="id" referencedTableName="CATEGORY" /> -->
 
-		<loadData encoding="UTF-8"
-			file="config/liquibase/changelog/db-initialload_account.csv"
-			separator=";" tableName="ACCOUNT" />
+<!-- 		<loadData encoding="UTF-8" -->
+<!-- 			file="config/liquibase/changelog/db-initialload_account.csv" -->
+<!-- 			separator=";" tableName="ACCOUNT" /> -->
 
-		<loadData encoding="UTF-8"
-			file="config/liquibase/changelog/db-initialload_category.csv"
-			separator=";" tableName="CATEGORY" />
+<!-- 		<loadData encoding="UTF-8" -->
+<!-- 			file="config/liquibase/changelog/db-initialload_category.csv" -->
+<!-- 			separator=";" tableName="CATEGORY" /> -->
 			
-		<loadData encoding="UTF-8"
-			file="config/liquibase/changelog/db-initialload_account_entry.csv"
-			separator=";" tableName="ACCOUNT_ENTRY" />
+<!-- 		<loadData encoding="UTF-8" -->
+<!-- 			file="config/liquibase/changelog/db-initialload_account_entry.csv" -->
+<!-- 			separator=";" tableName="ACCOUNT_ENTRY" /> -->
 
 	</changeSet>
 
