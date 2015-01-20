@@ -13,12 +13,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.codahale.metrics.annotation.Timed;
 import com.softb.system.security.model.UserAccount;
 import com.softb.system.security.service.UserAccountService;
 import com.softb.system.security.web.resource.AuthenticationResource;
-import com.softb.system.security.web.resource.UserResource;
 import com.softb.system.security.web.resource.RegisterResource;
+import com.softb.system.security.web.resource.UserResource;
 
 /**
  * RESTful Service para o usuário logado no Spring Security.
@@ -58,7 +57,7 @@ public class SignInController {
 	 */
 	@RequestMapping(value = "authenticate", method = RequestMethod.POST)
 	@ResponseBody
-	@Timed
+//	@Timed
 	public UserResource authenticate(@RequestBody AuthenticationResource user) {
 		logger.debug("==>REST: /rest/user/authenticate");
 		
@@ -70,7 +69,7 @@ public class SignInController {
 	
 	@RequestMapping(value = "register", method = RequestMethod.POST)
 	@ResponseBody
-	@Timed
+//	@Timed
 	public UserResource register(@RequestBody RegisterResource user) {
 		logger.debug("==>REST: /public/user/register");
 		
@@ -89,7 +88,7 @@ public class SignInController {
 	
 	@RequestMapping(value = "current", method = RequestMethod.GET)
 	@ResponseBody
-	@Timed
+//	@Timed
 	public UserResource getCurrentUser() {
 		logger.debug("==>REST: /public/user/current");
 		

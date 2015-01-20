@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.LoggerContext;
 
-import com.codahale.metrics.annotation.Timed;
 import com.softb.system.logging.web.resource.LoggerResource;
 
 /**
@@ -25,7 +24,7 @@ import com.softb.system.logging.web.resource.LoggerResource;
 public class LoggerController {
 
     @RequestMapping(method = RequestMethod.GET, produces = "application/json")
-    @Timed
+//    @Timed
     public List<LoggerResource> getList() {
         LoggerContext context = (LoggerContext) LoggerFactory.getILoggerFactory();
         List<LoggerResource> loggers = new ArrayList<>();
@@ -37,7 +36,7 @@ public class LoggerController {
 
     @RequestMapping(method = RequestMethod.PUT)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @Timed
+//    @Timed
     public void changeLevel(@RequestBody LoggerResource jsonLogger) {
         LoggerContext context = (LoggerContext) LoggerFactory.getILoggerFactory();
         context.getLogger(jsonLogger.getName()).setLevel(Level.valueOf(jsonLogger.getLevel()));

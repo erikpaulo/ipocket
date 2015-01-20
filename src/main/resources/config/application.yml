@@ -32,7 +32,7 @@ spring:
         cacheSeconds: 1    
 
 metrics:
-    jmx.enabled: true
+    jmx.enabled: false
     elasticsearch:
         enabled: false
         host: localhost

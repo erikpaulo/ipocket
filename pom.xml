@@ -25,7 +25,7 @@
 		
         <liquibase-slf4j.version>1.2.1</liquibase-slf4j.version>
         <swagger-springmvc.version>0.8.2</swagger-springmvc.version>
-        <metrics-spring.version>3.0.0</metrics-spring.version>
+<!--         <metrics-spring.version>3.0.0</metrics-spring.version> -->
 	</properties>	
 	
 	<dependencies>	

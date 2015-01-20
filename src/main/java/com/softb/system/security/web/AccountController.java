@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import com.codahale.metrics.annotation.Timed;
 import com.softb.system.security.model.UserAccount;
 import com.softb.system.security.model.UserSocialConnection;
 import com.softb.system.security.repository.UserAccountRepository;
@@ -58,7 +57,7 @@ public class AccountController {
 
     @RequestMapping(value = "overview", method = RequestMethod.GET)
     @ResponseBody
-    @Timed
+//    @Timed
     public UserAccountResource getCurrentUserAccount() {
         UserAccount currentUser = userAccountService.getCurrentUser();
         List<UserSocialConnection> connections = userSocialConnectionRepository.findByUserId(currentUser.getUserId());
@@ -67,7 +66,7 @@ public class AccountController {
 
     @RequestMapping(value = "profile", method = RequestMethod.GET)
     @ResponseBody
-    @Timed
+//    @Timed
     public UserAccountResource getProfile() {
         UserAccount currentUser = userAccountService.getCurrentUser();
         return UserAccountResource.transferForProfileUpdate(currentUser);
@@ -75,7 +74,7 @@ public class AccountController {
 
     @RequestMapping(value = "profile", method = RequestMethod.PUT)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @Timed
+//    @Timed
     public void updateProfile(@RequestBody UserAccountResource profile) {
         UserAccount currentUser = userAccountService.getCurrentUser();
         currentUser.updateProfile(profile.getDisplayName(), profile.getEmail(), profile.getWebSite());
@@ -84,7 +83,7 @@ public class AccountController {
 
     @RequestMapping(value = "useSocialImage", method = RequestMethod.PUT)
     @ResponseBody
-    @Timed
+//    @Timed
     public UserAccountResource useSocialImage(@RequestParam("provider") String provider) {
         UserAccount currentUser = userAccountService.getCurrentUser();
         List<UserSocialConnection> connections = userSocialConnectionRepository.findByUserId(currentUser.getUserId());
