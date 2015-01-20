@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+	<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+	<head >
+	<meta charset="utf-8" />
+	<link rel="shortcut icon" href="resources/img/favicon.png" type="image/png">
+	<title translate="global.title">iPocket</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	<meta content="" name="description" />
+	<meta content="" name="author" />
+	
+	<meta http-equiv="cache-control" content="max-age=0" />
+	<meta http-equiv="cache-control" content="no-cache" />
+	<meta http-equiv="expires" content="0" />
+	<meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT" />
+	<meta http-equiv="pragma" content="no-cache" />
+	
+	<!-- BEGIN CORE CSS FRAMEWORK -->
+	
+	<link href="resources/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+	
+	
+	<link href="resources/legacy/pace/pace-theme-flash.css" rel="stylesheet" type="text/css" media="screen" /> <!-- usado no load flash da aplicacao -->
+	<link href="resources/legacy/font-awesome/css/font-awesome.css" rel="stylesheet" type="text/css" />   <!-- usado nos icones-->
+	<!-- END CORE CSS FRAMEWORK -->
+	
+	<link href="resources/styles/animate.min.css" rel="stylesheet" type="text/css" />
+	<link href="resources/lib/select2/select2.css" rel="stylesheet" type="text/css" />
+	
+	<!-- BEGIN CSS TEMPLATE -->
+	<link href="resources/styles/index.css" rel="stylesheet" type="text/css" />
+	<link href="resources/styles/style.css" rel="stylesheet" type="text/css" />
+	<link href="resources/styles/forms.css" rel="stylesheet" type="text/css" />
+	<link href="resources/styles/slider.css" rel="stylesheet" type="text/css" />
+	<link href="resources/styles/form-elements.css" rel="stylesheet" type="text/css" />
+	<link href="resources/styles/table.css" rel="stylesheet" type="text/css" />
+	<link href="resources/styles/responsive.css" rel="stylesheet" type="text/css" />
+	<link href="resources/styles/menu.css" rel="stylesheet" type="text/css" />
+	<link href="resources/styles/custom-icon-set.css" rel="stylesheet" type="text/css" />
+	<link href="resources/styles/famfamfam-flags.css" rel="stylesheet" type="text/css" />
+	<link href="resources/lib/angular-ui-grid/ui-grid.css" rel="stylesheet" type="text/css" />
+	<!-- END CSS TEMPLATE -->
+	
+	</head>
+	<!-- END HEAD -->
+	
+	<body ng-controller="IndexController" class="horizontal-menu  pace-done breakpoint-1024">
+		<div class="pace  pace-inactive">
+			<div class="pace-progress" data-progress-text="100%" data-progress="99" style="width: 100%;">
+	  			<div class="pace-progress-inner"></div>
+			</div>
+			<div class="pace-activity"></div>
+		</div>
+	
+		<!-- BEGIN HEADER -->
+		<div class="header navbar navbar-inverse "> 
+	 		<!-- BEGIN TOP NAVIGATION BAR -->
+	  		<div class="navbar-inner">
+				<div class="header-seperation"> 
+					<ul class="nav pull-left notifcation-center" id="main-menu-toggle-wrapper" style="display: none;">	
+			 			<li class="dropdown"> 
+			 				<a id="horizontal-menu-toggle" href="#" class=""> 
+			 					<div class="iconset top-menu-toggle-white"></div> 
+			 				</a> 
+			 			</li>		 
+					</ul>
+	      
+	      			<!-- BEGIN LOGO -->	
+	      			<a href="index.html">
+	      				<img src="assets/img/logo.png" class="logo" alt="" data-src="assets/img/logo.png" data-src-retina="assets/img/logo2x.png" width="106" height="21">
+	      			</a>
+	      			<!-- END LOGO --> 
+	      
+	      			<ul class="nav pull-right notifcation-center">	
+	        			<li class="dropdown" id="header_task_bar"> 
+	        				<a href="index.html" class="dropdown-toggle active" data-toggle=""> 
+	        					<div class="iconset top-home"></div> 
+	        				</a> 
+	        			</li>
+	        			<li class="dropdown" id="header_inbox_bar" style="display: block;"> 
+	        				<a href="email.html" class="dropdown-toggle"> 
+	        					<div class="iconset top-messages"></div>  
+	        					<span class="badge animated bounceIn" id="msgs-badge">2</span> 
+	        				</a>
+	        			</li>
+						<li class="dropdown" id="portrait-chat-toggler" style="display: none;"> 
+							<a href="#sidr" class="chat-menu-toggle"> 
+								<div class="iconset top-chat-white "></div> 
+							</a> 
+						</li>        
+	      			</ul>
+	      		</div>
+	      		<!-- END RESPONSIVE MENU TOGGLER --> 
+	      
+	      		<!-- BEGIN TOP NAVIGATION MENU -->
+	      		<div class="header-quick-nav container text-center"> 
+		  			<div class="pull-left"> 	
+	        			<ul class="nav quick-section">
+	        				<li class="quicklinks"> 
+	        					<a href="#" class="">
+	            					<div class="iconset top-tiles"></div>
+	            				</a> 
+	        				</li>
+	        				<li class="quicklinks"> 
+	        					<span class="h-seperate"></span>
+	        				</li>
+	        				<li class="quicklinks"> 
+	        					<a href="#" class="">
+	            					<div class="iconset top-reload"></div>
+	            				</a> 
+	        				</li>
+							<li class="m-r-10 input-prepend inside search-form no-boarder">
+								<span class="add-on"> 
+									<span class="iconset top-search"></span>
+								</span>
+								<input name="" type="text" class="no-boarder " placeholder="Search Dashboard" style="width:250px;">
+							</li>
+			  			</ul>
+		  			</div>
+	    			<a href="index.html" class="demo-center-logo">
+	    				<img src="assets/img/logo-b.png" class="logo" alt="" data-src="assets/img/logo-b.png" data-src-retina="assets/img/logo-b2x.png" width="106" height="21">
+	    			</a>
+				 <!-- END TOP NAVIGATION MENU -->
+				 
+	      		</div> 
+	      		<!-- END TOP NAVIGATION MENU --> 
+	   
+	  		</div>
+	 		<!-- END TOP NAVIGATION BAR --> 
+		</div>
+		<!-- END HEADER -->
+		
+		<!-- BEGIN CONTAINER -->
+		<div class="page-container row-fluid">
+	
+	  		<!-- BEGIN PAGE CONTAINER-->
+	  		<div class="page-content"> 
+	  			<div class="bar" style="overflow: visible; display: block;">
+	  				<div class="container">
+	  					<div class="bar-inner">
+							<ul>
+								<li>
+									<a href="javascript:;">Whats <span class="semi-bold">new </span>
+									</a>
+								</li>
+								<li ng-class="{open: openMenu}" class="classic" ng-click="openMenu = !openMenu">
+									<a href="javascript:;">	Classic <span class="semi-bold">Menu</span> <span class="arrow"></span>
+									</a>
+									<ul class="classic">
+										<li>
+											<a href="index.html">UI Elements
+												<span class="description">Find which UI elements suits you the most.
+												</span>
+											</a>
+										</li>
+										<li>
+											<a href="index.html">Message &amp; Notifications
+												<span class="description">Alerts help to gain user attention and give...
+												</span></a>
+										</li>
+										<li>
+											<a href="index.html">Buttons
+										<span class="description">
+											Basic buttons are traditional buttons 
+											...
+										
+									</span></a>
+								</li>
+								<li>
+									<a href="index.html">Sliders
+										<span class="description">
+										Basic slider with different options use 
+										of ...
+										
+									</span></a>
+								</li>
+							</ul>
+						</li>
+						<li class="horizontal">
+							<a href="javascript:;">
+								Horizontal <span class="semi-bold">Menu</span> <span class="arrow"></span>
+							</a>
+	
+							<ul class="horizontal">
+								<div class="container">
+									<li>
+										<a href="index.html">UI Elements</a>
+									</li>
+									<li>
+										<a href="index.html">Message &amp; Notifications</a>
+									</li>
+									<li>
+										<a href="index.html">Buttons</a>
+									</li>
+									<li>
+										<a href="index.html">Sliders</a>
+									</li>
+								</div>
+							</ul>
+						</li>
+						<li class="mega">
+							<a href="javascript:;">
+								Mega <span class="semi-bold">Menu </span><span class="arrow"></span>
+							</a>
+							<div class="mega">
+								<div class="container">
+								<div class="row">
+									<div class="col-sm-3 ">
+										<div class="sub-menu-heading bold">Features UI</div>
+										<img src="assets/img/Webarch_thumb.jpg" alt="" data-src="assets/img/Webarch_thumb.jpg" data-src-retina="assets/img/Webarch_thumb_retina.jpg" height="100" width="100">
+	
+									</div>
+									<div class="col-sm-3">
+									 	<div class="sub-menu-heading bold"> UI Elements</div>
+							          <ul class="sub-menu">
+							            <li> <a href="typography.html"> Typography </a> </li>
+							            <li> <a href="messages_notifications.html"> Messages &amp; Notifications </a> </li>
+							            <li> <a href="notifications.html"> Notifications </a> </li>
+							            <li> <a href="icons.html">Icons</a> </li>
+							            <li> <a href="buttons.html">Buttons</a> </li>
+							            <li> <a href="tabs_accordian.html"> Tabs &amp; Accordions </a> </li>
+							            <li> <a href="sliders.html">Sliders</a> </li>
+							            <li class="active"> <a href="group_list.html">Group list </a> </li>
+							          </ul>
+									</div>	
+									<div class="col-sm-3">
+										<div class="sub-menu-heading bold">Layout Options</div>
+							            <ul class="sub-menu">
+							              <li> <a href="layout_options.html"> Layout Options </a> </li>
+							              <li> <a href="boxed_layout.html">Boxed Layout </a> </li>
+							              <li> <a href="boxed_layout_v2.html">Inner Boxed Layout </a> </li>
+							              <li> <a href="extended_layout.html">Extended Layout</a> </li>
+							              <li> <a href="RTL.html">RTL Layout</a> </li>
+							            </ul>
+							            <div class="sub-menu-heading bold"> Forms</div>
+							          <ul class="sub-menu">
+							            <li> <a href="form_elements.html">Form Elements </a> </li>
+							            <li> <a href="form_validations.html">Form Validations</a> </li>
+							          </ul>
+									</div>
+	
+								<div class="col-sm-3">
+									<div class="sub-menu-heading bold">Extra</div>
+						            <ul class="sub-menu">
+						              <li> <a href="layout_options.html"> Layout Options </a> </li>
+						              <li> <a href="boxed_layout.html">Boxed Layout </a> </li>
+						              <li> <a href="boxed_layout_v2.html">Inner Boxed Layout </a> </li>
+						              <li> <a href="extended_layout.html">Extended Layout</a> </li>
+						              <li> <a href="RTL.html">RTL Layout</a> </li>
+						            </ul>
+								</div>
+								</div>
+								</div>
+							</div>
+						</li>
+					</ul>
+				</div>	
+			</div>	
+		</div>	
+	   			<div class="clearfix"></div>
+			    <div class="container">  
+				    <div class="content">  
+						<div ng-view></div>
+				    </div>
+			    </div>
+	  		</div>
+		 </div>
+		<!-- END CONTAINER -->
+		
+		<!-- BEGIN CORE JS FRAMEWORK--> 
+		<script type="text/javascript" src="resources/lib/requirejs/require.js" data-main="system/main.js"></script>
+		<!-- END CORE TEMPLATE JS --> 
+	
+		<div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
+			<div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
+		</div>
+	</body>
+</html>
