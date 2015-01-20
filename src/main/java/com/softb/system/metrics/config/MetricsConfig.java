@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.bind.RelaxedPropertyResolver;
 import org.springframework.context.EnvironmentAware;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.env.Environment;
 
@@ -21,11 +20,10 @@ import com.codahale.metrics.jvm.FileDescriptorRatioGauge;
 import com.codahale.metrics.jvm.GarbageCollectorMetricSet;
 import com.codahale.metrics.jvm.MemoryUsageGaugeSet;
 import com.codahale.metrics.jvm.ThreadStatesGaugeSet;
-import com.ryantenney.metrics.spring.config.annotation.EnableMetrics;
 import com.ryantenney.metrics.spring.config.annotation.MetricsConfigurerAdapter;
 
-@Configuration
-@EnableMetrics(proxyTargetClass = true)
+//@Configuration
+//@EnableMetrics(proxyTargetClass = true)
 @Import(value={HealthIndicatorConfig.class})
 public class MetricsConfig extends MetricsConfigurerAdapter implements EnvironmentAware {
 

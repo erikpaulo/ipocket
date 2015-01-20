@@ -9,13 +9,12 @@ import javax.sql.DataSource;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.actuate.health.HealthIndicator;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
 import com.softb.system.metrics.health.DatabaseHealthCheckIndicator;
 import com.softb.system.metrics.health.HealthCheckIndicator;
 import com.softb.system.metrics.health.JavaMailHealthCheckIndicator;
 
-@Configuration
+//@Configuration
 public class HealthIndicatorConfig implements InitializingBean {
 
 
