@@ -4,43 +4,43 @@ define([], function()
         defaultRoutePath: '/',
         routes: {
             // ==== ACCOUNT MODULE ====
-            '/account': {
+            '/useraccount': {
                 templateUrl: 'system/views/account-overview.html',
                 dependencies: [
                     'system/controllers/account-controller'
                 ]
             },
-            '/account/:status': {
+            '/useraccount/:status': {
                 templateUrl: 'system/views/account-overview.html',
                 dependencies: [
                     'system/controllers/account-controller'
                 ]
             },             
-            '/tasks': {
+            '/usertasks': {
                 templateUrl: 'system/views/account-tasks.html',
                 dependencies: []
             },         
             
             // ==== ADMIN MODULE ====
-            '/admin': {
+            '/useradmin': {
                 templateUrl: 'system/views/user-list.html',
                 dependencies: [
                     'system/controllers/manage-user-controller'
                 ]
             },
-            '/logs': {
+            '/userlogs': {
                 templateUrl: 'system/views/logs.html',
                 dependencies: [
                     'system/controllers/logs-controller'
                 ]
             },
-            '/metrics': {
+            '/usermetrics': {
                 templateUrl: 'system/views/metrics.html',
                 dependencies: [
                     'system/controllers/metrics-controller'
                 ]
             },            
-            '/docs-api': {
+            '/userdocs-api': {
                 templateUrl: 'system/views/docs.html',
                 dependencies: [ ]
             }

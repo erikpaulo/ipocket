@@ -3,11 +3,12 @@ function (module) {
 	
 	module.factory('AccountResource', function($resource) {
 	    return $resource(
-	        'api/account', 
+	        'api/account/:id', 
 	        {account: '@account'}, 
 	        {
-	            listAll:	{ method : 'GET', params: {}, isArray : true },
-	            new: 		{ method : 'POST', params: {}, isArray : false }
+	            listAll:	{ method :'GET',  params: {}, isArray : true },
+	            get:		{ method :'GET',  params: {}, isArray : false },
+	            new: 		{ method :'POST', params: {}, isArray : false },
 	        }
 	    );
 	});

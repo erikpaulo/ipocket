@@ -232,84 +232,7 @@ div.DTTT_print_info p {
 	z-index: 10000 !important;
 }
 
-/************** DATATABLES CUSTOMIZATION **************/
 
-div.table-bottom{
-	display: inline-block;
-	padding: 0px;
-	float: right;
-	margin-right: 10px;
-}
-
-.pagination{
-	margin: 7px 0px !important;
-}
-
-.dataTables_length {
-	margin-top: 7px;
-	margin-left: 15px;
-}
-
-div.DTFC_LeftBodyLiner table tbody tr > td  {
-	border-right: 1px solid #eff2f3;
-}
-
-.dataTables_wrapper .pagination ul > li {
-	display:inline-block;
-	padding-left: 0px;
-}
-
-.dataTables_wrapper  .pagination ul > li:last-child > a, .dataTables_wrapper  .pagination ul > li:last-child > span{
-	margin-left:0px;
-}
-.dataTables_wrapper .pagination ul > li > a, .pagination ul > li > span {
-	border:none;
-	box-shadow:none;
-	border-radius:3px;
-	color: #6F7B8A;
-}
-
-.dataTables_wrapper .pagination ul {
-	box-shadow:none;
-	font-size: 12px;
-	padding:0;
-}
-
-.dataTables_wrapper .pagination ul > .disabled > span, .pagination ul > .disabled > a, .pagination ul > .disabled > a:hover, .pagination ul > .disabled > a:focus{
- color:#C2C6CB !important;
- opacity:0.65 !important;
- background-color: #fff !important;
-	
-}
-.dataTables_wrapper  .pagination ul > li > a{
-	padding:5px 10px;
-}
-.dataTables_wrapper  .pagination ul > .active > a, .pagination ul > .active > span {
-	background-color:#F3F6F9;
-	font-weight:600;
-}
-.dataTables_wrapper .pagination ul > li > a:hover, .pagination ul > li > a:focus, .pagination ul > .active > a, .pagination ul > .active > span{
-	background-color: #e8edf3;
- }
- .dataTables_wrapper .pagination ul > li.next > a:hover{
-  background-color: #fff;
-	color:#000;
-}
- .dataTables_wrapper .pagination ul > li.prev > a:hover{
-  background-color: #fff;
-  color:#000;
-}
-
-.dataTables_wrapper .pagination ul > li.prev.disabled > a:hover{
-  color:#C2C6CB ;
- opacity:0.65 ;
- background-color: #fff ;
-}
- .dataTables_wrapper .pagination ul > li.next.disabled > a:hover{
-  color:#C2C6CB ;
-  opacity:0.65 ;
-  background-color: #fff ;
-}
 
 /******************** DATEPICKER *******************/
 .datepicker{
@@ -2431,24 +2354,24 @@ code:hover{
 .tabs-below > .nav-tabs > .active > a, .tabs-below > .nav-tabs > .active > a:hover, .tabs-below > .nav-tabs > .active > a:focus {
     border-color: rgba(0, 0, 0, 0) #DDDDDD #DDDDDD;
 }
-.tabs-left > .nav-tabs > li, .tabs-right > .nav-tabs > li {
+.tabs-left .nav-tabs > li, .tabs-right > .nav-tabs > li {
     float: none;
 }
-.tabs-left > .nav-tabs > li > a, .tabs-right > .nav-tabs > li > a {
+.tabs-left .nav-tabs > li > a, .tabs-right > .nav-tabs > li > a {
     margin-bottom: 3px;
     margin-right: 0;
     min-width: 74px;
 }
-.tabs-left > .nav-tabs {
+.tabs-left .nav-tabs {
     border-right: 1px solid #DDDDDD;
     float: left;
-    margin-right: 19px;
+    margin-right: 0px;
 }
-.tabs-left > .nav-tabs > li > a {
+.tabs-left .nav-tabs > li > a {
     border-radius: 4px 0 0 4px;
-    margin-right: -1px;
+    margin-right: -4px;
 }
-.tabs-left > .nav-tabs > li > a:hover, .tabs-left > .nav-tabs > li > a:focus {
+.tabs-left .nav-tabs > li > a:hover, .tabs-left > .nav-tabs > li > a:focus {
     border-color: #EEEEEE #DDDDDD #EEEEEE #EEEEEE;
 }
 
@@ -2479,34 +2402,37 @@ code:hover{
 .nav-tabs{
 	margin-bottom:0px;
 	background-color:#d1dade;
+	padding: 0;
 }
 
 .nav-tabs > li > a{
 	border-radius:none;
 	border:0px;
 	padding:15px 20px;
-		color:#8e9aa2;
-		min-width:70px;
+	color:#8e9aa2;
+	min-width:70px;
+	margin-left:1px;
 		
 }
-.nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus{
+.nav-tabs li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus{
 	border-width:0px;
+	border-top-width: 1px;
 }
-.nav-tabs > .active > a, .nav-tabs > .active > a:hover, .nav-tabs > .active > a:focus{
+.nav-tabs .active > a, .nav-tabs > .active > a:hover, .nav-tabs > .active > a:focus{
 	border:0px;
 	color:#505458;
-	-webkit-border-top-left-radius: 3px;
+	-webkit-border-top-left-radius: 3px;i
 -webkit-border-top-right-radius: 3px;
 -moz-border-radius-topleft: 3px;
 -moz-border-radius-topright: 3px;
 border-top-left-radius: 3px;
 border-top-right-radius: 3px;
--webkit-box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
--moz-box-shadow:    1px 1px 2px rgba(0, 0, 0, 0.1);
-box-shadow:         1px 1px 2px rgba(0, 0, 0, 0.1);
+-webkit-box-shadow: -1px 2px 2px rgba(0, 0, 0, 0.1);
+-moz-box-shadow:    -1px 2px 2px rgba(0, 0, 0, 0.1);
+box-shadow:         -1px 2px 2px rgba(0, 0, 0, 0.1);
 }
 
-.tabs-left > .nav-tabs > li > a{
+.tabs-left .nav-tabs > li > a{
 -webkit-border-top-left-radius: 3px;
 -webkit-border-bottom-left-radius: 3px;
 -moz-border-radius-topleft: 3px;
@@ -2603,6 +2529,10 @@ border-bottom-right-radius: 3px;
 	background-color:#fff;
 	overflow:hidden;
 	margin-bottom: 18px;
+	border-right: 1px solid #DDDDDD;
+	border-bottom: 1px solid #DDDDDD;
+	border-top: 1px solid #DDDDDD;
+	
 }
 
 .tab-content > .tab-pane, .pill-content > .pill-pane{

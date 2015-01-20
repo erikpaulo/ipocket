@@ -472,16 +472,7 @@ ul.progress-list li  .progress{
 	background-color:#2a2e36;
 	color:#8b91a0;
 }
-.table > thead > tr > th{
-	border-bottom:0px;
-}
-.table th{
-	/*border-bottom: 1px solid #c9d1d8;*/
-	border-top: 1px solid #e8edf1;
-	padding: 10px 12px;
-	font-size:12px;
-	text-transform:uppercase;
-}
+
 /*** Popovers **/
 .popover{
 	border-radius:3px;

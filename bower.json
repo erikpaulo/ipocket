@@ -28,6 +28,8 @@
         "datatables-colreorder": "1.1.0", 
         "datatables-tabletools": "2.2.0",
         
+        "angular-ui-grid": "3.0.0-RC.18",
+        
         "requirejs": "2.1.11",
         "requirejs-domready": "2.0.1",
         

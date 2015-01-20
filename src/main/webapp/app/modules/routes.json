@@ -12,9 +12,20 @@
         "id": "account", 
 		"name":"Contas", 
 		"icon": "glyphicon glyphicon-usd",
-		"originalPath": "/account", 	
+		"originalPath": "/account",
 		"templateUrl": "modules/account/views/accounts.html",
-		"dependencies": ["modules/account/controllers/account-controller", "app", "layout-form"]
+		"dependencies": ["modules/account/controllers/account-controller", "app", "layout-form"],
+		"hasSubMenu": true,
+		"items" : [
+		    {
+		        "id": "accountEntry", 
+				"name":"Lançamentos", 
+				"originalPath": "/account/:accountID/entries", 	
+				"templateUrl": "modules/account/views/account-entries.html",
+				"visible": false,
+				"dependencies": ["modules/account/controllers/account-entry-controller", "app", "layout-form"]
+		    }
+		]
     },
     {
         "id": "configuration", 

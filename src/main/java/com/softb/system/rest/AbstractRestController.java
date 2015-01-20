@@ -66,7 +66,7 @@ public abstract class AbstractRestController<T, ID extends Serializable> {
 
         Map<String, Object> m = new HashMap<String, Object>();
         m.put("success", true);
-        m.put("created", created);
+        m.put("object", created);
         return m;
     }
 
@@ -88,7 +88,7 @@ public abstract class AbstractRestController<T, ID extends Serializable> {
         Map<String, Object> m = new HashMap<String, Object>();
         m.put("success", true);
         m.put("id", id);
-        m.put("updated", updated);
+        m.put("object", updated);
         return m;
     }
 
@@ -106,7 +106,7 @@ public abstract class AbstractRestController<T, ID extends Serializable> {
 	}    
 	
 	
-    private void validate(String objectName, Object validated) throws FormValidationError {
+    protected void validate(String objectName, Object validated) throws FormValidationError {
     	logger.debug("Validating object: " + validated);
 
         BeanPropertyBindingResult bindingResult = new BeanPropertyBindingResult(validated, objectName);

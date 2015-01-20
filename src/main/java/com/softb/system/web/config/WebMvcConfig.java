@@ -149,7 +149,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter implements ServletCont
 
 		public CustomObjectMapper() {
 			super();
-			setDateFormat(new SimpleDateFormat("dd/MM/yyyy"));
+			setDateFormat(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"));
 		}
 
 	}

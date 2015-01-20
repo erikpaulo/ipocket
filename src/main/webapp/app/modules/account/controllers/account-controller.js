@@ -1,43 +1,57 @@
 define(['./module', './account-resources'], function (app) {
 
-	app.controller('AccountController', ['$scope', '$http', '$log', '$modal', 'AccountResource', 'MessageHandler', 
-	                                 	function($scope, $http, $log, $modal, Account, MessageHandler) {
+	app.controller('AccountController', ['$scope', '$modal', '$location', 'AccountResource', 'MessageHandler',
+	                                 	function($scope, $modal, $location, Account, MessageHandler) {
 		
 		$scope.appContext.changeCurrentContext($scope.modules[0].id);
+		
 		$scope.account = {};
 		$scope.accountAggregation = [];
 		$scope.typeControl = [];
 		
+		
 		// Lista todas as contas já cadastradas para o uário.
 		Account.listAll(function(accounts){
-		    // A partir das contas recuperadas, agrupa todas elas por tipo de conta.
+			// A partir das contas recuperadas, agrupa todas elas por tipo de conta.
 			$scope.accountAggregation = aggregate($scope.accountAggregation, accounts, $scope.typeControl);
 		}, function(err){
-		    alert('request failed');
+			alert('Não foi possível recuperar as contas do usuário. err: '+ err);
 		});
 		
-        /**
-		 * MODAL: Permite a inserção de uma nova conta.
-		 */
-        $scope.insert = function() {
-        	MessageHandler.clear();
-        	
-        	// Abre a modal.
-    		var modalInstance = openModal($scope, $modal, ModalInstanceCtrl)
-    		modalInstance.result.then(function (account) {
-    			console.log('Gravando conta '+ account.name);
-    			
-    			// Executa a gravação da conta.
-    			Account.new(account).$promise.then(function(){
-    				$scope.account = {};
-    				$scope.accountAggregation = aggregate($scope.accountAggregation, [account], $scope.typeControl);
-    			});
-    			
-    			
-    		}, function () {
-    		});
-        }
-        
+		// Calcula a soma total de dinheiro do usuário, considerando todas as contas.
+		$scope.getTotal = function(){
+			var total = 0;
+			for (var i in $scope.accountAggregation){
+				total += $scope.accountAggregation[i].total;
+			}
+			return total;
+		}
+		
+		// Aciona o detalhamento da conta, recuperando todos os lançamentos realizados ali.
+		$scope.detail = function (account){
+			$location.path('/account/'+ account.id +'/entries');
+		};
+				
+		// Insere uma nova conta no sistema a partir dos dados informados na Modal.
+		$scope.save = function() {
+			
+			// Abre a modal.
+			var modalInstance = openModal($scope, $modal, ModalInstanceCtrl)
+			modalInstance.result.then(function (account) {
+				console.log('Gravando conta '+ account.name);
+				
+				// Executa a gravação da conta.
+				account.balance = 0;
+				Account.new(account).$promise.then(function(data){
+					$scope.accountAggregation = aggregate($scope.accountAggregation, [data.object], $scope.typeControl);
+				}, function(err){
+					console.log('Erro na gravação da conta. err: '+ err);
+				});
+			});
+			$scope.account = {};
+		}
+		
+        // Abre a modal.
         function openModal($scope, $modal, ModalInstanceCtrl){
         	
     		var modalInstance = $modal.open({
@@ -83,7 +97,6 @@ define(['./module', './account-resources'], function (app) {
     			}
     		}
         }
-		
 	}]);
 });
 
@@ -111,4 +124,23 @@ function aggregate(accountAggregation, accounts, typeControl){
     }
     
     return accountAggregation;
+}
+
+/**
+ * Atualiza direto na referência, o saldo total das contas de acordo com os
+ * valores dos lançamentos de cada uma delas.
+ * @param accounts Contas que terão suas referências atualizadas com o saldo
+ * @returns null
+ */
+function updateBalance(accounts){
+	var totalBalance = 0;
+	
+	// Atualiza o saldo após o lançamento em questão.
+	for(var a=0;a<accounts.length;a++){
+		var balance = 0;
+		for (var e=0;e<accounts[a].entries.length;e++){
+			balance += accounts[a].entries[e].amount;
+		}
+		accounts[a].balance = accounts[a].startBalance + balance;
+	}
 }

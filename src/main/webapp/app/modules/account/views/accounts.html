@@ -1,15 +1,17 @@
 <section ng-controller="AccountController">
+
 	<div class="content">
 		<div class="row">
 			<div class="col-md-12">
-				<div class="grid simple ">
+				<div class="grid simple" ng-show="!AccountCtrl.accountSelected">
 					<div class="grid-title">
 						<h3>
 							Gerenciamento de <span class="semi-bold">Contas</span>
 						</h3>
 						<div class="tools">
-							<button ng-click="insert()" type="button" class="btn btn-info btn-cons">
-								<i class="fa fa-paste"></i> Novo
+							<button ng-click="save()" type="button"	class="btn btn-xs btn-cons ">
+								<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+								 Novo
 							</button>
 						</div>
 					</div>
@@ -24,9 +26,10 @@
 									<br>
 									<table class="table table-hover table-no-header">
 										<tbody>
-											<tr ng-repeat="account in accountType.accounts">
+											<tr style="cursor:pointer" ng-repeat="account in accountType.accounts"
+												ng-click="detail(account)">
 												<td>{{account.name}}</td>
-												<td style="text-align: right;">R$ 9.043,99</td>
+												<td style="text-align: right;">{{account.balance | currency: "R$ "}}</td>
 											</tr>
 										</tbody>
 									</table>
@@ -42,9 +45,11 @@
 										</h3>
 										<table class="table table-no-header">
 											<tbody>
-												<tr ng-repeat="accountType in accountAggregation">
+												<tr
+													ng-repeat="accountType in accountAggregation">
 													<td>Conta {{accountType.name}}</td>
-													<td style="text-align: right;">{{accountType.total | currency:"R$ ": 2}}</td>
+													<td style="text-align: right;">{{accountType.total |
+														currency:"R$ ": 2}}</td>
 												</tr>
 											</tbody>
 										</table>
@@ -55,7 +60,7 @@
 															<span class="semi-bold">Total Geral</span>
 														</h4></td>
 													<td style="text-align: right;"><h4>
-															<span class="semi-bold">R$ 11.704,33</span>
+															<span class="semi-bold">{{getTotal() | currency : "R$ "}}</span>
 														</h4></td>
 												</tr>
 											</tbody>

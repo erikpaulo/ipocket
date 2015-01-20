@@ -1,9 +1,13 @@
 package com.softb.ipocket.account.model;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
@@ -49,9 +53,13 @@ public class Account extends BaseEntity<Integer> implements Serializable {
 	@Column(name = "NUMBER")
 	protected String number;
 	
-	@Column(name = "START_BALANCE")
-	protected Long startBalance;
+	@Column(name = "START_BALANCE", columnDefinition = "double default 100")
+	protected Double startBalance;
+	
+	@OneToMany(fetch = FetchType.EAGER)
+	@JoinColumn(name = "ACCOUNT_ID", referencedColumnName = "ID")
+	protected List<AccountEntry> entries;
 	
 	@Transient
-	protected Long balance;
+	protected Double balance;
 }

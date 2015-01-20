@@ -49,7 +49,7 @@ define([ './module', './category-resources' ], function(module) {
 						return "Atributos obrigatórios não foram definidos.";
 					} else {
 						Category.new(data).$promise.then(function(returned){
-							$scope.categories[index] = returned.created;
+							$scope.categories[index] = returned.object;
 						},function(reason){$log.error('Não foi possível criar categoria. Motivo: '+ reason)});
 					}
 				};

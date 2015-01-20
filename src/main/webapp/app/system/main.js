@@ -51,6 +51,7 @@ require.config({
 		'datatables-tabletools': 'resources/legacy/datatables-tabletools/dataTables.tableTools',
 		'datatables-responsive': 'resources/legacy/datatables-responsive/js/datatables.responsive', 
 		'datatables-lodash': 'resources/legacy/datatables-responsive/js/lodash.min',
+		'angular-ui-grid': 'resources/lib/angular-ui-grid/ui-grid',
 
 		// === NG CURRENCY
 		'ng-currency': 'resources/lib/ng-currency/dist/ng-currency.min',
@@ -78,6 +79,7 @@ require.config({
 		'angular-dynamic-locale': ['angular', 'angular-cookies', 'angular-translate', 'angular-translate-storage-cookie', 'angular-translate-loader-static-files'],
 
  		'datatables-fixedcolumns': {deps: ['jquery', 'datatables']},
+ 		'angular-ui-grid': ['angular'],
 		'bootstrap-datepicker-pt-BR': ['jquery', 'bootstrap-datepicker'],
 		'bootstrap-datepicker': ['jquery'], 
 		'bootstrap': ['jquery'],
@@ -95,7 +97,7 @@ require.config({
 		'xeditable': ['angular'],
  		
         'layout-core': {
-			deps: ['jquery-ui', 'bootstrap', 'breakpoints', 'jquery-unveil', 'pane', 'jquery-slimscroll', 'jquery-block-ui', 'jquery-slider', 'bootstrap-datepicker-pt-BR', 'xeditable']
+			deps: ['jquery-ui', 'bootstrap', 'breakpoints', 'jquery-unveil', 'pane', 'jquery-slimscroll', 'jquery-block-ui', 'jquery-slider', 'bootstrap-datepicker-pt-BR', 'xeditable', 'angular-ui-grid']
 		},
 		
 		'layout-form': ['layout-core', 

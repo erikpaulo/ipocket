@@ -34,13 +34,25 @@ define(['./module', 'jquery'], function(directives, $)
 			transclude: true,
 			link: function (scope, element, attrs) {
 				var options = {};
-				var sDom = '<"top"f<"clear"i>>rt<"row"l<"table-bottom"ip>>';
+				var sDom = '<"table-top"f><"table-row"t><"table-bottom"p>';
 				
 				options = {
 					fnInitComplete: function(oSettings, json) {
 								
 						// Altera posição da operação de search da tabela.
 						$('#grid_filter').prependTo('#resultGridTools');
+						
+						var table = $('#grid').DataTable();
+						$('#grid tbody').on( 'click', 'tr', function () {
+					        if ( $(this).hasClass('selected') ) {
+					            $(this).removeClass('selected');
+					        }
+					        else {
+					            table.$('tr.selected').removeClass('selected');
+					            $(this).addClass('selected');
+					        }
+					        rowSelectedCallback();
+					    } );
 						
 						// Se acionado com opção de mostrar plugin ColVis.
 						if ( scope.colVis ){

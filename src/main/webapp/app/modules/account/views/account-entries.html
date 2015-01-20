@@ -1,0 +1,91 @@
+<section ng-controller="AccountEntryController">
+	<div class="content">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="grid simple ">
+					<div class="grid-title">
+						<h3>
+							<span>{{account.name}}</span>
+						</h3>
+					</div>
+					<div class="grid-body">
+						<div class="row">
+							<br>
+							<div ui-grid="gridOptions" ui-grid-selection class="grid"></div>
+						</div>
+						<div class="row">
+							<div class="col-md-1"></div>
+							<div class="col-md-10">
+								<div class="tabbable tabs-left">
+									<tabset> 
+										<tab ng-repeat="tab in tabs" heading="{{tab.title}}" active="tab.active">
+											<div style="min-height: 106px">
+												<form name="form_account_entry" novalidate="novalidate">
+													<div class="col-md-10">
+														<div class="row form-row">
+															<div class="col-md-7">
+																<label class="form-label">Descrição</label>
+																<div class="controls">
+																	<input type="text" name="accountEntry.description"	ng-model="accountEntry.description" class="form-control" ng-required="true" ng-class="" mg-validation-alert>
+																</div>
+															</div>
+															<div class="col-md-3">
+																<label class="form-label">Data</label>
+																<div class="controls">
+																	<input type="date" placeholder="yyyy-MM-dd"	name="accountEntry.date" ng-model="accountEntry.date"	class="form-control" ng-required="true" ng-class=""	mg-validation-alert>
+																</div>
+															</div>
+														</div>
+														<div class="row form-row">
+															<div class="col-md-7">
+																<label class="form-label">Categoria</label>
+																<div class="controls">
+																	<select ui-select2	ng-model="accountEntry.category.id" name="accountEntry.category.id" data-placeholder="Selecione" class="select2 form-control" ng-required="true" ng-class="" mg-validation-alert>
+																		<option value=""></option>
+																		<option	ng-repeat="category in categories"	value="{{category.id}}"	ng-selected="{{category.id == accountEntry.category.id}}">{{category.name +" : "+ category.subCategoryName}}</option>
+																	</select>
+																</div>
+															</div>
+															<div class="col-md-3">
+																<label class="form-label">Valor</label>
+																<div class="controls">
+																	<input type="number" name="accountEntry.amount" ng-model="accountEntry.amount" class="form-control" ng-required="true" ng-class="" mg-validation-alert>
+																</div>
+															</div>
+														</div>
+														<div class="row form-row" ng-show="tab.type == 'T'">
+															<div class="col-md-7">
+																<label class="form-label">Conta Destino</label>
+																<div class="controls">
+																	<select ui-select2	ng-model="accountEntry.destinyAccountId" name="accountEntry.destinyAccountId" data-placeholder="Selecione" class="select2 form-control" ng-required="{{(tab.type=='T' ? true : false )}}" ng-class="" mg-validation-alert>
+																		<option value=""></option>
+																		<option	ng-repeat="useAccount in accounts"	value="{{useAccount.id}}">{{useAccount.name}}</option>
+																	</select>
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="col-md-2">
+														<button type="submit" class="btn btn-block btn-success"
+															ng-click="save(form_account_entry)">
+															<span ng-show="accountEntry.id">Salvar</span>
+															<span ng-show="!accountEntry.id">Novo</span>
+														</button>
+														<button ng-show="accountEntry.id" type="button" class="btn btn-block btn-danger"
+															ng-click="remove(form_account_entry)">Remover</button>
+														<button type="button" class="btn btn-block btn-default"
+															ng-click="clear(form_account_entry)">Cancelar</button>
+													</div>
+												</form>
+											</div>
+										</tab> 
+									</tabset>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
