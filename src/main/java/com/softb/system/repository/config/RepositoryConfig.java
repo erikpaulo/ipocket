@@ -51,6 +51,7 @@ public class RepositoryConfig  {
         basicDataSource.setUrl(dbUrl);
         basicDataSource.setUsername(username);
         basicDataSource.setPassword(password);
+        basicDataSource.setDriverClassName("org.postgresql.Driver");
 
         return basicDataSource;
     }
