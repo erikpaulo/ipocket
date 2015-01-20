@@ -7,10 +7,10 @@ server:
 
 spring:
     application:
-        name: ipocket
+        name: pefin
 
     datasource:
-        driverClassName: ${database.driverClassName}
+        driverClassName: org.hsqldb.jdbcDriver
         url: #{ 'jdbc:postgresql://' + @dbUrl.getHost() + ':' + @dbUrl.getPort() + @dbUrl.getPath() }
         username: #{ @dbUrl.getUserInfo().split(':')[0] }
         password: #{ @dbUrl.getUserInfo().split(':')[1] }
