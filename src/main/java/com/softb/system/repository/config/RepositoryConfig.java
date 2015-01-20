@@ -33,13 +33,15 @@ public class RepositoryConfig  {
         SpringLiquibase liquibase = new SpringLiquibase();
         liquibase.setDataSource(datasource);
         liquibase.setChangeLog("classpath:config/liquibase/master.xml");
-        liquibase.setContexts("development, production");
+        liquibase.setContexts("development");
         return liquibase;
     }
     
     @Bean
     public URI buildURIDatabase() throws URISyntaxException {
-    	return  new URI(environment.getProperty("DATABASE_URL"));
+    	URI herokuURI = new URI(environment.getProperty("DATABASE_URL"));
+    	
+    	return herokuURI;
     }
 }
 

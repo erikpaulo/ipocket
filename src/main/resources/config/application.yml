@@ -7,7 +7,7 @@ server:
 
 spring:
     application:
-        name: pefin
+        name: ipocket
 
     datasource:
         driverClassName: ${database.driverClassName}
