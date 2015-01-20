@@ -10,7 +10,6 @@
 			<column name="date" type="timestamp"/>
 			<column name="token_value" type="varchar(255)"/>
 			<column name="username" type="varchar(255)"/>
-			<column name="username" type="varchar(255)"/>
 		</createTable>
 		<addPrimaryKey columnNames="id" tableName="remember_me_token" />
 		<addAutoIncrement catalogName="iPocket"	columnDataType="integer" columnName="id" incrementBy="1" schemaName="public" startWith="1" tableName="remember_me_token" />
@@ -25,8 +24,6 @@
 			<column name="password" type="varchar(64)"/>
 			<column name="trusted_account" type="boolean"/>
 			<column name="web_site" type="varchar(255)"/>
-			<column name="trusted_account" type="boolean"/>
-			<column name="trusted_account" type="boolean"/>
 		</createTable>
 		<addPrimaryKey columnNames="id" tableName="user_account" />
 		<addAutoIncrement catalogName="iPocket"	columnDataType="integer" columnName="id" incrementBy="1" schemaName="public" startWith="100" tableName="user_account" />
