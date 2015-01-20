@@ -7,6 +7,7 @@ import javax.sql.DataSource;
 
 import liquibase.integration.spring.SpringLiquibase;
 
+import org.apache.commons.dbcp2.BasicDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,11 +38,21 @@ public class RepositoryConfig  {
         return liquibase;
     }
     
+    
     @Bean
-    public URI buildURIDatabase() throws URISyntaxException {
-    	URI herokuURI = new URI(environment.getProperty("DATABASE_URL"));
-    	
-    	return herokuURI;
+    public BasicDataSource dataSource() throws URISyntaxException {
+    	URI dbUri = new URI(environment.getProperty("DATABASE_URL"));
+
+        String username = dbUri.getUserInfo().split(":")[0];
+        String password = dbUri.getUserInfo().split(":")[1];
+        String dbUrl = "jdbc:postgresql://" + dbUri.getHost() + ':' + dbUri.getPort() + dbUri.getPath();
+
+        BasicDataSource basicDataSource = new BasicDataSource();
+        basicDataSource.setUrl(dbUrl);
+        basicDataSource.setUsername(username);
+        basicDataSource.setPassword(password);
+
+        return basicDataSource;
     }
 }
 
