@@ -30,40 +30,40 @@
 	
 	<dependencies>	
 		<!-- Metrics dependencias -->
-<!--         <dependency> -->
-<!--             <groupId>com.codahale.metrics</groupId> -->
-<!--             <artifactId>metrics-core</artifactId> -->
-<!--         </dependency> -->
-<!--         <dependency> -->
-<!--             <groupId>com.codahale.metrics</groupId> -->
-<!--             <artifactId>metrics-ehcache</artifactId> -->
-<!--             <version>${codahale-metrics.version}</version> -->
-<!--         </dependency> -->
-<!--         <dependency> -->
-<!--             <groupId>com.codahale.metrics</groupId> -->
-<!--             <artifactId>metrics-jvm</artifactId> -->
-<!--             <version>${codahale-metrics.version}</version> -->
-<!--         </dependency> -->
-<!--         <dependency> -->
-<!--             <groupId>com.codahale.metrics</groupId> -->
-<!--             <artifactId>metrics-servlet</artifactId> -->
-<!--             <version>${codahale-metrics.version}</version> -->
-<!--         </dependency> -->
-<!--         <dependency> -->
-<!--             <groupId>com.codahale.metrics</groupId> -->
-<!--             <artifactId>metrics-json</artifactId> -->
-<!--             <version>${codahale-metrics.version}</version> -->
-<!--         </dependency> -->
-<!--         <dependency> -->
-<!--             <groupId>com.codahale.metrics</groupId> -->
-<!--             <artifactId>metrics-servlets</artifactId> -->
-<!--             <exclusions> -->
-<!--                 <exclusion> -->
-<!--                     <groupId>com.codahale.metrics</groupId> -->
-<!--                     <artifactId>metrics-healthchecks</artifactId> -->
-<!--                 </exclusion> -->
-<!--             </exclusions> -->
-<!--         </dependency> -->
+        <dependency>
+            <groupId>com.codahale.metrics</groupId>
+            <artifactId>metrics-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.codahale.metrics</groupId>
+            <artifactId>metrics-ehcache</artifactId>
+            <version>${codahale-metrics.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.codahale.metrics</groupId>
+            <artifactId>metrics-jvm</artifactId>
+            <version>${codahale-metrics.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.codahale.metrics</groupId>
+            <artifactId>metrics-servlet</artifactId>
+            <version>${codahale-metrics.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.codahale.metrics</groupId>
+            <artifactId>metrics-json</artifactId>
+            <version>${codahale-metrics.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.codahale.metrics</groupId>
+            <artifactId>metrics-servlets</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.codahale.metrics</groupId>
+                    <artifactId>metrics-healthchecks</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
         <dependency>
             <groupId>com.ryantenney.metrics</groupId>
             <artifactId>metrics-spring</artifactId>

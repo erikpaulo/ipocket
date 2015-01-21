@@ -12,6 +12,7 @@ import javax.servlet.DispatcherType;
 import javax.servlet.FilterRegistration;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
+import javax.servlet.ServletRegistration;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,6 +27,9 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
+import com.codahale.metrics.MetricRegistry;
+import com.codahale.metrics.servlet.InstrumentedFilter;
+import com.codahale.metrics.servlets.MetricsServlet;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.softb.system.config.Constants;
 import com.softb.system.web.filter.gzip.GZipServletFilter;
@@ -42,8 +46,8 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter implements ServletCont
 
 	private final Logger logger = LoggerFactory.getLogger(WebMvcConfig.class);
 	
-//    @Inject
-//    private MetricRegistry metricRegistry;
+    @Inject
+    private MetricRegistry metricRegistry;
     
     @Inject
     private Environment env;
@@ -53,10 +57,10 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter implements ServletCont
         logger.info("Web application configuration, using profiles: {}", Arrays.toString(env.getActiveProfiles()));
         EnumSet<DispatcherType> disps = EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD, DispatcherType.ASYNC);
 
-//        initMetrics(servletContext, disps);
+        initMetrics(servletContext, disps);
         if (env.acceptsProfiles(Constants.SPRING_PROFILE_PRODUCTION)) {
-            // initStaticResourcesProductionFilter(servletContext, disps);
-            // initCachingHttpHeadersFilter(servletContext, disps);
+//             initStaticResourcesProductionFilter(servletContext, disps);
+//             initCachingHttpHeadersFilter(servletContext, disps);
         	initGzipFilter(servletContext, disps);
         }
         
@@ -92,37 +96,37 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter implements ServletCont
         compressingFilter.addMappingForUrlPatterns(disps, true, "*.html");
         compressingFilter.addMappingForUrlPatterns(disps, true, "*.js");
         compressingFilter.addMappingForUrlPatterns(disps, true, "/app/rest/*");
-//        compressingFilter.addMappingForUrlPatterns(disps, true, "/metrics/*");
+        compressingFilter.addMappingForUrlPatterns(disps, true, "/metrics/*");
 
         compressingFilter.setAsyncSupported(true);
     }    
     
-//    /**
-//     * Initializes Metrics.
-//     */
-//    private void initMetrics(ServletContext servletContext, EnumSet<DispatcherType> disps) {
-//        logger.debug("Initializing Metrics registries");
-//        servletContext.setAttribute(InstrumentedFilter.REGISTRY_ATTRIBUTE,
-//                metricRegistry);
-//        servletContext.setAttribute(MetricsServlet.METRICS_REGISTRY,
-//                metricRegistry);
-//
-//        logger.debug("Registering Metrics Filter");
-//        FilterRegistration.Dynamic metricsFilter = servletContext.addFilter("webappMetricsFilter",
-//                new InstrumentedFilter());
-//
-//        metricsFilter.addMappingForUrlPatterns(disps, true, "/*");
-//        metricsFilter.setAsyncSupported(true);
-//
-//        logger.debug("Registering Metrics Servlet");
-//        ServletRegistration.Dynamic metricsAdminServlet =
-//                servletContext.addServlet("metricsServlet", new MetricsServlet());
-//
-//        metricsAdminServlet.addMapping("/metrics/metrics/*");
-//        metricsAdminServlet.setAsyncSupported(true);
-//        metricsAdminServlet.setLoadOnStartup(2);
-//    }    
-//    
+    /**
+     * Initializes Metrics.
+     */
+    private void initMetrics(ServletContext servletContext, EnumSet<DispatcherType> disps) {
+        logger.debug("Initializing Metrics registries");
+        servletContext.setAttribute(InstrumentedFilter.REGISTRY_ATTRIBUTE,
+                metricRegistry);
+        servletContext.setAttribute(MetricsServlet.METRICS_REGISTRY,
+                metricRegistry);
+
+        logger.debug("Registering Metrics Filter");
+        FilterRegistration.Dynamic metricsFilter = servletContext.addFilter("webappMetricsFilter",
+                new InstrumentedFilter());
+
+        metricsFilter.addMappingForUrlPatterns(disps, true, "/*");
+        metricsFilter.setAsyncSupported(true);
+
+        logger.debug("Registering Metrics Servlet");
+        ServletRegistration.Dynamic metricsAdminServlet =
+                servletContext.addServlet("metricsServlet", new MetricsServlet());
+
+        metricsAdminServlet.addMapping("/metrics/metrics/*");
+        metricsAdminServlet.setAsyncSupported(true);
+        metricsAdminServlet.setLoadOnStartup(2);
+    }    
+    
 	
 	@Override
 	public void configureMessageConverters(final List<HttpMessageConverter<?>> converters) {

@@ -7,13 +7,13 @@ server:
 
 spring:
     application:
-        name: pefin
+        name: ipocket
 
     datasource:
-        driverClassName: org.hsqldb.jdbcDriver
-        url: jdbc:hsqldb:mem:petclinic
-        username: sa
-        password:
+        driverClassName: org.postgresql.Driver
+        url: #{ 'jdbc:postgresql://' + @dbUrl.getHost() + ':' + @dbUrl.getPort() + @dbUrl.getPath() }
+        username: #{ @dbUrl.getUserInfo().split(':')[0] }
+        password: #{ @dbUrl.getUserInfo().split(':')[1] }
 
     jpa:
         database: HSQL
@@ -32,7 +32,7 @@ spring:
         cacheSeconds: 1    
 
 metrics:
-    jmx.enabled: true
+    jmx.enabled: false
     elasticsearch:
         enabled: false
         host: localhost
@@ -59,4 +59,4 @@ swagger:
     termsOfServiceUrl: https://github.com/marcuslacerda/needs/blob/master/readme.md
     contact:
     license: Apache 2.0
-    licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.html        
+    licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.html     

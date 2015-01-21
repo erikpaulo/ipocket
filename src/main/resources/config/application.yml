@@ -11,9 +11,9 @@ spring:
 
     datasource:
         driverClassName: org.postgresql.Driver
-        url: #{ 'jdbc:postgresql://' + @dbUrl.getHost() + ':' + @dbUrl.getPort() + @dbUrl.getPath() }
-        username: #{ @dbUrl.getUserInfo().split(':')[0] }
-        password: #{ @dbUrl.getUserInfo().split(':')[1] }
+        url: jdbc:postgresql://localhost:5432/eriklacerda
+        username: eriklacerda
+        password:
 
     jpa:
         database: HSQL
@@ -38,7 +38,10 @@ metrics:
         host: localhost
         port: 9200
 
-
+cache:
+    timeToLiveSeconds: 3600
+    ehcache:
+        maxBytesLocalHeap: 16M
 
 application:
     social:

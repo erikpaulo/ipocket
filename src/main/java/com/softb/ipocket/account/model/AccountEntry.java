@@ -43,7 +43,7 @@ public class AccountEntry extends BaseEntity<Integer> implements Serializable {
 	@NotNull
 	protected Integer accountId;
 	
-	@Column(name = "DESC")
+	@Column(name = "DESCRIPTION")
 	@NotEmpty
 	protected String description;
 	
@@ -73,8 +73,4 @@ public class AccountEntry extends BaseEntity<Integer> implements Serializable {
 	
 	@Transient
 	protected Integer destinyAccountId;
-
-	
-	
-	
 }

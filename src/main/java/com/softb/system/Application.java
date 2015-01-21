@@ -16,9 +16,11 @@ import org.springframework.context.annotation.Import;
 import org.springframework.core.env.Environment;
 import org.springframework.core.env.SimpleCommandLinePropertySource;
 
+import com.softb.system.cache.config.CacheConfig;
 import com.softb.system.config.Constants;
 import com.softb.system.config.ServiceConfig;
 import com.softb.system.logging.config.LoggingConfig;
+import com.softb.system.metrics.config.MetricsConfig;
 import com.softb.system.security.config.SecurityConfig;
 import com.softb.system.security.config.SocialConfig;
 import com.softb.system.swagger.config.SwaggerConfiguration;
@@ -32,7 +34,7 @@ import com.softb.system.web.config.WebMvcConfig;
 @Configuration
 @EnableAutoConfiguration
 @EnableConfigurationProperties
-@Import(value={/*MetricsConfig.class, */WebMvcConfig.class, ServiceConfig.class, SocialConfig.class, SecurityConfig.class, SwaggerConfiguration.class, /*CacheConfig.class, */LoggingConfig.class})
+@Import(value={MetricsConfig.class, WebMvcConfig.class, ServiceConfig.class, SocialConfig.class, SecurityConfig.class, SwaggerConfiguration.class, CacheConfig.class, LoggingConfig.class})
 public class Application {
 
     private final Logger log = LoggerFactory.getLogger(Application.class);
@@ -82,7 +84,7 @@ public class Application {
      */
     private static void addDefaultProfile(SpringApplication app, SimpleCommandLinePropertySource source) {
         if (!source.containsProperty("spring.profiles.active")) {
-            app.setAdditionalProfiles(Constants.SPRING_PROFILE_PRODUCTION);
+            app.setAdditionalProfiles(Constants.SPRING_PROFILE_DEVELOPMENT);
         }
     }    
 	
