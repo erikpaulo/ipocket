@@ -1,1 +1,1 @@
-web: java -Dserver.port=$PORT -jar target/ipocket-0.0.1.jar
+web: java -Dserver.port=$PORT -jar target/ipocket-0.0.1.jar --spring.profiles.active=prod
