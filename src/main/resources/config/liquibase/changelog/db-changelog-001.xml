@@ -6,14 +6,6 @@
 
 	<changeSet id="1" author="Erik Lacerda">
 
-		<dropTable tableName="ACCOUNT_ENTRY"/>
-		<dropTable tableName="ACCOUNT"/>
-		<dropTable tableName="CATEGORY"/>
-		<dropTable tableName="user_role"/>
-		<dropTable tableName="remember_me_token"/>
-		<dropTable tableName="user_social_connection"/>
-		<dropTable tableName="user_account"/>
-		
 		<createTable tableName="remember_me_token">
 			<column name="id" type="integer"/>
 			<column name="date" type="timestamp"/>
@@ -22,7 +14,6 @@
 		</createTable>
 		<addPrimaryKey columnNames="id" tableName="remember_me_token" />
 		<addAutoIncrement catalogName="iPocket"	columnDataType="integer" columnName="id" incrementBy="1" schemaName="public" startWith="1" tableName="remember_me_token" />
-
 
 		<createTable tableName="user_account">
 			<column name="id" type="integer"/>

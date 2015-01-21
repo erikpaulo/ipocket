@@ -57,7 +57,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter implements ServletCont
         logger.info("Web application configuration, using profiles: {}", Arrays.toString(env.getActiveProfiles()));
         EnumSet<DispatcherType> disps = EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD, DispatcherType.ASYNC);
 
-        initMetrics(servletContext, disps);
+//        initMetrics(servletContext, disps);
         if (env.acceptsProfiles(Constants.SPRING_PROFILE_PRODUCTION)) {
 //             initStaticResourcesProductionFilter(servletContext, disps);
 //             initCachingHttpHeadersFilter(servletContext, disps);

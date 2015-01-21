@@ -8,9 +8,7 @@ import javax.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.CacheManager;
-import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.ehcache.EhCacheCacheManager;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.util.Assert;
@@ -19,7 +17,7 @@ import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.ehcache.InstrumentedEhcache;
 
 @Configuration
-@EnableCaching
+//@EnableCaching
 public class CacheConfig {
 
     private final Logger logger = LoggerFactory.getLogger(CacheConfig.class);
@@ -43,7 +41,7 @@ public class CacheConfig {
         cacheManager.shutdown();
     }
 
-    @Bean
+//    @Bean
     public CacheManager cacheManager() {
         logger.debug("Starting Ehcache");
         
