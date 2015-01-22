@@ -10,7 +10,7 @@ spring:
         name: ipocket
 
     datasource:
-        driverClassName: org.postgresql.Driver
+        driverClassName: ${database.driverClassName}
         url: #{ 'jdbc:postgresql://' + @dbUrl.getHost() + ':' + @dbUrl.getPort() + @dbUrl.getPath() }
         username: #{ @dbUrl.getUserInfo().split(':')[0] }
         password: #{ @dbUrl.getUserInfo().split(':')[1] }
