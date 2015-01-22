@@ -9,12 +9,6 @@ spring:
     application:
         name: ipocket
 
-    datasource:
-        driverClassName: ${database.driverClassName}
-        url: #{ 'jdbc:postgresql://' + @dbUrl.getHost() + ':' + @dbUrl.getPort() + @dbUrl.getPath() }
-        username: #{ @dbUrl.getUserInfo().split(':')[0] }
-        password: #{ @dbUrl.getUserInfo().split(':')[1] }
-
     jpa:
         database: HSQL
         openInView: true

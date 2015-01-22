@@ -5,15 +5,11 @@ server:
         access_log_enabled: true
         basedir: target/tomcat
 
+DATABASE_URL: postgres://eriklacerda@localhost:5432/eriklacerda
+
 spring:
     application:
         name: ipocket
-
-    datasource:
-        driverClassName: org.postgresql.Driver
-        url: jdbc:postgresql://localhost:5432/eriklacerda
-        username: eriklacerda
-        password:
 
     jpa:
         database: HSQL
@@ -51,6 +47,7 @@ application:
     security: 
         secureChannel: http
         key: ipocket
+
 
 swagger:
     apiDocsLocation: http://localhost:8080
