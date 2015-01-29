@@ -15,7 +15,7 @@ import com.softb.system.repository.config.RepositoryConfig;
 @EnableAutoConfiguration
 @EnableConfigurationProperties
 @ComponentScan(basePackages = { 
-		"com.softb.system.security.service"})
+		"com.softb.system.security.service", "com.softb.ipocket.account.service"})
 @Import(value={RepositoryConfig.class, LocaleConfig.class})
 public class ServiceConfig {
 

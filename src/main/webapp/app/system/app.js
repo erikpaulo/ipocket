@@ -12,7 +12,7 @@ function(angular, layout, config, dependencyResolverFor, errorHandler, menuHandl
     
 	// TODO [marcus] app.directives foi iniciada no arquivo 'system/directives/index'. Alterar esse index para retornar o módulo e pegar o nome aqui para evitar hardcoded
 	
-    var app = angular.module('app', ['ngRoute', 'ui.grid', 'ui.grid.cellNav', 'ui.grid.pinning', 'ui.grid.selection', 'xeditable', 'ngResource', 'ngDragDrop', 'ui.select2', 'ui.bootstrap', 'ngCookies', 'tmh.dynamicLocale', 'pascalprecht.translate',  errorHandler.name, menuHandler.name, authHandler.name, 'app.directives', 'app.filters' ]);
+    var app = angular.module('app', ['ngRoute', 'ui.grid', 'angularFileUpload', 'ui.grid.cellNav', 'ui.grid.pinning', 'ui.grid.selection', 'xeditable', 'ngResource', 'ngDragDrop', 'ui.select2', 'ui.bootstrap', 'ngCookies', 'tmh.dynamicLocale', 'pascalprecht.translate',  errorHandler.name, menuHandler.name, authHandler.name, 'app.directives', 'app.filters' ]);
 
     app.config(
     [

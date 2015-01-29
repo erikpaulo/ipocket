@@ -1,3 +1,5 @@
+<link href="resources/styles/table.css" rel="stylesheet" type="text/css" />
+
 <section ng-controller="AccountEntryController">
 	<div class="content">
 		<div class="row">
@@ -7,6 +9,14 @@
 						<h3>
 							<span>{{account.name}}</span>
 						</h3>
+						<div class="tools">
+							<button type="button" ng-click="uploadFile()" class="btn btn-default btn-info" title="Importar Lançamentos">
+							  <span class="glyphicon glyphicon-open-file"></span>
+							</button>
+							<button type="button" class="btn btn-default btn-danger" title="Excluir Conta">
+							  <span class="glyphicon glyphicon-remove-circle"></span>
+							</button>
+						</div>
 					</div>
 					<div class="grid-body">
 						<div class="row">

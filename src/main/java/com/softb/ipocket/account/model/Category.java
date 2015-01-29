@@ -35,9 +35,9 @@ public class Category extends BaseEntity<Integer> implements Serializable {
 	@NotEmpty
 	protected String subCategoryName;
 	
-	@Column(name = "FIXED_COST")
+	@Column(name = "TYPE")
 	@NotEmpty
-	protected String fixedCost;
+	protected String type;
 	
 	@Column(name = "KIND")
 	@NotEmpty

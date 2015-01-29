@@ -17,8 +17,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
-import com.softb.system.config.Constants;
-
 @Configuration
 @EnableJpaRepositories(basePackages = { 
 		"com.softb.system.security.repository", "com.softb.ipocket.account.repository"})
@@ -34,13 +32,13 @@ public class RepositoryConfig  {
     public SpringLiquibase liquibase(DataSource datasource) {
     	SpringLiquibase liquibase = null;
     	
-    	if (!environment.acceptsProfiles(Constants.SPRING_PROFILE_PRODUCTION)) {
-	        logger.debug("Configuring Liquibase");
-	        liquibase = new SpringLiquibase();
-	        liquibase.setDataSource(datasource);
-	        liquibase.setChangeLog("classpath:config/liquibase/master.xml");
-	        liquibase.setContexts("development");
-    	}
+//    	if (!environment.acceptsProfiles(Constants.SPRING_PROFILE_PRODUCTION)) {
+//	        logger.debug("Configuring Liquibase");
+//	        liquibase = new SpringLiquibase();
+//	        liquibase.setDataSource(datasource);
+//	        liquibase.setChangeLog("classpath:config/liquibase/master.xml");
+//	        liquibase.setContexts("development");
+//    	}
     	
         return liquibase;
     }

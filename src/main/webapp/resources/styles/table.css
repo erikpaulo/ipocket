@@ -39,6 +39,12 @@
 .align-currency {
 	text-align: right;
 }
+.positive {
+	color: blue;
+}
+.negative {
+	color: red;
+}
 
 .align-date {
 	text-align: center;
@@ -134,4 +140,38 @@ div.DTFC_LeftBodyLiner table tbody tr > td  {
 
 div.dataTables_wrapper {
 	margin-top: 5px;
+}
+
+/** Table na Mão **/
+ .th-inner {
+position: absolute;
+top: 10px;
+line-height: 30px;
+*text-align: left;
+*border-left: 1px solid black;
+*padding-left: 5px;
+*margin-left: -5px;
+}
+
+.fixed-table-container {
+*width: 50%;
+height: 200px;
+*border: 1px solid black;
+margin: 10px auto;
+*background-color: white;
+*position: relative;
+padding-top: 30px;
+}
+.fixed-table-container-inner {
+overflow-x: hidden;
+overflow-y: auto;
+height: 100%;
+}
+.header-background {
+background-color: #ECF0F2;
+height: 38px;
+position: absolute;
+top: 5px;
+right: 0;
+left: 0;
 }

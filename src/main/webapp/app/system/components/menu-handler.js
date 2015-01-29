@@ -50,8 +50,8 @@ define(['angular-resource', 'jquery'], function (resource, $) {
 	    return $resource('public/user/current');
 	});
     
-    MenuModule.controller('IndexController', [ '$scope', '$rootScope', 'User', '$translate', 
-     function($scope, $rootScope, User, $translate) {
+    MenuModule.controller('IndexController', [ '$scope', '$window', '$location', '$rootScope', 'User', '$translate', 
+     function($scope, $window, $location, $rootScope, User, $translate) {
     		
     	console.log('==>AdminMenuController');
 
@@ -83,7 +83,7 @@ define(['angular-resource', 'jquery'], function (resource, $) {
 				
 			} else {
 				console.log('  user is not authenticated, add social signin menu.');
-				
+				$location.path('login');
 			}
 		});
     	
@@ -110,6 +110,7 @@ define(['angular-resource', 'jquery'], function (resource, $) {
 		    
 		    // caso não tenha submenu, pode retornar
 		    if (grupoMenu.next().children().length == 0) {
+		    	handleCloseSideMenu();
 		        return;
 		    }
 
@@ -135,11 +136,20 @@ define(['angular-resource', 'jquery'], function (resource, $) {
 	        }
 
 	        if (isSubMenu) {
+	        	handleCloseSideMenu();
 	        	return;
 	        } else {
 	        	event.preventDefault();
 	        }
 	    };
+	    
+	    function handleCloseSideMenu(){
+			// Esconde o menú após o click quando resolução menor que 480px.
+			if ($window.innerWidth<480){
+				$.sidr('close', 'main-menu');
+				$.sidr('close', 'sidr');
+			}
+	    }
 
 		$scope.handleSidenarAndContentHeight = function () {
 	        var content = $('.page-content');

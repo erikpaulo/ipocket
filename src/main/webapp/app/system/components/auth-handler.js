@@ -45,6 +45,7 @@ function (angular, resource, cookie, errorHandler) {
 				
 				if ($rootScope.user === undefined) {
 					return false;
+					
 				}
 				
 				if ($rootScope.user.roles[role] === undefined) {

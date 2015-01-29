@@ -1,5 +1,6 @@
 package com.softb.ipocket.account.repository;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.dao.DataAccessException;
@@ -16,4 +17,7 @@ public interface AccountEntryRepository extends JpaRepository<AccountEntry, Inte
 	
 	@Query("select ae from AccountEntry ae where ae.userId = :userId")
 	List<Account> listAllByUser(@Param("userId") Integer userId) throws DataAccessException;
+	
+	@Query("select ae from AccountEntry ae where ae.userId = :userId and ae.accountId = :accountId and ae.date = :date and ae.amount = :amount")
+	List<AccountEntry> listAllByUserDateAmount(@Param("userId") Integer userId, @Param("accountId") Integer accountId, @Param("date") Date date, @Param("amount") Double amount) throws DataAccessException;
 }

@@ -87,6 +87,7 @@ a.sb,
 .form-control{
 	border:1px solid #E5E9EC;
 	font-size: 13px;
+	height: 28px;
 }
 
 .form-row input, .form-row select, .form-row textarea, .form-row select2{
@@ -870,7 +871,7 @@ form legend,
 }
 .grid.simple .grid-title {  
    padding:14px 15px 7px 15px;
-   border-bottom: 1px solid #eee;
+/*    border-bottom: 1px solid #eee; */
    color: #282323 !important;
    background-color:#fff;
 }
@@ -881,7 +882,7 @@ form legend,
 
 .grid.simple .grid-title .tools {
 	display: -webkit-box;
-  	margin-top: -42px;
+  	margin-top: -25px;
   	position:relative;
 }
 
@@ -1016,7 +1017,7 @@ form legend,
 .grid.simple .grid-body {
   background-color: #fff;
   padding: 0px 26px 26px 26px;
-  border:1px solid #dddddd;
+/*   border:1px solid #dddddd; */
   color:#6f7b8a;  
 }
 .grid.simple .grid-body.no-padding{
@@ -1038,7 +1039,7 @@ form legend,
  } 
 .grid.simple .grid-title {  
   margin-bottom: 0px;
-  border:1px solid #dddddd;
+/*   border:1px solid #dddddd; */
   border-bottom:0px;
 }
 .grid.simple .grid-title .no-border{ 
@@ -1180,196 +1181,6 @@ form legend,
    border-top: 0;
 }
 
-
-/*** General Users  List ***/
-.user-info-wrapper{
-	display:block;
-	margin:20px 31px;
-	margin-bottom:0px;
-}
-.user-info-wrapper .profile-wrapper{
-	height:65px; 
-	width:65px;
-	border-radius:100px; 
-	overflow:hidden;
-	display:inline-block;
-	margin-right:11px;
-	margin-top:9px;
-	float:left;
-}
-.user-info-wrapper .user-info {
-	color:#fff;
-	background-color:#1b1e24;
-	display:inline-block;
-}
-.user-info-wrapper .user-info .status{
-	color:#929fa5;
-	font-size:13px;
-	margin-bottom:10px;	
-	margin-top: 2px;
-	font-weight:normal;
-}	
-.user-info-wrapper .user-info .profile{
-	float:right;
-	display:inline;
-}
-
-.user-info-wrapper .user-info .btn-set{
-	margin-top:10px;
-}
-
-.user-info-wrapper .user-info .username{
-	font-size:19px;
-	margin-bottom:10px;	
-}
-.user-info-wrapper .user-info .greeting{
-	font-size:19px;
-	font-weight:600;
-	position: relative;
-    top: 1.5px;
-    margin-top:15px;
-}
-.user-info-wrapper .user-info a{
-	color:#fff;
-	
-}
-.user-info-wrapper .user-info .status-icon{
-	margin:0px 5px;
-}
-.user-info-wrapper .user-info a:hover{
-	text-decoration:none
-}
-.user-info-wrapper .user-info .collapse{ 
- 	width:18px;
-	height:18px;
-	background-color:#50545c;
-	position:absolute;
-	right:15px;
-	margin-top:10px;
-
-}
-.user-info-wrapper .user-info .collapse i{
-	position:relative; 
-	margin-top:-8px;
-	top:-2px;
-	left:3px;
-	
- }
-.user-info-wrapper .user-info .collapse:hover{ 
-	background-color:#000000;
-}
-
-.side-panel{
-   border-width: 0;
-    display: block;
-    max-height: none;
-    min-height: 100%;
-    position: fixed;
-    top: 0;
-    width: 17em;
-	background: linear-gradient(#F9F9F9, #EEEEEE) repeat scroll 0 0 #F9F9F9;
-    border: 1px solid #AAAAAA;
-    color: #333333;
-    text-shadow: 0 1px 0 #FFFFFF;
-	float:right;
-	right:0;
-	z-index:1200;
-}
-/* User - status icons */
-.status-widget{
-	margin-bottom: 9px;
-    padding: 0 31px;
-	animation-duration: 0.3s !important;
-	
-}
-.status-widget-wrapper{
-	font-size: 13px;
-}
-.status-widget .title{
-	color: #fff;
-	font-size: 13px;
-}
-.status-widget .title a:hover,.status-widget .title a:active{
-	text-decoration:none
-}
-.status-widget p{
-	overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    width: 95%;
-	color:#808285;
-}
-.status-widget .title i{
-	float:right;
-	font-size:7px;
-	margin-top:6px;
-	margin-right:6px;
-	color:#8b8f92;
-}
-.status-widget .progress{
-	height:10px;
-	background-color: #2a2e36;
-    background-image: -moz-linear-gradient(top, #2a2e36, #2a2e36);
-    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#2a2e36), to(#2a2e36));
-    background-image: -webkit-linear-gradient(top, #2a2e36, #2a2e36);
-    background-image: -o-linear-gradient(top, #2a2e36, #2a2e36);
-    background-image: linear-gradient(to bottom, #2a2e36, #2a2e36);
-    background-repeat: repeat-x;
-	margin-bottom:5px;
-	  -webkit-transition: width 30.0s ease !important;
-     -moz-transition: width 30.0s ease !important;
-       -o-transition: width 30.0s ease !important;
-          transition: width 30.0s ease !important;
-}
-.status-icon{
-	background: url('../img/icon/status.png') no-repeat;
-	position: relative;
-	display:inline-block;
-	margin-right:10px;
-	top:2px;
-}
-.status-icon.green{
-	background-position: -1px -1px; width: 14px; height: 14px;
-}
-.status-icon.red{
-	background-position: -17px -1px; width: 14px; height: 14px;
-}
-.status-icon.blue{
-	background-position: -33px -1px; width: 14px; height: 14px;
-}
-.status-icon.yellow{
-	background-position: -48px -1px; width: 15px; height: 14px;
-}
-.status-icon.grey{
-	background-position: -64px -1px; width: 14px; height: 14px;
-}
-
-.user-info img {
-  float: left;
-  margin-right: 5px;
-}
-
-.user-info .details {
-  display: inline-block;
-}
-
-.user-info .label {
-  font-weight: 300;
-  font-size: 11px;
-}
-
-/*** SlimScrollBar  ***/
-.scroller {
-  padding: 0px !important;
-  margin: 0px !important;
-  padding-right: 12px !important;
-}
-.popover-content .scroller{
-  padding-right: 0px !important;
-}
-.grid-body .slimScrollBar {
-  margin-right: 0px !important;
-}
 
 /*** Toggle buttons plugin css changes ***/
 .toggle-button, 
@@ -2862,3 +2673,28 @@ border-bottom-left-radius: 2px;
 	box-shadow:none;
 	border:0;
 }
+/*** Page Content ***/
+.summary{
+	border:1px solid #dddddd;
+	margin: -10px;
+}
+
+/*** Upload File ***/
+
+.my-drop-zone {
+	border: 1px solid #cccccc; 
+	border-radius: 4px;
+	background: #fff;
+	padding: 5px;
+	vertical-align: middle;
+	text-align: center;
+}
+.my-drop-zone-over {
+	background: #efeff3
+}
+.entries-to-import{
+	
+}
+.nv-file-over {
+	border: dotted 3px red; 
+} /* Default class applied to drop zones on over */

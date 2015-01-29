@@ -83,56 +83,68 @@ define(['angular'], function(angular) {
 		
 		//Break point entry 
 		$(window).bind('enterBreakpoint320',function() {	
-			$('#main-menu-toggle-wrapper').show();		
-			$('#portrait-chat-toggler').show();	
-			$('#header_inbox_bar').hide();	
-			$('#main-menu').removeClass('mini');		   
-			$('.page-content').removeClass('condensed');
-			rebuildSider();
+			if ($('body').hasClass( 'authenticated' )){
+				$('#main-menu-toggle-wrapper').show();		
+				//$('#portrait-chat-toggler').show();	
+				$('#header_inbox_bar').hide();	
+				$('#main-menu').removeClass('mini');		   
+				$('.page-content').removeClass('condensed');
+				rebuildSider();
+			}
 		});	
 		
 		$(window).bind('enterBreakpoint480',function() {
-			$('#main-menu-toggle-wrapper').show();		
-			$('.header-seperation').show();		
-			$('#portrait-chat-toggler').show();				
-			$('#header_inbox_bar').hide();	
-			//Incase if condensed layout is applied
-			$('#main-menu').removeClass('mini');		   
-			$('.page-content').removeClass('condensed');			
-			rebuildSider();
+			if ($('body').hasClass( 'authenticated' )){
+				$('#main-menu-toggle-wrapper').show();		
+//			$('.header-seperation').show();		
+//				$('#portrait-chat-toggler').show();				
+				$('#header_inbox_bar').hide();	
+				//Incase if condensed layout is applied
+				$('#main-menu').removeClass('mini');		   
+				$('.page-content').removeClass('condensed');			
+				rebuildSider();
+			}
 		});
 		
-		$(window).bind('enterBreakpoint768',function() {		
-			$('#main-menu-toggle-wrapper').show();		
-			$('#portrait-chat-toggler').show();	
-			
-			$('#header_inbox_bar').hide();	
-			if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {			
-				$('#main-menu').removeClass('mini');	
-				$('.page-content').removeClass('condensed');	
-				rebuildSider();
-			}	
+		$(window).bind('enterBreakpoint768',function() {
+			if ($('body').hasClass( 'authenticated' )){
+				//$('#main-menu-toggle-wrapper').show();		
+				//$('#portrait-chat-toggler').show();	
+				
+				$('#header_inbox_bar').hide();	
+				if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {			
+					$('#main-menu').removeClass('mini');	
+					$('.page-content').removeClass('condensed');	
+					rebuildSider();
+				}	
+			}
 		});
 
-		$(window).bind('exitBreakpoint320',function() {	
-			$('#main-menu-toggle-wrapper').hide();		
-			$('#portrait-chat-toggler').hide();	
-			$('#header_inbox_bar').show();			
-			closeAndRestSider();		
+		$(window).bind('exitBreakpoint320',function() {
+			if ($('body').hasClass( 'authenticated' )){
+				$('#main-menu-toggle-wrapper').hide();		
+//				$('#portrait-chat-toggler').hide();	
+				$('#header_inbox_bar').show();			
+				closeAndRestSider();		
+			}
 		});	
 		
 		$(window).bind('exitBreakpoint480',function() {
-			$('#main-menu-toggle-wrapper').hide();		
-			$('#portrait-chat-toggler').hide();	
-			$('#header_inbox_bar').show();			
-			closeAndRestSider();	
+			if ($('body').hasClass( 'authenticated' )){
+				$('#main-menu-toggle-wrapper').hide();		
+//				$('#portrait-chat-toggler').hide();	
+				$('#header_inbox_bar').show();			
+				closeAndRestSider();	
+			}
 		});
 		
 		$(window).bind('exitBreakpoint768',function() {
-			$('#main-menu-toggle-wrapper').hide();		
-			$('#portrait-chat-toggler').hide();	
-			$('#header_inbox_bar').show();			
-			closeAndRestSider();
+			if ($('body').hasClass( 'authenticated' )){
+				$('#main-menu-toggle-wrapper').hide();		
+//				$('#portrait-chat-toggler').hide();	
+				$('#header_inbox_bar').show();			
+				closeAndRestSider();
+			}
 		});
 
 		//Common Function calls
@@ -142,15 +154,15 @@ define(['angular'], function(angular) {
 			$.sidr('close', 'main-menu');
 			$.sidr('close', 'sidr');		
 			$('#main-menu').removeClass("sidr");	
-			$('#main-menu').removeClass("left");	
+			$('#main-menu').removeClass("left");
 		  }
 		  else{
 			$.sidr('close', 'main-menu');
 			$.sidr('close', 'sidr');		
 			$('#main-menu').removeClass("sidr");	
 			$('#main-menu').removeClass("left");	
-		}
-		
+		  }
+
 		}
 		function rebuildSider(){
 			$('#main-menu-toggle').sidr({		
@@ -169,16 +181,16 @@ define(['angular'], function(angular) {
 				$('#main-menu').removeClass('mini');
 				$('.page-content').removeClass('condensed');		
 				$('.scrollup').removeClass('to-edge');	
-				$('.header-seperation').show();
+//				$('.header-seperation').show();
 				//Bug fix - In high resolution screen it leaves a white margin
-				$('.header-seperation').css('height','61px');
+//				$('.header-seperation').css('height','61px');
 				$('.footer-widget').show();
 			  }	
 			  else{
 				$('#main-menu').addClass('mini');
 				$('.page-content').addClass('condensed');		
 				$('.scrollup').addClass('to-edge');	
-				$('.header-seperation').hide();
+//				$('.header-seperation').hide();
 				$('.footer-widget').hide();	  
 			  }
 			 }

@@ -56,7 +56,18 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter implements ServletCont
     public void onStartup(ServletContext servletContext) throws ServletException {
         logger.info("Web application configuration, using profiles: {}", Arrays.toString(env.getActiveProfiles()));
         EnumSet<DispatcherType> disps = EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD, DispatcherType.ASYNC);
-
+        
+//        AnnotationConfigWebApplicationContext rootContext = new AnnotationConfigWebApplicationContext();
+//        rootContext.register(Application.class);
+//        
+//        //Enable multipart support
+//        ServletRegistration.Dynamic dispatcher = servletContext.addServlet("DispatcherServlet", new DispatcherServlet(rootContext));
+//        dispatcher.setLoadOnStartup(1);
+//        dispatcher.addMapping("/");
+//        dispatcher.setMultipartConfig(
+//                new MultipartConfigElement("/tmp", 25 * 1024 * 1024, 125 * 1024 * 1024, 1 * 1024 * 1024)
+//        );
+        
 //        initMetrics(servletContext, disps);
         if (env.acceptsProfiles(Constants.SPRING_PROFILE_PRODUCTION)) {
 //             initStaticResourcesProductionFilter(servletContext, disps);

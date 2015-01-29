@@ -8,6 +8,7 @@ require.config({
 		'angular-route': 'resources/lib/angular-route/angular-route',
 		'angular-dragdrop': 'resources/lib/angular-dragdrop/src/angular-dragdrop.min',
 		'angular-ui-select2': 'resources/lib/angular-ui-select2/src/select2',
+		'angular-file-upload': 'resources/lib/angular-file-upload/angular-file-upload.min',
 		'ui-bootstrap-tpls': 'resources/lib/angular-bootstrap/ui-bootstrap-tpls.min',
 		'domReady': 'resources/lib/requirejs-domready/domReady',
 		'angular-cookies': 'resources/lib/angular-cookies/angular-cookies.min', 
@@ -70,6 +71,7 @@ require.config({
  		'angular-resource': ['angular'],
  		'angular-dragdrop': ['angular'],
  		'angular-ui-select2': ['angular', 'select2'],
+ 		'angular-file-upload': ['angular'],
  		'ui-bootstrap-tpls': ['angular'],	
  		'angular-cookies': { deps: ['angular', 'angular-route', 'angular-resource']},
  		
@@ -97,7 +99,7 @@ require.config({
 		'xeditable': ['angular'],
  		
         'layout-core': {
-			deps: ['jquery-ui', 'bootstrap', 'breakpoints', 'jquery-unveil', 'pane', 'jquery-slimscroll', 'jquery-block-ui', 'jquery-slider', 'bootstrap-datepicker-pt-BR', 'xeditable', 'angular-ui-grid']
+			deps: ['jquery-ui', 'bootstrap', 'breakpoints', 'jquery-unveil', 'pane', 'jquery-slimscroll', 'jquery-block-ui', 'jquery-slider', 'bootstrap-datepicker-pt-BR', 'xeditable', 'angular-ui-grid', 'angular-file-upload']
 		},
 		
 		'layout-form': ['layout-core', 
@@ -112,7 +114,7 @@ require.config({
 		                'datatables-lodash'],
 		
 		'app': {
-			deps: ['layout-core', 'angular', 'angular-route', 'angular-dragdrop', 'angular-ui-select2', 'ui-bootstrap-tpls', 'angular-cookies', 'angular-dynamic-locale', 'xeditable']
+			deps: ['layout-core', 'angular', 'angular-route', 'angular-dragdrop', 'angular-ui-select2', 'ui-bootstrap-tpls', 'angular-cookies', 'angular-dynamic-locale', 'xeditable', 'angular-file-upload']
 		},
 	}
 });

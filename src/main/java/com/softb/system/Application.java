@@ -22,7 +22,6 @@ import com.softb.system.config.ServiceConfig;
 import com.softb.system.logging.config.LoggingConfig;
 import com.softb.system.security.config.SecurityConfig;
 import com.softb.system.security.config.SocialConfig;
-import com.softb.system.swagger.config.SwaggerConfiguration;
 import com.softb.system.web.config.WebMvcConfig;
 
 /**
@@ -33,7 +32,7 @@ import com.softb.system.web.config.WebMvcConfig;
 @Configuration
 @EnableAutoConfiguration
 @EnableConfigurationProperties
-@Import(value={/*MetricsConfig.class, */WebMvcConfig.class, ServiceConfig.class, SocialConfig.class, SecurityConfig.class, SwaggerConfiguration.class, CacheConfig.class, LoggingConfig.class})
+@Import(value={/*MetricsConfig.class, */WebMvcConfig.class, ServiceConfig.class, SocialConfig.class, SecurityConfig.class, /*SwaggerConfiguration.class, */CacheConfig.class, LoggingConfig.class})
 public class Application {
 
     private final Logger log = LoggerFactory.getLogger(Application.class);
@@ -100,6 +99,9 @@ public class Application {
                 "liquibase.structure" + "," + "liquibase.structurecompare" + "," + "liquibase.lockservice" + "," +
                 "liquibase.ext" + "," + "liquibase.changelog");
     }
-	
-
+    
+//    @Bean
+//    public MultipartResolver multipartResolver() {
+//        return new StandardServletMultipartResolver();
+//    }
 }
