@@ -13,12 +13,13 @@
 						</div>
 						<div class="tools">
 							<span class="dropdown" dropdown on-toggle="toggled(open)">
-							  <button href class="dropdown-toggle" dropdown-toggle>
-							    <i style="background-image: url(../img/icon/ic_overflow.png);"></i>
-							  </button>
-							  <ul class="dropdown-menu">
-							    <li ng-repeat="choice in items">
-							      <a href>{{choice}}</a>
+							<span class="glyphicon glyphicon-option-vertical" aria-hidden="true" class="dropdown-toggle" dropdown-toggle></span>
+							  <ul class="dropdown-menu dropdown-menu-right">
+							    <li>
+							      <a href ng-click="new()"><i class="glyphicon glyphicon-plus"></i>Novo</a>
+							    </li>
+							    <li>
+							      <a href  ng-click="remove()"><i class="glyphicon glyphicon-remove"></i>Excluir</a>
 							    </li>
 							  </ul>
 							</span>

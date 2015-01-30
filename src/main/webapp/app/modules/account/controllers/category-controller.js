@@ -17,8 +17,8 @@ define([ './module', './category-resources' ], function(module) {
 		};
 	});
 	
-	module.controller('CategoryController', ['$scope', '$log', 'CategoryResource',
-	    function($scope, $log, Category) {
+	module.controller('CategoryController', ['$scope', '$log', '$http', 'CategoryResource',
+	    function($scope, $log, $http, Category) {
 			$scope.selectedCategories = [];
 			
 			// Recupera as categorias já cadastradas no banco para o usuário.
@@ -68,22 +68,12 @@ define([ './module', './category-resources' ], function(module) {
 				gridApi.edit.on.afterCellEdit($scope,function(rowEntity, colDef, newValue, oldValue){
 					$scope.save(rowEntity);
 				});
-				
-				// Row Selection
-				gridApi.selection.on.rowSelectionChanged($scope,function(row){
-					if (row.isSelected){
-						$scope.selectedCategories.push(row);
-					} else {
-						for (i in $scope.selectedCategories){
-							if ($scope.selectedCategories[i].id = row.entity.id){
-								$scope.selectedCategories.splice(i, 1);
-								break;
-							}
-						}
-					}
-				});
 			};
 
+			$scope.new = function(){
+				$scope.categories.unshift({name: '', subCategoryName: '', type: ''});
+			}
+			
 			$scope.save = function(data, index) {
 				angular.extend(data, {});
 				
@@ -98,23 +88,38 @@ define([ './module', './category-resources' ], function(module) {
 					});
 				}
 			};
+			
+			// Remove Categoria
+			$scope.remove = function() {
+				var categories = $scope.gridApi.selection.getSelectedRows();
+				$http.post('api/account/category/deleteList', categories).
+				  success(function(data, status, headers, config) {
+					  
+					  // Atualiza a visualização da tabela.
+					  for (var iRemoved in categories){
+						  for (var iList in $scope.categories){
+							  if ( categories[iRemoved].id == $scope.categories[iList].id ){
+								  $scope.categories.splice(iList, 1);
+								  break;
+							  }
+						  }
+					  }
+				  }).
+				  error(function(data, status, headers, config) {
+					  console.log('Erro ao tentar remover categorias.')
+				  });
+				
+			};
 		}
 	])
 });
 
 function validate(category){
-	return category.name && category.subCategoryName && category.type && category.kind;
+	return category.name && category.subCategoryName && category.type;
 }
 
-//
-//// Remove Categoria
-//$scope.removeCategory = function(index) {
-//	Category.delete({categoryId: $scope.categories[index].id}).$promise.then(function(){
-//		$scope.categories.splice(index, 1);
-//	},function(){
-//		
-//	});
-//};
+
+
 
 //// Adiciona nova linha
 //$scope.addCategory = function() {

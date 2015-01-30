@@ -8,6 +8,8 @@ import javax.inject.Inject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.softb.ipocket.account.model.Category;
@@ -64,5 +66,8 @@ public class CategoryController extends AbstractRestController<Category, Integer
 		return(id != null ? super.update(id, json) : super.create(json));
 	}
 	
-	
+	@RequestMapping(value="/deleteList", method=RequestMethod.POST)
+	public @ResponseBody void delete(@RequestBody List<Category> json) throws FormValidationError{
+		categoryRepository.delete(json);
+	}
 }
