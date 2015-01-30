@@ -39,9 +39,9 @@ public class Category extends BaseEntity<Integer> implements Serializable {
 	@NotEmpty
 	protected String type;
 	
-	@Column(name = "KIND")
-	@NotEmpty
-	protected String kind;
+//	@Column(name = "KIND")
+//	@NotEmpty
+//	protected String kind;
 	
 	@Column(name="USER_ID")
 	@NotNull

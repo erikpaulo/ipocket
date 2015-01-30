@@ -26,8 +26,8 @@ require.config({
 		
 		'pane': 'resources/legacy/pace/pace.min',
 		
-		'bootstrap-datepicker': 'resources/lib/bootstrap-datepicker/js/bootstrap-datepicker',
-		'bootstrap-datepicker-pt-BR': 'resources/lib/bootstrap-datepicker/js/locales/bootstrap-datepicker.pt-BR',
+//		'bootstrap-datepicker': 'resources/lib/bootstrap-datepicker/js/bootstrap-datepicker',
+//		'bootstrap-datepicker-pt-BR': 'resources/lib/bootstrap-datepicker/js/locales/bootstrap-datepicker.pt-BR',
 		
 		'jquery-slimscroll': 'resources/legacy/jquery-slimscroll/jquery.slimscroll.min',
 		'jquery-slider': 'resources/legacy/jquery-slider/jquery.sidr.min',
@@ -57,7 +57,7 @@ require.config({
 		// === NG CURRENCY
 		'ng-currency': 'resources/lib/ng-currency/dist/ng-currency.min',
 		
-		'xeditable': 'resources/lib/angular-xeditable/dist/js/xeditable',
+//		'xeditable': 'resources/lib/angular-xeditable/dist/js/xeditable',
 		
 		'layout-core': 'system/layout-core',
 		'layout-form': 'system/layout-form',
@@ -82,8 +82,8 @@ require.config({
 
  		'datatables-fixedcolumns': {deps: ['jquery', 'datatables']},
  		'angular-ui-grid': ['angular'],
-		'bootstrap-datepicker-pt-BR': ['jquery', 'bootstrap-datepicker'],
-		'bootstrap-datepicker': ['jquery'], 
+//		'bootstrap-datepicker-pt-BR': ['jquery', 'bootstrap-datepicker'],
+//		'bootstrap-datepicker': ['jquery'], 
 		'bootstrap': ['jquery'],
 		'breakpoints': ['jquery'],
 		'jquery-unveil': ['jquery'],
@@ -96,10 +96,10 @@ require.config({
 		'select2' : ['jquery'],
 		'jquery-validation': ['jquery'],
 		'jquery-validation-add-methods': ['jquery-validation'],
-		'xeditable': ['angular'],
+//		'xeditable': ['angular'],
  		
         'layout-core': {
-			deps: ['jquery-ui', 'bootstrap', 'breakpoints', 'jquery-unveil', 'pane', 'jquery-slimscroll', 'jquery-block-ui', 'jquery-slider', 'bootstrap-datepicker-pt-BR', 'xeditable', 'angular-ui-grid', 'angular-file-upload']
+			deps: ['jquery-ui', 'bootstrap', 'breakpoints', 'jquery-unveil', 'pane', 'jquery-slimscroll', 'jquery-block-ui', 'jquery-slider'/*, 'bootstrap-datepicker-pt-BR'*/, 'angular-ui-grid', 'angular-file-upload']
 		},
 		
 		'layout-form': ['layout-core', 
@@ -114,7 +114,7 @@ require.config({
 		                'datatables-lodash'],
 		
 		'app': {
-			deps: ['layout-core', 'angular', 'angular-route', 'angular-dragdrop', 'angular-ui-select2', 'ui-bootstrap-tpls', 'angular-cookies', 'angular-dynamic-locale', 'xeditable', 'angular-file-upload']
+			deps: ['layout-core', 'angular', 'angular-route', 'angular-dragdrop', 'angular-ui-select2', 'ui-bootstrap-tpls', 'angular-cookies', 'angular-dynamic-locale', 'angular-file-upload']
 		},
 	}
 });

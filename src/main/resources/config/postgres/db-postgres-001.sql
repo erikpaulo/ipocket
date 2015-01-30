@@ -67,7 +67,7 @@ CREATE TABLE CATEGORY (
 	NAME				VARCHAR(255),
 	SUBCATEGORY_NAME	VARCHAR(255),
 	TYPE				VARCHAR(1), /*F - despesa fixa, V - despesa variável, I - despesa irregular, E - entrada */
-	KIND				VARCHAR(255),
+/*	KIND				VARCHAR(255),*/
 	USER_ID				INTEGER REFERENCES user_account(id),
 	
 	CONSTRAINT U_CONST_01 UNIQUE (USER_ID,NAME,SUBCATEGORY_NAME)

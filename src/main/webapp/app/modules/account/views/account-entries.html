@@ -1,4 +1,6 @@
 <link href="resources/styles/table.css" rel="stylesheet" type="text/css" />
+<link href="resources/lib/angular-ui-grid/ui-grid.css" rel="stylesheet" type="text/css" />
+<link href="resources/styles/forms.css" rel="stylesheet" type="text/css" />
 
 <section ng-controller="AccountEntryController">
 	<div class="content">
@@ -19,9 +21,9 @@
 						</div>
 					</div>
 					<div class="grid-body">
-						<div class="row">
+						<div class="row" ng-cloak>
 							<br>
-							<div ui-grid="gridOptions" ui-grid-selection class="grid"></div>
+							<div ui-grid="gridOptions" ui-grid-selection ></div>
 						</div>
 						<div class="row">
 							<div class="col-md-1"></div>

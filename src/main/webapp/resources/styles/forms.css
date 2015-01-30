@@ -654,7 +654,51 @@ form legend,
 .tab-content.transparent{
 	background-color:transparent;
 }
+/*** UI-GRID ***/
+.ui-grid-header-cell {
+	position: relative;
+	float: left;
+	top: 0;
+	bottom: 0;
+	min-height: 65px;
+	background-color: inherit;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	width: 0;
+}
+
+
+div.ui-grid-cell-custom input  {
+	*border-radius: inherit;
+	*padding: 0;
+	width: 97%;
+	*color: inherit;
+	height: 5px;
+	*font: inherit;
+	*outline: none;
+	margin-left: 5px;
+	margin-top: 5px;
+	min-height: 22px;
+}
+
+div.ui-grid-cell-custom select {
+	width: 95% !important;
+	min-height: 60px;
+	margin-left: 5px;
+	margin-top: 5px;
+	padding: 5px;
+}
+
+/* .ui-grid-custom { */
+/* 	width: 600px; */
+/* } */
+
 /*** grids ***/
+
+
+
 .grid  {
   clear: both;
   margin-top: 0px;
@@ -714,7 +758,13 @@ form legend,
 .grid-title .tools  a{
 	vertical-align: middle;
 	color: grey;
+	position: fixed;
+	right: 3%;
+	top: 25%;
 } 
+
+
+
 /*
 .grid-title .tools > a:hover, 
 .grid-title .tools > button:hover {
