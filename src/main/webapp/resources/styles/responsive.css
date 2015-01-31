@@ -616,6 +616,10 @@ and (orientation : portrait) {
 /*** Phones ***/
 @media (max-width: 480px) {
 	
+	.h3, h3 {
+		font-size: 20px;
+	}
+	
 	.page-title h3{
 		width:80%;
 	}	
@@ -796,6 +800,11 @@ and (orientation : portrait) {
 	  padding-right: 8px !important;
 	}
 	
+	/* Title */
+	.h3, h3 {
+		font-size: 20px;
+	}
+	
 }	
 
 
@@ -805,7 +814,6 @@ and (orientation : portrait) {
        only screen and (-o-min-device-pixel-ratio: 200/100),
        only screen and (min-device-pixel-ratio: 2.0) {
 		.grid.simple .grid-title .tools a{
-  			background: url('../img/icon/portlet-tray-2x.png');
 			background-size: 199px 57px;
 		} 	
 		.tiles .controller a{

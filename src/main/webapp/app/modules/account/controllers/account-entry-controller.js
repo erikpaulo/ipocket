@@ -3,12 +3,14 @@ define(['./module', './account-resources', './account-entry-resources', './categ
 	
 	app.controller('AccountEntryController', ['$scope', '$http', '$modal', '$window', '$filter', '$routeParams', 'AccountResource', 'AccountEntryResource', 'CategoryResource', 'MessageHandler', 'uiGridConstants', 'FileUploader',
         function($scope, $http, $modal, $window, $filter, $routeParams, Account, AccountEntry, Category, MessageHandler, uiGridConstants, FileUploader) {
-			var profile = ($window.innerWidth > 768 ? 'TOTAL' : 'MINIMUM');
+			$scope.fullLayout = ($window.innerWidth > 768);
 		  	$scope.tabs = [
 		  	             { title:'Direto', type: 'D', active: true },
 		                 { title:'Transferência', type: 'T', active: false }
 		               ];
 		
+		  	console.log('Layout: '+ $scope.fullLayout)
+		  	
 			$scope.appContext.changeCurrentContext($scope.modules[0].id);
 			$scope.account = {};
 			$scope.accounts = [];
@@ -33,9 +35,9 @@ define(['./module', './account-resources', './account-entry-resources', './categ
 			             {field: 'accountId',displayName: 'accountId',  visible: false},
 			             {field: 'userId',displayName: 'userId',  visible: false},
 			             {field: 'date', displayName: 'Data', type: 'date', cellFilter: "date:'dd/MM/yyyy'", width: '85', enableFiltering: false, cellClass: 'align-date', headerCellClass: 'align-date'},
-			             {field: 'description', displayName: 'Descrição', width: '*', visible: (profile == 'TOTAL' ? true : false)},
+			             {field: 'description', displayName: 'Descrição', width: '*', visible: $scope.fullLayout},
 			             {field: 'category.getFullName()', displayName: 'Categoria', width: '*', filter: {condition: uiGridConstants.filter.CONTAINS}},
-			             {field: 'reconciled', displayName: 'R', width: '5', enableFiltering: false, cellClass: 'align-date', headerCellClass: 'align-date', visible: (profile == 'TOTAL' ? true : false)},
+			             {field: 'reconciled', displayName: 'R', width: '5', enableFiltering: false, cellClass: 'align-date', headerCellClass: 'align-date', visible: $scope.fullLayout},
 			             {field: 'amount', 
 			            	 displayName: 'Valor', 
 			            	 width: '130', 
@@ -49,13 +51,10 @@ define(['./module', './account-resources', './account-entry-resources', './categ
 			            	 enableFiltering: false, 
 			            	 cellTemplate: '<div class="ui-grid-cell-contents ng-binding ng-scope align-currency" ng-class="{positive:grid.getCellValue(row,col)>0, negative:grid.getCellValue(row,col)<0}">{{grid.getCellValue(row,col) | currency:"R$ "}}</div></div>',
 			            	 headerCellClass: 'align-currency', 
-			            	 visible: (profile == 'TOTAL' ? true : false)}
+			            	 visible: $scope.fullLayout}
 		             ]
 			
 			};
-			
-			// De acordo com a resolução corrente, show/hide algumas colunas.
-			
 			
 			// Registra eventos na tabela de lançamentos para permitir seleção nas linhas.
 			$scope.gridOptions.onRegisterApi = function( gridApi ) {

@@ -765,7 +765,8 @@ div.ui-grid-cell-custom select {
 
 /* Title */
 .grid-title {  
-
+	border-top-left-radius: 8px;
+	border-top-right-radius: 8px;
 }
 
 .grid-title h4 {

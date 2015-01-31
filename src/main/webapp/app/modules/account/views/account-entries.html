@@ -12,23 +12,30 @@
 							<span>{{account.name}}</span>
 						</h3>
 						<div class="tools">
-							<button type="button" ng-click="uploadFile()" class="btn btn-default btn-info" title="Importar Lançamentos">
-							  <span class="glyphicon glyphicon-open-file"></span>
-							</button>
-							<button type="button" class="btn btn-default btn-danger" title="Excluir Conta">
-							  <span class="glyphicon glyphicon-remove-circle"></span>
-							</button>
+							<span class="dropdown" dropdown on-toggle="toggled(open)">
+							<span class="glyphicon glyphicon-option-vertical" aria-hidden="true" class="dropdown-toggle" dropdown-toggle></span>
+							  <ul class="dropdown-menu dropdown-menu-right">
+							    <li>
+							      <a href ng-click="uploadFile()"><i class="glyphicon glyphicon-open-file"></i>Importar Lançamentos</a>
+							    </li>
+							    <li>
+							      <a href ng-click="inactivateAccount()"><i class="glyphicon glyphicon-remove-circle"></i>Inativar Conta</a>
+							    </li>
+							  </ul>
+							</span>
 						</div>
 					</div>
 					<div class="grid-body">
 						<div class="row" ng-cloak>
-							<br>
-							<div ui-grid="gridOptions" ui-grid-selection ></div>
+							<div class="col-md-12">
+								<div ui-grid="gridOptions" ui-grid-selection ></div>
+							</div>
 						</div>
 						<div class="row">
 							<div class="col-md-1"></div>
 							<div class="col-md-10">
-								<div class="tabbable tabs-left">
+								<br>
+								<div class="tabbable" ng-class="{'tabs-left': fullLayout, 'tabs-below': !fullLayout}">
 									<tabset> 
 										<tab ng-repeat="tab in tabs" heading="{{tab.title}}" active="tab.active">
 											<div style="min-height: 106px">
@@ -76,6 +83,7 @@
 																</div>
 															</div>
 														</div>
+														<br>
 													</div>
 													<div class="col-md-2">
 														<button type="submit" class="btn btn-block btn-success"
