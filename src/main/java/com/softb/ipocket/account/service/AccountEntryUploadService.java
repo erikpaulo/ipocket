@@ -49,7 +49,7 @@ public class AccountEntryUploadService {
 		List<AccountEntryImport> entriesToImport = new ArrayList<AccountEntryImport>();
 		AccountEntryImport entryToImport = null;
 		String[] dateFormat = {"dd/MM/yyyy"};
-		NumberFormat nf = NumberFormat.getInstance(new Locale("pt","BR"));
+		NumberFormat nf = NumberFormat.getCurrencyInstance(new Locale("pt","BR"));
 		
 		// Caso tenha sido enviado mais de um arquivo, itera por eles.
 		while (fileIterator.hasNext()) {
