@@ -9,8 +9,6 @@ define(['./module', './account-resources', './account-entry-resources', './categ
 		                 { title:'Transferência', type: 'T', active: false }
 		               ];
 		
-		  	console.log('Layout: '+ $scope.fullLayout)
-		  	
 			$scope.appContext.changeCurrentContext($scope.modules[0].id);
 			$scope.account = {};
 			$scope.accounts = [];
@@ -89,7 +87,11 @@ define(['./module', './account-resources', './account-entry-resources', './categ
 			// Salva um novo ou já existente lançamento na conta selecionada.
 			$scope.save = function(form){
 				if (form.$valid){
-					$scope.accountEntry.category = $filter('filter')($scope.categories, {id: $scope.accountEntry.category.id})[0];
+					for (var i in $scope.categories){
+						if ($scope.categories[i].id == $scope.accountEntry.category.id){
+							$scope.accountEntry.category =  $scope.categories[i];
+						}
+					}
 					$scope.accountEntry.type = $filter('filter')($scope.tabs, {active: true})[0].type;
 					
 					var entry = new AccountEntry({accountId: $scope.account.id});
@@ -99,6 +101,7 @@ define(['./module', './account-resources', './account-entry-resources', './categ
 					entry.$save(function(data){
 						$scope.clear(form);
 						$scope.updateView($scope.account, data.object, null);
+						$scope.accountEntry = {};
 					},function(err){
 						console.log('Não foi possível salvar o lançamento da conta. err: '+ err);
 					});
