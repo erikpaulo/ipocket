@@ -198,7 +198,7 @@ define(['./module', './account-resources', './account-entry-resources', './categ
 				});
 				
 				// Atualiza o saldo após o lançamento em questão.
-				var balance = 0;
+				var balance = account.startBalance;
 				for (var e in account.entries){
 					balance += account.entries[e].amount;
 					account.entries[e].balance = balance;
@@ -258,25 +258,8 @@ define(['./module', './account-resources', './account-entry-resources', './categ
 	     		
 	     		 var uploader = $scope.uploader = new FileUploader({
 	 	        	url: 'api/account/'+ accountId +'/entries/upload'
-//	 	        	headers: {'Content-Type': 'multipart/form-data'}
 	     		 });
 	     		 
-//	     		uploader.onAfterAddingFile = function(fileItem) {
-//		            console.info('onAfterAddingFile', fileItem);
-//		        };
-//		        uploader.onAfterAddingAll = function(addedFileItems) {
-//		            console.info('onAfterAddingAll', addedFileItems);
-//		        };
-//		        uploader.onBeforeUploadItem = function(item) {
-////		        	item.formData = angular.toJson(item.file)
-//		            console.info('onBeforeUploadItem', item);
-//		        };
-//		        uploader.onProgressItem = function(fileItem, progress) {
-//		            console.info('onProgressItem', fileItem, progress);
-//		        };
-//		        uploader.onProgressAll = function(progress) {
-//		            console.info('onProgressAll', progress);
-//		        };
 		        uploader.onSuccessItem = function(fileItem, response, status, headers) {
 		        	if (response.sucess){
 		        		$scope.entriesToImport = response.object;
@@ -284,41 +267,15 @@ define(['./module', './account-resources', './account-entry-resources', './categ
 		        		console.log('Não foi possível preparar o arquivo para import dos lançamentos. Message: '+ response.message)
 		        	}
 		        };
-//		        uploader.onErrorItem = function(fileItem, response, status, headers) {
-//		            console.info('onErrorItem', fileItem, response, status, headers);
-//		        };
-//		        uploader.onCancelItem = function(fileItem, response, status, headers) {
-//		            console.info('onCancelItem', fileItem, response, status, headers);
-//		        };
-//		        uploader.onCompleteItem = function(fileItem, response, status, headers) {
-//		            console.info('onCompleteItem', fileItem, response, status, headers);
-//		        };
-//		        uploader.onCompleteAll = function() {
-//		            console.info('onCompleteAll');
-//		        };
 	     		
 	     		$scope.ok = function ( form ) {
-//	     			if (form.$valid){
-	     				$modalInstance.close($scope.entriesToImport);
-//	     			} else {
-//	     				dirtyFormFields(form);
-//	     			}
+	     			$modalInstance.close($scope.entriesToImport);
 	     		};
 
 	     		$scope.cancel = function () {
 	     			$modalInstance.dismiss('cancel');
 	     		};
 	     	}
-	     	
-	        function dirtyFormFields(form){
-	    		for (var validation in form.$error){
-	    			for (var field in form.$error[validation]){
-	    				if (form.$error[validation][field].$pristine){
-	    					form.$error[validation][field].$pristine = false;
-	    				}
-	    			}
-	    		}
-	        }
 	}]);
 });
 

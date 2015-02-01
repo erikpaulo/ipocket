@@ -1,6 +1,8 @@
 package com.softb.ipocket.account.web;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -12,8 +14,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.tomcat.util.http.fileupload.FileItemIterator;
+import org.apache.tomcat.util.http.fileupload.FileUploadException;
 import org.apache.tomcat.util.http.fileupload.servlet.ServletFileUpload;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,6 +35,7 @@ import com.softb.ipocket.account.repository.AccountRepository;
 import com.softb.ipocket.account.repository.CategoryRepository;
 import com.softb.ipocket.account.service.AccountEntryUploadService;
 import com.softb.system.errorhandler.exception.FormValidationError;
+import com.softb.system.errorhandler.exception.SystemException;
 import com.softb.system.rest.AbstractRestController;
 import com.softb.system.security.model.UserAccount;
 import com.softb.system.security.service.UserAccountService;
@@ -124,29 +129,27 @@ public class AccountController extends AbstractRestController<Account, Integer> 
 	}
 	
 	@RequestMapping(value="/{accountId}/entries/upload", method = RequestMethod.POST)
-	@ResponseBody public Map<String, Object> uploadEntries(@PathVariable Integer accountId, final HttpServletRequest request,final HttpServletResponse response) throws IOException{
+	@ResponseBody public Map<String, Object> uploadEntries(@PathVariable Integer accountId, final HttpServletRequest request,final HttpServletResponse response) throws SystemException, DataAccessException, FileUploadException, IOException, ParseException{
 		Map<String, Object> map = new HashMap<String, Object>();
 		List<AccountEntryImport> entriesToImport = null;
 		
 		try {
 			request.setCharacterEncoding("utf-8");
-			if (request.getHeader("Content-Type") != null){
-				if  (request.getHeader("Content-Type").startsWith("multipart/form-data")) {
-					
-					// Importa o arquivo e prepara os dados para serem trabalhados pelo usuário.
-					ServletFileUpload upload = new ServletFileUpload();
-					FileItemIterator fileIterator = upload.getItemIterator(request);
-					entriesToImport = uploadService.csvImport(accountId, fileIterator);
-				} else if (request.getHeader("Content-Type").startsWith("application/json")) {
-					throw new Exception("Invalid Content-Type: "+ request.getHeader("Content-Type"));
-				}
-			}
-		} catch (Exception ex) {
-			map.put("sucess", false);
-			map.put("object", null);
-			map.put("message", ex.getMessage());
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		
+		if (request.getHeader("Content-Type") != null){
+			if  (request.getHeader("Content-Type").startsWith("multipart/form-data")) {
+				
+				// Importa o arquivo e prepara os dados para serem trabalhados pelo usuário.
+				ServletFileUpload upload = new ServletFileUpload();
+				FileItemIterator fileIterator = upload.getItemIterator(request);
+				entriesToImport = uploadService.csvImport(accountId, fileIterator);
+			} else {
+				throw new SystemException("Invalid Content-Type: "+ request.getHeader("Content-Type"));
+			}
+		}
 		map.put("sucess", true);
 		map.put("object", entriesToImport);
 		map.put("message", "");

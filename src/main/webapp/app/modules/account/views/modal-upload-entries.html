@@ -54,7 +54,7 @@
 		                                    <button type="button" class="btn btn-warning btn-small" ng-click="item.cancel()" ng-disabled="!item.isUploading">
 		                                        <span class="glyphicon glyphicon-ban-circle"></span> Cancel
 		                                    </button>
-		                                    <button type="button" class="btn btn-danger btn-small" ng-click="item.remove()">
+		                                    <button type="button" class="btn btn-danger btn-small" ng-click="item.remove()" ng-disabled="item.isReady || item.isUploading || item.isSuccess">
 		                                        <span class="glyphicon glyphicon-trash"></span> Remove
 		                                    </button>
 		                                </td>
@@ -97,7 +97,7 @@
 																</select>
 															</div>
 														</td>
-										  				<td>{{entryToImport.amount | currency:"R$ "}}</td>
+										  				<td ng-class="{positive: entryToImport.amount>0, negative: entryToImport.amount<0 }">{{entryToImport.amount | currency:"R$ "}}</td>
 														<td>
 															<span style="cursor:pointer;" tooltip="{{getConflictsText(entryToImport.conflicts)}}" class="label" ng-click="entryToImport.ok = !entryToImport.ok" ng-class="{'label-important': !entryToImport.ok, 'label-success': entryToImport.ok}">{{(entryToImport.ok ? 'Ok' : 'NOk')}}</span>
 														</td>
