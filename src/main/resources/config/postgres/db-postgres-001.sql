@@ -66,7 +66,7 @@ CREATE TABLE CATEGORY (
 	ID					SERIAL PRIMARY KEY,
 	NAME				VARCHAR(255),
 	SUBCATEGORY_NAME	VARCHAR(255),
-	TYPE				VARCHAR(1), /*F - despesa fixa, V - despesa variável, I - despesa irregular, E - entrada */
+	TYPE				VARCHAR(1), /*F - despesa fixa, V - despesa variável, I - despesa irregular, E - entrada, T - Transferência */
 /*	KIND				VARCHAR(255),*/
 	USER_ID				INTEGER REFERENCES user_account(id),
 	

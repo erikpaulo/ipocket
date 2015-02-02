@@ -5,7 +5,8 @@ define([ './module', './category-resources' ], function(module) {
                 'F' : 'Despesa Fixa', 
              	'V' : 'Despesa Variável',
              	'I' : 'Despesa Irregular',
-             	'E' : 'Entrada'
+             	'E' : 'Entrada',
+             	'T' : 'Transferência'
 				};
  
 				return function(input) {
@@ -56,7 +57,8 @@ define([ './module', './category-resources' ], function(module) {
                         {id : 'F', value : 'Despesa Fixa'}, 
                      	{id : 'V', value : 'Despesa Variável'},
                      	{id : 'I', value : 'Despesa Irregular'},
-                     	{id : 'E', value : 'Entrada'}
+                     	{id : 'E', value : 'Entrada'},
+                     	{id : 'T', value : 'Transferência'}
                      	] 
 			      }
              ];
@@ -117,24 +119,3 @@ define([ './module', './category-resources' ], function(module) {
 function validate(category){
 	return category.name && category.subCategoryName && category.type;
 }
-
-
-
-
-//// Adiciona nova linha
-//$scope.addCategory = function() {
-//	$scope.inserted = {
-//		name : '',
-//		subCategoryName : '',
-//		type : null,
-//		kind : null
-//	};
-//	$scope.categories.push($scope.inserted);
-//};
-
-//// Cancela uma operação.
-//$scope.cancel = function(index){
-//	if ( !$scope.categories[index].id ) {
-//		$scope.categories.splice(index, 1);
-//	}
-//}
