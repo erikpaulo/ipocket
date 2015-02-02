@@ -1,3 +1,5 @@
+pg:psql --app ipocket < /Users/eriklacerda/Documents/Personal/Projetos/ipocket/src/main/resources/config/postgres/db-postgres-001.sql
+
 heroku pg:psql —-app ipocket 
 TRUNCATE TABLE ACCOUNT_ENTRY RESTART IDENTITY CASCADE;
 TRUNCATE TABLE ACCOUNT RESTART IDENTITY CASCADE;
