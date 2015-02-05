@@ -110,7 +110,7 @@ public class AccountController extends AbstractRestController<Account, Integer> 
 	}
 
 	@Override
-	public Map<String, Object> create(@RequestBody Account json) throws FormValidationError {
+	public Account create(@RequestBody Account json) throws FormValidationError {
 
 		// Recupera o id do usuário logado para filtro dos dados.
 		UserAccount user = userAccountService.getCurrentUser();
@@ -118,14 +118,13 @@ public class AccountController extends AbstractRestController<Account, Integer> 
 		json.setUserId(userId);
 		
 		// Cria a nova conta.
-		Map<String, Object> m = super.create(json);
-		Account account = (Account) m.get("object");
+		Account account = super.create(json);
 		
 		// Atualiza o saldo na referência que será retornada.
 		account.setBalance(calcBalance(account));
-		m.put("object", account);
+//		m.put("object", account);
 		
-		return m;
+		return account;
 	}
 	
 	@RequestMapping(value="/{accountId}/entries/upload", method = RequestMethod.POST)

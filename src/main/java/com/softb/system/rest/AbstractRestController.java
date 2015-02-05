@@ -57,23 +57,23 @@ public abstract class AbstractRestController<T, ID extends Serializable> {
     }
 
     @RequestMapping(method=RequestMethod.POST)
-    public @ResponseBody Map<String, Object> create(@RequestBody T json) throws FormValidationError {
+    public @ResponseBody T create(@RequestBody T json) throws FormValidationError {
     	logger.debug("create() with body {} of type {}", json, json.getClass());
 
     	validate(getEntityName(), json);
     	
     	T created = getRepository().save(json);
 
-        Map<String, Object> m = new HashMap<String, Object>();
-        m.put("success", true);
-        m.put("object", created);
-        return m;
+//        Map<String, Object> m = new HashMap<String, Object>();
+//        m.put("success", true);
+//        m.put("object", created);
+        return created;
     }
 
     public abstract String getEntityName();
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-    public Map<String, Object> update(@PathVariable("id") ID id, @RequestBody T json) {
+    public T update(@PathVariable("id") ID id, @RequestBody T json) {
         logger.debug("update() of id#{} with body {}", id, json);
         logger.debug("T json is of type {}", json.getClass());
 
@@ -85,19 +85,19 @@ public abstract class AbstractRestController<T, ID extends Serializable> {
         T updated = getRepository().save(json);
         logger.debug("updated enitity: {}", updated);
 
-        Map<String, Object> m = new HashMap<String, Object>();
-        m.put("success", true);
-        m.put("id", id);
-        m.put("object", updated);
-        return m;
+//        Map<String, Object> m = new HashMap<String, Object>();
+//        m.put("success", true);
+//        m.put("id", id);
+//        m.put("object", updated);
+        return updated;
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-    public @ResponseBody Map<String, Object> delete(@PathVariable("id") ID id) {
+    public @ResponseBody void delete(@PathVariable("id") ID id) {
     	getRepository().delete(id);
         Map<String, Object> m = new HashMap<String, Object>();
         m.put("success", true);
-        return m;
+//        return m;
     }
     
 	@RequestMapping(value = "deleteAll", method = RequestMethod.DELETE)

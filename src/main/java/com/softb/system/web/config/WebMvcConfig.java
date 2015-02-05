@@ -40,8 +40,10 @@ import com.softb.system.web.filter.gzip.GZipServletFilter;
 		"com.softb.system.rest", 
 		"com.softb.system.errorhandler.web",
 		"com.softb.ipocket.account.web",
+		"com.softb.ipocket.bill.web",
 		"com.softb.system.security.service", 
-		"com.softb.system.security.web"})
+		"com.softb.system.security.web"
+})
 public class WebMvcConfig extends WebMvcConfigurerAdapter implements ServletContextInitializer {
 
 	private final Logger logger = LoggerFactory.getLogger(WebMvcConfig.class);

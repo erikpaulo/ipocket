@@ -8,7 +8,7 @@
 		"dependencies": ["modules/dashboard/controllers/index"]
 
     },
-    {
+     {
         "id": "account", 
 		"name":"Contas", 
 		"icon": "glyphicon glyphicon-usd",
@@ -27,6 +27,14 @@
 		    }
 		]
     },
+    {
+        "id": "bills", 
+		"name":"Lançamentos Programados", 
+		"icon": "glyphicon glyphicon-calendar",
+		"originalPath": "/bill",
+		"templateUrl": "modules/bill/views/bill.html",
+		"dependencies": ["modules/bill/controllers/bill-controller", "app", "layout-form"]
+    },    
     {
         "id": "configuration", 
 		"name":"Configurações", 

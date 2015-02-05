@@ -17,8 +17,6 @@ import lombok.EqualsAndHashCode;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.softb.system.repository.BaseEntity;
 
 /**
@@ -30,7 +28,6 @@ import com.softb.system.repository.BaseEntity;
 @EqualsAndHashCode(callSuper = false)
 @Entity
 @Table(name = "ACCOUNT")
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Account extends BaseEntity<Integer> implements Serializable {
 
 	private static final long serialVersionUID = 1L;

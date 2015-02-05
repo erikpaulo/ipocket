@@ -1,0 +1,90 @@
+<div class="content">
+	<div class="page-title">
+		<div class="modaltitle">
+			<h3>
+				Editar Lançamento <span class="semi-bold">Programado</span>
+			</h3>
+		</div>
+	</div>
+	<div message-box handler="messageHandler" enable-remove="true" style="margin-bottom: 10px"></div>
+
+	<div class="form-group">
+		<div class="grid simple">
+			<div class="grid-body no-border" style="overflow: hidden; display: block;">
+				<br>
+				<form name="form_edit_bill" novalidate="novalidate">
+
+					<!-- Linha 01-->
+					<div class="row form-row">
+						<div class="col-md-5">
+							<div class="row">
+								<div class="col-md-12">
+									<label class="form-label">Descrição</label>
+									<div class="controls">
+										<input type="text" name="bill.description"	ng-model="bill.description" class="form-control" ng-required="true" ng-class="" mg-validation-alert>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-12">
+									<label class="form-label">Categoria</label>
+									<div class="controls">
+										<select ui-select2	ng-model="bill.category.id" name="bill.category.id" data-placeholder="Selecione" class="select2 form-control" ng-required="true" ng-class="" mg-validation-alert>
+											<option value=""></option>
+											<option	ng-repeat="category in categories"	value="{{category.id}}"	ng-selected="{{category.id == bill.category.id}}">{{category.name +" : "+ category.subCategoryName}}</option>
+										</select>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-12">
+									<label class="form-label">Conta Bancária</label>
+									<div class="controls">
+										<select ui-select2="{minimumResultsForSearch: -1}"	ng-model="bill.account.id" name="bill.account.id" data-placeholder="Selecione" class="select2 form-control" ng-required="true" ng-class="" mg-validation-alert>
+											<option value=""></option>
+											<option	ng-repeat="account in accounts"	value="{{account.id}}"	ng-selected="{{account.id == bill.account.id}}">{{account.name}}</option>
+										</select>
+									</div>
+								</div>
+							</div>
+						</div>
+						
+						<div class="col-md-7">
+							<div class="row" ng-show="bill.billEntries.length>0">
+								<div class="col-md-11 col-md-offset-1">
+								<br>
+										<table class="table table-bordered">
+											<thead>
+												<tr>
+													<th>Data</th>
+													<th>Valor</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr ng-repeat="entry in bill.billEntries">
+													<td><input type="date" ng-model="entry.date"/> </td>
+													<td><input type="number" ng-model="entry.amount" ng-class="{positive: entry.amount>0, negative: entry.amount<0}"/></td>
+												</tr>
+											</tbody>
+										</table>
+								</div>
+							</div>
+						</div>
+					</div>
+					
+					<!-- Linha 04 -->
+					<div class="form-actions">
+						<div class="pull-right">
+							<button type="button" class="btn btn-white btn-cons"
+								ng-click="cancel()">Cancelar</button>
+							<button type="submit" class="btn btn-success btn-cons"
+								ng-click="ok(form_edit_bill)">
+								<i class="icon-ok"></i> Salvar
+							</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>

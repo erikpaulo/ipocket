@@ -20,6 +20,16 @@
 	border-radius: 0px;
 }
 
+.table-bordered td input {
+	margin-bottom: 0px;
+}
+.table-bordered td input[type="date"] {
+	text-align: center;
+}
+.table-bordered td input[type="number"] {
+	text-align: right;
+}
+
 /* sobreescreve bootstrap para centralizar conteúdo no meio. */
  .table>tbody>tr>td {    
 	vertical-align: middle;

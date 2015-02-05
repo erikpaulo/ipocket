@@ -1,0 +1,45 @@
+<link href="resources/styles/table.css" rel="stylesheet" type="text/css" />
+<link href="resources/lib/angular-ui-grid/ui-grid.css" rel="stylesheet" type="text/css" />
+<link href="resources/styles/forms.css" rel="stylesheet" type="text/css" />
+
+<section ng-controller="BillController">
+	<div class="content">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="grid simple ">
+					<div class="grid-title">
+						<h3>
+							Lançamentos <span class="semi-bold">Programados</span>
+						</h3>
+						<div class="tools">
+							<span class="dropdown" dropdown on-toggle="toggled(open)">
+							<span class="glyphicon glyphicon-option-vertical" aria-hidden="true" class="dropdown-toggle" dropdown-toggle></span>
+							  <ul class="dropdown-menu dropdown-menu-right">
+							    <li>
+							      <a href ng-click="new()"><i class="glyphicon glyphicon-plus-sign"></i>Novo</a>
+							    </li>
+							    <li>
+							      <a href ng-click="edit()"><i class="glyphicon glyphicon-edit"></i>Editar</a>
+							    </li>
+							    <li>
+							      <a href ng-click="delete()"><i class="glyphicon glyphicon-remove-circle"></i>Excluir</a>
+							    </li>
+							    <li>
+							      <a href ng-click="register()"><i class="glyphicon glyphicon-save"></i>Registrar em Conta</a>
+							    </li>
+							  </ul>
+							</span>
+						</div>
+					</div>
+					<div class="grid-body">
+						<div class="row" ng-cloak>
+							<div class="col-md-12">
+								<div ui-grid="gridOptions" ui-grid-selection class="grid-no-filter"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>

@@ -19,9 +19,15 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @Configuration
 @EnableJpaRepositories(basePackages = { 
-		"com.softb.system.security.repository", "com.softb.ipocket.account.repository"})
+		"com.softb.system.security.repository", 
+		"com.softb.ipocket.account.repository",
+		"com.softb.ipocket.bill.repository"
+})
 @EntityScan(basePackages = { 
-		"com.softb.system.security.model", "com.softb.ipocket.account.model"})
+		"com.softb.system.security.model", 
+		"com.softb.ipocket.account.model",
+		"com.softb.ipocket.bill.model"
+})
 public class RepositoryConfig  {
 
     private final Logger logger = LoggerFactory.getLogger(RepositoryConfig.class);

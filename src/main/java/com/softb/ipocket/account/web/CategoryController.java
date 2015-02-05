@@ -1,7 +1,6 @@
 package com.softb.ipocket.account.web;
 
 import java.util.List;
-import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -55,7 +54,7 @@ public class CategoryController extends AbstractRestController<Category, Integer
 	}
 
 	@Override
-	public Map<String, Object> create(@RequestBody Category json) throws FormValidationError {
+	public Category create(@RequestBody Category json) throws FormValidationError {
 
 		// Recupera o id do usuário logado para filtro dos dados.
 		UserAccount user = userAccountService.getCurrentUser();
