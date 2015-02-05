@@ -100,7 +100,7 @@ define(['./module', './account-resources', './account-entry-resources', './categ
 					// Salva
 					entry.$save(function(data){
 						$scope.clear(form);
-						$scope.updateView($scope.account, data.object, null);
+						$scope.updateView($scope.account, entry, null);
 						$scope.accountEntry = {};
 					},function(err){
 						console.log('Não foi possível salvar o lançamento da conta. err: '+ err);
@@ -114,10 +114,8 @@ define(['./module', './account-resources', './account-entry-resources', './categ
 			$scope.remove = function (form){
 				if ($scope.accountEntry.id){
 					new AccountEntry({accountId: $scope.account.id, id: $scope.accountEntry.id}).$delete(function(data){
-						if (data.success) {
-							$scope.updateView($scope.account, null, $scope.accountEntry)
-							$scope.clear(form);
-						} else console.log('Erro na remoção do lançamento.'); 
+						$scope.updateView($scope.account, null, $scope.accountEntry)
+						$scope.clear(form);
 					},function(err){
 						console.log('Não foi possível remover o lançamento selecionado. err: '+ err);
 					});
@@ -145,12 +143,10 @@ define(['./module', './account-resources', './account-entry-resources', './categ
 					})
 					$http.post('api/account/'+ $scope.account.id +'/entries/import', entriesToImport).
 					  success(function(data, status, headers, config) {
-						  if(data.success){
-							  angular.forEach(data.object, function(row){
-								  $scope.account.entries.push(row);
-							  })
-							  $scope.updateView($scope.account);
-						  }
+						  angular.forEach(data, function(row){
+							  $scope.account.entries.push(row);
+						  })
+						  $scope.updateView($scope.account);
 					  }).
 					  error(function(data, status, headers, config) {
 						  console.log('NOK')

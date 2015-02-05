@@ -51,7 +51,6 @@ public class BillController extends AbstractRestController<Bill, Integer> {
 
 	@Override
 	public List<Bill> listAll() {
-		
 		// Recupera todas as contas do usuário logado.
 		List<Bill> bills =  billRepository.listAllByUser(userAccountService.getCurrentUser().getId());
 		return bills;
@@ -59,22 +58,16 @@ public class BillController extends AbstractRestController<Bill, Integer> {
 	
 	@RequestMapping(value = "/{id}", method = RequestMethod.POST)
 	public Bill save(@RequestBody Bill bill) {
-//		Map<String, Object> map = new HashMap<String, Object>();
 		
 		// Salva as entradas.
 		List<BillEntry> billEntries = billEntryRepository.save(bill.getBillEntries());
 		
-		// Salva o lançamento programado.
+		// Salva o pagamento programado.
 		bill = billRepository.save(bill);
 		bill.setBillEntries(billEntries);
 
-//		map.put("success", true);
-//		map.put("object", bill);
-		
 		return bill;
 	}
-
-
 
 	public Bill create(@RequestBody Bill bill) throws FormValidationError {
 		List<BillEntry> entriesToSave = new ArrayList<BillEntry>();
@@ -100,10 +93,6 @@ public class BillController extends AbstractRestController<Bill, Integer> {
 		}
 		entriesToSave = billEntryRepository.save(entriesToSave);
 		bill.setBillEntries(entriesToSave);
-		
-//		Map<String, Object> map = new HashMap<String, Object>();
-//		map.put("success", true);
-//		map.put("object", bill);
 		
 		return bill;
 	}

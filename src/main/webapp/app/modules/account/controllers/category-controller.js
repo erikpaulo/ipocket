@@ -73,21 +73,13 @@ define([ './module', './category-resources' ], function(module) {
 			};
 
 			$scope.new = function(){
-				$scope.categories.unshift({name: '', subCategoryName: '', type: ''});
+				$scope.categories.unshift(new Category());
 			}
 			
-			$scope.save = function(data, index) {
-				angular.extend(data, {});
-				
+			$scope.save = function(category) {
 				// Valida se os campos obrigatórios foram preenchidos.
-				if (!validate(data)){
-					return "Atributos obrigatórios não foram definidos.";
-				} else {
-					Category.new(data).$promise.then(function(returned){
-						$scope.categories[index] = returned.object;
-					},function(reason){
-						$log.error('Não foi possível criar categoria. Motivo: '+ reason)
-					});
+				if (validate(category)){
+					category.$new();
 				}
 			};
 			

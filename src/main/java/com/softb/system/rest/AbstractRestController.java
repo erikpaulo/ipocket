@@ -1,9 +1,7 @@
 package com.softb.system.rest;
 
 import java.io.Serializable;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -61,12 +59,8 @@ public abstract class AbstractRestController<T, ID extends Serializable> {
     	logger.debug("create() with body {} of type {}", json, json.getClass());
 
     	validate(getEntityName(), json);
-    	
     	T created = getRepository().save(json);
 
-//        Map<String, Object> m = new HashMap<String, Object>();
-//        m.put("success", true);
-//        m.put("object", created);
         return created;
     }
 
@@ -81,23 +75,14 @@ public abstract class AbstractRestController<T, ID extends Serializable> {
         // T entity = repository.findOne(id);
         
         validate(getEntityName(), json);
-        
         T updated = getRepository().save(json);
-        logger.debug("updated enitity: {}", updated);
 
-//        Map<String, Object> m = new HashMap<String, Object>();
-//        m.put("success", true);
-//        m.put("id", id);
-//        m.put("object", updated);
         return updated;
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public @ResponseBody void delete(@PathVariable("id") ID id) {
     	getRepository().delete(id);
-        Map<String, Object> m = new HashMap<String, Object>();
-        m.put("success", true);
-//        return m;
     }
     
 	@RequestMapping(value = "deleteAll", method = RequestMethod.DELETE)

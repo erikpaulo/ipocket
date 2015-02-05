@@ -48,10 +48,6 @@ public class CategoryController extends AbstractRestController<Category, Integer
 		return categories;
 	}
 
-	@Override
-	public String getEntityName() {
-		return OBJECT_NAME;
-	}
 
 	@Override
 	public Category create(@RequestBody Category json) throws FormValidationError {
@@ -68,5 +64,10 @@ public class CategoryController extends AbstractRestController<Category, Integer
 	@RequestMapping(value="/deleteList", method=RequestMethod.POST)
 	public @ResponseBody void delete(@RequestBody List<Category> json) throws FormValidationError{
 		categoryRepository.delete(json);
+	}
+	
+	@Override
+	public String getEntityName() {
+		return OBJECT_NAME;
 	}
 }

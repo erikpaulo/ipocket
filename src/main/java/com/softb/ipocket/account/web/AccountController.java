@@ -4,10 +4,8 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
@@ -37,7 +35,6 @@ import com.softb.ipocket.account.service.AccountEntryUploadService;
 import com.softb.system.errorhandler.exception.FormValidationError;
 import com.softb.system.errorhandler.exception.SystemException;
 import com.softb.system.rest.AbstractRestController;
-import com.softb.system.security.model.UserAccount;
 import com.softb.system.security.service.UserAccountService;
 
 @RestController("AccController")
@@ -74,12 +71,8 @@ public class AccountController extends AbstractRestController<Account, Integer> 
 	public List<Account> listAll() {
 		Account account = null;
 		
-		// Recupera o id do usuário logado para filtro dos dados.
-		UserAccount user = userAccountService.getCurrentUser();
-		Integer userId = user.getId();
-		
 		// Recupera todas as contas do usuário logado.
-		List<Account> accounts =  accountRepository.listAllByUser(userId);
+		List<Account> accounts =  accountRepository.listAllByUser(userAccountService.getCurrentUser().getId());
 		
 		// Atualiza o saldo das contas 'desnormalizado';
 		Iterator<Account> i = accounts.iterator();
@@ -113,23 +106,19 @@ public class AccountController extends AbstractRestController<Account, Integer> 
 	public Account create(@RequestBody Account json) throws FormValidationError {
 
 		// Recupera o id do usuário logado para filtro dos dados.
-		UserAccount user = userAccountService.getCurrentUser();
-		Integer userId = user.getId();		
-		json.setUserId(userId);
+		json.setUserId(userAccountService.getCurrentUser().getId());
 		
 		// Cria a nova conta.
 		Account account = super.create(json);
 		
-		// Atualiza o saldo na referência que será retornada.
+		// Atualiza o saldo.
 		account.setBalance(calcBalance(account));
-//		m.put("object", account);
 		
 		return account;
 	}
 	
 	@RequestMapping(value="/{accountId}/entries/upload", method = RequestMethod.POST)
-	@ResponseBody public Map<String, Object> uploadEntries(@PathVariable Integer accountId, final HttpServletRequest request,final HttpServletResponse response) throws SystemException, DataAccessException, FileUploadException, IOException, ParseException{
-		Map<String, Object> map = new HashMap<String, Object>();
+	@ResponseBody public List<AccountEntryImport> uploadEntries(@PathVariable Integer accountId, final HttpServletRequest request,final HttpServletResponse response) throws SystemException, DataAccessException, FileUploadException, IOException, ParseException{
 		List<AccountEntryImport> entriesToImport = null;
 		
 		try {
@@ -149,15 +138,12 @@ public class AccountController extends AbstractRestController<Account, Integer> 
 				throw new SystemException("Invalid Content-Type: "+ request.getHeader("Content-Type"));
 			}
 		}
-		map.put("sucess", true);
-		map.put("object", entriesToImport);
-		map.put("message", "");
 		
-		return map;
+		return entriesToImport;
 	}
 	
 	@RequestMapping(value="/{accountId}/entries/import", method = RequestMethod.POST)
-	@ResponseBody public Map<String, Object> importdEntries(@PathVariable Integer accountId, @RequestBody List<AccountEntryImport> json) throws IOException{
+	@ResponseBody public List<AccountEntry> importdEntries(@PathVariable Integer accountId, @RequestBody List<AccountEntryImport> json) throws IOException{
 		List<AccountEntry> entries = new ArrayList<AccountEntry>();
 		List<AccountEntry> entriesCreated = null;
 
@@ -182,16 +168,13 @@ public class AccountController extends AbstractRestController<Account, Integer> 
 		}
 		
 		entriesCreated = getAccountEntryRepository().save(entries);
-		Map<String, Object> m = new HashMap<String, Object>();
-		m.put("success", true);
-		m.put("object", entriesCreated);
-		return m;
+		return entriesCreated;
 	}
 
 	
 	@Transactional
 	@RequestMapping(value="/{accountId}/entries", method=RequestMethod.POST)
-	public Map<String, Object> createEntry(@PathVariable Integer accountId, @RequestBody AccountEntry json) throws FormValidationError, CloneNotSupportedException {
+	public AccountEntry createEntry(@PathVariable Integer accountId, @RequestBody AccountEntry json) throws FormValidationError, CloneNotSupportedException {
     	
 		// Recupera o id do usuário logado para filtro dos dados.
 		json.setUserId(userAccountService.getCurrentUser().getId());
@@ -213,31 +196,21 @@ public class AccountController extends AbstractRestController<Account, Integer> 
 		}
 		
 		AccountEntry created = getAccountEntryRepository().save(json);
-		Map<String, Object> m = new HashMap<String, Object>();
-		m.put("success", true);
-		m.put("object", created);
-		return m;
+		return created;
 	}
 	
 	@RequestMapping(value="/{accountId}/entries/{accountEntryId}", method=RequestMethod.POST)
-	public Map<String, Object> updateEntry(@PathVariable Integer accountId, @PathVariable Integer accountEntryId, @RequestBody AccountEntry json) throws FormValidationError {
+	public AccountEntry  updateEntry(@PathVariable Integer accountId, @PathVariable Integer accountEntryId, @RequestBody AccountEntry json) throws FormValidationError {
     	
 		validate("AccountEntry", json);
 		
 		AccountEntry updated = getAccountEntryRepository().save(json);
-		Map<String, Object> m = new HashMap<String, Object>();
-		m.put("success", true);
-		m.put("object", updated);
-		return m;
+		return updated;
 	}
 	
 	@RequestMapping(value="/{accountId}/entries/{accountEntryId}", method=RequestMethod.DELETE)
-	public Map<String, Object> removeEntry(@PathVariable Integer accountId, @PathVariable Integer accountEntryId) throws FormValidationError {
-    	
+	public void removeEntry(@PathVariable Integer accountId, @PathVariable Integer accountEntryId) throws FormValidationError {
 		getAccountEntryRepository().delete(accountEntryId);
-		Map<String, Object> m = new HashMap<String, Object>();
-		m.put("success", true);
-		return m;
 	}
 	
 	/**
