@@ -1,6 +1,6 @@
 /**
-* Changeset 001
-* Criação da aplicação.
+* Changeset 002
+* Acrescentando módulo de gestão de pagamentos programados (bills).
 * heroku pg:psql --app ipocket < /Users/eriklacerda/Documents/Personal/Projetos/ipocket/src/main/resources/config/postgres/db-postgres-001.sql
 */
 

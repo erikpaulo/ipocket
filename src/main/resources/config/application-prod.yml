@@ -1,6 +1,6 @@
 server:
     port: 8080
-    contextPath: /
+    contextPath: /ipocket
     tomcat:
         access_log_enabled: true
         basedir: target/tomcat
