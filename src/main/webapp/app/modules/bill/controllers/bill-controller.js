@@ -97,7 +97,7 @@ define(['./module', './bill-resources', '../../account/controllers/category-reso
 				// Recupera o objecto correspondente a conta selecionada.
 				for(var i=0;i<$scope.accounts.length;i++){
 					if ($scope.accounts[i].id == bill.account.id){
-						bill.account = $scope.accounts[i];
+						bill.account = angular.copy($scope.accounts[i]);
 						break;
 					}
 				}
@@ -148,6 +148,9 @@ define(['./module', './bill-resources', '../../account/controllers/category-reso
 		$scope.jump = function (){
 			if ($scope.gridApi.selection.getSelectedRows().length>0){
 				var bill = $scope.gridApi.selection.getSelectedRows()[0];
+				// WORKAROUND: ui-grid retorna as entradas da conta associada ao pagamento 
+				// incorretamente causando problema na deserialização
+				bill.account.entries = null;
 				bill.$skip(function(){
 					updateListView($scope.bills, null, (bill.billEntries < 1 ? bill : null));
 				});
@@ -203,9 +206,11 @@ define(['./module', './bill-resources', '../../account/controllers/category-reso
 		    
 			// Ordena crescente pela data.
 			bills.sort(function(a, b){
-				if (!angular.isDate(a.date)) a.date = new Date(a.date);
-				if (!angular.isDate(b.date)) b.date = new Date(b.date);
-				return a.billEntries[0].date - b.billEntries[0].date;
+				a.date = a.billEntries[0].date;
+				b.date = b.billEntries[0].date;
+	    		if (!angular.isDate(a.date)) a.date = new Date(a.date);
+	    		if (!angular.isDate(b.date)) b.date = new Date(b.date);
+				return a.date - b.date;
 			});
 			
 			updateChart();
