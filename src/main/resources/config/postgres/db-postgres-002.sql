@@ -1,7 +1,7 @@
 /**
 * Changeset 002
 * Acrescentando módulo de gestão de pagamentos programados (bills).
-* heroku pg:psql --app ipocket < /Users/eriklacerda/Documents/Personal/Projetos/ipocket/src/main/resources/config/postgres/db-postgres-001.sql
+* heroku pg:psql --app ipocket < /Users/eriklacerda/Documents/Personal/Projetos/ipocket/src/main/resources/config/postgres/db-postgres-002.sql
 */
 
 DROP TABLE IF EXISTS BILL_ENTRY;

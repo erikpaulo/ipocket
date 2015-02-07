@@ -192,21 +192,21 @@ define(['./module', './bill-resources', '../../account/controllers/category-reso
 		    	}
 		    });
 			
+		    // Ordena as entradas de cada lançamento programado.
+		    for (var i=0;i<bills.length;i++){
+		    	bills[i].billEntries.sort(function(a, b){
+		    		if (!angular.isDate(a.date)) a.date = new Date(a.date);
+		    		if (!angular.isDate(b.date)) b.date = new Date(b.date);
+		    		return a.date - b.date;
+		    	})
+		    }
+		    
 			// Ordena crescente pela data.
 			bills.sort(function(a, b){
 				if (!angular.isDate(a.date)) a.date = new Date(a.date);
 				if (!angular.isDate(b.date)) b.date = new Date(b.date);
-				return b.date - a.date;
+				return a.billEntries[0].date - b.billEntries[0].date;
 			});
-			
-			// Ordena as entradas de cada lançamento programado.
-			for (var i=0;i<bills.length;i++){
-				bills[i].billEntries.sort(function(a, b){
-				if (!angular.isDate(a.date)) a.date = new Date(a.date);
-				if (!angular.isDate(b.date)) b.date = new Date(b.date);
-				return a.date - b.date;
-				})
-			}
 			
 			updateChart();
 			
