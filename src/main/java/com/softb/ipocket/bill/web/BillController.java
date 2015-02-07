@@ -9,6 +9,7 @@ import javax.inject.Inject;
 
 import org.apache.commons.lang.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -17,6 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.softb.ipocket.account.model.AccountEntry;
 import com.softb.ipocket.account.model.Category;
 import com.softb.ipocket.account.repository.AccountEntryRepository;
+import com.softb.ipocket.account.web.AccountConstants;
+import com.softb.ipocket.account.web.AccountController;
 import com.softb.ipocket.bill.model.Bill;
 import com.softb.ipocket.bill.model.BillEntry;
 import com.softb.ipocket.bill.repository.BillEntryRepository;
@@ -39,6 +42,9 @@ public class BillController extends AbstractRestController<Bill, Integer> {
 	
 	@Autowired
 	private AccountEntryRepository accountEntryRepository;
+	
+	@Autowired
+	private AccountController accountController;
 	
 	@Override
 	public BillRepository getRepository() {
@@ -97,6 +103,60 @@ public class BillController extends AbstractRestController<Bill, Integer> {
 		return bill;
 	}
 
+	@Transactional
+	@RequestMapping(value = "/{id}/register", method = RequestMethod.POST)
+	public Bill register(@RequestBody Bill bill) throws FormValidationError {
+		validate(getEntityName(), bill);
+		BillEntry entryToDelete = bill.getBillEntries().get(0);
+		
+		// Cria o lançamento que será incluído.
+		AccountEntry entry = new AccountEntry(	bill.getAccount().getId(), bill.getDescription(), bill.getCategory(), 
+												entryToDelete.getDate(), null, entryToDelete.getAmount(), null, 
+												null, AccountConstants.TYPE_DIRECT, null);
+		accountController.createEntry(bill.getAccount().getId(), entry);
+		
+		// Remove esta entrada dos lançamentos programados.
+		billEntryRepository.delete(entryToDelete); 
+		bill.getBillEntries().remove(0);
+		
+		// Atualiza as entradas do pagamento.
+		bill = updateEntries(bill);
+		
+		return bill;
+	}
+
+	
+	@RequestMapping(value = "/{id}/skip", method = RequestMethod.POST)
+	public Bill skip(@RequestBody Bill bill) throws FormValidationError {
+		
+		billEntryRepository.delete(bill.getBillEntries().get(0));
+		bill.getBillEntries().remove(0);
+		return updateEntries(bill);
+	}
+	
+	/**
+	 * Atualiza os valores das entradas da conta.
+	 * @param bill
+	 * @return
+	 */
+	private Bill updateEntries(Bill bill) {
+		if (bill.getBillEntries().size() > 0){
+			
+			// Atualiza o valor das entradas se o tipo da conta é média dos ultimos lançamentos.
+			if (bill.getCalcType().equalsIgnoreCase("A")){
+				Double amount = getAccountEntryAmountAverage(bill.getCategory(), bill.getAverageCount());
+				for (BillEntry entryToUpdate: bill.getBillEntries()){
+					entryToUpdate.setAmount(amount);
+				}
+				billEntryRepository.save(bill.getBillEntries());
+			}
+		} else {
+			// Remove a conta do sistema.
+			billRepository.delete(bill);
+		}
+		
+		return bill;
+	}
 
 	/**
 	 * Recupera a média dos 'count' ultimos itens lançados com a categoria informada.

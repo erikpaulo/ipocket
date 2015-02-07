@@ -1,9 +1,9 @@
 package com.softb.ipocket.account.web;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -107,6 +107,7 @@ public class AccountController extends AbstractRestController<Account, Integer> 
 
 		// Recupera o id do usuário logado para filtro dos dados.
 		json.setUserId(userAccountService.getCurrentUser().getId());
+		json.setCreateDate(new Date());
 		
 		// Cria a nova conta.
 		Account account = super.create(json);
@@ -121,12 +122,7 @@ public class AccountController extends AbstractRestController<Account, Integer> 
 	@ResponseBody public List<AccountEntryImport> uploadEntries(@PathVariable Integer accountId, final HttpServletRequest request,final HttpServletResponse response) throws SystemException, DataAccessException, FileUploadException, IOException, ParseException{
 		List<AccountEntryImport> entriesToImport = null;
 		
-		try {
-			request.setCharacterEncoding("utf-8");
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		request.setCharacterEncoding("utf-8");
 		if (request.getHeader("Content-Type") != null){
 			if  (request.getHeader("Content-Type").startsWith("multipart/form-data")) {
 				
@@ -143,7 +139,7 @@ public class AccountController extends AbstractRestController<Account, Integer> 
 	}
 	
 	@RequestMapping(value="/{accountId}/entries/import", method = RequestMethod.POST)
-	@ResponseBody public List<AccountEntry> importdEntries(@PathVariable Integer accountId, @RequestBody List<AccountEntryImport> json) throws IOException{
+	@ResponseBody public List<AccountEntry> importEntries(@PathVariable Integer accountId, @RequestBody List<AccountEntryImport> json) throws IOException{
 		List<AccountEntry> entries = new ArrayList<AccountEntry>();
 		List<AccountEntry> entriesCreated = null;
 
@@ -158,10 +154,13 @@ public class AccountController extends AbstractRestController<Account, Integer> 
 				category = categoryRepository.findOneByUser(entryToImport.getCategory().getId(), userAccountService.getCurrentUser().getId());
 			}
 			
+			// Se import ocorrendo em conta tipo crédito, inverte o sinal.
+			Account account = accountRepository.findOne(accountId);
+			
 			// Cria o lançamento que será incluído no sistema.
 			AccountEntry entry = new AccountEntry(	accountId, entryToImport.getDescription(), category, entryToImport.getDate(), 
-													"E", entryToImport.getAmount(), userAccountService.getCurrentUser().getId(), 
-													null, null, null);
+													"E", (account.getType().equalsIgnoreCase(AccountConstants.TYPE_CREDIT) ? -1 : 1) * entryToImport.getAmount(), 
+													userAccountService.getCurrentUser().getId(), null, null, null);
 			
 			validate("AccountEntry", entry);
 			entries.add(entry);
@@ -174,7 +173,7 @@ public class AccountController extends AbstractRestController<Account, Integer> 
 	
 	@Transactional
 	@RequestMapping(value="/{accountId}/entries", method=RequestMethod.POST)
-	public AccountEntry createEntry(@PathVariable Integer accountId, @RequestBody AccountEntry json) throws FormValidationError, CloneNotSupportedException {
+	public AccountEntry createEntry(@PathVariable Integer accountId, @RequestBody AccountEntry json) throws FormValidationError {
     	
 		// Recupera o id do usuário logado para filtro dos dados.
 		json.setUserId(userAccountService.getCurrentUser().getId());
@@ -231,9 +230,9 @@ public class AccountController extends AbstractRestController<Account, Integer> 
 		balance += account.getStartBalance();
 		
 		// Verifica o tipo da conta. Se conta crédito o saldo na verdade é negativo.
-		if (account.getType().equals(AccountConstants.TYPE_CREDIT)) {
-			balance = balance * -1;
-		}
+//		if (account.getType().equals(AccountConstants.TYPE_CREDIT)) {
+//			balance = balance * -1;
+//		}
 		
 		return balance;
 	}

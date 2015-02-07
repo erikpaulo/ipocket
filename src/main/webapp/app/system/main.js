@@ -26,9 +26,6 @@ require.config({
 		
 		'pane': 'resources/legacy/pace/pace.min',
 		
-//		'bootstrap-datepicker': 'resources/lib/bootstrap-datepicker/js/bootstrap-datepicker',
-//		'bootstrap-datepicker-pt-BR': 'resources/lib/bootstrap-datepicker/js/locales/bootstrap-datepicker.pt-BR',
-		
 		'jquery-slimscroll': 'resources/legacy/jquery-slimscroll/jquery.slimscroll.min',
 		'jquery-slider': 'resources/legacy/jquery-slider/jquery.sidr.min',
 		'jquery-block-ui': 'resources/legacy/jquery-block-ui/jqueryblockui',
@@ -41,6 +38,10 @@ require.config({
 		// == FULL CALENDAR
 		'fullcalendar': 'resources/legacy/fullcalendar/fullcalendar.min',
 		'qtip': 'resources/legacy/qtip/jquery.qtip.min',
+		
+		// == ANGULAR CHARTS
+		'angular-chart': 'resources/lib/angular-chart.js/dist/angular-chart',
+		'chart': 'resources/lib/Chart.js/Chart.min',
 		
 		//	==== DATATABLES
 		'datatables': 'resources/lib/datatables/media/js/jquery.dataTables',
@@ -74,6 +75,7 @@ require.config({
  		'angular-file-upload': ['angular'],
  		'ui-bootstrap-tpls': ['angular'],	
  		'angular-cookies': { deps: ['angular', 'angular-route', 'angular-resource']},
+ 		'angular-chart': ['angular', 'chart'],
  		
 		'angular-translate': ['angular'],
 		'angular-translate-storage-cookie': ['angular-translate'],
@@ -99,7 +101,7 @@ require.config({
 //		'xeditable': ['angular'],
  		
         'layout-core': {
-			deps: ['jquery-ui', 'bootstrap', 'breakpoints', 'jquery-unveil', 'pane', 'jquery-slimscroll', 'jquery-block-ui', 'jquery-slider'/*, 'bootstrap-datepicker-pt-BR'*/, 'angular-ui-grid', 'angular-file-upload']
+			deps: ['jquery-ui', 'bootstrap', 'breakpoints', 'jquery-unveil', 'pane', 'jquery-slimscroll', 'jquery-block-ui', 'jquery-slider'/*, 'bootstrap-datepicker-pt-BR'*/, 'angular-ui-grid', 'angular-file-upload', 'angular-chart']
 		},
 		
 		'layout-form': ['layout-core', 

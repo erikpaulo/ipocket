@@ -33,7 +33,7 @@
 											<tr style="cursor:pointer" ng-repeat="account in accountType.accounts"
 												ng-click="detail(account)">
 												<td>{{account.name}}</td>
-												<td style="text-align: right;">{{account.balance | currency: "R$ "}}</td>
+												<td class="align-currency">{{account.balance | currency: "R$ "}}</td>
 											</tr>
 										</tbody>
 									</table>

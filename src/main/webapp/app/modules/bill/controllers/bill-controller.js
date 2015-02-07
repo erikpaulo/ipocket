@@ -1,7 +1,7 @@
-define(['./module', './bill-resources', '../../account/controllers/category-resources', '../../account/controllers/account-resources'], function (app) {
+define(['./module', './bill-resources', '../../account/controllers/category-resources', '../../account/controllers/account-resources', '../../dashboard/controllers/chart-service.js'], function (app) {
 
-	app.controller('BillController', ['$scope', '$modal', 'BillResource', 'CategoryResource', 'AccountResource', 'uiGridConstants',
-        function($scope, $modal, Bill, Category, Account, uiGridConstants) {
+	app.controller('BillController', ['$scope', '$modal', '$filter', 'BillResource', 'CategoryResource', 'AccountResource', 'ChartService', 'uiGridConstants',
+        function($scope, $modal, $filter, Bill, Category, Account, Chart, uiGridConstants) {
 		$scope.appContext.changeCurrentContext($scope.modules[0].id);
 		
 		$scope.bills = null;
@@ -9,6 +9,7 @@ define(['./module', './bill-resources', '../../account/controllers/category-reso
 		$scope.categories = null;
 		$scope.accounts = null;
 		
+		//*************** GRID *****************//
 		// Configura a tabela com as contas
 		$scope.gridOptions = {
 				enableSorting: false,
@@ -41,6 +42,23 @@ define(['./module', './bill-resources', '../../account/controllers/category-reso
 			$scope.gridApi = gridApi;
 		};
 		
+		//*********** CHART **************//
+		$scope.labels = null;
+		$scope.series = null;
+		$scope.data = null;
+		$scope.options =  {
+				// Sets the chart to be responsive
+				responsive: true,
+				maintainAspectRatio: false,
+		};
+		
+		$scope.$watch('accounts', function(newValue, oldValue){
+			if ($scope.accounts){
+				updateChart();
+			}
+		})
+		
+		//*********** DATA ****************//
 		// Recupera a lista de categorias disponível no sistema.
 		Category.listAll(function(data){
 			$scope.categories = data;
@@ -109,26 +127,55 @@ define(['./module', './bill-resources', '../../account/controllers/category-reso
 							$scope.bills.splice(i, 1);
 						}
 					}
+					updateChart();
 				})
 			} else {
 				console.log('Selecione uma linha para editar.')
 			}
 		}
 		
+		// Registra um Pagamento Programando no conta correspondente.
+		$scope.register = function (){
+			if ($scope.gridApi.selection.getSelectedRows().length>0){
+				var bill = $scope.gridApi.selection.getSelectedRows()[0];
+				bill.$register(function(){
+					updateListView($scope.bills, null, (bill.billEntries < 1 ? bill : null));
+				});
+			}
+		}
+		
+		// Pula o lançamento desta ocorrência no sistema.
+		$scope.jump = function (){
+			if ($scope.gridApi.selection.getSelectedRows().length>0){
+				var bill = $scope.gridApi.selection.getSelectedRows()[0];
+				bill.$skip(function(){
+					updateListView($scope.bills, null, (bill.billEntries < 1 ? bill : null));
+				});
+			}
+		}
+		
 		// Atualiza a lista de lançamentos programados ordenando crescente pela data.
-		var updateListView = function (bills, newEntry){
+		var updateListView = function (bills, newEntry, delEntry){
 			
 			// Localiza o id do novo lançamento para decidir se atualiza ou cria.
 			if (newEntry){
 				for (var ae=0;ae<bills.length;ae++){
-					if (newEntry.id == bills[ae].id){
-//						angular.extend(bills[ae], newEntry);
+					if (newEntry.id  == bills[ae].id){
 						bills[ae] = newEntry;
 						break;
 					}
 				}
 				if ((ae == undefined || ae == bills.length)){
 					bills.push(newEntry);
+				}
+			}
+			
+			if (delEntry){
+				for (var ae=0;ae<bills.length;ae++){
+					if (delEntry.id  == bills[ae].id){
+						bills.splice(ae, 1);
+						break;
+					}
 				}
 			}
 			
@@ -161,7 +208,23 @@ define(['./module', './bill-resources', '../../account/controllers/category-reso
 				})
 			}
 			
+			updateChart();
+			
 			return bills;
+		}
+		
+		function updateChart(){
+			var beginDate = new Date();
+			var endDate = new Date();
+			
+			beginDate.setMonth(beginDate.getMonth()-1);
+			endDate.setMonth(endDate.getMonth()+11);
+			
+			var accounts = $filter('filter')($scope.accounts, {type: "CH"});
+			var dataStructure = new Chart(accounts, $scope.bills, beginDate, endDate, {groupBy: "Month"});
+			$scope.labels = dataStructure.labels;
+			$scope.series = dataStructure.series;
+			$scope.data = dataStructure.data;
 		}
 		
 		

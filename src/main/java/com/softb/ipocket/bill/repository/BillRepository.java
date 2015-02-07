@@ -10,9 +10,12 @@ import org.springframework.stereotype.Repository;
 
 import com.softb.ipocket.bill.model.Bill;
 
+
+
 @Repository("iPocketBillRepository")
 public interface BillRepository extends JpaRepository<Bill, Integer> {
 	
 	@Query("select b from Bill b where b.userId = :userId")
 	List<Bill> listAllByUser(@Param("userId") Integer userId) throws DataAccessException;
+	
 }

@@ -1,6 +1,7 @@
 package com.softb.ipocket.account.model;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -46,6 +47,10 @@ public class Account extends BaseEntity<Integer> implements Serializable {
 
 	@Column(name = "BRANCH")
 	protected String branch;
+	
+	@Column(name = "CREATE_DATE")
+	@NotNull
+	protected Date createDate;
 
 	@Column(name = "NUMBER")
 	protected String number;

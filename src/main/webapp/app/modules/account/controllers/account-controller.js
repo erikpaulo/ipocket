@@ -43,7 +43,7 @@ define(['./module', './account-resources'], function (app) {
 				// Executa a gravação da conta.
 				account.balance = 0;
 				Account.new(account).$promise.then(function(data){
-					$scope.accountAggregation = aggregate($scope.accountAggregation, [data.object], $scope.typeControl);
+					$scope.accountAggregation = aggregate($scope.accountAggregation, [data], $scope.typeControl);
 				}, function(err){
 					console.log('Erro na gravação da conta. err: '+ err);
 				});

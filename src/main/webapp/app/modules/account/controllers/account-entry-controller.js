@@ -77,6 +77,7 @@ define(['./module', './account-resources', './account-entry-resources', './categ
 			});
 			
 			// Recupera os dados da conta selecionada juntamente com seus lançamentos.
+			//TODO: Recuperar a conta da lista de todas as contas já recuperada acima.
 			Account.get({id: $routeParams.accountID}, function(account){
 				$scope.account = $scope.updateView(account);
 				$scope.gridOptions.data = $scope.account.entries;
@@ -260,11 +261,7 @@ define(['./module', './account-resources', './account-entry-resources', './categ
 	     		 });
 	     		 
 		        uploader.onSuccessItem = function(fileItem, response, status, headers) {
-		        	if (response.sucess){
-		        		$scope.entriesToImport = response.object;
-		        	} else {
-		        		console.log('Não foi possível preparar o arquivo para import dos lançamentos. Message: '+ response.message)
-		        	}
+		        		$scope.entriesToImport = response;
 		        };
 	     		
 	     		$scope.ok = function ( form ) {

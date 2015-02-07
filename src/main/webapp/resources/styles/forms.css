@@ -1,5 +1,10 @@
 /**************** BEGIN: IN USE - FOR SURE **********************/
-
+    canvas{
+/*         width: 100% !important; */
+/*         max-width: 800px; */
+        height: 250px !important;
+    }
+    
 /* Account Page */
 .img-portrait{
     width:160px;

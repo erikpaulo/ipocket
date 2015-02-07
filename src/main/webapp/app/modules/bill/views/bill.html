@@ -1,6 +1,6 @@
 <link href="resources/styles/table.css" rel="stylesheet" type="text/css" />
 <link href="resources/lib/angular-ui-grid/ui-grid.css" rel="stylesheet" type="text/css" />
-<link href="resources/styles/forms.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="resources/lib/angular-chart.js/dist/angular-chart.css"">
 
 <section ng-controller="BillController">
 	<div class="content">
@@ -9,7 +9,7 @@
 				<div class="grid simple ">
 					<div class="grid-title">
 						<h3>
-							Lançamentos <span class="semi-bold">Programados</span>
+							Pagamentos <span class="semi-bold">Programados</span>
 						</h3>
 						<div class="tools">
 							<span class="dropdown" dropdown on-toggle="toggled(open)">
@@ -27,13 +27,32 @@
 							    <li>
 							      <a href ng-click="register()"><i class="glyphicon glyphicon-save"></i>Registrar em Conta</a>
 							    </li>
+							    <li>
+							      <a href ng-click="jump()"><i class="glyphicon glyphicon-new-window"></i>Pular Pagamento</a>
+							    </li>
 							  </ul>
 							</span>
 						</div>
 					</div>
 					<div class="grid-body">
+						<div class="row"">
+							<div class="col-md-12" id="line-chart">
+								<div class="panel-body">
+									<canvas id="line" 
+											class="chart chart-line" 
+											data="data" 
+											labels="labels" 
+											legend="true" 
+											series="series"
+ 												click="onClick" 
+ 												options="options" 
+ 												height="300">
+									</canvas> 
+								</div>
+							</div>
+						</div>
 						<div class="row" ng-cloak>
-							<div class="col-md-12">
+							<div class="col-md-10 col-md-offset-1">
 								<div ui-grid="gridOptions" ui-grid-selection class="grid-no-filter"></div>
 							</div>
 						</div>
