@@ -13,8 +13,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.softb.system.repository.BaseEntity;
 
 /**
@@ -28,7 +26,6 @@ import com.softb.system.repository.BaseEntity;
 @EqualsAndHashCode(callSuper = false)
 @Entity
 @Table(name = "BILL_ENTRY")
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class BillEntry extends BaseEntity<Integer> implements Serializable {
 
 	private static final long serialVersionUID = 1L;
