@@ -1,0 +1,62 @@
+<link rel="stylesheet" href="resources/lib/angular-chart.js/dist/angular-chart.css"">
+
+<section ng-controller="CashflowController">
+	<div class="content">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="grid simple ">
+					<div class="grid-title">
+						<h3>
+							Relatório de <span class="semi-bold">Fluxo de Caixa</span>
+						</h3>
+					</div>
+					<div class="grid-body">
+						<form name="form_cashflow" novalidate="novalidate">
+							<div class="row form-row">
+								<div class="col-md-3">
+									<label class="form-label">Período</label>
+									<div class="controls">
+										<select	ui-select2="select2Options" ng-model="selectedPeriod" class="select2 form-control input-sm" data-placeholder="Selecione" ng-required="true" ng-class="" mg-validation-alert>
+											<option	ng-repeat="period in periodOptions"	value="{{period.id}}" ng-selected="{{period.id == selectedPeriod}}">{{period.name}}</option>
+										</select>
+									</div>
+								</div>
+								<div class="col-md-7">
+									<label class="form-label">Contas Bancárias</label>
+									<div class="controls">
+										<select	ui-select2="select2Options" multiple="multiple" ng-model="selectedAccountIds" class="select2 form-control input-sm" data-placeholder="Selecione uma ou mais contas" ng-required="true" ng-class="" mg-validation-alert>
+											<option	ng-repeat="account in accounts | orderBy: 'name'"	value="{{account.id}}"	ng-selected="{{account.id == bill.accountId}}">{{account.name}}</option>
+										</select>
+									</div>
+								</div>
+								<div class="col-md-2">
+									<div class="pull-right">
+										<br>
+										<button type="button" class="btn btn-success btn-cons"
+											ng-click="generateChart()">Gerar</button>
+									</div>
+								</div>
+							</div>
+						</form>
+						<br>
+						<div class="row" style="border-top: 1px solid #e5e9ec">
+							<div class="col-md-12" id="line-chart">
+								<div class="panel-body">
+									<canvas id="line" 
+											class="chart chart-line" 
+											data="data" 
+											labels="labels" 
+											legend="true" 
+											series="series"
+ 											click="onClick" 
+ 											options="options">
+									</canvas> 
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>

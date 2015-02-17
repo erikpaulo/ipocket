@@ -52,11 +52,11 @@ define(['./module', './bill-resources', '../../account/controllers/category-reso
 				maintainAspectRatio: false,
 		};
 		
-		$scope.$watch('accounts', function(newValue, oldValue){
-			if ($scope.accounts){
-				updateChart();
-			}
-		})
+//		$scope.$watch('accounts', function(newValue, oldValue){
+//			if ($scope.accounts){
+//				updateChart();
+//			}
+//		})
 		
 		//*********** DATA ****************//
 		// Recupera a lista de categorias disponível no sistema.
@@ -67,13 +67,15 @@ define(['./module', './bill-resources', '../../account/controllers/category-reso
 		// Lista todas as contas já cadastradas para o usuário.
 		Account.listAll(function(accounts){
 			$scope.accounts = accounts
+			
+			// Recupera todos os lançamentos programados registrados para o usuário.
+			Bill.listAll(function(bills){
+				$scope.gridOptions.data = $scope.bills = bills;
+				
+				updateListView($scope.bills);
+			});
 		});
 		
-		// Recupera todos os lançamentos programados registrados para o usuário.
-		Bill.listAll(function(bills){
-			$scope.gridOptions.data = $scope.bills = bills;
-			updateListView($scope.bills);
-		});
 		
 		// Aciona modal para criação de nova conta.
 		$scope.new = function(){
@@ -95,12 +97,12 @@ define(['./module', './bill-resources', '../../account/controllers/category-reso
 			var modalInstance = openModal($scope, $modal, ModalInstanceCtrl, (scopeBill.id ? "edit" : "new"));
 			modalInstance.result.then(function (bill) {
 				// Recupera o objecto correspondente a conta selecionada.
-				for(var i=0;i<$scope.accounts.length;i++){
-					if ($scope.accounts[i].id == bill.account.id){
-						bill.account = angular.copy($scope.accounts[i]);
-						break;
-					}
-				}
+//				for(var i=0;i<$scope.accounts.length;i++){
+//					if ($scope.accounts[i].id == bill.account.id){
+//						bill.account = angular.copy($scope.accounts[i]);
+//						break;
+//					}
+//				}
 				
 				// Recupera o objecto correspondente a categoria selecionada.
 				for(var i=0;i<$scope.categories.length;i++){
@@ -145,7 +147,7 @@ define(['./module', './bill-resources', '../../account/controllers/category-reso
 		}
 		
 		// Pula o lançamento desta ocorrência no sistema.
-		$scope.jump = function (){
+		$scope.skip = function (){
 			if ($scope.gridApi.selection.getSelectedRows().length>0){
 				var bill = $scope.gridApi.selection.getSelectedRows()[0];
 				// WORKAROUND: ui-grid retorna as entradas da conta associada ao pagamento 
@@ -182,8 +184,8 @@ define(['./module', './bill-resources', '../../account/controllers/category-reso
 				}
 			}
 			
-			// Adiciona função para recuperar os nomes da categoria com subcategoria
 		    angular.forEach(bills, function(row){
+		    	// Adiciona função para recuperar os nomes da categoria com subcategoria
 		    	if (row.category){
 					if (!row.category.getFullName){
 						row.category.getFullName = function() {
@@ -192,6 +194,16 @@ define(['./module', './bill-resources', '../../account/controllers/category-reso
 				    }
 		    	} else {
 		    		return '';
+		    	}
+		    	
+		    	// Recupera a conta (object) associado ao Bill
+		    	if (!row.account){
+		    		for (var i=0;i<$scope.accounts.length;i++){
+		    			if ($scope.accounts[i].id == row.accountId){
+		    				row.account = $scope.accounts[i];
+		    				break;
+		    			}
+		    		}
 		    	}
 		    });
 			
@@ -202,6 +214,10 @@ define(['./module', './bill-resources', '../../account/controllers/category-reso
 		    		if (!angular.isDate(b.date)) b.date = new Date(b.date);
 		    		return a.date - b.date;
 		    	})
+		    	
+		    	if (bills[i].billEntries.length==1){
+		    		bills[i].billEntries[0].date = new Date(bills[i].billEntries[0].date);
+		    	}
 		    }
 		    
 			// Ordena crescente pela data.
@@ -218,6 +234,9 @@ define(['./module', './bill-resources', '../../account/controllers/category-reso
 			return bills;
 		}
 		
+		/**
+		 * Atualiza o gráfico de acordo com as contas programadas que foram atualizadas.
+		 */
 		function updateChart(){
 			var beginDate = new Date();
 			var endDate = new Date();

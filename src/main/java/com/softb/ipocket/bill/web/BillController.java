@@ -74,6 +74,25 @@ public class BillController extends AbstractRestController<Bill, Integer> {
 
 		return bill;
 	}
+	
+	/**
+	 * Lista todos os lançamentos programados para as contas informadas. 
+	 * @param ids Identificador das contas
+	 * @return
+	 */
+	@RequestMapping(value = "/listByAccounts", method = RequestMethod.GET)
+	public List<Bill> listByAccounts (@RequestBody List<Integer> ids) {
+		List<Bill> billsToReturn = new ArrayList<Bill>();
+		
+		Iterator<Integer> i = ids.iterator();
+		while(i.hasNext()){
+			Integer accountId = i.next();
+			List<Bill> bills =  billRepository.listAllByAccountUser(accountId, userAccountService.getCurrentUser().getId());
+			billsToReturn.addAll(bills);
+		}
+		
+		return billsToReturn;
+	}
 
 	public Bill create(@RequestBody Bill bill) throws FormValidationError {
 		List<BillEntry> entriesToSave = new ArrayList<BillEntry>();
@@ -110,10 +129,10 @@ public class BillController extends AbstractRestController<Bill, Integer> {
 		BillEntry entryToDelete = bill.getBillEntries().get(0);
 		
 		// Cria o lançamento que será incluído.
-		AccountEntry entry = new AccountEntry(	bill.getAccount().getId(), bill.getDescription(), bill.getCategory(), 
+		AccountEntry entry = new AccountEntry(	bill.getAccountId(), bill.getDescription(), bill.getCategory(), 
 												entryToDelete.getDate(), null, entryToDelete.getAmount(), null, 
 												null, AccountConstants.TYPE_DIRECT, null);
-		accountController.createEntry(bill.getAccount().getId(), entry);
+		accountController.createEntry(bill.getAccountId(), entry);
 		
 		// Remove esta entrada dos lançamentos programados.
 		billEntryRepository.delete(entryToDelete); 

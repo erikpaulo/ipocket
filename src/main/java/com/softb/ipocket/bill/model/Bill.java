@@ -21,7 +21,6 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import com.softb.ipocket.account.model.Account;
 import com.softb.ipocket.account.model.Category;
 import com.softb.system.repository.BaseEntity;
 
@@ -58,9 +57,13 @@ public class Bill extends BaseEntity<Integer> implements Serializable {
 	@JoinColumn(name = "CATEGORY_ID", referencedColumnName = "ID")
 	protected Category category;
 	
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "ACCOUNT_ID", referencedColumnName = "ID")
-	protected Account account;
+//	@ManyToOne(fetch = FetchType.EAGER)
+//	@JoinColumn(name = "ACCOUNT_ID", referencedColumnName = "ID")
+//	protected Account account;
+	
+	@Column(name="ACCOUNT_ID")
+	@NotNull
+	protected Integer accountId;
 	
 	@OneToMany(fetch = FetchType.EAGER)
 	@JoinColumn(name= "BILL_ID", referencedColumnName = "ID")

@@ -101,9 +101,9 @@
 						<div class="col-md-5">
 							<label class="form-label">Conta Bancária</label>
 							<div class="controls">
-								<select ui-select2="{minimumResultsForSearch: -1}"	ng-model="bill.account.id" name="bill.account.id" data-placeholder="Selecione" class="select2 form-control" ng-required="true" ng-class="" mg-validation-alert>
+								<select ui-select2="{minimumResultsForSearch: -1}"	ng-model="bill.accountId" name="bill.accountId" data-placeholder="Selecione" class="select2 form-control" ng-required="true" ng-class="" mg-validation-alert>
 									<option value=""></option>
-									<option	ng-repeat="account in accounts"	value="{{account.id}}"	ng-selected="{{account.id == bill.account.id}}">{{account.name}}</option>
+									<option	ng-repeat="account in accounts"	value="{{account.id}}"	ng-selected="{{account.id == bill.accountId}}">{{account.name}}</option>
 								</select>
 							</div>
 						</div>

@@ -83,6 +83,22 @@ public class AccountController extends AbstractRestController<Account, Integer> 
 		
 		return accounts;
 	}
+	
+	@RequestMapping(value="/listSome", method=RequestMethod.GET)
+	public List<Account> listSome(@RequestBody List<Integer> accountIds) {
+		List<Account> accounts = new ArrayList<Account>();
+		
+		Iterator<Integer> i = accountIds.iterator();
+		while (i.hasNext()){
+			Integer accountId = i.next();
+			Account account = accountRepository.getOne(accountId);
+			if (account != null){
+				accounts.add(account);
+			}
+		}
+		
+		return accounts;
+	}
 
 	@Override
 	@RequestMapping(value="/{id}", method=RequestMethod.GET)
@@ -186,17 +202,13 @@ public class AccountController extends AbstractRestController<Account, Integer> 
 		
 		// Realiza tratamento de acordo com o tipo de entrada: crédito, débito ou transferência
 		if (json.getType().equals(AccountConstants.TYPE_TRANSFER)){
-			AccountEntry destinyJson = new AccountEntry(json.getDestinyAccountId(), json.getDescription(), 	json.getCategory(), 
-														json.getDate(), 	 		json.getReconciled(),  	json.getAmount(), 
-														json.getUserId(), 	 		null, 					null, 
-														null);
-			json.setAmount(json.getAmount() * -1);
-			getAccountEntryRepository().save(destinyJson);
+			createDestinyEntry(json);
 		}
 		
 		AccountEntry created = getAccountEntryRepository().save(json);
 		return created;
 	}
+
 	
 	@RequestMapping(value="/{accountId}/entries/{accountEntryId}", method=RequestMethod.POST)
 	public AccountEntry  updateEntry(@PathVariable Integer accountId, @PathVariable Integer accountEntryId, @RequestBody AccountEntry json) throws FormValidationError {
@@ -210,6 +222,19 @@ public class AccountController extends AbstractRestController<Account, Integer> 
 	@RequestMapping(value="/{accountId}/entries/{accountEntryId}", method=RequestMethod.DELETE)
 	public void removeEntry(@PathVariable Integer accountId, @PathVariable Integer accountEntryId) throws FormValidationError {
 		getAccountEntryRepository().delete(accountEntryId);
+	}
+	
+	/**
+	 * Quando o lançamento for uma trasferência cria o lançamento na conta destino com o sinal inverso.
+	 * @param json
+	 */
+	private void createDestinyEntry(AccountEntry json) {
+		AccountEntry destinyJson = new AccountEntry(json.getDestinyAccountId(), json.getDescription(), 	json.getCategory(), 
+				json.getDate(), 	 		json.getReconciled(),  	json.getAmount(), 
+				json.getUserId(), 	 		null, 					null, 
+				null);
+		json.setAmount(json.getAmount() * -1);
+		getAccountEntryRepository().save(destinyJson);
 	}
 	
 	/**
@@ -228,11 +253,6 @@ public class AccountController extends AbstractRestController<Account, Integer> 
 			}
 		}
 		balance += account.getStartBalance();
-		
-		// Verifica o tipo da conta. Se conta crédito o saldo na verdade é negativo.
-//		if (account.getType().equals(AccountConstants.TYPE_CREDIT)) {
-//			balance = balance * -1;
-//		}
 		
 		return balance;
 	}

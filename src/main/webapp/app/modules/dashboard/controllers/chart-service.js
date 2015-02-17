@@ -1,7 +1,6 @@
 define(['./module'], function (app) {
 
-	app.factory('ChartService', 
-	function() {
+	app.factory('ChartService', function() {
 		return function(bankingAccounts, bills, beginDate, endDate, options){
 			var chartInstance = {};
 			chartInstance.labels = [];
@@ -33,9 +32,17 @@ define(['./module'], function (app) {
 			
 			// Itera pelos lançamentos programados fazendo projeção do fluxo de caixa.
 			angular.forEach(bills, function(bill){
-				if (exists(holder, bill.account.name)){
+				
+				// Recupera o nome da conta associada ao lançameto programado.
+				for (var a in bankingAccounts){
+					if (bankingAccounts[a].id == bill.accountId){
+						bill.accountName = bankingAccounts[a].name;
+						break;
+					}
+				}
+				if (exists(holder, bill.accountName)){
 					angular.forEach(bill.billEntries, function(billEntry){
-						doSum(bill.account.name, billEntry.date, billEntry.amount, options.groupBy);
+						doSum(bill.accountName, billEntry.date, billEntry.amount, options.groupBy);
 					})
 				}
 			})
@@ -93,9 +100,14 @@ define(['./module'], function (app) {
 					if (!exists(chartInstance.labels, label)) 
 						chartInstance.labels.push(label);
 				}
-				chartInstance.series.push(serie);
+
+				chartInstance.series.push(serie)
 				chartInstance.data.push(data);
 			}
+			
+//			$scope.data = chartInstance.data;
+//			$scope.labels = chartInstance.labels;
+//			$scope.series = chartInstance.series;
 			
 			return chartInstance
 		}

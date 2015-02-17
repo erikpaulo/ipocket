@@ -34,7 +34,23 @@
 		"originalPath": "/bill",
 		"templateUrl": "modules/bill/views/bill.html",
 		"dependencies": ["modules/bill/controllers/bill-controller", "app", "layout-form"]
-    },    
+    },  
+     {
+        "id": "reports", 
+		"name":"Relatórios", 
+		"icon": "fa fa-bar-chart-o",
+		"hasSubMenu": true,
+		"items" : [
+		    {
+		        "id": "casflow", 
+				"name":"Fluxo de Caixa", 
+				"originalPath": "/dashboard/reports/cashflow", 	
+				"templateUrl": "modules/dashboard/views/report-cashflow.html",
+				"visible": true,
+				"dependencies": ["modules/dashboard/controllers/report-cashflow-controller", "app", "layout-form"]
+		    }
+		]
+    },
     {
         "id": "configuration", 
 		"name":"Configurações", 
