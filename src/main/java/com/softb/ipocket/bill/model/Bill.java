@@ -64,6 +64,9 @@ public class Bill extends BaseEntity<Integer> implements Serializable {
 	@Column(name="ACCOUNT_ID")
 	@NotNull
 	protected Integer accountId;
+
+	@Column(name="DESTINY_ACCOUNT_ID")
+	protected Integer destinyAccountId;
 	
 	@OneToMany(fetch = FetchType.EAGER)
 	@JoinColumn(name= "BILL_ID", referencedColumnName = "ID")

@@ -2,14 +2,8 @@ define(['./module'], function (app) {
 
 	app.factory('ChartService', function() {
 		return function(bankingAccounts, bills, beginDate, endDate, options){
-			var chartInstance = {};
-			chartInstance.labels = [];
-			chartInstance.data = [];
-			chartInstance.series = [];
-			
 			var monthNames = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
 			var holder = [];
-			
 			var labels = [];
 			
 			if (!angular.isDate(beginDate)) beginDate = new Date(beginDate);
@@ -32,17 +26,25 @@ define(['./module'], function (app) {
 			
 			// Itera pelos lançamentos programados fazendo projeção do fluxo de caixa.
 			angular.forEach(bills, function(bill){
+				var accountName, destinyAccountName;
 				
 				// Recupera o nome da conta associada ao lançameto programado.
 				for (var a in bankingAccounts){
 					if (bankingAccounts[a].id == bill.accountId){
-						bill.accountName = bankingAccounts[a].name;
-						break;
+						accountName = bankingAccounts[a].name;
+					}
+					if (bankingAccounts[a].id == bill.destinyAccountId){
+						destinyAccountName = bankingAccounts[a].name;
 					}
 				}
-				if (exists(holder, bill.accountName)){
+				if (exists(holder, accountName)){
 					angular.forEach(bill.billEntries, function(billEntry){
-						doSum(bill.accountName, billEntry.date, billEntry.amount, options.groupBy);
+						doSum(accountName, billEntry.date, billEntry.amount, options.groupBy);
+					})
+				}
+				if (exists(holder, destinyAccountName)){
+					angular.forEach(bill.billEntries, function(billEntry){
+						doSum(destinyAccountName, billEntry.date, billEntry.amount*-1, options.groupBy);
 					})
 				}
 			})
@@ -91,6 +93,10 @@ define(['./module'], function (app) {
 				return found;
 			}
 			
+			var chartInstance = {};
+			chartInstance.labels = [];
+			chartInstance.data = [];
+			chartInstance.series = [];
 			for (var serie in holder){
 				var data = [];
 				var balance = 0;

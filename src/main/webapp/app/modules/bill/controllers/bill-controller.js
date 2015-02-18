@@ -113,6 +113,7 @@ define(['./module', './bill-resources', '../../account/controllers/category-reso
 				}
 				
 				// Inclui ou altera um lançamento programado.
+				delete bill.account;
 				bill.$save(function(){
 					updateListView($scope.bills, bill);
 				});
@@ -123,6 +124,7 @@ define(['./module', './bill-resources', '../../account/controllers/category-reso
 		$scope.delete = function(){
 			if ($scope.gridApi.selection.getSelectedRows().length>0){
 				var bill = $scope.gridApi.selection.getSelectedRows()[0];
+				delete bill.account;
 				bill.$delete(function(){
 					for (var i=0;i<$scope.bills.length;i++){
 						if ($scope.bills[i].id == bill.id){
@@ -140,6 +142,7 @@ define(['./module', './bill-resources', '../../account/controllers/category-reso
 		$scope.register = function (){
 			if ($scope.gridApi.selection.getSelectedRows().length>0){
 				var bill = $scope.gridApi.selection.getSelectedRows()[0];
+				delete bill.account;
 				bill.$register(function(){
 					updateListView($scope.bills, null, (bill.billEntries < 1 ? bill : null));
 				});
@@ -150,9 +153,7 @@ define(['./module', './bill-resources', '../../account/controllers/category-reso
 		$scope.skip = function (){
 			if ($scope.gridApi.selection.getSelectedRows().length>0){
 				var bill = $scope.gridApi.selection.getSelectedRows()[0];
-				// WORKAROUND: ui-grid retorna as entradas da conta associada ao pagamento 
-				// incorretamente causando problema na deserialização
-				bill.account.entries = null;
+				delete bill.account;
 				bill.$skip(function(){
 					updateListView($scope.bills, null, (bill.billEntries < 1 ? bill : null));
 				});

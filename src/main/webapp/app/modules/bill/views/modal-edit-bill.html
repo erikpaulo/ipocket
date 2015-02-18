@@ -47,13 +47,24 @@
 									</div>
 								</div>
 							</div>
+							<div class="row">
+								<div class="col-md-12">
+									<label class="form-label">Conta Bancária Destino</label>
+									<div class="controls">
+										<select ui-select2	ng-model="bill.destinyAccountId" name="bill.destinyAccountId" data-placeholder="Selecione se Transferência" class="select2 form-control" ng-class="">
+											<option value="">Teste</option>
+											<option	ng-repeat="account in accounts"	value="{{account.id}}"	ng-selected="{{account.id == bill.destinyAccountId}}">{{account.name}}</option>
+										</select>
+									</div>
+								</div>
+							</div>
 						</div>
 						
 						<div class="col-md-7">
 							<div class="row" ng-show="bill.billEntries.length>0">
 								<div class="col-md-11 col-md-offset-1">
 									<br>
-									<div style="height:170px; overflow:auto;">
+									<div style="height:215px; overflow:auto;">
 										<table class="table table-bordered">
 											<thead>
 												<tr>

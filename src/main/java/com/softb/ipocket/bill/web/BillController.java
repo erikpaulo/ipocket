@@ -75,25 +75,6 @@ public class BillController extends AbstractRestController<Bill, Integer> {
 		return bill;
 	}
 	
-	/**
-	 * Lista todos os lançamentos programados para as contas informadas. 
-	 * @param ids Identificador das contas
-	 * @return
-	 */
-	@RequestMapping(value = "/listByAccounts", method = RequestMethod.GET)
-	public List<Bill> listByAccounts (@RequestBody List<Integer> ids) {
-		List<Bill> billsToReturn = new ArrayList<Bill>();
-		
-		Iterator<Integer> i = ids.iterator();
-		while(i.hasNext()){
-			Integer accountId = i.next();
-			List<Bill> bills =  billRepository.listAllByAccountUser(accountId, userAccountService.getCurrentUser().getId());
-			billsToReturn.addAll(bills);
-		}
-		
-		return billsToReturn;
-	}
-
 	public Bill create(@RequestBody Bill bill) throws FormValidationError {
 		List<BillEntry> entriesToSave = new ArrayList<BillEntry>();
 		
@@ -126,12 +107,16 @@ public class BillController extends AbstractRestController<Bill, Integer> {
 	@RequestMapping(value = "/{id}/register", method = RequestMethod.POST)
 	public Bill register(@RequestBody Bill bill) throws FormValidationError {
 		validate(getEntityName(), bill);
+		
 		BillEntry entryToDelete = bill.getBillEntries().get(0);
+		
+		// Verifica se possui conta destino, pois nesse caso se trata de uma transferência.
+		String type = (bill.getDestinyAccountId() == null ? AccountConstants.TYPE_DIRECT : AccountConstants.TYPE_TRANSFER);
 		
 		// Cria o lançamento que será incluído.
 		AccountEntry entry = new AccountEntry(	bill.getAccountId(), bill.getDescription(), bill.getCategory(), 
 												entryToDelete.getDate(), null, entryToDelete.getAmount(), null, 
-												null, AccountConstants.TYPE_DIRECT, null);
+												null,  type, bill.getDestinyAccountId());
 		accountController.createEntry(bill.getAccountId(), entry);
 		
 		// Remove esta entrada dos lançamentos programados.

@@ -230,10 +230,9 @@ public class AccountController extends AbstractRestController<Account, Integer> 
 	 */
 	private void createDestinyEntry(AccountEntry json) {
 		AccountEntry destinyJson = new AccountEntry(json.getDestinyAccountId(), json.getDescription(), 	json.getCategory(), 
-				json.getDate(), 	 		json.getReconciled(),  	json.getAmount(), 
+				json.getDate(), 	 		json.getReconciled(),  	json.getAmount()*-1, 
 				json.getUserId(), 	 		null, 					null, 
 				null);
-		json.setAmount(json.getAmount() * -1);
 		getAccountEntryRepository().save(destinyJson);
 	}
 	

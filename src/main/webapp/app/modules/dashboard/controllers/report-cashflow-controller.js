@@ -1,12 +1,10 @@
 define(['./module', '../../bill/controllers/bill-resources', '../../account/controllers/account-resources', '../../dashboard/controllers/chart-service.js'], function (app) {
 
-	app.controller('CashflowController', ['$scope', '$http', 'ChartService', 'AccountResource', 'BillResource',
-        function($scope, $http, Chart, Account, Bill) {
+	app.controller('CashflowController', ['$scope', 'ChartService', 'AccountResource', 'BillResource',
+        function($scope, Chart, Account, Bill) {
 		$scope.accounts;
 		$scope.bills;
-		
 		$scope.selectedAccountIds;
-		$scope.selectedBills
 		
 		$scope.select2Options = {
 			minimumResultsForSearch: -1
@@ -58,7 +56,7 @@ define(['./module', '../../bill/controllers/bill-resources', '../../account/cont
 				}
 			}
 			
-			// Recupera as contas relacionadas às contas informadas.
+			// Recupera os lançamentos programados relacionadas às contas selecionadas.
 			for (var i=0;i<$scope.bills.length;i++){
 				for (var aId in $scope.selectedAccountIds){
 					if ($scope.bills[i].accountId == $scope.selectedAccountIds[aId]){

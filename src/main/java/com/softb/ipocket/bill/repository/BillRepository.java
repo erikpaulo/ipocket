@@ -18,7 +18,4 @@ public interface BillRepository extends JpaRepository<Bill, Integer> {
 	@Query("select b from Bill b where b.userId = :userId")
 	List<Bill> listAllByUser(@Param("userId") Integer userId) throws DataAccessException;
 	
-	@Query("select b from Bill b where b.accountId = :accountId and b.userId = :userId")
-	List<Bill> listAllByAccountUser(@Param("accountId") Integer accountId, @Param("userId") Integer userId) throws DataAccessException;
-	
 }

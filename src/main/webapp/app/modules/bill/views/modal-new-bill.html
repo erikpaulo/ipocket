@@ -107,6 +107,15 @@
 								</select>
 							</div>
 						</div>
+						<div class="col-md-6">
+							<label class="form-label">Conta Bancária Destino</label>
+							<div class="controls">
+								<select ui-select2="{minimumResultsForSearch: -1}"	ng-model="bill.destinyAccountId" name="bill.destinyAccountId" data-placeholder="Selecione se Transferência" class="select2 form-control" ng-class="">
+									<option value=""></option>
+									<option	ng-repeat="account in accounts"	value="{{account.id}}"	ng-selected="{{account.id == bill.destinyAccountId}}">{{account.name}}</option>
+								</select>
+							</div>
+						</div>
 					</div>
 					
 					<!-- Linha 04 -->
