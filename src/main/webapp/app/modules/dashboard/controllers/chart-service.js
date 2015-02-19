@@ -7,13 +7,21 @@ define(['./module'], function (app) {
 			var labels = [];
 			
 			if (!angular.isDate(beginDate)) beginDate = new Date(beginDate);
-			if (!angular.isDate(endDate)) endDate = new Date(endDate); 
+			beginDate.setDate(1);
+			
+			if (!angular.isDate(endDate)) endDate = new Date(endDate);
+			endDate.setMonth(endDate.getMonth()+1)
+			endDate.setDate(-0);
 			
 			// Gera os labels.
 			var date = new Date(beginDate.getTime());
 			while (date <= endDate){
 				labels[getGroupId(date, options.groupBy)] = 0;
-				date.setMonth(date.getMonth()+1);
+				if (options.groupBy == "Month"){
+					date.setMonth(date.getMonth()+1);
+				} else if (options.groupBy == "Week") {
+					date.setDate(date.getDate()+7);
+				}
 			}
 			
 			// Itera pelas contas e de acordo com a periodicidade, define o saldo total dessas contas nesses períodos.
@@ -70,6 +78,17 @@ define(['./module'], function (app) {
 			function getGroupId(date, groupBy){
 				if (groupBy == "Month") {
 					return monthNames[date.getMonth()] +'/'+ date.getFullYear();
+				} else if (groupBy == "Week") {
+					var day;
+					if (date.getDate()>28){
+						var newDate = new Date(date);
+						newDate.setMonth(date.getMonth()+1);
+						newDate.setDate(-0);
+						day = newDate.getDate();
+					} else {
+						day = Math.ceil((date.getDate()/7))*7;
+					}
+					return day +'/'+ monthNames[date.getMonth()] +'/'+ date.getFullYear();
 				}
 			}
 			

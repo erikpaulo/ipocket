@@ -242,11 +242,11 @@ define(['./module', './bill-resources', '../../account/controllers/category-reso
 			var beginDate = new Date();
 			var endDate = new Date();
 			
-			beginDate.setMonth(beginDate.getMonth()-1);
-			endDate.setMonth(endDate.getMonth()+11);
+			beginDate.setMonth(beginDate.getMonth());
+			endDate.setMonth(endDate.getMonth()+6);
 			
 			var accounts = $filter('filter')($scope.accounts, {type: "CH"});
-			var dataStructure = new Chart(accounts, $scope.bills, beginDate, endDate, {groupBy: "Month"});
+			var dataStructure = new Chart(accounts, $scope.bills, beginDate, endDate, {groupBy: "Week"});
 			$scope.labels = dataStructure.labels;
 			$scope.series = dataStructure.series;
 			$scope.data = dataStructure.data;
