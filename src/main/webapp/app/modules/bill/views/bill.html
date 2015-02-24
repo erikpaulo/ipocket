@@ -35,6 +35,11 @@
 						</div>
 					</div>
 					<div class="grid-body">
+						<div class="row" ng-cloak>
+							<div class="col-md-12">
+								<div ui-grid="gridOptions" ui-grid-selection class="grid-no-filter"></div>
+							</div>
+						</div>
 						<div class="row"">
 							<div class="col-md-12" id="line-chart">
 								<div class="panel-body">
@@ -49,11 +54,6 @@
  												height="300">
 									</canvas> 
 								</div>
-							</div>
-						</div>
-						<div class="row" ng-cloak>
-							<div class="col-md-10 col-md-offset-1">
-								<div ui-grid="gridOptions" ui-grid-selection class="grid-no-filter"></div>
 							</div>
 						</div>
 					</div>

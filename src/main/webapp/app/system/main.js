@@ -40,8 +40,10 @@ require.config({
 		'qtip': 'resources/legacy/qtip/jquery.qtip.min',
 		
 		// == ANGULAR CHARTS
-		'angular-chart': 'resources/lib/angular-chart.js/dist/angular-chart',
-		'chart': 'resources/lib/Chart.js/Chart.min',
+		'highcharts-ng': 'resources/lib/highcharts-ng/dist/highcharts-ng.min',
+		'highcharts': 'resources/js/highcharts/highcharts',
+		'highcharts-drilldown': 'resources/js/highcharts/drilldown',
+		
 		
 		//	==== DATATABLES
 		'datatables': 'resources/lib/datatables/media/js/jquery.dataTables',
@@ -75,7 +77,8 @@ require.config({
  		'angular-file-upload': ['angular'],
  		'ui-bootstrap-tpls': ['angular'],	
  		'angular-cookies': { deps: ['angular', 'angular-route', 'angular-resource']},
- 		'angular-chart': ['angular', 'chart'],
+ 		'highcharts-drilldown': ['highcharts'],
+ 		'highcharts-ng': ['angular', 'highcharts', 'highcharts-drilldown'],
  		
 		'angular-translate': ['angular'],
 		'angular-translate-storage-cookie': ['angular-translate'],
@@ -101,7 +104,7 @@ require.config({
 //		'xeditable': ['angular'],
  		
         'layout-core': {
-			deps: ['jquery-ui', 'bootstrap', 'breakpoints', 'jquery-unveil', 'pane', 'jquery-slimscroll', 'jquery-block-ui', 'jquery-slider'/*, 'bootstrap-datepicker-pt-BR'*/, 'angular-ui-grid', 'angular-file-upload', 'angular-chart']
+			deps: ['jquery-ui', 'bootstrap', 'breakpoints', 'jquery-unveil', 'pane', 'jquery-slimscroll', 'jquery-block-ui', 'jquery-slider'/*, 'bootstrap-datepicker-pt-BR'*/, 'angular-ui-grid', 'angular-file-upload', 'highcharts-ng']
 		},
 		
 		'layout-form': ['layout-core', 

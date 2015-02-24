@@ -2513,6 +2513,33 @@ border-bottom-right-radius: 3px;
 .panel-default{
 	border:0px;
 }
+
+.panel-chart{
+	border:0px;
+}
+.panel-chart > .panel-heading{
+	background-image:none;
+	background: -webkit-gradient(linear, left bottom, left top, color-stop(0, #C8D7E3), color-stop(1, #FFFFFF));
+	background: -ms-linear-gradient(bottom, #C8D7E3, #ffffff);
+	background: -moz-linear-gradient(center bottom, #C8D7E3 0%, #ffffff 100%);
+	background: -o-linear-gradient(#ffffff, #C8D7E3);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#C8D7E3', GradientType=0);
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+	border-top: 1px solid #CCCCCC;
+	border-left: 1px solid #CCCCCC;
+	border-right: 1px solid #CCCCCC;
+	border-bottom: 0px;
+	box-shadow:none;
+	font-family: 'Open Sans';
+	color: black;
+	font-weight: 600;
+}
+.panel-chart > .panel-body{
+	border: 1px solid #CCCCCC;
+	border-bottom-left-radius: 5px;
+	border-bottom-right-radius: 5px;
+}
 .panel-default > .panel-heading{
 	background-image:none;
 	background-color: #D9E0E4;

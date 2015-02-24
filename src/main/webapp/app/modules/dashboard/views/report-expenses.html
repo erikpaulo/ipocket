@@ -1,0 +1,66 @@
+<link rel="stylesheet" href="resources/lib/angular-chart.js/dist/angular-chart.css"">
+<link href="resources/styles/custom-charts.css" rel="stylesheet" type="text/css">
+
+<section ng-controller="ExpensesReportController">
+	<div class="content">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="grid simple ">
+					<div class="grid-title">
+						<h3>
+							Análise de <span class="semi-bold">Despesas</span>
+						</h3>
+					</div>
+					<div class="grid-body">
+						<form name="form_expenses" novalidate="novalidate">
+							<div class="row">
+								<div class="col-md-12">
+									<div class="panel panel-chart" ng-controller="ERController.IncomeExpenseByCategoryType">
+										<div class="panel-heading">Tipo de Categoria vs. Entradas</div>
+										<div class="panel-body">
+											<div class="chart-container">
+												<highchart id="chart1" config="chartConfig"></highchart>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-6">
+									<div class="panel panel-chart" ng-controller="ERController.ExpensesByCategory">
+										<div class="panel-heading">Distribuição por Categoria</div>
+										<div class="panel-body">
+											<div class="row">
+												<div class="col-md-12">
+													<div class="controls">
+														<select	ui-select2="select2Options" placeholder="Período" ng-change="updateChart()" ng-model="selectedPeriod" class="select2 form-control input-sm" data-placeholder="Selecione" ng-required="true" ng-class="" mg-validation-alert>
+															<option	ng-repeat="period in periodOptions"	value="{{period.id}}" ng-selected="{{period.id == selectedPeriod}}">{{period.name}}</option>
+														</select>
+													</div>
+													<div class="chart-container">
+														<highchart id="chart3" config=chartConfig></highchart>
+														</canvas>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="panel panel-chart" ng-controller="ERController.ExpensesByCategoryEvolution">
+										<div class="panel-heading">Evolução por Categoria</div>
+										<div class="panel-body">
+											<div class="chart-container">
+												<highchart id="chart2" config=chartConfig></highchart>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>

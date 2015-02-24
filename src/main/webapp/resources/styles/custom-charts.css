@@ -1,0 +1,10 @@
+.custom-pie-legend .pie-legend li{
+	display: -webkit-box;
+	/* white-space: nowrap; */
+	position: relative;
+	margin-bottom: 4px;
+	/* border-radius: 5px; */
+	padding: 2px 8px 2px 24px;
+	font-size: smaller;
+	cursor: default;
+}

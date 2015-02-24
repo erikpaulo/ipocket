@@ -48,6 +48,14 @@
 				"templateUrl": "modules/dashboard/views/report-cashflow.html",
 				"visible": true,
 				"dependencies": ["modules/dashboard/controllers/report-cashflow-controller", "app", "layout-form"]
+		    },
+		    {
+		        "id": "expenses", 
+				"name":"Análise de Despesas", 
+				"originalPath": "/dashboard/reports/expenses", 	
+				"templateUrl": "modules/dashboard/views/report-expenses.html",
+				"visible": true,
+				"dependencies": ["modules/dashboard/controllers/report-expenses-controller", "app", "layout-form"]
 		    }
 		]
     },

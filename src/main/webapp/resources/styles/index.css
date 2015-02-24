@@ -363,6 +363,9 @@ Page sidebar
 	z-index:110;
 	min-width:250px;
 }
+.mini .page-sidebar-wrapper {
+	overflow: visible!important;
+}
 .page-sidebar  .page-sidebar-wrapper > ul > li.active > a {
   border-top-color: transparent !important;
   color:#fff;
@@ -1619,6 +1622,7 @@ border-bottom-right-radius: 3px;
 .page-sidebar.mini {
 	width: 50px;
 	overflow:visible !important;
+	
 }
 .page-sidebar.mini .slimScrollDiv{
 	overflow:visible !important;
@@ -1683,7 +1687,10 @@ display:none;
 	 background-color: #225577 !important;
     height: 100%;
 	margin-top:0;
-	position:absolute;
+	width: 50px;
+	overflow: visible!important;
+	position: fixed;
+	z-index: 90;
 }
 .page-content.condensed{
 	 margin-left: 50px;
