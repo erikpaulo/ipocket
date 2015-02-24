@@ -30,24 +30,26 @@ define(['./module', '../../shared/services/constants-service'], function (app) {
 						var date = new Date(entry.date);
 						var groupId = getGroupId(date, "Month");
 						
-						// Agrupamento por mês
-						if (!dataN1[groupId]) dataN1[groupId] = {total: 0, data: []}
-						dataN1[groupId].total += entry.amount;
-						
-						// Agrupamento por tipo de categoria
-						if (!dataN1[groupId].data[entry.category.type]) 
-							dataN1[groupId].data[entry.category.type] = {total: 0, data: []};
-						dataN1[groupId].data[entry.category.type].total += entry.amount;
-						
-						// Agrupamento por categoria
-						if (!dataN1[groupId].data[entry.category.type].data[entry.category.name]) 
-							dataN1[groupId].data[entry.category.type].data[entry.category.name] = {total: 0, data: []}
-						dataN1[groupId].data[entry.category.type].data[entry.category.name].total += entry.amount;
-						
-						// Agrupamento por subcategoria
-						if (!dataN1[groupId].data[entry.category.type].data[entry.category.name].data[entry.category.subCategoryName])
-							dataN1[groupId].data[entry.category.type].data[entry.category.name].data[entry.category.subCategoryName] = {total: 0}; 
-						dataN1[groupId].data[entry.category.type].data[entry.category.name].data[entry.category.subCategoryName].total += entry.amount;
+						if (entry.category){
+							// Agrupamento por mês
+							if (!dataN1[groupId]) dataN1[groupId] = {total: 0, data: []}
+							dataN1[groupId].total += entry.amount;
+							
+							// Agrupamento por tipo de categoria
+							if (!dataN1[groupId].data[entry.category.type]) 
+								dataN1[groupId].data[entry.category.type] = {total: 0, data: []};
+							dataN1[groupId].data[entry.category.type].total += entry.amount;
+							
+							// Agrupamento por categoria
+							if (!dataN1[groupId].data[entry.category.type].data[entry.category.name]) 
+								dataN1[groupId].data[entry.category.type].data[entry.category.name] = {total: 0, data: []}
+							dataN1[groupId].data[entry.category.type].data[entry.category.name].total += entry.amount;
+							
+							// Agrupamento por subcategoria
+							if (!dataN1[groupId].data[entry.category.type].data[entry.category.name].data[entry.category.subCategoryName])
+								dataN1[groupId].data[entry.category.type].data[entry.category.name].data[entry.category.subCategoryName] = {total: 0}; 
+							dataN1[groupId].data[entry.category.type].data[entry.category.name].data[entry.category.subCategoryName].total += entry.amount;
+						}
 					})
 				})
 				incomeAndExpense.data = dataN1;

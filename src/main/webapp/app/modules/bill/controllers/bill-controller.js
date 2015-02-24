@@ -1,7 +1,7 @@
-define(['./module', './bill-resources', '../../account/controllers/category-resources', '../../account/controllers/account-resources', '../../dashboard/controllers/chart-service.js'], function (app) {
+define(['./module', './bill-resources', '../../account/controllers/category-resources', '../../account/controllers/account-resources'], function (app) {
 
-	app.controller('BillController', ['$scope', '$modal', '$filter', 'BillResource', 'CategoryResource', 'AccountResource', 'ChartService', 'uiGridConstants',
-        function($scope, $modal, $filter, Bill, Category, Account, Chart, uiGridConstants) {
+	app.controller('BillController', ['$scope', '$modal', '$filter', 'BillResource', 'CategoryResource', 'AccountResource', 'uiGridConstants',
+        function($scope, $modal, $filter, Bill, Category, Account, uiGridConstants) {
 		$scope.appContext.changeCurrentContext($scope.modules[0].id);
 		
 		$scope.bills = null;
@@ -43,14 +43,14 @@ define(['./module', './bill-resources', '../../account/controllers/category-reso
 		};
 		
 		//*********** CHART **************//
-		$scope.labels = null;
-		$scope.series = null;
-		$scope.data = null;
-		$scope.options =  {
-				// Sets the chart to be responsive
-				responsive: true,
-				maintainAspectRatio: false,
-		};
+//		$scope.labels = null;
+//		$scope.series = null;
+//		$scope.data = null;
+//		$scope.options =  {
+//				// Sets the chart to be responsive
+//				responsive: true,
+//				maintainAspectRatio: false,
+//		};
 		
 //		$scope.$watch('accounts', function(newValue, oldValue){
 //			if ($scope.accounts){
