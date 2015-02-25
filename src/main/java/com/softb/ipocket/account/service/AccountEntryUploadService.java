@@ -60,7 +60,7 @@ public class AccountEntryUploadService {
 			char delimiter = defineDelimiter(reader);
 			
 			for(CSVRecord record : CSVFormat.EXCEL.withDelimiter(delimiter).parse(reader).getRecords()) {
-				 entryToImport = new AccountEntryImport(DateUtils.parseDate(record.get(0)+"T23:59:59", dateFormat), record.get(1).trim(), nf.parse(record.get(2)).doubleValue(), null, null, true);
+				 entryToImport = new AccountEntryImport(DateUtils.parseDate(record.get(0)+"T03:00:00", dateFormat), record.get(1).trim(), nf.parse(record.get(2)).doubleValue(), null, null, true);
 					
 					// Verifica se existe um lançamento na conta com mesma data e valor. Se existir aponta como provável conflito.
 					List<AccountEntry> conflicts =  entryRepository.listAllByUserDateAmount(userAccountService.getCurrentUser().getId(), accountId, entryToImport.getDate(), entryToImport.getAmount());

@@ -18,7 +18,7 @@ public interface AccountEntryRepository extends JpaRepository<AccountEntry, Inte
 	@Query("select ae from AccountEntry ae where ae.userId = :userId")
 	List<Account> listAllByUser(@Param("userId") Integer userId) throws DataAccessException;
 	
-	@Query("select ae from AccountEntry ae where ae.userId = :userId and ae.accountId = :accountId and Date(ae.date) = :date and ae.amount = :amount")
+	@Query("select ae from AccountEntry ae where ae.userId = :userId and ae.accountId = :accountId and ae.date = :date and ae.amount = :amount")
 	List<AccountEntry> listAllByUserDateAmount(@Param("userId") Integer userId, @Param("accountId") Integer accountId, @Param("date") Date date, @Param("amount") Double amount) throws DataAccessException;
 	
 	@Query("select ae from AccountEntry ae, Account a where ae.accountId = a.id and a.type = 'CH' and ae.userId = :userId and ae.category.id = :catId order by ae.date  DESC")
