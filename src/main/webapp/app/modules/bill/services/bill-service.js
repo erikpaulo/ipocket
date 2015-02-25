@@ -12,22 +12,26 @@ define(['./module', '../../shared/services/constants-service'], function (app) {
 				 * A partir das contas e lançamentos programados, realiza a projeção do fluxo de
 				 * caixa no período informado e retorna em uma serie.
 				 */
-				billsProjection.getCashFlowProjection = function(startDate, endDate) {
+				billsProjection.getCashFlowProjection = function(startDate, endDate, groupBy) {
 					var series = [];
 					var labels = [];
 					
 					// Gera os labels.
 					var date = new Date(startDate.getTime());
 					while (date <= endDate){
-						labels[getGroupId(date, "Day")] = 0;
-						date.setDate(date.getDate()+1);
+						labels[getGroupId(date, groupBy)] = 0;
+						if (groupBy == "Day"){
+							date.setDate(date.getDate()+1);
+						} else {
+							date.setMonth(date.getMonth()+1);
+						}
 					}
 					
 					// Itera pelas contas e de acordo com a periodicidade, define o saldo total dessas contas nesses períodos.
 					angular.forEach(this.accounts, function(account){
-						doSum(account.name, account.createDate, account.startBalance, "Day");
+						doSum(account.name, account.createDate, account.startBalance, groupBy);
 						angular.forEach(account.entries, function(entry){
-							doSum(account.name, entry.date, entry.amount, "Day");
+							doSum(account.name, entry.date, entry.amount, groupBy);
 						})
 					});
 					
@@ -46,10 +50,10 @@ define(['./module', '../../shared/services/constants-service'], function (app) {
 						}
 						angular.forEach(bill.billEntries, function(billEntry){
 							if (series[accountName]){
-								doSum(accountName, billEntry.date, billEntry.amount, "Day");
+								doSum(accountName, billEntry.date, billEntry.amount, groupBy);
 							}
 							if (series[destinyAccountName]){
-								doSum(destinyAccountName, billEntry.date, billEntry.amount*-1, "Day");
+								doSum(destinyAccountName, billEntry.date, billEntry.amount*-1, groupBy);
 							}
 						})
 					})
@@ -109,21 +113,23 @@ define(['./module', '../../shared/services/constants-service'], function (app) {
 					}
 					
 					// Elimina os pontos sem valor
-					for (var labelName in labels){
-						found = false;
-						for (var serieName in series){
-							if (series[serieName][labelName] == 0){
-								found = true;
-							} else {
-								found = false;
-								break;
-							}
-						}
-						
-						if (found){
+					if (groupBy == "Day"){
+						for (var labelName in labels){
+							found = false;
 							for (var serieName in series){
-								delete series[serieName][labelName];
-								delete labels[labelName];
+								if (series[serieName][labelName] == 0){
+									found = true;
+								} else {
+									found = false;
+									break;
+								}
+							}
+							
+							if (found){
+								for (var serieName in series){
+									delete series[serieName][labelName];
+									delete labels[labelName];
+								}
 							}
 						}
 					}
@@ -134,7 +140,7 @@ define(['./module', '../../shared/services/constants-service'], function (app) {
 					var i = 0;
 					for (var serieName in series){
 						var balance = 0;
-						cashFlowProjection.series[i] = {name: serieName, data:[], color: color[i%7]};
+						cashFlowProjection.series[i] = {name: serieName, data:[], color: color[i%7], visible: (i==0)};
 						for (var labelName in series[serieName]) {
 							balance += series[serieName][labelName]
 							cashFlowProjection.series[i].data.push(balance);

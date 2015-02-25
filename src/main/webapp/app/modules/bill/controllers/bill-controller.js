@@ -281,7 +281,7 @@ define(['./module', './bill-resources', '../services/bill-service', '../../accou
 			
 			var accounts = $filter('filter')($scope.accounts, {type: "CH"});
 			var billsProjection = BillService.newInstance(accounts, $scope.bills);
-			var cashFlowProjection = billsProjection.getCashFlowProjection(beginDate, endDate);
+			var cashFlowProjection = billsProjection.getCashFlowProjection(beginDate, endDate, "Day");
 			
 			$scope.chartConfig.xAxis.categories = cashFlowProjection.labels;
 			$scope.chartConfig.series = cashFlowProjection.series;

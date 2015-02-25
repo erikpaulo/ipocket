@@ -4,19 +4,19 @@ define(['./module', '../../bill/controllers/bill-resources', '../../bill/service
         function($scope, Account, Bill, BillService) {
 		$scope.accounts;
 		$scope.bills;
-		$scope.selectedAccountIds;
+//		$scope.selectedAccountIds;
 		
 		$scope.select2Options = {
 			minimumResultsForSearch: -1
 		}
 		
 		var start = new Date();
-		$scope.selectedPeriod = 1;
+		$scope.selectedPeriod = 0;
 		$scope.periodOptions = [
-		    {id:1 , name:"Este ano" , start: start, end: new Date(start).setMonth(11)},
-		    {id:2 , name:"Próximos 6 meses" , start: start, end: new Date(start).setMonth(start.getMonth() + 6)},
-		    {id:3 , name:"Próximos 12 meses" , start: start, end: new Date(start).setMonth(start.getMonth() + 12)},
-		    {id:4 , name:"Próximos 24 meses" , start: start, end: new Date(start).setMonth(start.getMonth() + 24)}
+		    {id:0 , name:"Este ano" , start: start, end: new Date(start).setMonth(11)},
+		    {id:1 , name:"Próximos 6 meses" , start: start, end: new Date(start).setMonth(start.getMonth() + 6)},
+		    {id:2 , name:"Próximos 12 meses" , start: start, end: new Date(start).setMonth(start.getMonth() + 12)},
+		    {id:3 , name:"Próximos 24 meses" , start: start, end: new Date(start).setMonth(start.getMonth() + 24)}
 		]
 		
 		//*********** CHART **************//
@@ -72,58 +72,59 @@ define(['./module', '../../bill/controllers/bill-resources', '../../bill/service
 		// Lista todas as contas já cadastradas para o usuário.
 		Account.listAll(function(accounts){
 			$scope.accounts = accounts;
-		});
-		
-		// Recupera todos os lançamentos programados do usuário.
-		Bill.listAll(function(bills){
-			$scope.bills = bills;
+			
+			// Recupera todos os lançamentos programados do usuário.
+			Bill.listAll(function(bills){
+				$scope.bills = bills;
+				
+				$scope.generateChart();
+			});
 		});
 		
 		// Filtra os itens selecionadas e aciona a geração do gráfico.
 		$scope.generateChart = function(){
-			var selectedAccounts = [];
-			var selectedBills = [];
-			var startDate = new Date();
-			var endDate = new Date()
+//			var selectedAccounts = [];
+//			var selectedBills = [];
+//			var startDate = new Date();
+//			var endDate = new Date()
 			
-			// Recupera todas as contas (object) selecionadas pelo usuário.
-			for (var aId in $scope.selectedAccountIds){
-				for (var i=0;i<$scope.accounts.length;i++){
-					if ($scope.accounts[i].id == $scope.selectedAccountIds[aId]){
-						selectedAccounts.push($scope.accounts[i]);
-						break;
-					}
-				}
-			}
+//			// Recupera todas as contas (object) selecionadas pelo usuário.
+//			for (var aId in $scope.selectedAccountIds){
+//				for (var i=0;i<$scope.accounts.length;i++){
+//					if ($scope.accounts[i].id == $scope.selectedAccountIds[aId]){
+//						selectedAccounts.push($scope.accounts[i]);
+//						break;
+//					}
+//				}
+//			}
 			
-			// Recupera os lançamentos programados relacionadas às contas selecionadas.
-			for (var i=0;i<$scope.bills.length;i++){
-				for (var aId in $scope.selectedAccountIds){
-					if ($scope.bills[i].accountId == $scope.selectedAccountIds[aId]){
-						selectedBills.push($scope.bills[i]);
-					}
-				}
-			}
+//			// Recupera os lançamentos programados relacionadas às contas selecionadas.
+//			for (var i=0;i<$scope.bills.length;i++){
+//				for (var aId in $scope.selectedAccountIds){
+//					if ($scope.bills[i].accountId == $scope.selectedAccountIds[aId]){
+//						selectedBills.push($scope.bills[i]);
+//					}
+//				}
+//			}
 			
 			// Recupera o período de geração do gráfico.
-			for (var p in $scope.periodOptions){
-				if ($scope.periodOptions[p].id == $scope.selectedPeriod){
-					startDate = $scope.periodOptions[p].start;
-					endDate = $scope.periodOptions[p].end;
-				}
-			}
+//			for (var p in $scope.periodOptions){
+//				if ($scope.periodOptions[p].id == $scope.selectedPeriod){
+//				}
+//			}
+			var startDate = $scope.periodOptions[$scope.selectedPeriod].start;
+			var endDate = $scope.periodOptions[$scope.selectedPeriod].end;
 
 			// Atualiza o gráfico.
-			updateChart(selectedAccounts, selectedBills, startDate, endDate);
+			var billsProjection = BillService.newInstance($scope.accounts, $scope.bills);
+			var cashFlowProjection = billsProjection.getCashFlowProjection(startDate, endDate, "Month");
+			
+			$scope.chartConfig.xAxis.categories = cashFlowProjection.labels;
+			$scope.chartConfig.series = cashFlowProjection.series;
 		}
 		
 		
 		function updateChart(selectedAccounts, selectedBills, startDate, endDate){
-			var billsProjection = BillService.newInstance(selectedAccounts, selectedBills);
-			var cashFlowProjection = billsProjection.getCashFlowProjection(startDate, endDate);
-			
-			$scope.chartConfig.xAxis.categories = cashFlowProjection.labels;
-			$scope.chartConfig.series = cashFlowProjection.series;
 		}
 		
 	}]);
