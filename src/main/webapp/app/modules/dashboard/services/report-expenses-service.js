@@ -113,7 +113,6 @@ define(['./module', '../../shared/services/constants-service'], function (app) {
 						// Atualiza aquelas categorias que possuem valor caso contrário fica com 0.
 						for (var n1Name in this.data[labels[i]].data){
 							for (var n2Name in this.data[labels[i]].data[n1Name].data){
-//								if (!n2Data['$'+ n2Name]) n2Data['$'+ n2Name] = [];
 								if (n2Data['$'+ n2Name]){
 									n2Data['$'+ n2Name][i] = this.data[labels[i]].data[n1Name].data[n2Name].total * (this.data[labels[i]].data[n1Name].data[n2Name].total < 0 ? -1:1);
 								}
@@ -175,117 +174,6 @@ define(['./module', '../../shared/services/constants-service'], function (app) {
 				
 				return incomeAndExpense
 				
-			},
-			getIncomeAndExpense: function(accounts, startDate, endDate){
-				var incomeExpense = {
-					groupLabels: 	[],
-					values:			[],
-					
-					init: function(startDate, endDate, options){
-						if (!angular.isDate(startDate)) startDate = new Date(startDate);
-						if (!angular.isDate(endDate)) endDate = new Date(endDate);
-						
-						// Gera os labels.
-						var date = new Date(startDate.getTime());
-						while (date <= endDate){
-							this.groupLabels.push(getGroupId(date, options.groupBy));
-							var valuesByType = [];
-							for (var property in Constants.CATEGORY_TYPE) {
-							    if (Constants.CATEGORY_TYPE.hasOwnProperty(property)){
-							    	if ( eval('Constants.CATEGORY_TYPE.'+ property).type == "I" || eval('Constants.CATEGORY_TYPE.'+ property).type == "C") {
-							    		valuesByType.push({type: eval('Constants.CATEGORY_TYPE.'+ property).id, value: 0});
-							    	}
-							    }
-							}
-							this.values.push(valuesByType);
-							
-							if (options.groupBy == "Month"){
-								date.setMonth(date.getMonth()+1);
-							}
-						}
-					},
-					addValue: function(amount, categoryType, date){
-						if (!angular.isDate(date)) date = new Date(date);
-						if (date >= startDate && date <=endDate){
-							var label = getGroupId(date, "Month");
-							
-							for(var i in this.groupLabels){
-								if (this.groupLabels[i] == label){
-									for (var r in this.values[i]){
-										if (this.values[i][r].type == categoryType){
-											this.values[i][r].value += amount;
-											break;
-										}
-									}
-									break;
-								}
-							}
-						}
-					},
-					getSeriesByCategoryType: function(categoryType){
-						var serie = {};
-						
-						serie.labels = this.groupLabels;
-						serie.data = [];
-						for (var i in this.values){
-							for (var r in this.values[i]){
-								if (this.values[i][r].type == categoryType.id){
-									serie.data.push(this.values[i][r].value.toFixed(2) * (categoryType.type == "C" ? -1 : 1))
-								}
-							}
-						}
-						return serie;
-					}
-				}
-				
-				
-				incomeExpense.init(startDate, endDate, {groupBy: "Month"});
-				
-				angular.forEach(accounts, function(account){
-					angular.forEach(account.entries, function(entry){
-						incomeExpense.addValue(entry.amount, entry.category.type, entry.date);
-					})
-				})
-				
-				return incomeExpense;
-			},
-			
-			getExpensesByCategory: function(accounts, startDate, endDate){
-				var expCategories = [];
-				
-				angular.forEach(accounts, function(account){
-					angular.forEach(account.entries, function(entry){
-						if (!angular.isDate(entry.date)) entry.date = new Date(entry.date);
-						if (entry.date >= startDate && entry.date <= endDate){
-							if (entry.category.type == Constants.CATEGORY_TYPE.FIXED_COST.id 
-									|| entry.category.type == Constants.CATEGORY_TYPE.VARIABLE_COST.id || entry.category.type == Constants.CATEGORY_TYPE.IRREGULAR_COST.id){
-								if (!expCategories[entry.category.name]) 
-									expCategories[entry.category.name] = {total: 0, subCategories: []};
-								expCategories[entry.category.name].total += (entry.amount * (entry.amount>0? 1: -1));
-								
-								if (!expCategories[entry.category.name].subCategories[entry.category.subCategoryName]) 
-									expCategories[entry.category.name].subCategories[entry.category.subCategoryName] = 0;
-								expCategories[entry.category.name].subCategories[entry.category.subCategoryName] += (entry.amount * (entry.amount>0? 1: -1));
-							}
-						}
-					})
-				})
-				
-				var expensesByCategory = {};
-				expensesByCategory.series = [];
-				expensesByCategory.drilldownSeries = [];
-				var i=0;
-				for(var name in expCategories) {
-					expensesByCategory.series.push({name: name, y: expCategories[name].total, drilldown: name});
-					expensesByCategory.drilldownSeries.push({name: name, id: name, data: []});
-					
-					for (var subName in expCategories[name].subCategories){
-						expensesByCategory.drilldownSeries[i].data.push([subName, expCategories[name].subCategories[subName]]);
-					}
-					i++;
-				}
-			
-				return expensesByCategory;
 			}
 		}
 	}]);

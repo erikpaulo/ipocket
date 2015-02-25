@@ -1,7 +1,7 @@
-define(['./module', '../../bill/controllers/bill-resources', '../../account/controllers/account-resources', '../../dashboard/controllers/chart-service.js'], function (app) {
+define(['./module', '../../bill/controllers/bill-resources', '../../bill/services/bill-service', '../../account/controllers/account-resources'], function (app) {
 
-	app.controller('CashflowController', ['$scope', 'ChartService', 'AccountResource', 'BillResource',
-        function($scope, Chart, Account, Bill) {
+	app.controller('CashflowController', ['$scope', 'AccountResource', 'BillResource', 'BillService',
+        function($scope, Account, Bill, BillService) {
 		$scope.accounts;
 		$scope.bills;
 		$scope.selectedAccountIds;
@@ -20,14 +20,54 @@ define(['./module', '../../bill/controllers/bill-resources', '../../account/cont
 		]
 		
 		//*********** CHART **************//
-		$scope.labels = null;
-		$scope.series = null;
-		$scope.data = null;
-		$scope.options =  {
-				// Sets the chart to be responsive
-				responsive: true,
-				maintainAspectRatio: false,
-		};
+		$scope.chartConfig = {
+			options: {
+		        chart: {
+		            type: 'areaspline'
+		        },
+		        plotOptions: {
+		            areaspline: {
+		                fillOpacity: 0.5
+		            },
+		            lineWidth: 1,
+		            series: {
+		                marker: {
+		                    radius: 2
+		                },
+		                states: {
+		                	hover: {
+		                		lineWidthPlus: 0
+		                	}
+		                }
+		            }
+		        },
+		        tooltip: {
+		            shared: true,
+		            pointFormat: '<span style="color:{point.color}">\u25CF</span> {series.name}: <b>R$ {point.y: .,2f}</b><br/>'
+		        }
+			},
+	        title: {
+	            text: ''
+	        },
+	        subtitle: {
+	            text: ''
+	        },
+	        xAxis: {
+	            categories: []
+	        },
+	        yAxis: {
+	            title: {
+	                text: ''
+	            }
+	        },
+	        series: [],
+            "credits": {"enabled": false},
+           	"loading": false,
+           	"size": {
+        	   "width": "",
+        	   "height": "380"
+           	}
+	    }
 				
 		// Lista todas as contas já cadastradas para o usuário.
 		Account.listAll(function(accounts){
@@ -79,11 +119,11 @@ define(['./module', '../../bill/controllers/bill-resources', '../../account/cont
 		
 		
 		function updateChart(selectedAccounts, selectedBills, startDate, endDate){
-			var dataStructure = new Chart(selectedAccounts, selectedBills, startDate, endDate, {groupBy: "Month"});
+			var billsProjection = BillService.newInstance(selectedAccounts, selectedBills);
+			var cashFlowProjection = billsProjection.getCashFlowProjection(startDate, endDate);
 			
-			$scope.data = dataStructure.data;
-			$scope.labels = dataStructure.labels;
-			$scope.series = dataStructure.series;
+			$scope.chartConfig.xAxis.categories = cashFlowProjection.labels;
+			$scope.chartConfig.series = cashFlowProjection.series;
 		}
 		
 	}]);

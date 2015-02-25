@@ -225,7 +225,7 @@ define(['./module', '../../shared/services/constants-service', '../services/repo
 			        },
 			        plotOptions: {
 			        	area: {
-//			        		stacking: 'percent',
+			        		stacking: 'normal',
 			        		lineColor: '#ffffff',
 			        		lineWidth: 1,
 			        		marker: {
@@ -255,27 +255,16 @@ define(['./module', '../../shared/services/constants-service', '../services/repo
 		            text: ''
 		        },
 		        xAxis: {
-//		            categories: ['1750', '1800', '1850', '1900', '1950', '1999', '2050'],
-//		            tickmarkPlacement: 'on',
 		            title: {
 		                enabled: false
 		            }
 		        },
 		        yAxis: {
 		            title: {
-		                text: 'Percent'
+		                text: ''
 		            }
 		        },
-		        series: [{
-		            name: 'Custo Irregular',
-//		            data: [502, 635, 809, 947, 1402, 3634, 5268]
-		        }, {
-		            name: 'Custo Variável',
-//		            data: [106, 107, 111, 133, 221, 767, 1766]
-		        }, {
-		            name: 'Custo Fixo',
-//		            data: [163, 203, 276, 408, 547, 729, 628]
-		        }],
+		        series: [],
                 "credits": {"enabled": false},
  	           	"loading": false,
  	           	"size": {
@@ -307,9 +296,9 @@ define(['./module', '../../shared/services/constants-service', '../services/repo
 				})
  				var n2Series = $scope.incomeAndExpenses.getN2Series(selectedCategories, $scope.periodOptions[4].start(), $scope.periodOptions[3].end());
  				$scope.chartConfig.xAxis.categories = n2Series.labels;
- 				var series = []
+ 				var series = [], i = 0;
  				for (var name in n2Series.data){
- 					series.push({name: name.replace('$', ''), data: n2Series.data[name]});
+ 					series.push({name: name.replace('$', ''), data: n2Series.data[name], visible: (++i<=5)});
  				}
  				$scope.chartConfig.series = series;
 			}

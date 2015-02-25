@@ -1,7 +1,7 @@
-define(['./module', './bill-resources', '../../account/controllers/category-resources', '../../account/controllers/account-resources'], function (app) {
+define(['./module', './bill-resources', '../services/bill-service', '../../account/controllers/category-resources', '../../account/controllers/account-resources'], function (app) {
 
-	app.controller('BillController', ['$scope', '$modal', '$filter', 'BillResource', 'CategoryResource', 'AccountResource', 'uiGridConstants',
-        function($scope, $modal, $filter, Bill, Category, Account, uiGridConstants) {
+	app.controller('BillController', ['$scope', '$modal', '$filter', 'BillService', 'BillResource', 'CategoryResource', 'AccountResource', 'uiGridConstants',
+        function($scope, $modal, $filter, BillService, Bill, Category, Account, uiGridConstants) {
 		$scope.appContext.changeCurrentContext($scope.modules[0].id);
 		
 		$scope.bills = null;
@@ -43,20 +43,53 @@ define(['./module', './bill-resources', '../../account/controllers/category-reso
 		};
 		
 		//*********** CHART **************//
-//		$scope.labels = null;
-//		$scope.series = null;
-//		$scope.data = null;
-//		$scope.options =  {
-//				// Sets the chart to be responsive
-//				responsive: true,
-//				maintainAspectRatio: false,
-//		};
-		
-//		$scope.$watch('accounts', function(newValue, oldValue){
-//			if ($scope.accounts){
-//				updateChart();
-//			}
-//		})
+		$scope.chartConfig = {
+				options: {
+			        chart: {
+			            type: 'areaspline'
+			        },
+			        plotOptions: {
+			            areaspline: {
+			                fillOpacity: 0.5
+			            },
+			            lineWidth: 1,
+			            series: {
+			                marker: {
+			                    radius: 2
+			                },
+			                states: {
+			                	hover: {
+			                		lineWidthPlus: 0
+			                	}
+			                }
+			            }
+			        },
+			        tooltip: {
+			            shared: true
+			        }
+				},
+		        title: {
+		            text: ''
+		        },
+		        subtitle: {
+		            text: ''
+		        },
+		        xAxis: {
+		            categories: []
+		        },
+		        yAxis: {
+		            title: {
+		                text: ''
+		            }
+		        },
+		        series: [],
+                "credits": {"enabled": false},
+ 	           	"loading": false,
+ 	           	"size": {
+ 	        	   "width": "",
+ 	        	   "height": "250"
+ 	           	}
+		    }
 		
 		//*********** DATA ****************//
 		// Recupera a lista de categorias disponível no sistema.
@@ -242,14 +275,15 @@ define(['./module', './bill-resources', '../../account/controllers/category-reso
 			var beginDate = new Date();
 			var endDate = new Date();
 			
-			beginDate.setMonth(beginDate.getMonth());
+//			beginDate.setMonth(beginDate.getMonth());
 			endDate.setMonth(endDate.getMonth()+6);
 			
 			var accounts = $filter('filter')($scope.accounts, {type: "CH"});
-			var dataStructure = new Chart(accounts, $scope.bills, beginDate, endDate, {groupBy: "Week"});
-			$scope.labels = dataStructure.labels;
-			$scope.series = dataStructure.series;
-			$scope.data = dataStructure.data;
+			var billsProjection = BillService.newInstance(accounts, $scope.bills);
+			var cashFlowProjection = billsProjection.getCashFlowProjection(beginDate, endDate);
+			
+			$scope.chartConfig.xAxis.categories = cashFlowProjection.labels;
+			$scope.chartConfig.series = cashFlowProjection.series;
 		}
 		
 		

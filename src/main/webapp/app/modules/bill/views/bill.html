@@ -1,6 +1,5 @@
 <link href="resources/styles/table.css" rel="stylesheet" type="text/css" />
 <link href="resources/lib/angular-ui-grid/ui-grid.css" rel="stylesheet" type="text/css" />
-<link rel="stylesheet" href="resources/lib/angular-chart.js/dist/angular-chart.css"">
 
 <section ng-controller="BillController">
 	<div class="content">
@@ -35,25 +34,16 @@
 						</div>
 					</div>
 					<div class="grid-body">
-						<div class="row" ng-cloak>
-							<div class="col-md-12">
-								<div ui-grid="gridOptions" ui-grid-selection class="grid-no-filter"></div>
-							</div>
-						</div>
-						<div class="row"">
+						<div class="row">
 							<div class="col-md-12" id="line-chart">
 								<div class="panel-body">
-<!-- 									<canvas id="line"  -->
-<!-- 											class="chart chart-line"  -->
-<!-- 											data="data"  -->
-<!-- 											labels="labels"  -->
-<!-- 											legend="true"  -->
-<!-- 											series="series" -->
-<!--  												click="onClick"  -->
-<!--  												options="options"  -->
-<!--  												height="300"> -->
-<!-- 									</canvas>  -->
+									<highchart id="chart1" config="chartConfig"></highchart>
 								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<div ui-grid="gridOptions" ui-grid-selection class="grid-no-filter"></div>
 							</div>
 						</div>
 					</div>
