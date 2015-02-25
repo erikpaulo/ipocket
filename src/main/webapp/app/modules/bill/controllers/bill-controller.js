@@ -65,7 +65,8 @@ define(['./module', './bill-resources', '../services/bill-service', '../../accou
 			            }
 			        },
 			        tooltip: {
-			            shared: true
+			            shared: true,
+			            pointFormat: '<span style="color:{point.color}">\u25CF</span> {series.name}: <b>R$ {point.y: ,.2f}</b><br/>'
 			        }
 				},
 		        title: {

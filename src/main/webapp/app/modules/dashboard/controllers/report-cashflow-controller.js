@@ -43,7 +43,7 @@ define(['./module', '../../bill/controllers/bill-resources', '../../bill/service
 		        },
 		        tooltip: {
 		            shared: true,
-		            pointFormat: '<span style="color:{point.color}">\u25CF</span> {series.name}: <b>R$ {point.y: .,2f}</b><br/>'
+		            pointFormat: '<span style="color:{point.color}">\u25CF</span> {series.name}: <b>R$ {point.y: ,.2f}</b><br/>'
 		        }
 			},
 	        title: {
