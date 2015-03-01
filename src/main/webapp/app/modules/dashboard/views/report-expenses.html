@@ -56,6 +56,43 @@
 									</div>
 								</div>
 							</div>
+							<div class="row">
+								<div class="col-md-12">
+									<div class="panel panel-chart" ng-controller="ERController.ExpensesAnalytics">
+										<div class="panel-heading">Detalhamento por Subcategoria</div>
+										<div class="panel-body">
+											<table class="table table-bordered no-more-tables">
+												<thead>
+													<tr>
+														<td class="report-n0 no-border" colspan="3" rowspan="1"></td>
+														<td class="report-n0 report-title" ng-repeat="month in tree.labels" class="align-data">{{month}}</td>
+													</tr>
+												</thead>
+												<tbody>
+													<tr ng-repeat-start="n0 in tree.data">
+														<td class="report-n0" rowspan="{{getColspan(n0)+n0.data.length}}">{{n0.name}}</td>
+													</tr>
+													<tr ng-repeat-start="n1 in n0.data">
+														<td class="report-n1" rowspan="{{getColspan(n1)}}">{{n1.name}}</td>
+													</tr>
+													<tr ng-repeat="n2 in n1.data">
+														<td class="report-n2" ng->{{n2.name}}</td>
+														<td class="align-currency" ng-class="{negative: n2Total<0, positive: n2Total>0}" ng-repeat="n2Total in n2.totals track by $index">{{n2Total | currency:'R$ '}}</td>
+													</tr>
+													<tr ng-repeat-end>
+														<td class="report-n1 report-total" colspan="2">Total: </td>
+														<td class="report-n1 report-total" ng-repeat="n1Total in n1.totals track by $index">{{n1Total | currency:'R$ '}}</td>
+													</tr>
+													<tr ng-repeat-end class="report-n0 report-total" ng-init="total += n0Total">
+														<td colspan="3">Total: </td>
+														<td ng-repeat="n0Total in n0.totals track by $index" >{{n0Total | currency:'R$ '}}</td>
+													</tr>
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+							</div>
 						</form>
 					</div>
 				</div>

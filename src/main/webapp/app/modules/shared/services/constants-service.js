@@ -9,17 +9,17 @@ define(['./module'], function (app) {
 				},
 				FIXED_COST: {
 					id: 'F',
-					type: 'C',
+					type: 'E',
 					name: "Custo Fixo"
 				},
 				VARIABLE_COST: {
 					id: 'V',
-					type: 'C',
+					type: 'E',
 					name: 'Custo Variável'
 				},
 				IRREGULAR_COST: {
 					id: 'I',
-					type: 'C',
+					type: 'E',
 					name: 'Custo Irregular'
 				},
 				TRANSFER: {

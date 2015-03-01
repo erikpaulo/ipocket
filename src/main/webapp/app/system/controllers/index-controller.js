@@ -5,7 +5,7 @@ define([ 'app' ], function(app) {
 		var moduleId = "system";
 		app.context.changeCurrentContext(moduleId);
 
-		console.log('IndexControl')
+		console.log('IndexControl: '+ moduleId);
 		
 		$scope.page = {
 			heading : 'Index'

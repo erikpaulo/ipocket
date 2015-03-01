@@ -136,14 +136,19 @@ Page header
 }  
 
 .page-sidebar  .page-sidebar-wrapper > ul > li.active > a .selected {
-  display: block;
-  width: 8px;
-  height: 25px;
-  background-image: url("../img/sidebar-menu-arrow.png");
-  float: right;
-  position: absolute;
-  right:-8px;
-  top:8px;
+/*   display: block; */
+/*   width: 8px; */
+/*   height: 25px; */
+/*   background-image: url("../img/sidebar-menu-arrow.png"); */
+/*   float: right; */
+/*   position: absolute; */
+/*   right:-8px; */
+/*   top:8px; */
+	position: absolute;
+	right: -9px;
+	top: 12px;
+	color: #225577;
+	font-size: xx-large;
 }
 
 .page-sidebar ul > li > a > .arrow:before {  

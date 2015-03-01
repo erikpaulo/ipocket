@@ -83,35 +83,6 @@ define(['./module', '../../bill/controllers/bill-resources', '../../bill/service
 		
 		// Filtra os itens selecionadas e aciona a geração do gráfico.
 		$scope.generateChart = function(){
-//			var selectedAccounts = [];
-//			var selectedBills = [];
-//			var startDate = new Date();
-//			var endDate = new Date()
-			
-//			// Recupera todas as contas (object) selecionadas pelo usuário.
-//			for (var aId in $scope.selectedAccountIds){
-//				for (var i=0;i<$scope.accounts.length;i++){
-//					if ($scope.accounts[i].id == $scope.selectedAccountIds[aId]){
-//						selectedAccounts.push($scope.accounts[i]);
-//						break;
-//					}
-//				}
-//			}
-			
-//			// Recupera os lançamentos programados relacionadas às contas selecionadas.
-//			for (var i=0;i<$scope.bills.length;i++){
-//				for (var aId in $scope.selectedAccountIds){
-//					if ($scope.bills[i].accountId == $scope.selectedAccountIds[aId]){
-//						selectedBills.push($scope.bills[i]);
-//					}
-//				}
-//			}
-			
-			// Recupera o período de geração do gráfico.
-//			for (var p in $scope.periodOptions){
-//				if ($scope.periodOptions[p].id == $scope.selectedPeriod){
-//				}
-//			}
 			var startDate = $scope.periodOptions[$scope.selectedPeriod].start;
 			var endDate = $scope.periodOptions[$scope.selectedPeriod].end;
 

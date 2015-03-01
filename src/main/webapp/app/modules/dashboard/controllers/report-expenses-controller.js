@@ -1,7 +1,7 @@
 define(['./module', '../../shared/services/constants-service', '../services/report-expenses-service', '../../account/controllers/account-resources', '../../account/controllers/category-resources'], function (app) {
 	
-	app.controller('ExpensesReportController', ['$scope', 'AccountResource', 'ExpenseReportService', 'ConstantsService',
-	   function($scope, Account, ExpenseReport, Constants) {
+	app.controller('ExpensesReportController', ['$scope', 'AccountResource', 'CategoryResource', 'ExpenseReportService', 'ConstantsService',
+	   function($scope, Account, Category, ExpenseReport, Constants) {
 			var start = new Date();
 			start.setDate(1);
 			$scope.periodOptions = [
@@ -57,7 +57,12 @@ define(['./module', '../../shared/services/constants-service', '../services/repo
 			// Lista todas as contas já cadastradas para o usuário.
 			Account.listAll(function(accounts){
 				$scope.accounts = accounts;
-				$scope.incomeAndExpenses = ExpenseReport.newInstance(accounts);
+				
+				// Recupera a lista de categorias disponível no sistema.
+				Category.listAll(function(categories){
+					$scope.categories = categories;
+					$scope.incomeAndExpenses = ExpenseReport.newInstance(categories, accounts);
+				});
 			});
 	}]);
 	
@@ -141,12 +146,25 @@ define(['./module', '../../shared/services/constants-service', '../services/repo
  			})
  		
  			$scope.updateChart = function(){
- 				var n1Series = $scope.incomeAndExpenses.getN1Series($scope.periodOptions[3].start(), $scope.periodOptions[3].end());
- 				$scope.chartConfig.xAxis.categories = n1Series.labels;
- 				$scope.chartConfig.series[0].data = eval('n1Series.data.$'+Constants.CATEGORY_TYPE.IRREGULAR_COST.id);
- 				$scope.chartConfig.series[1].data = eval('n1Series.data.$'+Constants.CATEGORY_TYPE.VARIABLE_COST.id);
- 				$scope.chartConfig.series[2].data = eval('n1Series.data.$'+Constants.CATEGORY_TYPE.FIXED_COST.id);
- 				$scope.chartConfig.series[3].data = eval('n1Series.data.$'+Constants.CATEGORY_TYPE.INCOME.id);
+ 				var n0Series = $scope.incomeAndExpenses.getN0($scope.periodOptions[3].start(), $scope.periodOptions[3].end());
+ 				$scope.chartConfig.xAxis.categories = n0Series.labels;
+ 				for (var i in n0Series.data) {
+ 					if (n0Series.data[i].name == 'Custo Irregular'){
+ 						$scope.chartConfig.series[0].data = n0Series.data[i].y;
+ 					}
+ 					
+ 					if (n0Series.data[i].name == 'Custo Variável'){
+ 						$scope.chartConfig.series[1].data = n0Series.data[i].y;
+ 					}
+ 					
+ 					if (n0Series.data[i].name == 'Custo Fixo'){
+ 						$scope.chartConfig.series[2].data = n0Series.data[i].y;
+ 					}
+ 					
+ 					if (n0Series.data[i].name == 'Entrada'){
+ 						$scope.chartConfig.series[3].data = n0Series.data[i].y;
+ 					}
+ 				}
  			}
  	}]);
 	
@@ -203,9 +221,9 @@ define(['./module', '../../shared/services/constants-service', '../services/repo
 	            }
 			
 			$scope.updateChart = function(){
-				var expensesByCategory = $scope.incomeAndExpenses.getN2SeriesForPie($scope.periodOptions[$scope.selectedPeriod].start(), $scope.periodOptions[$scope.selectedPeriod].end());
-				$scope.chartConfig.series[0].data = expensesByCategory.series;
-				$scope.chartConfig.options.drilldown.series = expensesByCategory.drilldownSeries;
+				var n1Serie = $scope.incomeAndExpenses.getN1($scope.periodOptions[$scope.selectedPeriod].start(), $scope.periodOptions[$scope.selectedPeriod].end(), true, ExpenseReport.JUST_EXPENSES, true);
+				$scope.chartConfig.series[0].data = n1Serie.data;
+				$scope.chartConfig.options.drilldown.series = n1Serie.drilldownData;
 			}
 			
  			$scope.$watch('incomeAndExpenses', function(newValue, oldValue){
@@ -215,8 +233,8 @@ define(['./module', '../../shared/services/constants-service', '../services/repo
  			})
 		}]);
 	
-	app.controller('ERController.ExpensesByCategoryEvolution', ['$scope', '$filter', 'AccountResource', 'CategoryResource', 'ConstantsService',
-        function($scope, $filter, Account, Category, Constants) {
+	app.controller('ERController.ExpensesByCategoryEvolution', ['$scope', '$filter', 'AccountResource', 'ConstantsService', 'ExpenseReportService',
+        function($scope, $filter, Account, Constants, ExpenseReport) {
 			
 			$scope.chartConfig = {
 				"options": {
@@ -275,33 +293,74 @@ define(['./module', '../../shared/services/constants-service', '../services/repo
 			
  			$scope.$watch('incomeAndExpenses', function(newValue, oldValue){
  				if ($scope.incomeAndExpenses){
- 					// Recupera a lista de categorias disponível no sistema.
- 					Category.listAll(function(categories){
- 						$scope.updateChart(categories);
- 					});
- 					
+ 					$scope.updateChart();
  				}
  			})
  		
- 			$scope.updateChart = function(categories){
-				var selectedCategories = [];
-
-				// Recupera as categorias para as quais deseja recuperar os valores.
-				angular.forEach(categories, function(category){
-					if (category.type == Constants.CATEGORY_TYPE.IRREGULAR_COST.id || 
-						category.type == Constants.CATEGORY_TYPE.VARIABLE_COST.id || 
-						category.type == Constants.CATEGORY_TYPE.FIXED_COST.id){
-						selectedCategories.push(category);
-					}
-				})
- 				var n2Series = $scope.incomeAndExpenses.getN2Series(selectedCategories, $scope.periodOptions[4].start(), $scope.periodOptions[3].end());
- 				$scope.chartConfig.xAxis.categories = n2Series.labels;
- 				var series = [], i = 0;
- 				for (var name in n2Series.data){
- 					series.push({name: name.replace('$', ''), data: n2Series.data[name], visible: (++i<=5)});
+ 			$scope.updateChart = function(){
+//				var selectedCategories = [];
+//
+//				// Recupera as categorias para as quais deseja recuperar os valores.
+//				angular.forEach(categories, function(category){
+//					if (category.type == Constants.CATEGORY_TYPE.IRREGULAR_COST.id || 
+//						category.type == Constants.CATEGORY_TYPE.VARIABLE_COST.id || 
+//						category.type == Constants.CATEGORY_TYPE.FIXED_COST.id){
+//						selectedCategories.push(category);
+//					}
+//				})
+ 				var n1Series = $scope.incomeAndExpenses.getN1($scope.periodOptions[3].start(), $scope.periodOptions[3].end(), false, ExpenseReport.JUST_EXPENSES, false);
+ 				$scope.chartConfig.xAxis.categories = n1Series.labels;
+ 				for (var i in n1Series.data){
+ 					$scope.chartConfig.series.push({name: n1Series.data[i].name, data: n1Series.data[i].y});
  				}
- 				$scope.chartConfig.series = series;
 			}
+	}]);
+	
+	app.controller('ERController.ExpensesAnalytics', ['$scope', 'AccountResource', 'ExpenseReportService', 'ConstantsService',
+	                                     	   function($scope, Account, ExpenseReport, Constants) {
+		
+		$scope.updateChart = function(){
+			var selectedCategories = [];
+
+			// Recupera as categorias para as quais deseja recuperar os valores.
+//			angular.forEach($scope.categories, function(category){
+//				if (category.type == Constants.CATEGORY_TYPE.IRREGULAR_COST.id || 
+//					category.type == Constants.CATEGORY_TYPE.VARIABLE_COST.id || 
+//					category.type == Constants.CATEGORY_TYPE.FIXED_COST.id){
+//					selectedCategories.push(category);
+//				}
+//			})
+			
+			$scope.tree = $scope.incomeAndExpenses.getTree($scope.periodOptions[3].start(), $scope.periodOptions[3].end());
+//			$scope.types = $scope.treeExpenses[1].data;
+		}
+		
+		$scope.$watch('incomeAndExpenses', function(newValue, oldValue){
+			if ($scope.incomeAndExpenses){
+				$scope.updateChart();
+			}
+		})
+		
+		$scope.total = 0;
+		
+		$scope.getColspan = function (node){
+			var colspan = 1;
+			if (node.data){
+				colspan += node.data.length
+				for (var i in node.data){
+					if (node.data[i].data){
+						colspan += node.data[i].data.length;
+//						for (var j in node.data[i].data){
+//							if (node.data[i].data[j].data){
+//								colspan += node.data[i].data[j].data.length;
+//							}
+//						}
+					}
+				}
+			}
+			return colspan;
+		}
+
 	}]);
 	
 });

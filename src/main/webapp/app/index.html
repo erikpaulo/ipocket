@@ -208,7 +208,7 @@
 							<a id="menu-{{module.id}} " href="{{module.originalPath != undefined ? '#' + module.originalPath : 'javascript:;'}}"  ng-click="handleMenuClick($event, module.id)"> 
 								<i class="{{module.icon}}" ></i> 
 								<span class="title">{{module.name}}</span> 
-								<span ng-class="{selected: appContext.modules[module.id]}"></span> 
+								<span ng-if="appContext.modules[module.id]" ng-class="{selected: appContext.modules[module.id]}">&#10151;</span> 
 								<!-- <span class="badge badge-important pull-right">5</span> -->
 							</a>
 							<ul class="sub-menu" ng-show="module.items != undefined" style="display: none;">
