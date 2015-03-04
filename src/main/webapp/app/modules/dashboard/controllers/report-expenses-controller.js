@@ -61,7 +61,7 @@ define(['./module', '../../shared/services/constants-service', '../services/repo
 				$scope.accounts = accounts;
 				
 				// Recupera a lista de categorias disponível no sistema.
-				Category.listAll(function(categories){
+				Category.listAll(function(categories){ 
 					$scope.categories = categories;
 					$scope.incomeAndExpenses = ExpenseReport.newInstance(categories, selectedAccounts);
 				});

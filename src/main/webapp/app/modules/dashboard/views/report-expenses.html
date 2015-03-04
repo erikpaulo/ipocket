@@ -83,7 +83,7 @@
 														<td class="report-n1 report-total" colspan="2">Total: </td>
 														<td class="report-n1 report-total" ng-repeat="n1Total in n1.totals track by $index">{{n1Total | currency:'R$ '}}</td>
 													</tr>
-													<tr ng-repeat-end class="report-n0 report-total" ng-init="total += n0Total">
+													<tr ng-repeat-end class="report-n0 report-total">
 														<td colspan="3">Total: </td>
 														<td ng-repeat="n0Total in n0.totals track by $index" >{{n0Total | currency:'R$ '}}</td>
 													</tr>
