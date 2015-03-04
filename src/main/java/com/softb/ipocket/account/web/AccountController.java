@@ -175,8 +175,7 @@ public class AccountController extends AbstractRestController<Account, Integer> 
 			
 			// Cria o lançamento que será incluído no sistema.
 			AccountEntry entry = new AccountEntry(	accountId, entryToImport.getDescription(), category, entryToImport.getDate(), 
-													"E", (account.getType().equalsIgnoreCase(AccountConstants.TYPE_CREDIT) ? -1 : 1) * entryToImport.getAmount(), 
-													userAccountService.getCurrentUser().getId(), null, null, null);
+													"E", entryToImport.getAmount(), userAccountService.getCurrentUser().getId(), null, null, null);
 			
 			validate("AccountEntry", entry);
 			entries.add(entry);
