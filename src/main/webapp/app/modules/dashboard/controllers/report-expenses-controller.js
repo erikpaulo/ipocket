@@ -1,7 +1,7 @@
 define(['./module', '../../shared/services/constants-service', '../services/report-expenses-service', '../../account/controllers/account-resources', '../../account/controllers/category-resources'], function (app) {
 	
-	app.controller('ExpensesReportController', ['$scope', 'AccountResource', 'CategoryResource', 'ExpenseReportService', 'ConstantsService',
-	   function($scope, Account, Category, ExpenseReport, Constants) {
+	app.controller('ExpensesReportController', ['$scope', '$filter', 'AccountResource', 'CategoryResource', 'ExpenseReportService', 'ConstantsService',
+	   function($scope, $filter, Account, Category, ExpenseReport, Constants) {
 			var start = new Date();
 			start.setDate(1);
 			$scope.periodOptions = [
@@ -56,12 +56,14 @@ define(['./module', '../../shared/services/constants-service', '../services/repo
 			
 			// Lista todas as contas já cadastradas para o usuário.
 			Account.listAll(function(accounts){
+				var selectedAccounts = $filter('filter')(accounts, {type: 'CH'}, true);
+				
 				$scope.accounts = accounts;
 				
 				// Recupera a lista de categorias disponível no sistema.
 				Category.listAll(function(categories){
 					$scope.categories = categories;
-					$scope.incomeAndExpenses = ExpenseReport.newInstance(categories, accounts);
+					$scope.incomeAndExpenses = ExpenseReport.newInstance(categories, selectedAccounts);
 				});
 			});
 	}]);
