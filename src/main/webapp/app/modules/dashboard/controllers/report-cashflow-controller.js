@@ -13,10 +13,30 @@ define(['./module', '../../bill/controllers/bill-resources', '../../bill/service
 		var start = new Date();
 		$scope.selectedPeriod = 0;
 		$scope.periodOptions = [
-		    {id:0 , name:"Este ano" , start: start, end: new Date(new Date(start.getTime()).setMonth(11))},
-		    {id:1 , name:"Próximos 6 meses" , start: start, end: new Date(new Date(start).setMonth(start.getMonth() + 6))},
-		    {id:2 , name:"Próximos 12 meses" , start: start, end: new Date(new Date(start).setMonth(start.getMonth() + 12))},
-		    {id:3 , name:"Próximos 24 meses" , start: start, end: new Date(new Date(start).setMonth(start.getMonth() + 24))}
+		    {id:0 , name:"Este ano" , start: start, end: function(){
+           	 var date = new Date(start);
+        	 date.setMonth(12);
+        	 date.setDate(-0);
+        	 return date;
+		    }},
+		    {id:1 , name:"Próximos 6 meses" , start: start, end: function(){
+		    	var date = new Date(start);
+		    	date.setMonth(start.getMonth() + 7)
+		    	date.setDate(-0);
+		    	return date;
+		    }},
+		    {id:2 , name:"Próximos 12 meses" , start: start, end: function(){
+		    	var date = new Date(start);
+		    	date.setMonth(start.getMonth() + 13)
+		    	date.setDate(-0);
+		    	return date;
+		    }},
+		    {id:3 , name:"Próximos 24 meses" , start: start, end: function(){
+		    	var date = new Date(start);
+		    	date.setMonth(start.getMonth() + 25)
+		    	date.setDate(-0);
+		    	return date;
+		    }}
 		]
 		
 		//*********** CHART **************//
@@ -84,7 +104,7 @@ define(['./module', '../../bill/controllers/bill-resources', '../../bill/service
 		// Filtra os itens selecionadas e aciona a geração do gráfico.
 		$scope.generateChart = function(){
 			var startDate = $scope.periodOptions[$scope.selectedPeriod].start;
-			var endDate = $scope.periodOptions[$scope.selectedPeriod].end;
+			var endDate = $scope.periodOptions[$scope.selectedPeriod].end();
 
 			// Atualiza o gráfico.
 			var billsProjection = BillService.newInstance($scope.accounts, $scope.bills);
