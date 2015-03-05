@@ -13,10 +13,10 @@ define(['./module', '../../bill/controllers/bill-resources', '../../bill/service
 		var start = new Date();
 		$scope.selectedPeriod = 0;
 		$scope.periodOptions = [
-		    {id:0 , name:"Este ano" , start: start, end: new Date(start).setMonth(11)},
-		    {id:1 , name:"Próximos 6 meses" , start: start, end: new Date(start).setMonth(start.getMonth() + 6)},
-		    {id:2 , name:"Próximos 12 meses" , start: start, end: new Date(start).setMonth(start.getMonth() + 12)},
-		    {id:3 , name:"Próximos 24 meses" , start: start, end: new Date(start).setMonth(start.getMonth() + 24)}
+		    {id:0 , name:"Este ano" , start: start, end: new Date(new Date(start.getTime()).setMonth(11))},
+		    {id:1 , name:"Próximos 6 meses" , start: start, end: new Date(new Date(start).setMonth(start.getMonth() + 6))},
+		    {id:2 , name:"Próximos 12 meses" , start: start, end: new Date(new Date(start).setMonth(start.getMonth() + 12))},
+		    {id:3 , name:"Próximos 24 meses" , start: start, end: new Date(new Date(start).setMonth(start.getMonth() + 24))}
 		]
 		
 		//*********** CHART **************//
@@ -92,10 +92,6 @@ define(['./module', '../../bill/controllers/bill-resources', '../../bill/service
 			
 			$scope.chartConfig.xAxis.categories = cashFlowProjection.labels;
 			$scope.chartConfig.series = cashFlowProjection.series;
-		}
-		
-		
-		function updateChart(selectedAccounts, selectedBills, startDate, endDate){
 		}
 		
 	}]);
