@@ -73,14 +73,14 @@
 														<td class="report-n0" rowspan="{{getColspan(n0)+n0.data.length}}">{{n0.name}}</td>
 													</tr>
 													<tr ng-repeat-start="n1 in n0.data">
-														<td class="report-n1" rowspan="{{getColspan(n1)}}">{{n1.name}}</td>
+														<td class="report-n1" rowspan="{{getColspan(n1)+1}}">{{n1.name}}</td>
 													</tr>
 													<tr ng-repeat="n2 in n1.data">
 														<td class="report-n2" ng->{{n2.name}}</td>
 														<td class="align-currency" ng-class="{negative: n2Total<0, positive: n2Total>0}" ng-repeat="n2Total in n2.totals track by $index">{{n2Total | currency:'R$ '}}</td>
 													</tr>
 													<tr ng-repeat-end>
-														<td class="report-n1 report-total" colspan="2">Total: </td>
+														<td class="report-n1 report-total" colspan="1">Total: </td>
 														<td class="report-n1 report-total" ng-repeat="n1Total in n1.totals track by $index">{{n1Total | currency:'R$ '}}</td>
 													</tr>
 													<tr ng-repeat-end class="report-n0 report-total">

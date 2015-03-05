@@ -23,15 +23,16 @@
 	text-align: center;
 	color: black;
 	font-family: 'Open Sans', sans-serif;
-	background-color: #ecf0f2;
-	font-weight: 300;
+	background-color: #fafafa;
+	padding: 4px !important;
+/* 	font-weight: 300; */
 }
 
 .report-n2 {
 	width: 12%;
 	text-align: left;
 	color: black;
-	font-weight: 300;
+	font-family: 'Open Sans', sans-serif;
 }
 
 .report-total{
