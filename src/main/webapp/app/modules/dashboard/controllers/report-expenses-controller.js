@@ -56,7 +56,12 @@ define(['./module', '../../shared/services/constants-service', '../services/repo
 			
 			// Lista todas as contas já cadastradas para o usuário.
 			Account.listAll(function(accounts){
-				var selectedAccounts = $filter('filter')(accounts, {type: 'CH'}, true);
+				var selectedAccounts = $filter('filter')(accounts, {type: 'CH'}, function(actual, expected){
+					if (actual == 'CH' || actual == 'CR')
+						return true;
+					else
+						return false;
+				});
 				
 				$scope.accounts = accounts;
 				
