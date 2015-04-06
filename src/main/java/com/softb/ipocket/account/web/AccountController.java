@@ -27,11 +27,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.softb.ipocket.account.model.Account;
 import com.softb.ipocket.account.model.AccountEntry;
 import com.softb.ipocket.account.model.AccountEntryImport;
-import com.softb.ipocket.account.model.Category;
 import com.softb.ipocket.account.repository.AccountEntryRepository;
 import com.softb.ipocket.account.repository.AccountRepository;
-import com.softb.ipocket.account.repository.CategoryRepository;
 import com.softb.ipocket.account.service.AccountEntryUploadService;
+import com.softb.ipocket.configuration.model.Category;
+import com.softb.ipocket.configuration.repository.CategoryRepository;
 import com.softb.system.errorhandler.exception.FormValidationError;
 import com.softb.system.errorhandler.exception.SystemException;
 import com.softb.system.rest.AbstractRestController;
@@ -167,11 +167,11 @@ public class AccountController extends AbstractRestController<Account, Integer> 
 			// Recupera a categoria selecionada.
 			Category category = null;
 			if (entryToImport.getCategory() != null){
-				category = categoryRepository.findOneByUser(entryToImport.getCategory().getId(), userAccountService.getCurrentUser().getId());
+//				category = categoryRepository.findOneByUser(entryToImport.getCategory().getId(), userAccountService.getCurrentUser().getId());
 			}
 			
 			// Se import ocorrendo em conta tipo crédito, inverte o sinal.
-			Account account = accountRepository.findOne(accountId);
+//			Account account = accountRepository.findOne(accountId);
 			
 			// Cria o lançamento que será incluído no sistema.
 			AccountEntry entry = new AccountEntry(	accountId, entryToImport.getDescription(), category, entryToImport.getDate(), 

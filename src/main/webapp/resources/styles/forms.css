@@ -723,6 +723,7 @@ div.ui-grid-cell-custom select {
 .grid-body {
   clear: both;  
   padding: 0;  
+  min-height: 445px;
 }
 
 .grid-body.light-blue, .grid.light-blue {
@@ -1458,7 +1459,27 @@ div.ui-grid-cell-custom select {
 	letter-spacing:0.5px;
 	font-weight:600;
 }
-
+.tiles-thin .tiles-body{
+	padding: 5px 17px 5px 20px !important;
+	
+	background-image:none;
+	background: -webkit-gradient(linear, left bottom, right top, color-stop(0, #C8D7E3), color-stop(1, #FFFFFF));
+	background: -ms-linear-gradient(left, #C8D7E3, #ffffff);
+	background: -moz-linear-gradient(left right, #C8D7E3 0%, #ffffff 100%);
+	background: -o-linear-gradient(#ffffff, #C8D7E3);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#C8D7E3', GradientType=0);
+	border-top-left-radius: 5px;
+/* 	border-top-right-radius: 5px; */
+/* 	border-top: 1px solid #CCCCCC; */
+/* 	border-left: 1px solid #CCCCCC; */
+/* 	border-right: 1px solid #CCCCCC; */
+/* 	border-bottom: 0px; */
+/* 	border-right: none; */
+	box-shadow:none;
+	font-family: 'Open Sans';
+	color: black;
+	font-weight: 300;
+}
 .tiles .tiles-body{
 	padding: 19px 18px 15px 24px;
 }
@@ -1590,12 +1611,120 @@ background-position: -95px -40px;
 	padding: 1px 4px;	
 }
 
+
 .tiles .heading{
   font-size:25px;
   display:block;
   font-family: 'Open Sans';
   font-weight:600;
   margin:4px 0px;
+}
+
+.tiles-thin .heading{
+  font-size:17px;
+  display:block;
+  font-family: 'Open Sans';
+  font-weight:300;
+	margin: 0px;
+}
+
+.cat-label {
+	display: table-cell;
+	height: 100%;
+	width: 8px;
+	border-bottom-left-radius: 5px;
+	border-top-left-radius: 5px;
+}
+
+.cat-body {
+	min-height: 55px;
+}
+
+.cat-inner{
+	padding-top: 13px;
+	padding-bottom: 9px;
+}
+
+.cat-wrapper{
+	display: inline-table;
+	margin-bottom: 10px;
+}
+
+.cat-type-fc .cat-label {
+	background-color: rgb(255,51,0);
+}
+
+.cat-type-fc .cat-body {
+	background-color: rgba(255,51,0, 0.05);
+	border: 1px solid #FF3300;
+}
+
+.cat-type-v .cat-label {
+	background-color: rgb(255,204,0);
+}
+
+.cat-type-v .cat-body {
+	background-color: rgba(255,204,0, 0.05);
+	border: 1px solid #FFCC00;
+}
+
+.cat-type-i .cat-label {
+	background-color: rgb(121,189,154);
+}
+
+.cat-type-i .cat-body {
+	background-color: rgba(121,189,154, 0.05);
+	border: 1px solid #79BD9A;
+}
+
+.cat-type-e .cat-label {
+	background-color: rgb(7,153,229);
+}
+
+.cat-type-e .cat-body {
+	background-color: rgba(7,153,229, 0.05);
+	border: 1px solid #0799E5;
+}
+
+.cat-type-t .cat-label {
+	background-color: rgb(138,91,126);
+}
+
+.cat-type-t .cat-body {
+	background-color: rgba(138,91,126, 0.05);
+	border: 1px solid #8A5B7E;
+}
+
+.cat-type-n .cat-label {
+	background-color: rgb(150,150,150);
+}
+
+.cat-type-n .cat-body {
+	background-color: rgba(150,150,150, 0.05);
+	border: 1px solid grey;
+}
+
+.cat-group-menu{
+	float: right;
+	position: relative;
+	top: -20px;
+}
+.cat-group-menu > span{
+	margin-right: 10px;
+	color: #225577;
+}
+
+.cat-group-menu > span:hover{
+	text-shadow: 4px 4px 4px rgba(102, 102, 102, 1);
+	cursor:pointer;
+	color:grey;
+	
+}
+
+.cat-status-pend{
+/* 	text-shadow: 2px 1px 4px rgba(150, 150, 150, 1); */
+	color:green;
+	cursor:pointer;
 }
 
 /* Tile Element Tweaks */
@@ -1639,6 +1768,10 @@ background-position: -95px -40px;
 	color:#fff;
 	font-size:13px;
 	padding:8px 15px;
+}
+.tile-footer-thin{
+	background-color: rgba(0, 0, 0, 0.28);
+	padding:1px 15px;
 }
 /* the default opacity is way too dark, just a small tweak to make it bit lighter */
 .tiles.white > .tile-footer{
@@ -1712,6 +1845,10 @@ background-position: -95px -40px;
 }
 .tiles.white.border-bottom{
 	border-bottom:1px solid #e5e9ec;
+}
+.tiles-b-radius{
+	border-top-left-radius: 8px;
+	border-top-right-radius: 8px;
 }
 .tiles.white hr{
 	margin: 10px 0px;
@@ -2543,7 +2680,7 @@ border-bottom-right-radius: 3px;
 .panel-default > .panel-heading{
 	background-image:none;
 	background-color: #D9E0E4;
-	border-radius: 2px;
+/* 	border-radius: 2px; */
 	box-shadow:none;
 }
 .panel-group{
@@ -2571,13 +2708,20 @@ border-bottom-right-radius: 3px;
 .panel-heading.collapsed{
 	background-color:#d1dade;
 }
-.panel-heading .panel-title > a:after {
-    /* symbol for "opening" panels */
-    font-family: 'FontAwesome'; 
-    content: "\f056";   
-    float: right;
-	color: #505458;
+.panel-title > a > i{
+	top: 5px;
+	 
 }
+.panel-collapse {
+	border: 1px solid #ddd
+}
+/* .panel-heading .panel-title > a:after { */
+/*     symbol for "opening" panels */
+/*     font-family: 'FontAwesome';  */
+/*     content: "\f056";    */
+/*     float: right; */
+/* 	color: #505458; */
+/* } */
 .panel-heading .panel-title > a.collapsed{
 	color: #8E9AA2;	
 }

@@ -1,4 +1,4 @@
-define(['./module', './bill-resources', '../services/bill-service', '../../account/controllers/category-resources', '../../account/controllers/account-resources'], function (app) {
+define(['./module', './bill-resources', '../services/bill-service', '../../configuration/services/category-resources', '../../account/controllers/account-resources'], function (app) {
 
 	app.controller('BillController', ['$scope', '$modal', '$filter', 'BillService', 'BillResource', 'CategoryResource', 'AccountResource', 'uiGridConstants',
         function($scope, $modal, $filter, BillService, Bill, Category, Account, uiGridConstants) {
@@ -17,15 +17,15 @@ define(['./module', './bill-resources', '../services/bill-service', '../../accou
 				enableSelectAll: false,
 				multiSelect: false,
 				enableFiltering: false,
-				enableRowHeaderSelection: false,
+				enableRowHeaderSelection: true,
 				enableColumnMenus: false,
 				rowHeight: 25,
 				excessRows:15,
-				minRowsToShow:8,
+				minRowsToShow:15,
 				columnDefs: [
 				     {field: 'billEntries[0].date', displayName: 'Data', type: 'date', cellFilter: "date:'dd/MM/yyyy'", width: '85', enableFiltering: false, cellClass: 'align-date', headerCellClass: 'align-date'},
 				     {field: 'description', displayName: 'Descrição', width: '*', visible: $scope.fullLayout},
-				     {field: 'category.getFullName()', displayName: 'Categoria', width: '*', filter: {condition: uiGridConstants.filter.CONTAINS}},
+				     {field: 'category.fullName', displayName: 'Categoria', width: '*', filter: {condition: uiGridConstants.filter.CONTAINS}},
 		             {field: 'account.name', displayName: 'Conta Bancária'},
 		             {field: 'billEntries[0].amount', 
 		            	 displayName: 'Valor', 
@@ -105,6 +105,7 @@ define(['./module', './bill-resources', '../services/bill-service', '../../accou
 			// Recupera todos os lançamentos programados registrados para o usuário.
 			Bill.listAll(function(bills){
 				$scope.gridOptions.data = $scope.bills = bills;
+				if (!$scope.bills) $scope.bills = [];
 				
 				updateListView($scope.bills);
 			});
@@ -220,16 +221,16 @@ define(['./module', './bill-resources', '../services/bill-service', '../../accou
 			}
 			
 		    angular.forEach(bills, function(row){
-		    	// Adiciona função para recuperar os nomes da categoria com subcategoria
-		    	if (row.category){
-					if (!row.category.getFullName){
-						row.category.getFullName = function() {
-							return this.name + ' : ' + this.subCategoryName;
-						}
-				    }
-		    	} else {
-		    		return '';
-		    	}
+//		    	// Adiciona função para recuperar os nomes da categoria com subcategoria
+//		    	if (row.category){
+//					if (!row.category.getFullName){
+//						row.category.getFullName = function() {
+//							return this.name + ' : ' + this.subCategoryName;
+//						}
+//				    }
+//		    	} else {
+//		    		return '';
+//		    	}
 		    	
 		    	// Recupera a conta (object) associado ao Bill
 		    	if (!row.account){

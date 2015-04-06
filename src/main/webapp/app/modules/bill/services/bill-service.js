@@ -18,6 +18,7 @@ define(['./module', '../../shared/services/constants-service'], function (app) {
 					
 					// Gera os labels.
 					var date = new Date(startDate.getTime());
+					date.setDate(1);
 					while (date <= endDate){
 						labels[getGroupId(date, groupBy)] = 0;
 						if (groupBy == "Day"){

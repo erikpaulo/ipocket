@@ -1,4 +1,4 @@
-define(['./module', '../../shared/services/constants-service', '../services/report-expenses-service', '../../account/controllers/account-resources', '../../account/controllers/category-resources'], function (app) {
+define(['./module', '../../shared/services/constants-service', '../services/report-expenses-service', '../../account/controllers/account-resources', '../../configuration/services/category-resources'], function (app) {
 	
 	app.controller('ExpensesReportController', ['$scope', '$filter', 'AccountResource', 'CategoryResource', 'ExpenseReportService', 'ConstantsService',
 	   function($scope, $filter, Account, Category, ExpenseReport, Constants) {
@@ -326,27 +326,16 @@ define(['./module', '../../shared/services/constants-service', '../services/repo
 	app.controller('ERController.ExpensesAnalytics', ['$scope', 'AccountResource', 'ExpenseReportService', 'ConstantsService',
 	                                     	   function($scope, Account, ExpenseReport, Constants) {
 		
-		$scope.updateChart = function(){
-			var selectedCategories = [];
-
-			// Recupera as categorias para as quais deseja recuperar os valores.
-//			angular.forEach($scope.categories, function(category){
-//				if (category.type == Constants.CATEGORY_TYPE.IRREGULAR_COST.id || 
-//					category.type == Constants.CATEGORY_TYPE.VARIABLE_COST.id || 
-//					category.type == Constants.CATEGORY_TYPE.FIXED_COST.id){
-//					selectedCategories.push(category);
-//				}
-//			})
-			
-			$scope.tree = $scope.incomeAndExpenses.getTree($scope.periodOptions[3].start(), $scope.periodOptions[3].end());
-//			$scope.types = $scope.treeExpenses[1].data;
-		}
-		
 		$scope.$watch('incomeAndExpenses', function(newValue, oldValue){
 			if ($scope.incomeAndExpenses){
 				$scope.updateChart();
 			}
 		})
+		
+		$scope.updateChart = function(){
+			var selectedCategories = [];
+			$scope.tree = $scope.incomeAndExpenses.getN1Tree($scope.periodOptions[3].start(), $scope.periodOptions[3].end());
+		}
 		
 		$scope.total = 0;
 		
@@ -357,11 +346,6 @@ define(['./module', '../../shared/services/constants-service', '../services/repo
 				for (var i in node.data){
 					if (node.data[i].data){
 						colspan += node.data[i].data.length;
-//						for (var j in node.data[i].data){
-//							if (node.data[i].data[j].data){
-//								colspan += node.data[i].data[j].data.length;
-//							}
-//						}
 					}
 				}
 			}

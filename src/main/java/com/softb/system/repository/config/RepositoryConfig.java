@@ -21,12 +21,16 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EnableJpaRepositories(basePackages = { 
 		"com.softb.system.security.repository", 
 		"com.softb.ipocket.account.repository",
-		"com.softb.ipocket.bill.repository"
+		"com.softb.ipocket.bill.repository",
+		"com.softb.ipocket.budget.repository",
+		"com.softb.ipocket.configuration.repository"
 })
 @EntityScan(basePackages = { 
 		"com.softb.system.security.model", 
 		"com.softb.ipocket.account.model",
-		"com.softb.ipocket.bill.model"
+		"com.softb.ipocket.bill.model",
+		"com.softb.ipocket.budget.model",
+		"com.softb.ipocket.configuration.model"
 })
 public class RepositoryConfig  {
 

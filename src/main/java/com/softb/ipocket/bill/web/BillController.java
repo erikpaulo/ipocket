@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.softb.ipocket.account.model.AccountEntry;
-import com.softb.ipocket.account.model.Category;
 import com.softb.ipocket.account.repository.AccountEntryRepository;
 import com.softb.ipocket.account.web.AccountConstants;
 import com.softb.ipocket.account.web.AccountController;
@@ -24,6 +23,7 @@ import com.softb.ipocket.bill.model.Bill;
 import com.softb.ipocket.bill.model.BillEntry;
 import com.softb.ipocket.bill.repository.BillEntryRepository;
 import com.softb.ipocket.bill.repository.BillRepository;
+import com.softb.ipocket.configuration.model.Category;
 import com.softb.system.errorhandler.exception.FormValidationError;
 import com.softb.system.rest.AbstractRestController;
 import com.softb.system.security.service.UserAccountService;

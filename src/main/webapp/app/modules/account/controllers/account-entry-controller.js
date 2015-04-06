@@ -1,4 +1,4 @@
-define(['./module', './account-resources', './account-entry-resources', './category-resources'], function (app) {
+define(['./module', './account-resources', './account-entry-resources', '../../configuration/services/category-resources'], function (app) {
 
 	
 	app.controller('AccountEntryController', ['$scope', '$http', '$modal', '$window', '$filter', '$routeParams', 'AccountResource', 'AccountEntryResource', 'CategoryResource', 'MessageHandler', 'uiGridConstants', 'FileUploader',
@@ -10,7 +10,7 @@ define(['./module', './account-resources', './account-entry-resources', './categ
 		               ];
 		
 			$scope.appContext.changeCurrentContext($scope.modules[0].id);
-			$scope.account = {};
+			$scope.account = null;
 			$scope.accounts = [];
 			$scope.accountEntry = {};
 			$scope.categories = null;
@@ -34,7 +34,7 @@ define(['./module', './account-resources', './account-entry-resources', './categ
 			             {field: 'userId',displayName: 'userId',  visible: false},
 			             {field: 'date', displayName: 'Data', type: 'date', cellFilter: "date:'dd/MM/yyyy'", width: '85', enableFiltering: false, cellClass: 'align-date', headerCellClass: 'align-date'},
 			             {field: 'description', displayName: 'Descrição', width: '*', visible: $scope.fullLayout},
-			             {field: 'category.getFullName()', displayName: 'Categoria', width: '*', filter: {condition: uiGridConstants.filter.CONTAINS}},
+			             {field: 'category.fullName', displayName: 'Categoria', width: '*', filter: {condition: uiGridConstants.filter.CONTAINS}},
 			             {field: 'reconciled', displayName: 'R', width: '5', enableFiltering: false, cellClass: 'align-date', headerCellClass: 'align-date', visible: $scope.fullLayout},
 			             {field: 'amount', 
 			            	 displayName: 'Valor', 
@@ -67,9 +67,9 @@ define(['./module', './account-resources', './account-entry-resources', './categ
 			};
 			
 			// Recupera todas as contas do usuário para usar em transferências
-			Account.listAll(function (data){
-				$scope.accounts = data;
-			})
+//			Account.listAll(function (data){
+//				$scope.accounts = data;
+//			})
 			
 			// Recupera a lista de categorias disponível no sistema.
 			Category.listAll(function(data){
@@ -177,18 +177,18 @@ define(['./module', './account-resources', './account-entry-resources', './categ
 					}
 				}
 				
-				// Adiciona função para recuperar os nomes da categoria com subcategoria
-			    angular.forEach(account.entries, function(row){
-			    	if (row.category){
-						if (!row.category.getFullName){
-							row.category.getFullName = function() {
-								return this.name + ' : ' + this.subCategoryName;
-							}
-					    }
-			    	} else {
-			    		return '';
-			    	}
-			    });
+//				// Adiciona função para recuperar os nomes da categoria com subcategoria
+//			    angular.forEach(account.entries, function(row){
+//			    	if (row.category){
+//						if (!row.category.getFullName){
+//							row.category.getFullName = function() {
+//								return this.name + ' : ' + this.subCategoryName;
+//							}
+//					    }
+//			    	} else {
+//			    		return '';
+//			    	}
+//			    });
 				
 				// Ordena decrescente pela data.
 				account.entries.sort(function(a, b){

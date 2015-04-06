@@ -69,9 +69,9 @@
 	    	"id": "category",
 			"name": "Categorias",
 			"originalPath": "/configuration", 	
-			"templateUrl": "modules/account/views/category.html",
+			"templateUrl": "modules/configuration/views/category.html",
 			"visible": true,
-			"dependencies": ["modules/account/controllers/category-controller", "app", "layout-form"]
+			"dependencies": ["modules/configuration/controllers/category-controller", "app", "layout-form"]
 	        }      
         ]
     }

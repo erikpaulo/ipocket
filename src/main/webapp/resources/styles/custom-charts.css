@@ -10,7 +10,7 @@
 }
 
 .report-n0 {
-	width: 8%;
+	width: 5%;
 	text-align: center;
 	color: white;
 	font-family: 'Open Sans', sans-serif;
@@ -19,20 +19,12 @@
 }
 
 .report-n1 {
-	width: 10%;
+	width: 8%;
 	text-align: center;
 	color: black;
 	font-family: 'Open Sans', sans-serif;
-	background-color: #fafafa;
+/* 	background-color: #fafafa; */
 /* 	font-weight: 300; */
-}
-
-.report-n2 {
-	width: 12%;
-	text-align: left;
-	color: black;
-	font-family: 'Open Sans', sans-serif;
-	padding: 4px !important;
 }
 
 .report-total{
@@ -50,3 +42,8 @@
 	
 	color: white;
 }
+
+.zebra:nth-child(even) {
+	background-color: #fafafa;
+}
+

@@ -12,7 +12,6 @@ import javax.servlet.DispatcherType;
 import javax.servlet.FilterRegistration;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
-import javax.servlet.ServletRegistration;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,9 +27,9 @@ import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 import com.codahale.metrics.MetricRegistry;
-import com.codahale.metrics.servlet.InstrumentedFilter;
-import com.codahale.metrics.servlets.MetricsServlet;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.hibernate4.Hibernate4Module;
+import com.fasterxml.jackson.datatype.hibernate4.Hibernate4Module.Feature;
 import com.softb.system.config.Constants;
 import com.softb.system.web.filter.gzip.GZipServletFilter;
 
@@ -40,6 +39,7 @@ import com.softb.system.web.filter.gzip.GZipServletFilter;
 		"com.softb.system.rest", 
 		"com.softb.system.errorhandler.web",
 		"com.softb.ipocket.account.web",
+		"com.softb.ipocket.configuration.web",
 		"com.softb.ipocket.bill.web",
 		"com.softb.system.security.service", 
 		"com.softb.system.security.web"
@@ -113,37 +113,12 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter implements ServletCont
 
         compressingFilter.setAsyncSupported(true);
     }    
-    
-    /**
-     * Initializes Metrics.
-     */
-    private void initMetrics(ServletContext servletContext, EnumSet<DispatcherType> disps) {
-        logger.debug("Initializing Metrics registries");
-        servletContext.setAttribute(InstrumentedFilter.REGISTRY_ATTRIBUTE,
-                metricRegistry);
-        servletContext.setAttribute(MetricsServlet.METRICS_REGISTRY,
-                metricRegistry);
-
-        logger.debug("Registering Metrics Filter");
-        FilterRegistration.Dynamic metricsFilter = servletContext.addFilter("webappMetricsFilter",
-                new InstrumentedFilter());
-
-        metricsFilter.addMappingForUrlPatterns(disps, true, "/*");
-        metricsFilter.setAsyncSupported(true);
-
-        logger.debug("Registering Metrics Servlet");
-        ServletRegistration.Dynamic metricsAdminServlet =
-                servletContext.addServlet("metricsServlet", new MetricsServlet());
-
-        metricsAdminServlet.addMapping("/metrics/metrics/*");
-        metricsAdminServlet.setAsyncSupported(true);
-        metricsAdminServlet.setLoadOnStartup(2);
-    }    
-    
 	
 	@Override
 	public void configureMessageConverters(final List<HttpMessageConverter<?>> converters) {
-		converters.add(0, jsonConverter());
+//		converters.add(0, jsonConverter());
+        converters.add(jsonConverter());
+        super.configureMessageConverters(converters);
 	}
 
 	@Bean
@@ -151,7 +126,12 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter implements ServletCont
 		final MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
 		
 		ObjectMapper objectMapper = new CustomObjectMapper();
-		converter.setObjectMapper(objectMapper);
+		
+		 Hibernate4Module hm = new Hibernate4Module();
+		 hm.disable(Feature.USE_TRANSIENT_ANNOTATION);
+		
+		 objectMapper.registerModule(hm);
+		 converter.setObjectMapper(objectMapper);
 
 		return converter;
 	}

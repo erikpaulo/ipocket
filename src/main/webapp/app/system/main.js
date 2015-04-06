@@ -24,7 +24,12 @@ require.config({
 		'breakpoints': 'resources/legacy/breakpoints',
 		'jquery-unveil': 'resources/legacy/jquery-unveil/jquery.unveil.min',
 		
-		'pane': 'resources/legacy/pace/pace.min',
+		//'pane': 'resources/legacy/pace/pace.min',
+		
+		'angular-loading-bar': 'resources/lib/angular-loading-bar/build/loading-bar',
+		'spin': 'resources/lib/spin.js/spin',
+		'angular-spinner':'resources/lib/angular-spinner/angular-spinner.min',
+		'angular-loading-spinner':'resources/lib/angular-loading-spinner/angular-loading-spinner',
 		
 		'jquery-slimscroll': 'resources/legacy/jquery-slimscroll/jquery.slimscroll.min',
 		'jquery-slider': 'resources/legacy/jquery-slider/jquery.sidr.min',
@@ -40,12 +45,12 @@ require.config({
 		'qtip': 'resources/legacy/qtip/jquery.qtip.min',
 		
 		// == ANGULAR CHARTS
+		'highcharts-drilldown': 'resources/js/highcharts/drilldown',
 		'highcharts-ng': 'resources/lib/highcharts-ng/dist/highcharts-ng.min',
 		'highcharts': 'resources/js/highcharts/highcharts',
-		'highcharts-drilldown': 'resources/js/highcharts/drilldown',
 		
 		
-		//	==== DATATABLES
+		/*	==== DATATABLES
 		'datatables': 'resources/lib/datatables/media/js/jquery.dataTables',
 		// TODO [marcus]; versao 1.1.0 tem bug quando utilizado com requirejs. Foi versionado uma versao correta em /legacy
 		'datatables-colreorder': 'resources/legacy/datatables-colreorder/dataTables.colReorder',
@@ -54,7 +59,7 @@ require.config({
 		// TODO [erik]: código foi alterado a partir da versão 2.2.0 p/ resolver problema do export para tabela invisivel
 		'datatables-tabletools': 'resources/legacy/datatables-tabletools/dataTables.tableTools',
 		'datatables-responsive': 'resources/legacy/datatables-responsive/js/datatables.responsive', 
-		'datatables-lodash': 'resources/legacy/datatables-responsive/js/lodash.min',
+		'datatables-lodash': 'resources/legacy/datatables-responsive/js/lodash.min',*/
 		'angular-ui-grid': 'resources/lib/angular-ui-grid/ui-grid',
 
 		// === NG CURRENCY
@@ -77,15 +82,19 @@ require.config({
  		'angular-file-upload': ['angular'],
  		'ui-bootstrap-tpls': ['angular'],	
  		'angular-cookies': { deps: ['angular', 'angular-route', 'angular-resource']},
+ 		'highcharts':['jquery'],
  		'highcharts-drilldown': ['highcharts'],
  		'highcharts-ng': ['angular', 'highcharts', 'highcharts-drilldown'],
  		
+ 		'angular-loading-bar': ['angular'],
+ 		'angular-loading-spinner': ['angular', 'angular-spinner', 'spin'],
+ 		'angular-spinner': ['angular', 'spin'],
 		'angular-translate': ['angular'],
 		'angular-translate-storage-cookie': ['angular-translate'],
 		'angular-translate-loader-static-files' : ['angular-translate'],
 		'angular-dynamic-locale': ['angular', 'angular-cookies', 'angular-translate', 'angular-translate-storage-cookie', 'angular-translate-loader-static-files'],
 
- 		'datatables-fixedcolumns': {deps: ['jquery', 'datatables']},
+// 		'datatables-fixedcolumns': {deps: ['jquery', 'datatables']},
  		'angular-ui-grid': ['angular'],
 //		'bootstrap-datepicker-pt-BR': ['jquery', 'bootstrap-datepicker'],
 //		'bootstrap-datepicker': ['jquery'], 
@@ -94,7 +103,7 @@ require.config({
 		'jquery-unveil': ['jquery'],
 		'core': ['jquery'],
 		'jquery-ui': ['jquery'],
-		'pane': ['jquery'],
+		//'pane': ['jquery'],
 		'jquery-slimscroll': ['jquery'],
 		'jquery-slider': ['jquery'],
 		'jquery-block-ui': ['jquery'],
@@ -104,19 +113,20 @@ require.config({
 //		'xeditable': ['angular'],
  		
         'layout-core': {
-			deps: ['jquery-ui', 'bootstrap', 'breakpoints', 'jquery-unveil', 'pane', 'jquery-slimscroll', 'jquery-block-ui', 'jquery-slider'/*, 'bootstrap-datepicker-pt-BR'*/, 'angular-ui-grid', 'angular-file-upload', 'highcharts-ng']
+			deps: ['jquery-ui', 'bootstrap', 'breakpoints', 'jquery-unveil'/*, 'pane'*/, 'jquery-slimscroll', 'jquery-block-ui', 'jquery-slider'/*, 'bootstrap-datepicker-pt-BR'*/, 'angular-ui-grid', 'angular-file-upload', 'highcharts-ng', 'angular-loading-bar', 'angular-spinner','angular-loading-spinner']
 		},
 		
 		'layout-form': ['layout-core', 
 		                'select2',  
-		                'datatables', 
-		                'datatables-colreorder', 
-		                'datatables-colvis', 
-		                'datatables-fixedcolumns', 
-		                'datatables-tabletools',
-		                'ng-currency',
-		                'datatables-responsive', 
-		                'datatables-lodash'],
+//		                'datatables', 
+//		                'datatables-colreorder', 
+//		                'datatables-colvis', 
+//		                'datatables-fixedcolumns', 
+//		                'datatables-tabletools',
+		                'ng-currency'
+//		                'datatables-responsive', 
+//		                'datatables-lodash'
+		                ],
 		
 		'app': {
 			deps: ['layout-core', 'angular', 'angular-route', 'angular-dragdrop', 'angular-ui-select2', 'ui-bootstrap-tpls', 'angular-cookies', 'angular-dynamic-locale', 'angular-file-upload']

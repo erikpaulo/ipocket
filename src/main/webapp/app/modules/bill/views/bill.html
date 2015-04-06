@@ -2,7 +2,8 @@
 <link href="resources/lib/angular-ui-grid/ui-grid.css" rel="stylesheet" type="text/css" />
 
 <section ng-controller="BillController">
-	<div class="content">
+<div class="lock-screen" ng-hide="bills" ng-show="!bills"></div>
+	<div class="content" ng-if="bills">
 		<div class="row">
 			<div class="col-md-12">
 				<div class="grid simple ">
@@ -36,14 +37,22 @@
 					<div class="grid-body">
 						<div class="row">
 							<div class="col-md-12" id="line-chart">
-								<div class="panel-body">
-									<highchart id="chart1" config="chartConfig"></highchart>
-								</div>
+								<accordion close-others="oneAtATime">
+									<accordion-group is-open="status.open">
+										<accordion-heading>
+										Fluxo de Caixa <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}"></i>
+										</accordion-heading>
+										
+<!-- 										<div class="panel-body"> -->
+											<highchart id="chart1" config="chartConfig"></highchart>
+<!-- 										</div> -->
+									</accordion-group>
+								</accordion>
 							</div>
 						</div>
 						<div class="row">
 							<div class="col-md-12">
-								<div ui-grid="gridOptions" ui-grid-selection class="grid-no-filter"></div>
+								<div ui-grid="gridOptions" ui-grid-selection ui-grid-cellNav class="grid-no-filter"></div>
 							</div>
 						</div>
 					</div>

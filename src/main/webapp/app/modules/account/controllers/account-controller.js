@@ -1,19 +1,20 @@
 define(['./module', './account-resources'], function (app) {
 
-	app.controller('AccountController', ['$scope', '$modal', '$location', 'AccountResource', 'MessageHandler',
-	                                 	function($scope, $modal, $location, Account, MessageHandler) {
+	app.controller('AccountController', ['$rootScope', '$scope', '$modal', '$location', 'AccountResource', 'MessageHandler',
+	                                 	function($rootScope, $scope, $modal, $location, Account, MessageHandler) {
 		
 		$scope.appContext.changeCurrentContext($scope.modules[0].id);
 		
 		$scope.account = {};
 		$scope.accountAggregation = [];
 		$scope.typeControl = [];
-		
+		$scope.fullLoaded = false;
 		
 		// Lista todas as contas já cadastradas para o uário.
 		Account.listAll(function(accounts){
 			// A partir das contas recuperadas, agrupa todas elas por tipo de conta.
 			$scope.accountAggregation = aggregate($scope.accountAggregation, accounts, $scope.typeControl);
+			$scope.fullLoaded = true;
 		}, function(err){
 			alert('Não foi possível recuperar as contas do usuário. err: '+ err);
 		});

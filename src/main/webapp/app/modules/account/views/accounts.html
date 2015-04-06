@@ -1,6 +1,6 @@
 <section ng-controller="AccountController">
-
-	<div class="content">
+	<div class="lock-screen" ng-hide="fullLoaded" ng-show="!fullLoaded"></div>
+	<div class="content" ng-if="fullLoaded">
 		<div class=row>
 			<div class="col-md-12">
 				<div class="grid simple" ng-show="!AccountCtrl.accountSelected">
@@ -20,7 +20,7 @@
 						</div>
 					</div>
 					<div class="grid-body">
-						<div class="row">
+						<div class="row" ng-if="ajaxCompleted">
 							<div class="col-md-7">
 								<div ng-repeat="accountType in accountAggregation">
 									<h4>

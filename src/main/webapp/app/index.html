@@ -10,14 +10,19 @@
 <meta http-equiv="pragma" content="no-cache" />
 
 <title translate="global.title">iPocket</title>
+<link rel="shortcut icon" href="resources/images/ipocket-logo.png">
 
 <!-- BEGIN CORE CSS FRAMEWORK -->
 <link rel="shortcut icon" href="resources/img/favicon.png" type="image/png">
 <link href="resources/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
-<link href="resources/legacy/pace/pace-theme-flash.css" rel="stylesheet" type="text/css" media="screen" /> <!-- usado no load flash da aplicacao -->
+<!-- <link href="resources/legacy/pace/pace-theme-flash.css" rel="stylesheet" type="text/css" media="screen" /> usado no load flash da aplicacao -->
 <link href="resources/legacy/jquery-slider/css/jquery.sidr.light.css" rel="stylesheet" type="text/css" media="screen">
 <link href="resources/legacy/font-awesome/css/font-awesome.css" rel="stylesheet" type="text/css" />   <!-- usado nos icones-->
 <!-- END CORE CSS FRAMEWORK -->
+
+<!-- BEGIN PLUGIN CSS FRAMEWORK -->
+<!-- <link href="resources/lib/angular-loading-bar/build/loading-bar.min.css" rel="stylesheet" type="text/css" /> -->
+<!-- BEGIN PLUGIN CSS FRAMEWORK -->
 
 <link href="resources/styles/animate.min.css" rel="stylesheet" type="text/css" />
 <link href="resources/lib/select2/select2.css" rel="stylesheet" type="text/css" />
@@ -41,8 +46,8 @@
 <!-- END HEAD -->
 
 <!-- BEGIN BODY -->
-<body class="pace-done breakpoint-1024" ng-controller="IndexController" ng-cloak class="ng-cloak" ng-class="{authenticated : currentUser.authenticated}">
-
+<body class=" breakpoint-1024" ng-controller="IndexController" ng-cloak class="ng-cloak" ng-class="{authenticated : currentUser.authenticated}">
+<!-- pace-done -->
 	
 	<!-- BEGIN HEADER -->
 	<div class="header navbar navbar-inverse">
@@ -238,7 +243,7 @@
 		</div>
 	</div>
 	<!-- END CONTAINER -->
-	<script src="resources/legacy/pace/pace.min.js" type="text/javascript"></script>
+<!-- 	<script src="resources/legacy/pace/pace.min.js" type="text/javascript"></script> -->
 	<script type="text/javascript" src="resources/lib/requirejs/require.js" data-main="system/main.js"></script>	
 </body>
 </html>

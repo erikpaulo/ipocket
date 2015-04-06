@@ -3,7 +3,8 @@
 <!-- <link href="resources/styles/forms.css" rel="stylesheet" type="text/css" /> -->
 
 <section ng-controller="AccountEntryController">
-	<div class="content">
+	<div class="lock-screen" ng-hide="account" ng-show="!account"></div>
+	<div class="content"  ng-if="account">
 		<div class="row">
 			<div class="col-md-12">
 				<div class="grid simple ">
@@ -26,7 +27,7 @@
 						</div>
 					</div>
 					<div class="grid-body">
-						<div class="row" ng-cloak>
+						<div class="row">
 							<div class="col-md-12">
 								<div ui-grid="gridOptions" ui-grid-selection class="grid-with-filter"></div>
 							</div>
@@ -61,7 +62,7 @@
 																<div class="controls">
 																	<select ui-select2	ng-model="accountEntry.category.id" name="accountEntry.category.id" data-placeholder="Selecione" class="select2 form-control" ng-required="true" ng-class="" mg-validation-alert>
 																		<option value=""></option>
-																		<option	ng-repeat="category in categories"	value="{{category.id}}"	ng-selected="{{category.id == accountEntry.category.id}}">{{category.name +" : "+ category.subCategoryName}}</option>
+																		<option	ng-repeat="category in categories"	value="{{category.id}}"	ng-selected="{{category.id == accountEntry.category.id}}">{{category.fullName}}</option>
 																	</select>
 																</div>
 															</div>

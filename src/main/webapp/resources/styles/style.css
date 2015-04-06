@@ -137,8 +137,19 @@ textarea[class*="span"]
 
 
 /* ## NOVOS ESTILOS */
+.b{
+	border:1px solid;
+}
 .b-b{
 	border-bottom:1px solid;
+}
+
+.b-l{
+	border-left:1px solid;
+}
+
+.b-r{
+	border-left:1px solid;
 }
 
 .b-grey{
@@ -496,4 +507,54 @@ textarea[class*="span"]
 }
 .margin-bottom-20{
 	margin-bottom:20px;
+}
+
+.group{
+	margin-bottom: 25px;
+/* 	background-color: #9AB; */
+	border-color: #d2e0eC;
+	border-radius: 5px;
+	display: flex;
+}
+
+.group-header {
+	color: white;
+	background-color: #587585;
+	/* background-color: #d2e0eC; */
+	border-top-left-radius: 5px;
+	border-bottom-left-radius: 5px;
+	min-width: 15%;
+	max-width: 15%;
+	text-align: center;
+	/* vertical-align: middle; */
+	display: flex;
+	justify-content: center;
+	align-content: center;
+	flex-direction: column;
+}
+
+.group-header > span{
+	font-family: 'Open Sans';
+	font-weight: 300;
+	font-size: 15px;
+}
+
+.group-body {
+/* 	background-color: #fafafa; */
+	min-height: 50px;
+}
+
+.group-content {
+	margin-left: 47px;
+	margin-right: 14px;
+	/* margin-top: 3px; */
+	margin-bottom: 10px;
+	background-color: white;
+	border-bottom-left-radius: 10px;
+	border-top-left-radius: 10px;
+}
+
+.group-content-body {
+	margin-left: 10px;
+/* 	min-height: 50px; */
 }

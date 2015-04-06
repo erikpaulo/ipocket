@@ -1,21 +1,21 @@
-define(['./module', '../../shared/services/constants-service', '../../account/controllers/category-resources'], function (app) {
+define(['./module', '../../shared/services/constants-service', '../../configuration/services/category-resources'], function (app) {
 	
 	app.service('ExpenseReportService', ['ConstantsService', 'CategoryResource', function(Constants, Category) {
 		return{
 			JUST_EXPENSES: 'E',
 			/**
-			 * Itera por todos os lançamentos contidos nas contas informadas, criando uma estrutura do tipo:
+			 * Itera por todos os lançamentos contidos nas contas informadas, criando uma estrutura do Grupo:
 			 * [
 			 * 		mmm/yyyy'
 			 * 		{total: 0.00 - saldo total do mês: +entradas - saídas
 			 * 		 data:[
 			 * 			Constants.CATEGORY_TYPE.<<TYPE>>.name,
-			 * 			{total: 0.00 - soma total dos lançamentos desse tipo
+			 * 			{total: 0.00 - soma total dos lançamentos desse Grupo
 			 * 			 data: [
-			 * 				entry.category.name,
+			 * 				entry.category.groupName,
 			 * 				{total: 0.00 - soma total dos lançamentos dessa categoria
 			 * 				 data: [
-			 * 					entry.category.subCategoryName, 
+			 * 					entry.category.name, 
 			 * 					{total: 0.00 - soma total dos lançamentos dessa subcategoria}
 			 * 				 ]
 			 * 			 ]
@@ -25,7 +25,7 @@ define(['./module', '../../shared/services/constants-service', '../../account/co
 			newInstance: function(categories, accounts){
 				var incomeAndExpense = {};
 				
-				// Cria hash para recuperação do nome associado ao tipo de categoria
+				// Cria hash para recuperação do nome associado ao Grupo de categoria
 				var categoryTypes = [];
 				for (var type in Constants.CATEGORY_TYPE){
 					categoryTypes[eval('Constants.CATEGORY_TYPE.' + type).id] = eval('Constants.CATEGORY_TYPE.' + type).name;
@@ -37,11 +37,11 @@ define(['./module', '../../shared/services/constants-service', '../../account/co
 					if (!dataTree[categoryTypes[category.type]]) {
 						dataTree[categoryTypes[category.type]] = {total: [], data: []};
 					}
-					if (!dataTree[categoryTypes[category.type]].data[category.name]){
-						dataTree[categoryTypes[category.type]].data[category.name] = {total: [], data: []}
+					if (!dataTree[categoryTypes[category.type]].data[category.groupName]){
+						dataTree[categoryTypes[category.type]].data[category.groupName] = {total: [], data: []}
 					}
-					if (!dataTree[categoryTypes[category.type]].data[category.name].data[category.subCategoryName]){
-						dataTree[categoryTypes[category.type]].data[category.name].data[category.subCategoryName] = {total: []}
+					if (!dataTree[categoryTypes[category.type]].data[category.groupName].data[category.name]){
+						dataTree[categoryTypes[category.type]].data[category.groupName].data[category.name] = {total: []}
 					}
 				})
 				
@@ -50,11 +50,11 @@ define(['./module', '../../shared/services/constants-service', '../../account/co
 					angular.forEach(account.entries, function(entry){
 						if (entry.category){
 							var categoryType = categoryTypes[entry.category.type];
-							var category = entry.category.name;
-							var subCategory = entry.category.subCategoryName;
+							var category = entry.category.groupName;
+							var subCategory = entry.category.name;
 							var x = getGroupId(new Date(entry.date), "Month");
 							
-							// Tipo de Categoria
+							// Grupo de Categoria
 							if (!dataTree[categoryType].total[x]) dataTree[categoryType].total[x] = 0;
 							dataTree[categoryType].total[x] += entry.amount;
 							
@@ -84,7 +84,7 @@ define(['./module', '../../shared/services/constants-service', '../../account/co
 					}	
 					
 					var i0=0;
-					for (var n0 in this.dataTree){ // Tipo de categoria
+					for (var n0 in this.dataTree){ // Grupo de categoria
 						treeSerie.data.push({name: n0, totals: [], data: []});
 						for (var month in selectedMonths){
 							if (this.dataTree[n0].total[month]){
@@ -154,6 +154,68 @@ define(['./module', '../../shared/services/constants-service', '../../account/co
 					
 					return n0Serie;
 				}
+
+				/**
+				 * Recupera o nível 1 da árvore em formato de árvore.
+				 */
+				incomeAndExpense.getN1Tree = function(startDate, endDate){
+					var treeSerie = {labels: [], data: []};
+					var tempHolder = [];
+					
+					// Recupera hash contendo os meses selecionados.
+					var selectedMonths = getSelectedMonths(startDate, endDate);
+					for (var month in selectedMonths){
+						treeSerie.labels.push(month);
+					}	
+					
+					var i0=0;
+					for (var n0 in this.dataTree){ // Tipo de categoria
+						for (var n1 in this.dataTree[n0].data){ // Grupo categoria
+							if (!tempHolder[n1]) tempHolder[n1] = {total: [], data: []};
+							for (var month in selectedMonths){
+								if (dataTree[n0].data[n1].total[month]){
+									if (!tempHolder[n1].total[month]) tempHolder[n1].total[month] = 0;
+									tempHolder[n1].total[month] += dataTree[n0].data[n1].total[month];
+								} else {
+									tempHolder[n1].total[month] = 0;
+								}
+							}
+							
+							for (var n2 in this.dataTree[n0].data[n1].data){ // Categoria
+								tempHolder[n1].data[n2] = {total: []};
+								
+								for (var month in selectedMonths){
+									if (this.dataTree[n0].data[n1].data[n2].total[month]){
+										tempHolder[n1].data[n2].total[month] = this.dataTree[n0].data[n1].data[n2].total[month];
+									} else {
+										tempHolder[n1].data[n2].total[month] = 0;
+									}
+								}
+							}
+						}
+					}
+					
+					var i0 = 0;
+					for (var groupName in tempHolder){
+						treeSerie.data.push({name: groupName, totals: [], data:[]})
+						for(var month in tempHolder[groupName].total){
+							treeSerie.data[i0].totals.push(tempHolder[groupName].total[month]);
+						}
+						
+						var i1 = 0;
+						for (var catName in tempHolder[groupName].data){
+							treeSerie.data[i0].data.push({name: catName, totals: []});
+							for (var month in tempHolder[groupName].data[catName].total){
+								treeSerie.data[i0].data[i1].totals.push(tempHolder[groupName].data[catName].total[month])
+							}
+							i1++;
+						}
+						i0++;
+					}
+					
+					return treeSerie;
+				}
+					
 				
 				/**
 				 * Recupera o nível 1 da árvore com opção de drilldown no padrão:
@@ -179,7 +241,7 @@ define(['./module', '../../shared/services/constants-service', '../../account/co
 
 					//Recupera o nível n1
 					var tempHolder = [];
-					for (var n0 in dataTree){ // tipos de categoria
+					for (var n0 in dataTree){ // Grupos de categoria
 						if (selectedCategories[n0]){
 							for (var n1 in dataTree[n0].data){ // categorias
 								if (!tempHolder[n1]) tempHolder[n1] = {total: [], data: []};
@@ -262,195 +324,6 @@ define(['./module', '../../shared/services/constants-service', '../../account/co
 					return n1Serie;
 				}
 				
-//				var dataN1 = [];
-//				angular.forEach(accounts, function(account){
-//					angular.forEach(account.entries, function(entry){
-//						var date = new Date(entry.date);
-//						var groupId = getGroupId(date, "Month");
-//						
-//						if (entry.category){
-//							// Agrupamento por mês
-//							if (!dataN1[groupId]) dataN1[groupId] = {total: 0, data: []}
-//							dataN1[groupId].total += entry.amount;
-//							
-//							// Agrupamento por tipo de categoria
-//							if (!dataN1[groupId].data[entry.category.type]) 
-//								dataN1[groupId].data[entry.category.type] = {total: 0, data: []};
-//							dataN1[groupId].data[entry.category.type].total += entry.amount;
-//							
-//							// Agrupamento por categoria
-//							if (!dataN1[groupId].data[entry.category.type].data[entry.category.name]) 
-//								dataN1[groupId].data[entry.category.type].data[entry.category.name] = {total: 0, data: []}
-//							dataN1[groupId].data[entry.category.type].data[entry.category.name].total += entry.amount;
-//							
-//							// Agrupamento por subcategoria
-//							if (!dataN1[groupId].data[entry.category.type].data[entry.category.name].data[entry.category.subCategoryName])
-//								dataN1[groupId].data[entry.category.type].data[entry.category.name].data[entry.category.subCategoryName] = {total: 0}; 
-//							dataN1[groupId].data[entry.category.type].data[entry.category.name].data[entry.category.subCategoryName].total += entry.amount;
-//						}
-//					})
-//				})
-//				incomeAndExpense.data = dataN1;
-//				
-//				/**
-//				 * Recupera as séries de nível 0 - meses.
-//				 */
-//				incomeAndExpense.getTree = function(startDate, endDate){
-//					var tree = [];
-//					
-//					var date = new Date(startDate.getTime());
-//					var selectedMonths = []
-//					while (date <= endDate){
-//						if (this.data[getGroupId(date, "Month")]) selectedMonths.push(getGroupId(date, "Month"));
-//						date.setMonth(date.getMonth()+1);
-//					}
-//					
-//					for (var i0=0;i0<selectedMonths.length;){
-////						if (labels[n0Name]){
-//						n0Name = selectedMonths[i0];
-//						tree.push({id: n0Name, total: this.data[n0Name].total, data: []});
-//						
-//						var i1=0;
-//						for (var n1Name in this.data[n0Name].data){
-//							tree[i0].data.push({id: n1Name, total: this.data[n0Name].data[n1Name].total, data: []})
-//							
-//							var i2=0;
-//							for (var n2Name in this.data[n0Name].data[n1Name].data){
-//								tree[i0].data[i1].data.push({id: n2Name, total: this.data[n0Name].data[n1Name].data[n2Name].total, data: []})
-//								
-//								for (var n3Name in this.data[n0Name].data[n1Name].data[n2Name].data){
-//									tree[i0].data[i1].data[i2].data.push({id: n3Name, total: this.data[n0Name].data[n1Name].data[n2Name].data[n3Name].total})
-//								}
-//								i2++;
-//							}
-//							i1++;
-//						}
-//						i0++;
-////						}
-//					}
-//					
-//					return tree;
-//				}
-//				
-//				
-//				/**
-//				 * Recupera as séries de nível 01 - tipo de categoria - agrupados por mês.
-//				 */
-//				incomeAndExpense.getN1Series = function(startDate, endDate){
-//					var n1Series = {};
-//					
-//					var date = new Date(startDate.getTime());
-//					n1Series.labels = labels = []
-//					while (date <= endDate){
-//						if (this.data[getGroupId(date, "Month")]) labels.push(getGroupId(date, "Month"));
-//						date.setMonth(date.getMonth()+1);
-//					}
-//
-//					var n1Data = [];
-//					for (var i in labels){
-//						for (var property in Constants.CATEGORY_TYPE) {
-//							if (Constants.CATEGORY_TYPE.hasOwnProperty(property)){
-//								if (!n1Data['$'+ eval('Constants.CATEGORY_TYPE.'+ property).id]) n1Data['$'+ eval('Constants.CATEGORY_TYPE.'+ property).id] = [];
-//								n1Data['$'+ eval('Constants.CATEGORY_TYPE.'+ property).id].push(0);
-//							}
-//						}
-//						for (var n1Name in this.data[labels[i]].data){
-//							if (!n1Data['$'+ n1Name]) n1Data['$'+ n1Name] = [];
-//							n1Data['$'+ n1Name][i] = this.data[labels[i]].data[n1Name].total * (this.data[labels[i]].data[n1Name].total < 0 ? -1:1);
-//						}
-//					}
-//					n1Series.data = n1Data;
-//					
-//					return n1Series;
-//				}
-//				
-//				/**
-//				 * Recupera as séries de nível 02 - categoria - para impressão em gráfico de série.
-//				 */
-//				incomeAndExpense.getN2Series = function(categories, startDate, endDate){
-//					var n2Series = {};
-//					
-//					var date = new Date(startDate.getTime());
-//					n2Series.labels = labels = []
-//					while (date <= endDate){
-//						if (this.data[getGroupId(date, "Month")]) labels.push(getGroupId(date, "Month"));
-//						date.setMonth(date.getMonth()+1);
-//					}
-//
-//					// Inicializa a estrutura com as categorias selecionadas.
-//					var n2Data = [];
-//					angular.forEach(categories, function(category){
-//						if (!n2Data['$'+ category.name]) n2Data['$'+ category.name] = [];
-//					})
-//					
-//					for (var i in labels){
-//						// Inicializa todas as categorias do mês.
-//						for(var name in n2Data){
-//							n2Data[name].push(0);
-//						}
-//						
-//						// Atualiza aquelas categorias que possuem valor caso contrário fica com 0.
-//						for (var n1Name in this.data[labels[i]].data){
-//							for (var n2Name in this.data[labels[i]].data[n1Name].data){
-//								if (n2Data['$'+ n2Name]){
-//									n2Data['$'+ n2Name][i] = this.data[labels[i]].data[n1Name].data[n2Name].total * (this.data[labels[i]].data[n1Name].data[n2Name].total < 0 ? -1:1);
-//								}
-//							}
-//						}
-//					}
-//					n2Series.data = n2Data;
-//					
-//					return n2Series;
-//				}
-//				
-//				/**
-//				 * Recupera as séries de nível 02 - categoria -  no formato para impressão em gráfico de pizza.
-//				 */
-//				incomeAndExpense.getN2SeriesForPie = function (startDate, endDate){
-//					var tempHolder = [];
-//					var dataToRet = {};
-//					
-//					var labels = [];
-//					var date = new Date(startDate.getTime());
-//					while (date <= endDate){
-//						if (this.data[getGroupId(date, "Month")]) labels.push(getGroupId(date, "Month"));
-//						date.setMonth(date.getMonth()+1);
-//					}
-//					
-//					for (var i in labels){
-//						n0Name = labels[i];
-//						if (this.data[n0Name]){
-//							for (var n1Name in this.data[n0Name].data){
-//								// Somente despesas
-//								if (n1Name == Constants.CATEGORY_TYPE.FIXED_COST.id || n1Name == Constants.CATEGORY_TYPE.FIXED_COST.id || n1Name == Constants.CATEGORY_TYPE.IRREGULAR_COST.id){
-//									for (var n2Name in this.data[n0Name].data[n1Name].data){
-//										if (!tempHolder[n2Name]) tempHolder[n2Name] = {total: 0, subcategory: []};
-//										
-//										tempHolder[n2Name].total += this.data[n0Name].data[n1Name].data[n2Name].total *-1;
-//										for (var n3Name in this.data[n0Name].data[n1Name].data[n2Name].data){
-//											if (!tempHolder[n2Name].subcategory[n3Name]) tempHolder[n2Name].subcategory[n3Name] = 0;
-//											tempHolder[n2Name].subcategory[n3Name] += this.data[n0Name].data[n1Name].data[n2Name].data[n3Name].total *-1;
-//										}
-//									}
-//								}
-//							}
-//						}
-//					}
-//					
-//					dataToRet.series = [];
-//					dataToRet.drilldownSeries = [];
-//					for(var name in tempHolder) {
-//						dataToRet.series.push({name: name, y: tempHolder[name].total, drilldown: name});
-//						var data = [];
-//						for (var subname in tempHolder[name].subcategory){
-//							data.push([subname, tempHolder[name].subcategory[subname]])
-//						}
-//						dataToRet.drilldownSeries.push({name: name, id: name, data: data});
-//					}
-//					
-//					return dataToRet;
-//				}
-				
 				return incomeAndExpense
 				
 				
@@ -487,7 +360,7 @@ function getGroupId(source, groupBy){
 		return day +'/'+ monthNames[source.getMonth()] +'/'+ source.getFullYear();
 		
 	} else if (groupBy == 'Subcategory'){
-		return source.name +':'+ source.subCategoryName;
+		return source.name +':'+ source.name;
 		
 	} else if (groupBy == 'Category'){
 		return source.name;
