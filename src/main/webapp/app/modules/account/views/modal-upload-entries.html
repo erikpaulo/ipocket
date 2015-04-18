@@ -93,7 +93,7 @@
 										  					<div class="controls">
 																<select ui-select2	ng-model="entryToImport.category.id" name="entryToImport.category.id" data-placeholder="Selecione" class="select2 form-control">
 																	<option value=""></option>
-																	<option	ng-repeat="category in categories"	value="{{category.id}}"	ng-selected="{{category.id == entryToImport.category.id}}">{{category.name +" : "+ category.subCategoryName}}</option>
+																	<option	ng-repeat="category in categories"	value="{{category.id}}"	ng-selected="{{category.id == entryToImport.category.id}}">{{category.fullName}}</option>
 																</select>
 															</div>
 														</td>
