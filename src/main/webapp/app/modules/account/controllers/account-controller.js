@@ -1,32 +1,15 @@
-define(['./module', './account-resources'], function (app) {
+define(['./module', '../services/account-resources'], function (app) {
 
 	app.controller('AccountController', ['$rootScope', '$scope', '$modal', '$location', 'AccountResource', 'MessageHandler',
 	                                 	function($rootScope, $scope, $modal, $location, Account, MessageHandler) {
+//		$scope.account = {};
+//		$scope.accountAggregation = [];
+//		$scope.typeControl = [];
 		
-		$scope.appContext.changeCurrentContext($scope.modules[0].id);
-		
-		$scope.account = {};
-		$scope.accountAggregation = [];
-		$scope.typeControl = [];
-		$scope.fullLoaded = false;
-		
-		// Lista todas as contas já cadastradas para o uário.
-		Account.listAll(function(accounts){
-			// A partir das contas recuperadas, agrupa todas elas por tipo de conta.
-			$scope.accountAggregation = aggregate($scope.accountAggregation, accounts, $scope.typeControl);
-			$scope.fullLoaded = true;
-		}, function(err){
-			alert('Não foi possível recuperar as contas do usuário. err: '+ err);
+		// Recupera o resumo das contas do usuário.
+		Account.summary(function(data){
+			$scope.summary = data;
 		});
-		
-		// Calcula a soma total de dinheiro do usuário, considerando todas as contas.
-		$scope.getTotal = function(){
-			var total = 0;
-			for (var i in $scope.accountAggregation){
-				total += $scope.accountAggregation[i].total;
-			}
-			return total;
-		}
 		
 		// Aciona o detalhamento da conta, recuperando todos os lançamentos realizados ali.
 		$scope.detail = function (account){
@@ -39,17 +22,16 @@ define(['./module', './account-resources'], function (app) {
 			// Abre a modal.
 			var modalInstance = openModal($scope, $modal, ModalInstanceCtrl)
 			modalInstance.result.then(function (account) {
-				console.log('Gravando conta '+ account.name);
 				
 				// Executa a gravação da conta.
 				account.balance = 0;
-				Account.new(account).$promise.then(function(data){
-					$scope.accountAggregation = aggregate($scope.accountAggregation, [data], $scope.typeControl);
-				}, function(err){
-					console.log('Erro na gravação da conta. err: '+ err);
+				Account.new(account).$promise.then(function(accData){
+					Account.summary(function(sumData){
+						$scope.summary = sumData;
+					});
 				});
 			});
-			$scope.account = {};
+//			$scope.account = {};
 		}
 		
         // Abre a modal.
@@ -101,47 +83,21 @@ define(['./module', './account-resources'], function (app) {
 	}]);
 });
 
-/**
- * Dada uma lista de contas do usuário, agrega todas elas por tipo de conta,
- * armazenando a soma total do saldo de cada uma.
- * @param aggregation
- * @param accounts
- */
-function aggregate(accountAggregation, accounts, typeControl){
-	var TYPES = [];
-	TYPES["CH"] = "Corrente";
-	TYPES["CR"] = "Crédito";
-	TYPES["SA"] = "Poupança";
-	TYPES["IN"] = "Investimento";
-    
-    // Itera pelas contas agregando.
-    for ( var index=0;index < accounts.length;index++ ) {
-    	if ( typeControl[accounts[index].type] == undefined ){
-    		typeControl[accounts[index].type] = accountAggregation.length;
-    		accountAggregation.push({name: TYPES[accounts[index].type], total: 0, accounts: []});
-    	}
-    	accountAggregation[typeControl[accounts[index].type]].total += accounts[index].balance;
-    	accountAggregation[typeControl[accounts[index].type]].accounts.push(accounts[index]);
-    }
-    
-    return accountAggregation;
-}
-
-/**
- * Atualiza direto na referência, o saldo total das contas de acordo com os
- * valores dos lançamentos de cada uma delas.
- * @param accounts Contas que terão suas referências atualizadas com o saldo
- * @returns null
- */
-function updateBalance(accounts){
-	var totalBalance = 0;
-	
-	// Atualiza o saldo após o lançamento em questão.
-	for(var a=0;a<accounts.length;a++){
-		var balance = 0;
-		for (var e=0;e<accounts[a].entries.length;e++){
-			balance += accounts[a].entries[e].amount;
-		}
-		accounts[a].balance = accounts[a].startBalance + balance;
-	}
-}
+///**
+// * Atualiza direto na referência, o saldo total das contas de acordo com os
+// * valores dos lançamentos de cada uma delas.
+// * @param accounts Contas que terão suas referências atualizadas com o saldo
+// * @returns null
+// */
+//function updateBalance(accounts){
+//	var totalBalance = 0;
+//	
+//	// Atualiza o saldo após o lançamento em questão.
+//	for(var a=0;a<accounts.length;a++){
+//		var balance = 0;
+//		for (var e=0;e<accounts[a].entries.length;e++){
+//			balance += accounts[a].entries[e].amount;
+//		}
+//		accounts[a].balance = accounts[a].startBalance + balance;
+//	}
+//}

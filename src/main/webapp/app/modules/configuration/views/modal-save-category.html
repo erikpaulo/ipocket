@@ -1,0 +1,61 @@
+<!-- BEGIN PAGE LEVEL STYLES -->
+<link href="resources/lib/hint.css/hint.min.css" rel="stylesheet"
+	type="text/css" />
+<link href="resources/styles/forms.css" rel="stylesheet" type="text/css" />
+<!-- END PAGE LEVEL STYLESE -->
+<div class="content">
+	<div class="page-title">
+		<div class="modaltitle">
+			<h3 ng-if="category">
+				Nova <span class="semi-bold">Categoria</span> em <span class="semi-bold">{{group.name}}</span>
+			</h3>
+			<h3 ng-if="!category">
+				Novo <span class="semi-bold">Grupo</span>
+			</h3>
+		</div>
+	</div>
+	<div class="grid simple no-border">
+		<div class="grid-body no-border" style="overflow: hidden; display: block;">
+			<br>
+			<form name="form" novalidate="novalidate">
+
+				<div class="row form-row" ng-if="!category">
+					<div class="col-md-12">
+						<label class="form-label">Nome</label>
+						<div class="controls">
+							<input type="text" name="group.name" ng-model="group.name" class="form-control" ng-required="true">
+						</div>
+					</div>
+				</div>
+				<div class="row form-row" ng-if="category">
+					<div class="col-md-7">
+						<label class="form-label">Nome</label>
+						<div class="controls">
+							<input type="text" name="category.name" ng-model="category.name" class="form-control" ng-required="true">
+						</div>
+					</div>
+					<div class="col-md-5">
+						<label class="form-label">Tipo</label>
+						<div class="controls">
+							<select ui-select2={minimumResultsForSearch:-1}	ng-model="category.type" name="category.type" ng-change="category.$status='pending'" data-placeholder="Selecione" class="select2 form-control" ng-required="true">
+								<option value="N"></option>
+								<option ng-if="group.kind=='EX'" ng-repeat="type in expenseTypes" value="{{type.id}}" ng-selected="{{type.id == category.type}}">{{type.name}}</option>
+								<option ng-if="group.kind=='IV'" ng-repeat="type in investTypes" value="{{type.id}}" ng-selected="{{type.id == category.type}}">{{type.name}}</option>
+							</select>
+						</div>
+					</div>
+				</div>
+				<div class="form-actions">
+					<div class="pull-right">
+						<button type="button" class="btn btn-white btn-cons"
+							ng-click="cancel()">Cancelar</button>
+						<button type="submit" class="btn btn-success btn-cons"
+							ng-click="ok(form)">
+							<i class="icon-ok"></i> Incluir
+						</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>

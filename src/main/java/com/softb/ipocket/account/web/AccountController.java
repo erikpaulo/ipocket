@@ -1,8 +1,11 @@
 package com.softb.ipocket.account.web;
 
 import java.io.IOException;
+import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -21,17 +24,21 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.softb.ipocket.account.model.Account;
 import com.softb.ipocket.account.model.AccountEntry;
 import com.softb.ipocket.account.model.AccountEntryImport;
+import com.softb.ipocket.account.model.AccountSummary;
 import com.softb.ipocket.account.repository.AccountEntryRepository;
 import com.softb.ipocket.account.repository.AccountRepository;
 import com.softb.ipocket.account.service.AccountEntryUploadService;
+import com.softb.ipocket.account.service.AccountService;
 import com.softb.ipocket.configuration.model.Category;
 import com.softb.ipocket.configuration.repository.CategoryRepository;
+import com.softb.ipocket.general.model.Period;
 import com.softb.system.errorhandler.exception.FormValidationError;
 import com.softb.system.errorhandler.exception.SystemException;
 import com.softb.system.rest.AbstractRestController;
@@ -58,6 +65,9 @@ public class AccountController extends AbstractRestController<Account, Integer> 
 	@Inject
 	private AccountEntryUploadService uploadService;
 	
+	@Inject
+	private AccountService accountService;
+	
 	@Override
 	public AccountRepository getRepository() {
 		return accountRepository;
@@ -69,19 +79,59 @@ public class AccountController extends AbstractRestController<Account, Integer> 
 
 	@Override
 	public List<Account> listAll() {
-		Account account = null;
+		return accountService.listAll();
+	}
+	
+	/**
+	 * Utiliza as contas e lançamentos do usuário para criar um resumo com totais
+	 * definidos por tipo de conta e total geral.
+	 * @return Resumo das contas.
+	 */
+	@RequestMapping(value="/summary", method=RequestMethod.GET)
+	public AccountSummary getAccountSummary(){
+		return accountService.genSummary();
+	}
+	
+	/**
+	 * Recupera o extrado da conta do usuário. É recuperado os lançamentos do
+	 * mês atual e mês anterior para a conta informada.
+	 * @return Lista de lançamentos do período.
+	 * @throws ParseException 
+	 */
+	@RequestMapping(value="/{id}/statement", method=RequestMethod.GET)
+	public Account getAccountStatement(@PathVariable Integer id, @RequestParam String start, @RequestParam String end) throws ParseException{
+		DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+		Date s = formatter.parse(start);
+		Date e = formatter.parse(end);
+		return accountService.getAccountStatement(id, s, e);
+	}
+	
+	@RequestMapping(value="/entries/listAllL3M", method=RequestMethod.GET)
+	public List<AccountEntry> listAllL3M(){
+		List<AccountEntry> entries = new ArrayList<AccountEntry>();
 		
-		// Recupera todas as contas do usuário logado.
-		List<Account> accounts =  accountRepository.listAllByUser(userAccountService.getCurrentUser().getId());
+		// Recupera data atual.
+		Calendar cal1 = Calendar.getInstance();
+		cal1.set(Calendar.DAY_OF_MONTH, 1);
 		
-		// Atualiza o saldo das contas 'desnormalizado';
-		Iterator<Account> i = accounts.iterator();
-		while (i.hasNext()) {
-			account = i.next();
-			account.setBalance(calcBalance(account));
-		}
+		Calendar cal2 = (Calendar) cal1.clone();		
+		cal2.roll(Calendar.MONTH, -3);
 		
-		return accounts;
+		Date dateStart = cal2.getTime();
+		Date dateEnd = cal1.getTime();
+		
+		entries = listAllByPeriod(new Period(dateStart, dateEnd, null));
+		
+		return entries;
+	}
+	
+	@RequestMapping(value="/entries/listAll", method=RequestMethod.POST)
+	public List<AccountEntry> listAllByPeriod(@RequestBody Period period){
+		List<AccountEntry> entries = new ArrayList<AccountEntry>();
+		
+		entries = accountEntryRepository.listAllByUserPeriod(userAccountService.getCurrentUser().getId(), period.getStartDate(), period.getEndDate());
+		
+		return entries;
 	}
 	
 	@RequestMapping(value="/listSome", method=RequestMethod.GET)
@@ -108,7 +158,7 @@ public class AccountController extends AbstractRestController<Account, Integer> 
 		Account account = super.get(id);
 		
 		// Atualiza o saldo na referência que será retornada.
-		account.setBalance(calcBalance(account));
+		account.setBalance(accountService.calcBalance(account));
 		
 		return account; 
 	}
@@ -129,7 +179,7 @@ public class AccountController extends AbstractRestController<Account, Integer> 
 		Account account = super.create(json);
 		
 		// Atualiza o saldo.
-		account.setBalance(calcBalance(account));
+		account.setBalance(accountService.calcBalance(account));
 		
 		return account;
 	}
@@ -167,15 +217,12 @@ public class AccountController extends AbstractRestController<Account, Integer> 
 			// Recupera a categoria selecionada.
 			Category category = null;
 			if (entryToImport.getCategory() != null){
-//				category = categoryRepository.findOneByUser(entryToImport.getCategory().getId(), userAccountService.getCurrentUser().getId());
+				category = categoryRepository.findOneByUser(entryToImport.getCategory().getId(), userAccountService.getCurrentUser().getId());
 			}
-			
-			// Se import ocorrendo em conta tipo crédito, inverte o sinal.
-//			Account account = accountRepository.findOne(accountId);
 			
 			// Cria o lançamento que será incluído no sistema.
 			AccountEntry entry = new AccountEntry(	accountId, entryToImport.getDescription(), category, entryToImport.getDate(), 
-													"E", entryToImport.getAmount(), userAccountService.getCurrentUser().getId(), null, null, null);
+													"E", entryToImport.getAmount(), userAccountService.getCurrentUser().getId(), null, null, null, false);
 			
 			validate("AccountEntry", entry);
 			entries.add(entry);
@@ -231,28 +278,8 @@ public class AccountController extends AbstractRestController<Account, Integer> 
 		AccountEntry destinyJson = new AccountEntry(json.getDestinyAccountId(), json.getDescription(), 	json.getCategory(), 
 				json.getDate(), 	 		json.getReconciled(),  	json.getAmount()*-1, 
 				json.getUserId(), 	 		null, 					null, 
-				null);
+				null, false);
 		getAccountEntryRepository().save(destinyJson);
-	}
-	
-	/**
-	 * Calcula o saldo total da conta informada a partir de seus lançamentos e/ou saldo inicial.
-	 * @param account Conta que terá seu saldo calculado.
-	 * @return saldo total.
-	 */
-	private Double calcBalance(Account account) {
-		Double balance = 0.0;
-		
-		if (account.getEntries() != null){
-			Iterator<AccountEntry> entries = account.getEntries().iterator();
-			while (entries.hasNext()){
-				AccountEntry entry = entries.next();
-				balance += entry.getAmount();
-			}
-		}
-		balance += account.getStartBalance();
-		
-		return balance;
 	}
 }
 

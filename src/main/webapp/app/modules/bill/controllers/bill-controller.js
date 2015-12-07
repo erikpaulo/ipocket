@@ -1,47 +1,65 @@
-define(['./module', './bill-resources', '../services/bill-service', '../../configuration/services/category-resources', '../../account/controllers/account-resources'], function (app) {
+define(['./module', '../services/bill-resources', '../services/bill-entry-resources', '../services/bill-service', '../../configuration/services/category-resources', '../../account/services/account-resources'], function (app) {
 
-	app.controller('BillController', ['$scope', '$modal', '$filter', 'BillService', 'BillResource', 'CategoryResource', 'AccountResource', 'uiGridConstants',
-        function($scope, $modal, $filter, BillService, Bill, Category, Account, uiGridConstants) {
+	app.controller('BillController', ['$scope', '$q', '$compile', '$modal', '$filter', 'BillService', 'BillResource', 'BillEntryResource', 'CategoryResource', 'AccountResource', 'uiCalendarConfig',
+        function($scope, $q, $compile, $modal, $filter, BillService, Bill, BillEntry, Category, Account, uiCalendarConfig) {
 		$scope.appContext.changeCurrentContext($scope.modules[0].id);
 		
-		$scope.bills = null;
+		$scope.events = [];
 		$scope.bill = null;
 		$scope.categories = null;
 		$scope.accounts = null;
 		
-		//*************** GRID *****************//
-		// Configura a tabela com as contas
-		$scope.gridOptions = {
-				enableSorting: false,
-				enableRowSelection: true, 
-				enableSelectAll: false,
-				multiSelect: false,
-				enableFiltering: false,
-				enableRowHeaderSelection: true,
-				enableColumnMenus: false,
-				rowHeight: 25,
-				excessRows:15,
-				minRowsToShow:15,
-				columnDefs: [
-				     {field: 'billEntries[0].date', displayName: 'Data', type: 'date', cellFilter: "date:'dd/MM/yyyy'", width: '85', enableFiltering: false, cellClass: 'align-date', headerCellClass: 'align-date'},
-				     {field: 'description', displayName: 'Descrição', width: '*', visible: $scope.fullLayout},
-				     {field: 'category.fullName', displayName: 'Categoria', width: '*', filter: {condition: uiGridConstants.filter.CONTAINS}},
-		             {field: 'account.name', displayName: 'Conta Bancária'},
-		             {field: 'billEntries[0].amount', 
-		            	 displayName: 'Valor', 
-		            	 width: '130', 
-		            	 cellTemplate: '<div class="ui-grid-cell-contents ng-binding ng-scope align-currency" ng-class="{positive:grid.getCellValue(row,col)>0, negative:grid.getCellValue(row,col)<0}">{{grid.getCellValue(row,col) | currency:"R$ "}}</div></div>', 
-		                 headerCellClass: 'align-currency'
-		             }
-	             ]
+		//*********** DATA ****************//
+		// Recupera a lista de categorias disponível no sistema.
+		Category.listAll(function(data){
+			$scope.categories = data;
+		});
 		
-		};
+		// Lista todas as contas já cadastradas para o usuário.
+		Account.listAll(function(accounts){
+			$scope.accounts = accounts
+		});
 		
-		// Registra eventos na tabela de lançamentos para permitir seleção nas linhas.
-		$scope.gridOptions.onRegisterApi = function( gridApi ) {
-			$scope.gridApi = gridApi;
-		};
+		// Recupera os lançamentos programados.
+		Bill.listAll(function(data){
+			$scope.bills = data;
+			loadEvents($scope.events, data);
+		});
+		$scope.eventSources = [$scope.events];
 		
+		// Atualiza os dados de projeção do gráfico.
+		updateChart()
+		
+	  //*************** CALENDAR *****************//
+	    $scope.uiConfig = {
+	      calendar:{
+	        editable: true,
+	        timezone: 'local',
+	        ignoreTimezone: false,
+	        header:{
+	          left: 'title',
+	          center: '',
+	          right: 'today prev,next'
+	        },
+	        dayClick: function(date, jsEvent, view) {
+	        	date.add(3, 'hours'); // workaround para ignorar timezone;
+	        	create(date);
+		    },
+		    eventRender: function(event, element) {    
+		    	// Customiza reinderização do evento.
+		    	element.find('.fc-title').attr('ng-click', 'edit('+ event._id +')');
+		    	element.find('.fc-content').append( "<span class='fc-value'>"+ $filter('currencybr')(event.amount) +"</span>" );
+		    	element.find('.fc-content').append( "<span class='fc-tools'>" +
+		    	 		"<a href ng-click='register("+ event._id +")'><i class='glyphicon glyphicon-save'></i></a>" +
+		    	 		"<a href ng-click='skip("+ event._id +")'><i class='glyphicon glyphicon-new-window'></i></a></span>" );
+		    	$compile(element)($scope);
+		    },
+		    eventDrop: function( event, delta, revertFunc, jsEvent, ui, view ) { 
+		    	changeDate(event, revertFunc);
+		    }
+	      }
+	    };
+	    
 		//*********** CHART **************//
 		$scope.chartConfig = {
 				options: {
@@ -91,184 +109,169 @@ define(['./module', './bill-resources', '../services/bill-service', '../../confi
  	        	   "height": "250"
  	           	}
 		    }
-		
-		//*********** DATA ****************//
-		// Recupera a lista de categorias disponível no sistema.
-		Category.listAll(function(data){
-			$scope.categories = data;
-		});
-		
-		// Lista todas as contas já cadastradas para o usuário.
-		Account.listAll(function(accounts){
-			$scope.accounts = accounts
-			
-			// Recupera todos os lançamentos programados registrados para o usuário.
-			Bill.listAll(function(bills){
-				$scope.gridOptions.data = $scope.bills = bills;
-				if (!$scope.bills) $scope.bills = [];
+	    
+	    /***
+	     * Cria um novo pagamento no sistema e o representa no calendário.
+	     ***/
+	    function create(day){
+	    	var bill = new Bill();
+	    	bill.date = day._d;
+	    	
+	    	// Registra o pagamento no sistema.
+	    	save(bill).then(function (newBill){
+				// Atualiza os pagamentos no calendário.
+				updateBillOnCalendar(newBill, event);
 				
-				updateListView($scope.bills);
+				// Atualiza gráfico.
+				updateChart();
+	    	});
+	    }
+	    
+	    /***
+	     * Edita um pagamento existente no pagamento no sistema e o representa no calendário.
+	     ***/
+	    $scope.edit = function (eventId){
+	    	// Localiza o pagamento que contém essa entrada.
+	    	var event = findEvent($scope.events, eventId);
+	    	
+	    	// Registra o pagamento no sistema.
+	    	save(event.b).then(function(newBill){
+				// Atualiza os pagamentos no calendário.
+				updateBillOnCalendar(newBill, event);
+				
+				// Atualiza gráfico.
+				updateChart();
+	    	});
+	    	
+	    }
+	    
+	    /***
+	     * Edita um lançamento alterando somente sua data.
+	     ***/
+	    function changeDate(event, revertFunc){
+	    	var billEntry = new BillEntry(event.e);
+	    	billEntry.date = event.start._d;
+	    	billEntry.$save(function(newBill){
+				// Atualiza os pagamentos no calendário.
+				updateBillOnCalendar(newBill, event);
+				
+				// Atualiza gráfico.
+				updateChart();
+	    	}, function(err){
+	    		revertFunc();
+	    	});
+	    }
+	    
+	    /***
+	     * Remove uma das entradas da conta.
+	     ***/
+		$scope.skip = function(eventId){
+			var event = findEvent($scope.events, eventId);
+			
+			new BillEntry(event.e).$skip(function(newBill){
+				// Atualiza os pagamentos no calendário.
+				updateBillOnCalendar(newBill, event);
+				
+				// Atualiza gráfico.
+				updateChart();
 			});
-		});
-		
-		
-		// Aciona modal para criação de nova conta.
-		$scope.new = function(){
-			save(new Bill());
 		}
 		
-		// Altera um lançamento programado previamente incluído.
-		$scope.edit = function(){
-			if ($scope.gridApi.selection.getSelectedRows().length>0){
-				save($scope.gridApi.selection.getSelectedRows()[0]);
-			} else {
-				console.log('Selecione uma linha para editar.')
-			}
-		}
-		
-		var save = function(scopeBill){
-			$scope.bill = scopeBill;
+		/***
+	     * Registra em conta corrente.
+	     ***/
+		$scope.register = function(eventId){
+			var event = findEvent($scope.events, eventId);
 			
-			var modalInstance = openModal($scope, $modal, ModalInstanceCtrl, (scopeBill.id ? "edit" : "new"));
-			modalInstance.result.then(function (bill) {
-				// Recupera o objecto correspondente a conta selecionada.
-//				for(var i=0;i<$scope.accounts.length;i++){
-//					if ($scope.accounts[i].id == bill.account.id){
-//						bill.account = angular.copy($scope.accounts[i]);
-//						break;
-//					}
-//				}
+			new BillEntry(event.e).$register(function(newBill){
+				// Atualiza os pagamentos no calendário.
+				updateBillOnCalendar(newBill, event);
 				
-				// Recupera o objecto correspondente a categoria selecionada.
-				for(var i=0;i<$scope.categories.length;i++){
-					if ($scope.categories[i].id == bill.category.id){
-						bill.category = $scope.categories[i];
-						break;
-					}
+				// Atualiza gráfico.
+				updateChart();
+			});
+		}
+	    
+    	// *************************** FUNÇÕES INTERNAS ***************************
+		/*** Cria ou atualiza um pagamento no sistema, acionando modal para entrada de dados ***/
+    	function save (bill){
+    		var deferred = $q.defer();
+    		
+    		var modalInstance = openModal($scope, $modal, ModalInstanceCtrl, BillEntry, (bill.id ? "edit" : "new"), bill);
+    		modalInstance.result.then(function (newBill) {
+    			// Formatação é feita sobre texto.
+    			if (newBill.amount){
+    				if (!angular.isNumber(newBill.amount))
+    				newBill.amount = parseFloat(newBill.amount.replace('R$ ', '').replace('.', '').replace(',', '.'));
+    			} else {
+    				for (var i in newBill.billEntries){
+    					if (!angular.isNumber(newBill.billEntries[i].amount))
+    						newBill.billEntries[i].amount = parseFloat(newBill.billEntries[i].amount.replace('R$ ', '').replace('.', '').replace(',', '.')); 
+    				}
+    			}
+    			// Salvao o pagamento
+    			newBill.$save(function(data){
+    				deferred.resolve(data);
+    			});
+    		});
+    		
+    		return deferred.promise;
+    	}
+    	
+    	/*** Atualiza um pagamento e suas entradas no calendário ***/
+    	function updateBillOnCalendar(bill, event){
+			var billToRem = (bill.billEntries ? bill : event.b);
+			
+    		// Representa o evento no calendário
+    		removeBillFromCal(billToRem);
+    		
+    		// Adiciona o lançamento como eventos no calendário.
+    		if(bill.billEntries) addBillToCal(bill);
+    	}
+    	
+    	/*** Adiciona um pagamento e suas entradas no calendário ***/
+    	function addBillToCal(bill){
+    		angular.forEach(bill.billEntries, function(entry){
+    			$scope.events.push(transformToEvent(bill, entry));
+    		});
+    	}
+    	
+    	/*** Remove um pagamento e suas entradas no calendário ***/
+    	function removeBillFromCal(bill){
+    		// Se está editando, remove eventos antigos.
+    		for (var i=0;i<$scope.events.length;i++){
+    			if ($scope.events[i].b.id == bill.id){
+    				$scope.events.splice(i,1);
+    				i--;
+    			}
+    		}
+    	}
+    	
+    	/*** Localiza um evento a partir do id do lançamento ***/
+		function findEvent(events, eventId){
+			for (var i=0;i<events.length;i++){
+				if (eventId == events[i]._id){
+					break;
 				}
-				
-				// Inclui ou altera um lançamento programado.
-				delete bill.account;
-				bill.$save(function(){
-					updateListView($scope.bills, bill);
-				});
-			});
+			}
+			return events[i];
 		}
 		
-		// Remove uma conta programada.
-		$scope.delete = function(){
-			if ($scope.gridApi.selection.getSelectedRows().length>0){
-				var bill = $scope.gridApi.selection.getSelectedRows()[0];
-				delete bill.account;
-				bill.$delete(function(){
-					for (var i=0;i<$scope.bills.length;i++){
-						if ($scope.bills[i].id == bill.id){
-							$scope.bills.splice(i, 1);
-						}
-					}
-					updateChart();
+		/*** Cria um evento de calendário a partir de um lançamento programado ***/
+		function transformToEvent(bill, entry){
+			if (!angular.isDate(entry.date)) entry.date = new Date(entry.date);
+			return {title: bill.category.fullName, start: entry.date, end:entry.date, amount: entry.amount, b:bill, e:entry, stick: true};
+		}
+
+		/*** Transforma um lançamento em um evento de calendário ***/
+		function loadEvents(events, bills){
+			angular.forEach(bills, function(bill){
+				angular.forEach(bill.billEntries, function(entry){
+					events.push(transformToEvent(bill, entry))
 				})
-			} else {
-				console.log('Selecione uma linha para editar.')
-			}
+			})
 		}
-		
-		// Registra um Pagamento Programando no conta correspondente.
-		$scope.register = function (){
-			if ($scope.gridApi.selection.getSelectedRows().length>0){
-				var bill = $scope.gridApi.selection.getSelectedRows()[0];
-				delete bill.account;
-				bill.$register(function(){
-					updateListView($scope.bills, null, (bill.billEntries < 1 ? bill : null));
-				});
-			}
-		}
-		
-		// Pula o lançamento desta ocorrência no sistema.
-		$scope.skip = function (){
-			if ($scope.gridApi.selection.getSelectedRows().length>0){
-				var bill = $scope.gridApi.selection.getSelectedRows()[0];
-				delete bill.account;
-				bill.$skip(function(){
-					updateListView($scope.bills, null, (bill.billEntries < 1 ? bill : null));
-				});
-			}
-		}
-		
-		// Atualiza a lista de lançamentos programados ordenando crescente pela data.
-		var updateListView = function (bills, newEntry, delEntry){
-			
-			// Localiza o id do novo lançamento para decidir se atualiza ou cria.
-			if (newEntry){
-				for (var ae=0;ae<bills.length;ae++){
-					if (newEntry.id  == bills[ae].id){
-						bills[ae] = newEntry;
-						break;
-					}
-				}
-				if ((ae == undefined || ae == bills.length)){
-					bills.push(newEntry);
-				}
-			}
-			
-			if (delEntry){
-				for (var ae=0;ae<bills.length;ae++){
-					if (delEntry.id  == bills[ae].id){
-						bills.splice(ae, 1);
-						break;
-					}
-				}
-			}
-			
-		    angular.forEach(bills, function(row){
-//		    	// Adiciona função para recuperar os nomes da categoria com subcategoria
-//		    	if (row.category){
-//					if (!row.category.getFullName){
-//						row.category.getFullName = function() {
-//							return this.name + ' : ' + this.subCategoryName;
-//						}
-//				    }
-//		    	} else {
-//		    		return '';
-//		    	}
-		    	
-		    	// Recupera a conta (object) associado ao Bill
-		    	if (!row.account){
-		    		for (var i=0;i<$scope.accounts.length;i++){
-		    			if ($scope.accounts[i].id == row.accountId){
-		    				row.account = $scope.accounts[i];
-		    				break;
-		    			}
-		    		}
-		    	}
-		    });
-			
-		    // Ordena as entradas de cada lançamento programado.
-		    for (var i=0;i<bills.length;i++){
-		    	bills[i].billEntries.sort(function(a, b){
-		    		if (!angular.isDate(a.date)) a.date = new Date(a.date);
-		    		if (!angular.isDate(b.date)) b.date = new Date(b.date);
-		    		return a.date - b.date;
-		    	})
-		    	
-		    	if (bills[i].billEntries.length==1){
-		    		bills[i].billEntries[0].date = new Date(bills[i].billEntries[0].date);
-		    	}
-		    }
-		    
-			// Ordena crescente pela data.
-			bills.sort(function(a, b){
-				a.date = a.billEntries[0].date;
-				b.date = b.billEntries[0].date;
-	    		if (!angular.isDate(a.date)) a.date = new Date(a.date);
-	    		if (!angular.isDate(b.date)) b.date = new Date(b.date);
-				return a.date - b.date;
-			});
-			
-			updateChart();
-			
-			return bills;
-		}
+	    
 		
 		/**
 		 * Atualiza o gráfico de acordo com as contas programadas que foram atualizadas.
@@ -278,30 +281,33 @@ define(['./module', './bill-resources', '../services/bill-service', '../../confi
 			var endDate = new Date();
 			
 //			beginDate.setMonth(beginDate.getMonth());
-			endDate.setMonth(endDate.getMonth()+6);
+			beginDate.setDate(1);
+			endDate.setMonth(endDate.getMonth()+5);
+			endDate.setDate(-0);
 			
-			var accounts = $filter('filter')($scope.accounts, {type: "CH"});
-			var billsProjection = BillService.newInstance(accounts, $scope.bills);
-			var cashFlowProjection = billsProjection.getCashFlowProjection(beginDate, endDate, "Day");
+			new Bill({startDate: beginDate, endDate: endDate, groupBy: "Day"}).$cashFlowProjection(function(cashFlow){
+				$scope.chartConfig.xAxis.categories = cashFlow.labels;
+				$scope.chartConfig.series = cashFlow.series;
+			});
 			
-			$scope.chartConfig.xAxis.categories = cashFlowProjection.labels;
-			$scope.chartConfig.series = cashFlowProjection.series;
 		}
-		
 		
 		
 		/*****************
 		 * Modal
 		 ****************/
-        function openModal($scope, $modal, ModalInstanceCtrl, action){
+        function openModal($scope, $modal, ModalInstanceCtrl, BillEntry, action, b){
         	
     		var modalInstance = $modal.open({
     			templateUrl: (action == 'new' ? 'modules/bill/views/modal-new-bill.html' : 'modules/bill/views/modal-edit-bill.html'),
     			controller: ModalInstanceCtrl,
-    			size: 'lg',
+    			size: 'md',
     			resolve: {
+    				BillEntry: function(){
+    					return BillEntry;
+    				},
     				bill: function () {
-    					return $scope.bill;
+    					return b;
     				},
     				categories: function(){
     					return $scope.categories;
@@ -315,9 +321,9 @@ define(['./module', './bill-resources', '../services/bill-service', '../../confi
     		return modalInstance;
         }
         
-     	var ModalInstanceCtrl = function ($scope,  $modalInstance, bill, categories, accounts) {
+     	var ModalInstanceCtrl = function ($scope,  $modalInstance, BillEntry, bill, categories, accounts) {
      		$scope.categories = categories;
-     		$scope.bill = bill; 
+     		$scope.bill = (bill ? bill : {});
      		$scope.accounts = accounts;
      		$scope.types = [
      		       {id: 'F', value: 'Valor Fixo'}, 
@@ -335,9 +341,11 @@ define(['./module', './bill-resources', '../services/bill-service', '../../confi
      		$scope.cancel = function () {
      			$modalInstance.dismiss('cancel');
      		};
+     		
+     		$scope.deleteEntry = function (entry) {
+    			new BillEntry(entry).$skip();
+     		}
      	}
-
-		
 	}]);
 });
 

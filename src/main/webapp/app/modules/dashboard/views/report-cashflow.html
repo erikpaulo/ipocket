@@ -10,36 +10,20 @@
 						</h3>
 					</div>
 					<div class="grid-body">
-						<form name="form_cashflow" novalidate="novalidate">
+						<form name="form_cashflow">
 							<div class="row form-row">
 								<div class="col-md-3">
 <!-- 									<label class="form-label">Período</label> -->
 									<div class="controls">
-										<select	ui-select2="select2Options" ng-change="generateChart()" ng-model="selectedPeriod" class="select2 form-control input-sm" data-placeholder="Selecione" ng-required="true" ng-class="" mg-validation-alert>
-											<option	ng-repeat="period in periodOptions"	value="{{period.id}}" ng-selected="{{period.id == selectedPeriod}}">{{period.name}}</option>
+										<select	ui-select2="select2Options" placeholder="Período" ng-change="generateChart()" ng-model="Selected.period" class="select2 form-control input-sm" data-placeholder="Selecione" ng-required="true" ng-class="" mg-validation-alert>
+											<option	ng-repeat="period in periodOptions"	value="{{period.id}}" ng-selected="{{period.id == Selected.period}}">{{period.name}}</option>
 										</select>
 									</div>
 								</div>
-<!-- 								<div class="col-md-7"> -->
-<!-- 									<label class="form-label">Contas Bancárias</label> -->
-<!-- 									<div class="controls"> -->
-<!-- 										<select	ui-select2="select2Options" multiple="multiple" ng-model="selectedAccountIds" class="select2 form-control input-sm" data-placeholder="Selecione uma ou mais contas" ng-required="true" ng-class="" mg-validation-alert> -->
-<!-- 											<option	ng-repeat="account in accounts | orderBy: 'name'"	value="{{account.id}}"	ng-selected="{{account.id == bill.accountId}}">{{account.name}}</option> -->
-<!-- 										</select> -->
-<!-- 									</div> -->
-<!-- 								</div> -->
-<!-- 								<div class="col-md-2"> -->
-<!-- 									<div class="pull-right"> -->
-<!-- 										<br> -->
-<!-- 										<button type="button" class="btn btn-success btn-cons" -->
-<!-- 											ng-click="generateChart()">Gerar</button> -->
-<!-- 									</div> -->
-<!-- 								</div> -->
 							</div>
 						</form>
 						<br>
 						<div class="row">
-<!-- 							<br> -->
 							<div class="col-md-12" id="line-chart">
 								<div class="panel-body">
 									<highchart id="chart1" config="chartConfig"></highchart>

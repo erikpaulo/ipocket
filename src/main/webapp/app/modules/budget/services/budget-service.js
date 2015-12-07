@@ -1,163 +1,263 @@
-define(['./module', '../../shared/services/constants-service'], function (app) {
+define(['./module', './budget-resources', '../../configuration/services/category-group-resources'], function (app) {
 	
-	app.service('BillService', ['ConstantsService', function(Constants) {
+	app.service('BudgetService', ['$q', '$routeParams', 'BudgetResource', 'CategoryGroupResource', function($q, $routeParams, Budget, CategoryGroup) {
+		var thisMonth = new Date().getMonth();
+		var months = ["janPlanned","febPlanned", "marPlanned", "aprPlanned", "mayPlanned", "junPlanned", "julPlanned", "augPlanned", "sepPlanned", "octPlanned", "novPlanned", "decPlanned"]
+		
 		return{
 
-			newInstance: function(accounts, bills){
-				billsProjection = {};
-				billsProjection.accounts = accounts;
-				billsProjection.bills = bills;
+			newWizardControl: function(){
+				var wizardControl = {};
+				wizardControl.steps = ['one', 'two', 'three'];
+			    wizardControl.step = 0;
+			    wizardControl.wizard = {tacos: 2};
+			    wizardControl.forward = true;
+			    
+			    wizardControl.isCurrentStep = function (step) {
+			        return wizardControl.step === step;
+			    };
+
+			    wizardControl.setCurrentStep = function (step) {
+			        wizardControl.step = step;
+			    };
+
+			    wizardControl.getCurrentStep = function () {
+			        return wizardControl.steps[wizardControl.step];
+			    };
+			    
+			    wizardControl.isFirstStep = function () {
+			        return wizardControl.step === 0;
+			    };
+
+			    wizardControl.isLastStep = function () {
+			        return wizardControl.step === (wizardControl.steps.length - 1);
+			    };
+
+			    wizardControl.getNextLabel = function () {
+			        return (wizardControl.isLastStep()) ? 'Submit' : 'Next';
+			    };
+
+			    wizardControl.handlePrevious = function () {
+			    	wizardControl.forward = false;
+			        wizardControl.step -= (wizardControl.isFirstStep()) ? 0 : 1;
+			    };
+
+			    wizardControl.handleNext = function () {
+			    	wizardControl.forward = true;
+			        if (wizardControl.isLastStep()) {
+			        } else {
+			            wizardControl.step += 1;
+			        }
+			    };
+			    
+				return wizardControl;
+			},
+		
+//			/**************************************************************
+//			 * A partir do budget distribuido nas categorias informadas. Utiliza as entradas informadas
+//			 * no segundo parâmetro para construir os valores que suportarão a decisão.
+//			 */
+//			newCategoriesBudget: function (categoryGroups, l3mEntries){
+//				var categoriesBudget = {};
+//				
+//				var lastMonthBegin = new Date();
+//				var lastMOnthEnd = new Date();
+//				lastMonthBegin.setDate(-0)
+//				lastMonthBegin.setDate(1)
+//				lastMOnthEnd.setDate(-0)
+//				console.log('Mês anterior: '+ lastMonthBegin +' a '+ lastMOnthEnd);
+//				
+//				var last3MBegin = new Date();
+//				var last3MEnd = new Date();
+//				last3MBegin.setMonth(last3MBegin.getMonth()-3);
+//				last3MBegin.setDate(1);
+//				last3MEnd.setDate(-0);
+//				console.log('L3M: '+ last3MBegin +' a '+ last3MEnd);
+//				
+//				// Itera pelos grupos de categoria construindo a estrutura.
+//				var holder = [];
+//				for(var i in categoryGroups) {
+//					var group = categoryGroups[i]; 
+//					
+//					// Itera pelas categorias do grupo
+//					for (var r in group.categories) {
+//						var category = group.categories[r];
+//						if (!holder[category.id]) holder[category.id] = {lastMonth: 0, averageL3M: 0}; 
+//					}
+//				}
+//				
+//				// Itera pelas entradas preenchendo a estrutura.
+//				for (var t in l3mEntries){
+//					var entry = l3mEntries[t];
+//					entry.date = new Date(entry.date);
+//					
+//					if (entry.date >= lastMonthBegin && entry.date <= lastMOnthEnd) {
+//						holder[entry.category.id].lastMonth += entry.amount;
+//					}
+//					
+//					if (entry.date >= last3MBegin && entry.date <= last3MEnd) {
+//						holder[entry.category.id].averageL3M += entry.amount;
+//					}
+//				}
+//				
+//				// Itera por todas as categorias calculando a média
+//				for(var i in holder){
+//					holder[i].averageL3M = holder[i].averageL3M / 3; 
+//				}
+//				
+//				
+//				for(var i in categoryGroups) {
+//					var group = categoryGroups[i]; 
+//					
+//					// Itera pelas categorias do grupo
+//					for (var r in group.categories) {
+//						var category = group.categories[r];
+//						category.lastMonth = holder[category.id].lastMonth;
+//						category.averageL3M = holder[category.id].averageL3M;
+//						if (!category.amount) { // Se budget sendo criado.
+//							category.amount = [];
+//							for (var i=0;i<12;i++){
+//								category.amount[i] = 0;
+//							}
+//						}
+//					}
+//				}
+//				
+//				return categoryGroups;
+//
+//			},
+		
+			/**************************************************************
+			 * Atualiza ou cria um novo orçamento no sistema.
+			 */
+			createOrUpdateBudget: function (budget){
+				// Salva.
+				budget.$save(function(data){
+					console.log(data);
+				});
+			},
+			
+			/**************************************************************
+			 * Cria uma nova instância de Budget. Utiliza os valores das categorias do sistema
+			 * e entradas do usuário para criar controles para suporte à decisão.
+			 */
+			initBudget: function (){
+				var deferred = $q.defer();
+				var budget = null;
+
+				// Recupera os grupos de categoria.
+				var categoryGroups = null;
+				CategoryGroup.listAll(function (dataCat) {
+					categoryGroups = dataCat;
+					
+					var holder = [];
+					for(var i=0;i<categoryGroups.length;i++) {
+						var group = categoryGroups[i];
+						if (!holder[group.name]) holder[group.name] = {entries: [], categoryGroup: group, totalPlanned: 0};
+						
+						// Itera pelas categorias do grupo
+						for (var r=0;r<categoryGroups[i].categories.length;r++) {
+							var category = categoryGroups[i].categories[r];
+							if(!holder[group.name].entries[category.name]) 
+								holder[group.name].entries[category.name] = {janPlanned: 0, febPlanned: 0, marPlanned: 0, aprPlanned: 0, mayPlanned: 0, junPlanned: 0, 
+																			 julPlanned: 0, augPlanned: 0, sepPlanned: 0, octPlanned: 0, novPlanned: 0, decPlanned: 0,
+																			 category: category};
+						}
+					}
+					
+					// Se editando...
+					if ($routeParams.budgetId) {
+						// Recupera o orçamento do usuário.
+						Budget.get({id: $routeParams.budgetId}, function(data){
+							budget = data;
+							
+							// Verifica quais categorias já existem registradas no orçamento e as remove.
+							if (budget.entryGroups){
+								for (var i=0;i<budget.entryGroups.length;i++){
+									var groupName = budget.entryGroups[i].categoryGroup.name;
+									
+									if (holder[groupName]){
+										var found = false;
+										for (var r=0;r<budget.entryGroups[i].entries.length;r++){
+											budget.entryGroups[i].entries[r].thisMonth =  eval('budget.entryGroups[i].entries[r].' + months[thisMonth]);
+											var catName = budget.entryGroups[i].entries[r].category.name;
+											
+											if (holder[groupName].entries[catName]){
+												delete holder[groupName].entries[catName];
+											} else {
+												found = true;
+											}
+										}
+										if (!found)	delete holder[groupName];
+									}
+								}
+							}
+
+							// Atualiza no orçamento as categorias não existentes.
+							budget = addCategories(budget, holder);
+							deferred.resolve(budget);
+						});
+						
+					// Se novo...
+					} else {
+						budget = new Budget();
+					}
+					
+					// Atualiza no orçamento as categorias não existentes.
+					if (budget){
+						budget = addCategories(budget, holder);
+						deferred.resolve(budget);
+					}
+				});
 				
-				/**
-				 * A partir das contas e lançamentos programados, realiza a projeção do fluxo de
-				 * caixa no período informado e retorna em uma serie.
-				 */
-				billsProjection.getCashFlowProjection = function(startDate, endDate, groupBy) {
-					var series = [];
-					var labels = [];
-					
-					// Gera os labels.
-					var date = new Date(startDate.getTime());
-					while (date <= endDate){
-						labels[getGroupId(date, groupBy)] = 0;
-						if (groupBy == "Day"){
-							date.setDate(date.getDate()+1);
-						} else {
-							date.setMonth(date.getMonth()+1);
-						}
-					}
-					
-					// Itera pelas contas e de acordo com a periodicidade, define o saldo total dessas contas nesses períodos.
-					angular.forEach(this.accounts, function(account){
-						doSum(account.name, account.createDate, account.startBalance, groupBy);
-						angular.forEach(account.entries, function(entry){
-							doSum(account.name, entry.date, entry.amount, groupBy);
-						})
-					});
-					
-					// Itera pelos lançamentos programados fazendo projeção do fluxo de caixa.
-					angular.forEach(bills, function(bill){
-						var accountName, destinyAccountName;
-						
-						// Recupera o nome da conta associada ao lançameto programado.
-						for (var a in billsProjection.accounts){
-							if (this.billsProjection.accounts[a].id == bill.accountId){
-								accountName = this.billsProjection.accounts[a].name;
-							}
-							if (this.billsProjection.accounts[a].id == bill.destinyAccountId){
-								destinyAccountName = this.billsProjection.accounts[a].name;
-							}
-						}
-						angular.forEach(bill.billEntries, function(billEntry){
-							if (series[accountName]){
-								doSum(accountName, billEntry.date, billEntry.amount, groupBy);
-							}
-							if (series[destinyAccountName]){
-								doSum(destinyAccountName, billEntry.date, billEntry.amount*-1, groupBy);
-							}
-						})
-					})
-					
-					// Realiza a soma do valor no mês correspondente.
-					function doSum(serieName, date, amount, groupBy){
-						if (!angular.isDate(date)) date = new Date(date);
-						if (!series[serieName]) {
-							var newLabels = {};
-							newLabels = copy(labels);
-							series[serieName] = newLabels;
-						}
-						
-						if (date >= startDate && date <= endDate){
-							series[serieName][getGroupId(date, groupBy)] += amount;
-						} else {
-							if (date < startDate){
-								series[serieName][getGroupId(startDate, groupBy)] += amount;
-							}
-						}
-					}
-					
-					function copy(source){
-						var arr = [];
-						for (var i in source){
-							arr[i] = source[i];
-						}
-						return arr;
-					}
-					
-					function getGroupId(source, groupBy){
-						var monthNames = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
-						
-						if (groupBy == "Month") {
-							return monthNames[source.getMonth()] +'/'+ source.getFullYear();
-						} else if (groupBy == "Week") {
-							var day;
-							if (source.getDate()>28){
-								var newDate = new Date(source);
-								newDate.setMonth(source.getMonth()+1);
-								newDate.setDate(-0);
-								day = newDate.getDate();
-							} else {
-								day = Math.ceil((source.getDate()/7))*7;
-							}
-							return day +'/'+ monthNames[source.getMonth()] +'/'+ source.getFullYear();
-							
-						} else if (groupBy == 'Day'){
-							return source.getDate() +'/'+ (parseInt(source.getMonth())+1) +'/'+ source.getFullYear();
-						} 
-						else if (groupBy == 'Subcategory'){
-							return source.name +':'+ source.subCategoryName;
-							
-						} else if (groupBy == 'Category'){
-							return source.name;
-						}
-					}
-					
-					// Elimina os pontos sem valor
-					if (groupBy == "Day"){
-						for (var labelName in labels){
-							found = false;
-							for (var serieName in series){
-								if (series[serieName][labelName] == 0){
-									found = true;
-								} else {
-									found = false;
-									break;
-								}
-							}
-							
-							if (found){
-								for (var serieName in series){
-									delete series[serieName][labelName];
-									delete labels[labelName];
-								}
-							}
-						}
-					}
-					
-					var color = ['#666666', '#6699CC', '#3399CC', '#6666FF', '#669900', '#669933', '#669966']
-					
-					var cashFlowProjection = {labels: [], series: []};
-					var i = 0;
-					for (var serieName in series){
-						var balance = 0;
-						cashFlowProjection.series[i] = {name: serieName, data:[], color: color[i%7], visible: (i==0)};
-						for (var labelName in series[serieName]) {
-							balance += series[serieName][labelName]
-							cashFlowProjection.series[i].data.push(balance);
-						}
-						i++;
-					}
-					
-					for (var labelName in labels){
-						cashFlowProjection.labels.push(labelName);
-					}
-					
-					return cashFlowProjection;
+				return deferred.promise;
+			},
+			
+			/**
+			 * Consiste os dados da entrada do orçamento de acordo com o entrado pelo usuário.
+			 */
+			updateEntry: function(entry, singleIn){
+				var deferred = $q.defer();
+				var thisMonth = new Date().getMonth();
+				
+				if (singleIn){
+					entry.janPlanned = entry.febPlanned = entry.marPlanned = entry.aprPlanned = entry.mayPlanned = entry.junPlanned = entry.thisMonth;
+					entry.julPlanned = entry.augPlanned = entry.sepPlanned = entry.octPlanned = entry.novPlanned = entry.decPlanned = entry.thisMonth;
+				} else {
+					entry.thisMonth = entry[months[thisMonth]];
 				}
 				
-				return billsProjection;
+				entry.totalAnnual = 0;
+				for(var i in months){
+					entry.totalAnnual += entry[months[i]];
+				}
+				deferred.resolve(entry);
+				
+				return deferred.promise;
 			}
 		}
 	}]);
 });
 
+
+/*********************************************
+ * Adiciona no orçamento as categorias informadas.
+ * @param budget
+ * @param categories
+ */
+function addCategories(budget, categories){
+	// Acrescenta no orçamento as categorias ainda não cadastradas.
+	var iGroup=0;
+	for (var groupName in categories){
+		if (!budget.entryGroups) budget.entryGroups = [];
+		budget.entryGroups.push(categories[groupName]);
+		
+		for (var catName in categories[groupName].entries){
+			if (!budget.entryGroups[iGroup].entries) budget.entryGroups[iGroup].entries = [];
+			budget.entryGroups[iGroup].entries.push(categories[groupName].entries[catName]);
+		}
+		iGroup++;
+	}
+	
+	return budget;
+}

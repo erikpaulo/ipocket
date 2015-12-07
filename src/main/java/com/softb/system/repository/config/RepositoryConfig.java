@@ -30,6 +30,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 		"com.softb.ipocket.account.model",
 		"com.softb.ipocket.bill.model",
 		"com.softb.ipocket.budget.model",
+		"com.softb.ipocket.general.model",
 		"com.softb.ipocket.configuration.model"
 })
 public class RepositoryConfig  {

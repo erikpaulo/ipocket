@@ -11,7 +11,8 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
-import lombok.EqualsAndHashCode;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -23,7 +24,8 @@ import com.softb.system.repository.BaseEntity;
  * @author Erik Lacerda
  *
  */
-@EqualsAndHashCode(callSuper = false)
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "CATEGORY")
 public class Category extends BaseEntity<Integer> implements Serializable {
@@ -53,6 +55,11 @@ public class Category extends BaseEntity<Integer> implements Serializable {
 	
 	@Transient
 	protected String groupName;
+	
+	@Transient
+	protected String selected;
+	
+	
 
 	public String getName() {
 		return name;
@@ -108,6 +115,14 @@ public class Category extends BaseEntity<Integer> implements Serializable {
 	
 	public void setGroupName(String groupName) {
 		this.groupName = groupName;
+	}
+
+	public String getSelected() {
+		return selected;
+	}
+
+	public void setSelected(String selected) {
+		this.selected = selected;
 	}
 	
 	

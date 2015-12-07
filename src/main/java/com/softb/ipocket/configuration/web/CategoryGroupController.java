@@ -1,5 +1,6 @@
 package com.softb.ipocket.configuration.web;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -67,11 +68,22 @@ public class CategoryGroupController extends AbstractRestController<CategoryGrou
 			group = super.update(json.getId(), json);
 		} else {
 			group = super.create(json);
+			group.setCategories(new ArrayList<Category>());
 		}
 		return group;
 	}
 	
 	
+
+	@Override
+	public CategoryGroup update(@PathVariable Integer id, @RequestBody CategoryGroup json) {
+		// Recupera o id do usuário logado para filtro dos dados.
+		UserAccount user = userAccountService.getCurrentUser();
+		Integer userId = user.getId();
+		
+		// TODO Auto-generated method stub
+		return super.update(id, json);
+	}
 
 	@Override
 	public void delete(@PathVariable Integer id) {

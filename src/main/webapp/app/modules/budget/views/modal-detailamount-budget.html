@@ -1,0 +1,113 @@
+<div class="content">
+	<div class="page-title">
+		<div class="modaltitle">
+			<h3>
+				Detalhar Orçamento para <span class="semi-bold">{{budget.year}}</span>
+			</h3>
+		</div>
+	</div>
+
+	<div class="form-group">
+		<div class="grid simple">
+			<div class="grid-body no-border no-min-height" style="overflow: hidden; display: block;">
+				<br>
+				<form name="form_edit_bill" novalidate="novalidate">
+
+					<!-- Linha 01-->
+					<div class="row">
+						<div class="col-md-4">
+							<label class="form-label">Janeiro</label>
+							<div class="controls">
+								<input type="number" name="entry.janPlanned"	ng-model="entry.janPlanned" class="form-control" ng-required="true" ng-class="" mg-validation-alert>
+							</div>
+						</div>
+						<div class="col-md-4">
+							<label class="form-label">Fevereiro</label>
+							<div class="controls">
+								<input type="number" name="entry.febPlanned"	ng-model="entry.febPlanned" class="form-control" ng-required="true" ng-class="" mg-validation-alert>
+							</div>
+						</div>
+						<div class="col-md-4">
+							<label class="form-label">Março</label>
+							<div class="controls">
+								<input type="number" name="entry.marPlanned"	ng-model="entry.marPlanned" class="form-control" ng-required="true" ng-class="" mg-validation-alert>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-4">
+							<label class="form-label">Abril</label>
+							<div class="controls">
+								<input type="number" name="entry.aprPlanned"	ng-model="entry.aprPlanned" class="form-control" ng-required="true" ng-class="" mg-validation-alert>
+							</div>
+						</div>
+						<div class="col-md-4">
+							<label class="form-label">Maio</label>
+							<div class="controls">
+								<input type="number" name="entry.mayPlanned"	ng-model="entry.mayPlanned" class="form-control" ng-required="true" ng-class="" mg-validation-alert>
+							</div>
+						</div>
+						<div class="col-md-4">
+							<label class="form-label">Junho</label>
+							<div class="controls">
+								<input type="number" name="entry.junPlanned"	ng-model="entry.junPlanned" class="form-control" ng-required="true" ng-class="" mg-validation-alert>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-4">
+							<label class="form-label">Julho</label>
+							<div class="controls">
+								<input type="number" name="entry.julPlanned"	ng-model="entry.julPlanned" class="form-control" ng-required="true" ng-class="" mg-validation-alert>
+							</div>
+						</div>
+						<div class="col-md-4">
+							<label class="form-label">Agosto</label>
+							<div class="controls">
+								<input type="number" name="entry.augPlanned"	ng-model="entry.augPlanned" class="form-control" ng-required="true" ng-class="" mg-validation-alert>
+							</div>
+						</div>
+						<div class="col-md-4">
+							<label class="form-label">Setembro</label>
+							<div class="controls">
+								<input type="number" name="entry.sepPlanned"	ng-model="entry.sepPlanned" class="form-control" ng-required="true" ng-class="" mg-validation-alert>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-4">
+							<label class="form-label">Outubro</label>
+							<div class="controls">
+								<input type="number" name="entry.octPlanned"	ng-model="entry.octPlanned" class="form-control" ng-required="true" ng-class="" mg-validation-alert>
+							</div>
+						</div>
+						<div class="col-md-4">
+							<label class="form-label">Novembro</label>
+							<div class="controls">
+								<input type="number" name="entry.novPlanned"	ng-model="entry.novPlanned" class="form-control" ng-required="true" ng-class="" mg-validation-alert>
+							</div>
+						</div>
+						<div class="col-md-4">
+							<label class="form-label">Dezembro</label>
+							<div class="controls">
+								<input type="number" name="entry.decPlanned"	ng-model="entry.decPlanned" class="form-control" ng-required="true" ng-class="" mg-validation-alert>
+							</div>
+						</div>
+					</div>
+					
+					<!-- Linha 04 -->
+					<div class="form-actions">
+						<div class="pull-right">
+							<button type="button" class="btn btn-white btn-cons"
+								ng-click="cancel()">Cancelar</button>
+							<button type="submit" class="btn btn-success btn-cons"
+								ng-click="ok(form_edit_bill)">
+								<i class="icon-ok"></i> Salvar
+							</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>

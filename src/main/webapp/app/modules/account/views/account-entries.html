@@ -1,107 +1,121 @@
-<!-- <link href="resources/styles/table.css" rel="stylesheet" type="text/css" /> -->
-<!-- <link href="resources/lib/angular-ui-grid/ui-grid.css" rel="stylesheet" type="text/css" /> -->
-<!-- <link href="resources/styles/forms.css" rel="stylesheet" type="text/css" /> -->
-
 <section ng-controller="AccountEntryController">
 	<div class="lock-screen" ng-hide="account" ng-show="!account"></div>
 	<div class="content"  ng-if="account">
-		<div class="row">
-			<div class="col-md-12">
-				<div class="grid simple ">
-					<div class="grid-title">
-						<h3>
-							<span>{{account.name}}</span>
-						</h3>
-						<div class="tools">
-							<span class="dropdown" dropdown on-toggle="toggled(open)">
-							<span class="glyphicon glyphicon-option-vertical" aria-hidden="true" class="dropdown-toggle" dropdown-toggle></span>
-							  <ul class="dropdown-menu dropdown-menu-right">
-							    <li>
-							      <a href ng-click="uploadFile()"><i class="glyphicon glyphicon-open-file"></i>Importar Lançamentos</a>
-							    </li>
-							    <li>
-							      <a href ng-click="inactivateAccount()"><i class="glyphicon glyphicon-remove-circle"></i>Inativar Conta</a>
-							    </li>
-							  </ul>
-							</span>
-						</div>
-					</div>
-					<div class="grid-body">
-						<div class="row">
-							<div class="col-md-12">
-								<div ui-grid="gridOptions" ui-grid-selection class="grid-with-filter"></div>
+		<div class="grid simple ">
+		
+			<div class="grid-title">
+				<div class="trail">
+					<h3>
+						Contas<span class="trail-divisor"> : </span><span class="semi-bold">{{account.name}}</span>
+					</h3>
+				</div>
+				<div class="tools">
+					<span class="menu" dropdown on-toggle="toggled(open)">
+						<span class="glyphicon glyphicon-option-vertical" aria-hidden="true" class="dropdown-toggle" dropdown-toggle></span>
+						  <ul class="menu-itens">
+						    <li>
+						      <a href ng-click="uploadFile()"><i class="glyphicon glyphicon-open-file"></i>Importar Lançamentos</a>
+						    </li>
+						    <li>
+						      <a href ng-click="inactivateAccount()"><i class="glyphicon glyphicon-remove-circle"></i>Inativar Conta</a>
+						    </li>
+						  </ul>
+					</span>
+				</div>
+			</div>
+			<div class="grid-body">
+				<div class="row">
+					<div class="col-md-8">
+						<div class="table-tools">
+							<div style="display:table-row;">
+								<div style="display:table-cell">
+										<div class="controls">
+											<select	ui-select2="{minimumResultsForSearch: -1}" placeholder="Período" ng-change="getStatement()" ng-model="Selected.period" class="select2 form-control input-sm" data-placeholder="Selecione" style="width:170px;">
+												<option	ng-repeat="period in periodOptions"	value="{{period.id}}" ng-selected="{{period.id == Selected.period}}">{{period.name}}</option>
+											</select>
+										</div>
+								</div>
+								<div style="display:table-cell" class="right">
+									<label>Search: <input type="text" ng-model="searchText.$"></label>
+								</div>
 							</div>
 						</div>
-						<div class="row">
-							<div class="col-md-1"></div>
-							<div class="col-md-10">
-								<br>
-								<div class="tabbable" ng-class="{'tabs-left': fullLayout, 'tabs-below': !fullLayout}">
-									<tabset> 
-										<tab ng-repeat="tab in tabs" heading="{{tab.title}}" active="tab.active">
-											<div style="min-height: 106px">
-												<form name="form_account_entry" novalidate="novalidate">
-													<div class="col-md-10">
-														<div class="row form-row">
-															<div class="col-md-7">
-																<label class="form-label">Descrição</label>
-																<div class="controls">
-																	<input type="text" name="accountEntry.description"	ng-model="accountEntry.description" class="form-control" ng-required="true" ng-class="" mg-validation-alert>
-																</div>
-															</div>
-															<div class="col-md-3">
-																<label class="form-label">Data</label>
-																<div class="controls">
-																	<input type="date" placeholder="yyyy-MM-dd"	name="accountEntry.date" ng-model="accountEntry.date"	class="form-control" ng-required="true" ng-class=""	mg-validation-alert>
-																</div>
-															</div>
-														</div>
-														<div class="row form-row">
-															<div class="col-md-7">
-																<label class="form-label">Categoria</label>
-																<div class="controls">
-																	<select ui-select2	ng-model="accountEntry.category.id" name="accountEntry.category.id" data-placeholder="Selecione" class="select2 form-control" ng-required="true" ng-class="" mg-validation-alert>
-																		<option value=""></option>
-																		<option	ng-repeat="category in categories"	value="{{category.id}}"	ng-selected="{{category.id == accountEntry.category.id}}">{{category.fullName}}</option>
-																	</select>
-																</div>
-															</div>
-															<div class="col-md-3">
-																<label class="form-label">Valor</label>
-																<div class="controls">
-																	<input type="number" name="accountEntry.amount" ng-model="accountEntry.amount" class="form-control" ng-required="true" ng-class="" mg-validation-alert>
-																</div>
-															</div>
-														</div>
-														<div class="row form-row" ng-show="tab.type == 'T'">
-															<div class="col-md-7">
-																<label class="form-label">Conta Destino</label>
-																<div class="controls">
-																	<select ui-select2	ng-model="accountEntry.destinyAccountId" name="accountEntry.destinyAccountId" data-placeholder="Selecione" class="select2 form-control" ng-required="{{(tab.type=='T' ? true : false )}}" ng-class="" mg-validation-alert>
-																		<option value=""></option>
-																		<option	ng-repeat="useAccount in accounts"	value="{{useAccount.id}}">{{useAccount.name}}</option>
-																	</select>
-																</div>
-															</div>
-														</div>
-														<br>
-													</div>
-													<div class="col-md-2">
-														<button type="submit" class="btn btn-block btn-success"
-															ng-click="save(form_account_entry)">
-															<span ng-show="accountEntry.id">Salvar</span>
-															<span ng-show="!accountEntry.id">Novo</span>
-														</button>
-														<button ng-show="accountEntry.id" type="button" class="btn btn-block btn-danger"
-															ng-click="remove(form_account_entry)">Remover</button>
-														<button type="button" class="btn btn-block btn-default"
-															ng-click="clear(form_account_entry)">Cancelar</button>
-													</div>
-												</form>
-											</div>
-										</tab> 
-									</tabset>
+						<div class="table table-bordered">
+							<div class="table-header">
+								<div class="table-row">
+									<div class="table-cell text-center" style="width:10%">Data</div>
+									<div class="table-cell text-left" style="width:50%">Categoria</div>
+									<div class="table-cell text-right" style="width:20%">Valor</div>
+									<div class="table-cell text-right" style="width:20%">Saldo</div>
 								</div>
+							</div>
+							<div class="table-body">
+								<div class="table-row" ng-repeat="entry in account.entries | filter:searchText" ng-click="selectEntry(entry)" ng-class="{active:entry.selected}">
+									<div class="table-cell text-center">{{entry.date | date:'dd/MM/yyyy'}}</div>
+									<div class="table-cell text-left">{{entry.category.fullName}}</div>
+									<div class="table-cell text-right zebra" ng-class="{negative: entry.amount <0, positive:entry.amount>=0}">{{entry.amount | currencybr}}</div>
+									<div class="table-cell text-right" ng-class="{negative: entry.amount <0, positive:entry.amount>=0}">{{entry.balance | currencybr}}</div>
+								</div>
+							</div>
+						</div>
+						<div class="no-data-found" ng-if="account.entries.length == 0">Não existem lançamentos realizados no período.</div>
+					</div>
+					<div class="col-md-4">
+						<div class="tabbable tabs-below entry-form" style="position:fixed;margin-top:12px;">
+							<tabset> 
+								<tab ng-repeat="tab in tabs" heading="{{tab.title}}" active="tab.active">
+									<div style="min-height: 106px">
+										<form name="form_account_entry" novalidate="novalidate">
+											<div class="row form-row">
+												<div class="col-md-12">
+													<label class="form-label">Descrição</label>
+													<div class="controls">
+														<input type="text" name="accountEntry.description"	ng-model="accountEntry.description" class="form-control" ng-required="true" ng-class="" mg-validation-alert>
+													</div>
+												</div>
+											</div>
+											<div class="row form-row">
+												<div class="col-md-12">
+													<label class="form-label">Categoria</label>
+													<div class="controls">
+														<select ui-select2	ng-model="accountEntry.category.id" name="accountEntry.category.id" data-placeholder="Selecione" class="select2 form-control" ng-required="true" ng-class="" mg-validation-alert>
+															<option value=""></option>
+															<option	ng-repeat="category in categories"	value="{{category.id}}"	ng-selected="{{category.id == accountEntry.category.id}}">{{category.fullName}}</option>
+														</select>
+													</div>
+												</div>
+											</div>
+											<div class="row form-row">
+												<div class="col-md-6">
+													<label class="form-label">Data</label>
+													<div class="controls">
+														<input type="date" placeholder="yyyy-MM-dd"	name="accountEntry.date" ng-model="accountEntry.date"	class="form-control" ng-required="true" ng-class=""	mg-validation-alert>
+													</div>
+												</div>
+												<div class="col-md-6">
+													<label class="form-label">Valor</label>
+													<div class="controls">
+														<input type="text" name="accountEntry.amount" ng-model="accountEntry.amount" class="form-control" ng-required="true" format="currency">
+													</div>
+												</div>
+											</div>
+											<div class="row form-row">
+												<div class="col-md-12">
+												<br>
+													<button type="submit" class="btn btn-block btn-success"	ng-click="save(form_account_entry)">
+														<span ng-show="accountEntry.id">Salvar</span>
+														<span ng-show="!accountEntry.id">Novo</span>
+													</button>
+													<button ng-show="accountEntry.id" type="button" class="btn btn-block btn-danger" ng-click="remove(form_account_entry)">Remover</button>
+													<button type="button" class="btn btn-block btn-default"	ng-click="clear(form_account_entry)">Cancelar</button>
+												</div>
+											</div>
+										</form>
+									</div>
+								</tab> 
+							</tabset>
+							<div class="account-balance">
+								<span>Saldo: {{account.balance | currencybr}}</span>
 							</div>
 						</div>
 					</div>

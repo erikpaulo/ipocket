@@ -1,4 +1,4 @@
-define(['./module', '../../bill/controllers/bill-resources', '../../bill/services/bill-service', '../../account/controllers/account-resources'], function (app) {
+define(['./module', '../../bill/services/bill-resources', '../../bill/services/bill-service', '../../account/services/account-resources'], function (app) {
 
 	app.controller('CashflowController', ['$scope', 'AccountResource', 'BillResource', 'BillService',
         function($scope, Account, Bill, BillService) {
@@ -11,7 +11,7 @@ define(['./module', '../../bill/controllers/bill-resources', '../../bill/service
 		}
 		
 		var start = new Date();
-		$scope.selectedPeriod = 0;
+		$scope.Selected = {period: 0};
 		$scope.periodOptions = [
 		    {id:0 , name:"Este ano" , start: start, end: function(){
            	 var date = new Date(start);
@@ -103,8 +103,8 @@ define(['./module', '../../bill/controllers/bill-resources', '../../bill/service
 		
 		// Filtra os itens selecionadas e aciona a geração do gráfico.
 		$scope.generateChart = function(){
-			var startDate = $scope.periodOptions[$scope.selectedPeriod].start;
-			var endDate = $scope.periodOptions[$scope.selectedPeriod].end();
+			var startDate = $scope.periodOptions[$scope.Selected.period].start;
+			var endDate = $scope.periodOptions[$scope.Selected.period].end();
 
 			// Atualiza o gráfico.
 			var billsProjection = BillService.newInstance($scope.accounts, $scope.bills);

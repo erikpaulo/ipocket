@@ -12,8 +12,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import org.hibernate.validator.constraints.NotEmpty;
@@ -26,10 +25,10 @@ import com.softb.system.repository.BaseEntity;
  * @author Erik Lacerda
  *
  */
-@Data
+//@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode(callSuper = false)
+//@EqualsAndHashCode(callSuper = false)
 @Entity
 @Table(name = "CATEGORY_GROUP")
 public class CategoryGroup extends BaseEntity<Integer> implements Serializable {
@@ -39,6 +38,10 @@ public class CategoryGroup extends BaseEntity<Integer> implements Serializable {
 	@Column(name = "NAME")
 	@NotEmpty
 	protected String name;
+	
+	@Column(name = "KIND")
+	@NotEmpty
+	protected String kind;
 
 	@JsonManagedReference
 	@OneToMany(fetch = FetchType.EAGER)
@@ -48,5 +51,50 @@ public class CategoryGroup extends BaseEntity<Integer> implements Serializable {
 	@Column(name="USER_ID")
 	@NotNull
 	protected Integer userId;
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public List<Category> getCategories() {
+		return categories;
+	}
+
+	public void setCategories(List<Category> categories) {
+		this.categories = categories;
+	}
+
+	public Integer getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Integer userId) {
+		this.userId = userId;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
 	
+	public String getKind() {
+		return kind;
+	}
+
+	public void setKind(String kind) {
+		this.kind = kind;
+	}
+
+	@Getter
+	public enum Kind {
+		INCOME("IC"), EXPENSE("EX"), INVESTIMENT("IV");
+		private String value;
+		
+		private Kind(String kind){
+			this.value = kind;
+		}
+	}
 }

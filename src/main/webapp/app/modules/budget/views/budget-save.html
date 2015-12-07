@@ -1,0 +1,189 @@
+<link href="resources/styles/custom-animate.css" rel="stylesheet" type="text/css" />
+
+<section ng-controller="BudgetController">
+	<div class="content">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="grid simple ">
+					<div class="grid-title">
+						<h3>
+							<span class="semi-bold">Orçamento</span>
+						</h3>
+						<div class="tools">
+							<span class="dropdown" dropdown on-toggle="toggled(open)">
+							<span class="glyphicon glyphicon-option-vertical" aria-hidden="true" class="dropdown-toggle" dropdown-toggle></span>
+							  <ul class="dropdown-menu dropdown-menu-right">
+							    <li>
+							      <a href ng-click="new()"><i class="glyphicon glyphicon-plus-sign"></i>Novo</a>
+							    </li>
+							    <li>
+							      <a href ng-click="edit()"><i class="glyphicon glyphicon-edit"></i>Editar</a>
+							    </li>
+							    <li>
+							      <a href ng-click="delete()"><i class="glyphicon glyphicon-remove-circle"></i>Excluir</a>
+							    </li>
+							    <li>
+							      <a href ng-click="register()"><i class="glyphicon glyphicon-save"></i>Registrar em Conta</a>
+							    </li>
+							    <li>
+							      <a href ng-click="skip()"><i class="glyphicon glyphicon-new-window"></i>Pular Pagamento</a>
+							    </li>
+							  </ul>
+							</span>
+						</div>
+					</div>
+					<div class="grid-body">
+						<div class="row">
+							<div class="col-md-12">
+								<div class="grid-body">
+									<div class="row">
+										<div class="form-wizard-steps">
+											<ul class="wizard-steps form-wizard">
+												<li ng-class="{active:wizardControl.isCurrentStep(0)}" data-target="#step1"> 
+													<a href="#tab1" data-toggle="tab"> 
+														<span class="step">1</span> 
+														<span class="title">Informações Básicas</span> 
+													</a> 
+												</li>
+												<li ng-class="{active:wizardControl.isCurrentStep(1)}" data-target="#step2" class=""> 
+													<a href="#tab2" data-toggle="tab"> 
+														<span class="step">2</span> 
+														<span class="title">Renda</span> 
+													</a> 
+												</li>
+												<li ng-class="{active:wizardControl.isCurrentStep(2)}" data-target="#step3" class=""> 
+													<a href="#tab3" data-toggle="tab"> 
+														<span class="step">3</span> 
+														<span class="title">Despesas</span> 
+													</a> 
+												</li>
+												<li ng-class="{active:wizardControl.isCurrentStep(3)}" data-target="#step4" class=""> 
+													<a href="#tab4" data-toggle="tab"> 
+														<span class="step">4</span> 
+														<span class="title">Resumo<br></span> 
+													</a> 
+												</li>
+											</ul>
+										</div>
+									</div>
+									<div ng-switch="wizardControl.getCurrentStep()" class="animate-switch-container wizard-content">
+    									<div ng-switch-when="one">
+											<h4 class="semi-bold">Passo 1 - <span class="light">Informações Básicas</span></h4>
+											<br>
+											<div class="row form-row">
+												<div class="col-md-4">
+													<label class="form-label">Nome</label>
+													<div class="controls">
+														<input type="text" name="budget.name" ng-model="budget.name" class="form-control" ng-required="true" ng-class="">													</div>
+												</div>
+												<div class="col-md-6">
+													<label class="form-label">Objetivo Macro</label>
+													<div class="controls">
+														<input type="text" name="budget.objective" ng-model="budget.objective" class="form-control" ng-required="true" ng-class="">
+													</div>
+												</div>
+												<div class="col-md-2">
+													<label class="form-label">Ano Referência</label>
+													<div class="controls">
+														<input type="number" name="budget.year" ng-model="budget.year" class="form-control" ng-required="true" ng-class="">
+													</div>
+												</div>
+											</div>
+    									</div>
+									    <div ng-switch-when="two">
+											<h4 class="semi-bold">Passo 2 - <span class="light">Informar Renda</span></h4>
+											<br>
+											<div class="col-md-12">
+												<div ng-repeat="entryGroup in budget.entryGroups" class="budget-table" ng-if="entryGroup.categoryGroup.name == 'Entradas'">
+													<div class="budget-table-row-group">
+														<div style="display: table;width: 100%;">
+															<div style="display: table-cell"><h5>Grupo: Entradas</h5></div>
+															<div style="display: table-cell;text-align: right;"><h5 style="margin-right: 10px;font-weight: 400;">Anual: {{groupTotalBudget(entryGroup) | currency: 'R$ '}}</h5></div>
+														</div>
+													</div>
+													<div class="budget-table-row">
+														<div class="budget-table-cell" style="width:30%">
+														</div>
+														<div class="budget-table-cell align-currency" style="width:20%; text-align:right">
+															<span><strong>Média Mensal</strong></span>
+														</div>
+														<div class="budget-table-cell align-currency" style="width:13%; text-align:right">
+															<span><strong>Estimado Ano</strong></span>
+														</div>
+														<div class="budget-table-cell" style="width:21%">
+														</div>
+													</div>
+													<div ng-if="entry.category.type == 'E'" class="budget-table-row" ng-repeat="entry in entryGroup.entries">
+														<div class="budget-table-cell" style="width:30%">
+															<span>{{entry.category.name}}</span>
+														</div>
+														<div class="budget-table-cell" style="width:20%">
+															<input type="number" name="entry.thisMonth" ng-model="entry.thisMonth" class="form-control" ng-blur="setThisMonth(entry)" ng-required="true" ng-class="">
+														</div>
+														<div class="budget-table-cell align-currency" style="width:13%">
+															{{entryTotal(entry) | currency:'R$ '}}
+														</div>
+														<div class="budget-table-cell" style="width:11%; text-align:center">
+															<a href ng-click="detailAmount(entry)"><i class="glyphicon glyphicon-list-alt"></i></a>
+														</div>
+													</div>
+												</div>
+											</div>
+									    </div>
+									    <div ng-switch-when="three">
+									    	<h4 class="semi-bold">Passo 3 - <span class="light">Informar Despesas</span></h4>
+											<br>
+											<div class="col-md-12">
+												<div ng-repeat="entryGroup in budget.entryGroups" class="budget-table" ng-if="entryGroup.categoryGroup.name != 'Entradas'">
+													<div class="budget-table-row-group">
+														<div style="display: table;width: 100%;">
+															<div style="display: table-cell"><h5>Grupo: {{entryGroup.categoryGroup.name}}</h5></div>
+															<div style="display: table-cell;text-align: right;"><h5 style="margin-right: 10px;font-weight: 400;">Anual: {{groupTotalBudget(entryGroup) | currency: 'R$ '}}</h5></div>
+														</div>
+													</div>
+													<div class="budget-table-row">
+														<div class="budget-table-cell" style="width:30%">
+														</div>
+														<div class="budget-table-cell align-currency" style="width:20%; text-align:right">
+															<span><strong>Média Mensal</strong></span>
+														</div>
+														<div class="budget-table-cell align-currency" style="width:13%; text-align:right">
+															<span><strong>Estimado Ano</strong></span>
+														</div>
+														<div class="budget-table-cell" style="width:21%">
+														</div>
+													</div>
+													<div class="budget-table-row" ng-repeat="entry in entryGroup.entries" ng-if="entry.category.type != 'E'">
+														<div class="budget-table-cell" style="width:30%">
+															<span>{{entry.category.name}}</span>
+														</div>
+														<div class="budget-table-cell" style="width:20%">
+															<input type="number" name="entry.thisMonth" ng-model="entry.thisMonth" class="form-control" ng-blur="setThisMonth(entry)" ng-required="true" ng-class="">
+														</div>
+														<div class="budget-table-cell align-currency" style="width:13%">
+															{{entryTotal(entry) | currency:'R$ '}}
+														</div>
+														<div class="budget-table-cell" style="width:11%; text-align:center">
+															<a href ng-click="detailAmount(entry)"><i class="glyphicon glyphicon-list-alt"></i></a>
+														</div>
+													</div>
+												</div>
+											</div>
+									    </div>
+									</div>
+									<div class="wizard wizard-actions">
+										<div class="pull-right">
+											<button type="button" class="btn btn-white btn-cons" ng-click="wizardControl.handlePrevious()" ng-show="!wizardControl.isFirstStep()">Anterior</button>
+											<button type="submit" class="btn btn-success btn-cons" ng-show="!wizardControl.isLastStep()" ng-click="wizardControl.handleNext()">Próximo</button>
+											<button type="submit" class="btn btn-success btn-cons" ng-show="wizardControl.isLastStep()" ng-click="finish()">Finalizar</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>

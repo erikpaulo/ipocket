@@ -1,0 +1,111 @@
+<link href="resources/styles/custom-animate.css" rel="stylesheet" type="text/css" />
+
+<section ng-controller="BudgetViewController">
+	<div class="content">
+		<div class="grid simple">
+			<div class="grid-title">
+				<h3>
+					<span class="semi-bold">Orçamentos</span>
+				</h3>
+				<div class="tools">
+					<span class="dropdown" dropdown on-toggle="toggled(open)">
+					<span class="glyphicon glyphicon-option-vertical" aria-hidden="true" class="dropdown-toggle" dropdown-toggle></span>
+					  <ul class="dropdown-menu dropdown-menu-right">
+					    <li>
+					      <a href ng-click="save()"><i class="glyphicon glyphicon-plus-sign"></i>Nova Conta</a>
+					    </li>
+					  </ul>
+					</span>
+				</div>
+			</div>
+			<div class="grid-body">
+				<div class="row" ng-show="budget">
+					<h3>{{budget.year}} - {{budget.name}}</h3>
+					<i><h5>{{budget.objective}} - <strong>Orçado: </strong> 2342q34q234 - <strong>Realizado: </strong>234234234</h5></i>
+					<a ng-click="edit(budget)">edit</a>
+				</div>
+				<br>
+				<div class="row">
+					<div class="col-md-8">
+						<div ng-repeat="entryGroup in budget.entryGroups">
+							<div ng-class="{'col-sm-4':!entryGroup.zoomIn, 'col-sm-12':entryGroup.zoomIn}" >
+								<div class="tiles grey borderall m-b-10">
+									<div class="tiles-body">
+										<div class="controller"> 
+											<span ng-click="zoomInOut(entryGroup)" ng-class="{'glyphicon glyphicon-zoom-in zoomIn': !entryGroup.zoomIn, 'glyphicon glyphicon-zoom-out': entryGroup.zoomIn}"></span>
+											<span ng-click="selectInOut(entryGroup)" class="glyphicon glyphicon-check" ng-class="{'text-info': entryGroup.selected}"></span>
+										</div>
+										<div class="tiles-title budget text-black">{{entryGroup.categoryGroup.name}}</div>
+										<div style="display:table; width:100%">
+											<div class="widget-stats">
+												<div class="wrapper transparent">
+													<span class="item-title semi-bold">Orçado </span> <span class="item-count animate-number" data-value="{{entryGroup.totalPlanned}}" data-animation-duration="700">{{entryGroup.totalPlanned | currency:"R$ ":0}}</span>
+												</div>
+											</div>
+											<div class="widget-stats">
+												<div class="wrapper last">
+													<span class="item-title semi-bold">Realizado </span> <span class="item-count animate-number" data-value="{{entryGroup.totalSpent}}" data-animation-duration="700">{{entryGroup.totalSpent | currency:"R$ ":0}}</span>
+												</div>
+											</div>
+										</div>
+										<div class="progress transparent progress-small no-radius m-t-20" style="width:100%">
+											<div ng-class="{'progress-bar-white': entryGroup.status=='ok', 'progress-bar-success': entryGroup.status=='sucess', 'progress-bar-warning': entryGroup.status=='warning', 'progress-bar-danger': entryGroup.status=='danger'}" class="progress-bar animate-progress-bar" data-percentage="{{entryGroup.percentSpent}}%" style="width: {{entryGroup.percentSpent}}%;"></div>
+										</div>
+										<div class="description"> <span class="text-black mini-description "><strong>{{entryGroup.percentSpent}}%</strong> <span class="blend">do planejado</span></span></div>
+										
+										<div ng-show="entryGroup.zoomIn" class="row">
+											<div class="col-md-12" style="display:table">
+												<table style="width:100%">
+													<tr>
+														<th colspan="2">Categoria</th>
+														<th>Jan</th>
+														<th>Fev</th>
+														<th>Mar</th>
+														<th>Abr</th>
+														<th>Mai</th>
+														<th>Jun</th>
+														<th>Jul</th>
+														<th>Ago</th>
+														<th>Set</th>
+														<th>Out</th>
+														<th>Nov</th>
+														<th>Dez</th>
+													</tr>
+													<tr ng-repeat-start="entry in entryGroup.entries" ng-class="{'bg-grey-1': $even, 'bg-grey-2': $odd}">
+														<td rowspan="2">{{entry.category.name}}</td>
+														<td>P</td>
+														<td>{{entry.janPlanned | currency: '':0}}</td>
+														<td>{{entry.febPlanned | currency: '':0}}</td>
+														<td>{{entry.marPlanned | currency: '':0}}</td>
+														<td>{{entry.aprPlanned | currency: '':0}}</td>
+														<td>{{entry.mayPlanned | currency: '':0}}</td>
+														<td>{{entry.junPlanned | currency: '':0}}</td>
+														<td>{{entry.julPlanned | currency: '':0}}</td>
+														<td>{{entry.augPlanned | currency: '':0}}</td>
+														<td>{{entry.sepPlanned | currency: '':0}}</td>
+														<td>{{entry.octPlanned | currency: '':0}}</td>
+														<td>{{entry.novPlanned | currency: '':0}}</td>
+														<td>{{entry.decPlanned | currency: '':0}}</td>
+													</tr>
+													<tr ng-repeat-end ng-class="{'bg-grey-1': $even, 'bg-grey-2': $odd}">
+														<td>R</td>
+														<td ng-class="{negative: !entry.inBudget[$index]}" ng-repeat="spentByMonth in entry.totalSpentByMonth track by $index">{{spentByMonth | currency:'':0}}</td>
+													</tr>
+												</table>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="panel-body" style="padding: 0px !important;">
+							<highchart id="chart1" config="chartConfig"></highchart>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>

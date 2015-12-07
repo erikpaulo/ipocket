@@ -21,4 +21,7 @@ public interface CategoryGroupRepository extends JpaRepository<CategoryGroup, In
 	
 	@Query("select cg from CategoryGroup cg where cg.name = :name and cg.userId = :userId")
 	List<CategoryGroup> getByNameUser(@Param("name") String name, @Param("userId") Integer userId) throws DataAccessException;
+	
+	@Query("select cg from CategoryGroup cg where cg.userId = :userId and cg.kind = :kind")
+	List<CategoryGroup> listAllByUserKind(@Param("userId") Integer userId, @Param("kind") String kind) throws DataAccessException;	
 }

@@ -3,10 +3,14 @@ package com.softb.ipocket.configuration.web;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.softb.ipocket.configuration.model.Category;
@@ -64,19 +68,35 @@ public class CategoryController extends AbstractRestController<Category, Integer
 		return category;
 	}
 	
-//	@Transactional
-//	@RequestMapping(value="/{categoryId}", method=RequestMethod.DELETE)
-//	public @ResponseBody void delete(@RequestBody Integer categoryId) throws FormValidationError{
-//		categoryRepository.delete(categoryId);
-//		
-////		// Remove o grupo caso não exista categoria associada
-////		for (Category category : json){
-////			List<Category> categories = categoryRepository.findByGroupUser(category.getGroup().getId(), category.getUserId());
-////			if (categories != null && categories.size() == 0){
-////				categoryGroupRepository.delete(category.getGroup().getId());
-////			}
-////		}
-//	}
+	
+	
+	@Override
+	@Transactional
+	public Category update(@PathVariable Integer id, @RequestBody Category json) {
+		
+		// Recupera o id do usuário logado para filtro dos dados.
+		UserAccount user = userAccountService.getCurrentUser();
+		json.setUserId(user.getId());
+		json.getGroup().setUserId(user.getId());
+		
+		// Salva a categoria.
+		Category category = categoryRepository.save(json);
+		return category;
+	}
+
+	@Transactional
+	@RequestMapping(value="/{id}", method=RequestMethod.DELETE)
+	public @ResponseBody void delete(@PathVariable Integer id) throws FormValidationError{
+		categoryRepository.delete(id);
+		
+//		// Remove o grupo caso não exista categoria associada
+//		for (Category category : json){
+//			List<Category> categories = categoryRepository.findByGroupUser(category.getGroup().getId(), category.getUserId());
+//			if (categories != null && categories.size() == 0){
+//				categoryGroupRepository.delete(category.getGroup().getId());
+//			}
+//		}
+	}
 	
 	@Override
 	public String getEntityName() {

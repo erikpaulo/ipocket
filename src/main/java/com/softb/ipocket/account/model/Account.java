@@ -45,23 +45,30 @@ public class Account extends BaseEntity<Integer> implements Serializable {
 	@NotNull
 	protected Integer userId;
 
-	@Column(name = "BRANCH")
-	protected String branch;
-	
 	@Column(name = "CREATE_DATE")
 	@NotNull
 	protected Date createDate;
 
-	@Column(name = "NUMBER")
-	protected String number;
-	
 	@Column(name = "START_BALANCE", columnDefinition = "double default 100")
 	protected Double startBalance;
 	
-	@OneToMany(fetch = FetchType.EAGER)
+	@OneToMany(fetch = FetchType.LAZY)
 	@JoinColumn(name = "ACCOUNT_ID", referencedColumnName = "ID")
 	protected List<AccountEntry> entries;
 	
 	@Transient
 	protected Double balance;
+	
+	public enum Type {
+        CH("Corrente"), CR("Crédito"), SA("Poupança"), IN("Investimento");
+        private String name;
+
+        private Type(String name) {
+                this.name = name;
+        }
+        
+        public String getName(){
+        	return this.name;
+        }
+	}
 }

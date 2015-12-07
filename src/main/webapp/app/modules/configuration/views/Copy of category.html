@@ -1,0 +1,95 @@
+<section ng-controller="CategoryController">
+	<div class="content" ng-if="groups">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="grid simple">
+					<div class="grid-title">
+						<div>
+							<h3>
+								<span class="semi-bold">Categorização</span>
+							</h3>
+						</div>
+						<div class="tools">
+							<span class="dropdown" dropdown on-toggle="toggled(open)">
+								<span class="glyphicon glyphicon-option-vertical" aria-hidden="true" class="dropdown-toggle" dropdown-toggle></span>
+								<ul class="dropdown-menu dropdown-menu-right">
+									<li>
+								    	<a href ng-click="newGroup()"><i class="glyphicon glyphicon-plus-sign"></i>Novo Grupo</a>
+								    </li>
+								</ul>
+							</span>
+						</div>
+					</div>
+					<div class="grid-body">
+						<div class="row">
+							<div class="col-md-11">
+								<div style="overflow:scroll; max-height:500px;">
+									<div ng-repeat="group in groups" class="col-md-12 tiles-container tiles white spacing-bottom">
+	              						<div class="tile-more-content tiles-b-radius col-md-12 no-padding">
+	                						<div class="tiles tiles-thin tiles-b-radius blue">
+	                  							<div class="tiles-body b b-grey"> 
+	                    							<div class="heading">
+	                    								<input type="text" name="group.name" ng-model="group.name">
+	                    							</div>
+	                    							<div class="cat-group-menu">
+														<span dropdown on-toggle="toggled(open)" ng-if="group.$status !='pending'">
+															<span class="glyphicon glyphicon-menu-down" aria-hidden="true" class="dropdown-toggle" dropdown-toggle></span>
+															<ul class="dropdown-menu dropdown-menu-right">
+																<li>
+															    	<a href ng-click="addCategoryIn(group)"><i class="glyphicon glyphicon-plus-sign"></i> Nova Categoria</a>
+															    </li>
+																<li>
+															    	<a href ng-click="delGroup(group)"><i class="glyphicon glyphicon-minus-sign"></i> Excluir Grupo</a>
+															    </li>
+															</ul>
+														</span>
+														<span ng-if="group.$status =='pending'" class="glyphicon glyphicon-ok-circle" ng-click="saveGroup(group)" style="color:green;"></span>
+	                    							</div>
+	                  							</div>
+	                  							<div class="tile-footer-thin">
+	                  							</div>
+	                						</div>
+	                						<div class="tiles-body b b-grey" ng-model="group.categories" data-drop="true" jqyoui-droppable="{multiple:true, onDrop:'changeToGroup(group)'}">
+	                							<div data-drag="true" data-jqyoui-options="{revert: 'invalid', scrollSpeed: 10}" jqyoui-draggable="{index: {{$index}}, onStart:'startDrag(category, group)'}" 
+	                							ng-model="group.categories" ng-repeat="category in group.categories" class="cat-wrapper col-md-6" 
+	                							ng-class="{'cat-type-fc': category.type=='F', 'cat-type-v': category.type=='V', 'cat-type-i': category.type=='I', 'cat-type-e': category.type=='E', 'cat-type-t': category.type=='T', 'cat-type-n': category.type=='N'}">
+		                							<div class="cat-label"></div>
+		                							<div class="cat-body">
+		                								<div class="cat-inner">
+			                								<div class="col-md-6">
+				                								<div class="controls">
+																	<input type="text" ng-model="category.name" ng-change="category.$status='pending'" name="category.name" class="form-control" ng-required="true" ng-class="">
+																</div>
+			                								</div>
+			                								<div class="col-md-5">
+																<div class="controls">
+																	<select ui-select2	ng-model="category.type" name="category.type" ng-change="category.$status='pending'" data-placeholder="Selecione" class="select2 form-control" ng-required="true" ng-class="">
+																		<option value="N"></option>
+																		<option	ng-repeat="type in types"	value="{{type.id}}"	ng-selected="{{type.id == category.type}}">{{type.name}}</option>
+																	</select>
+																</div>
+			                								</div>
+			                								<div class="col-md-1" style="top:-3px;">
+			                									<span class="glyphicon glyphicon-remove-circle" ng-click="removeCategory(category, group)"  style="color:darkred; cursor:pointer;"></span>
+			                									<span ng-class="{'cat-status-pend':category.$status == 'pending'}" class="glyphicon glyphicon-ok-circle" ng-click="saveCategory(category, group)"></span>
+			                								</div>
+		                								</div>
+		                							</div>
+		                						</div>
+	                      						<div class="clearfix"></div>
+	                						</div>
+	              						</div>
+	              						<div class="tiles white col-md-8 col-sm-8 no-padding">
+	                						<div class="tiles-chart"></div>
+	                						<div class="clearfix"></div>
+	              						</div>
+	            					</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>

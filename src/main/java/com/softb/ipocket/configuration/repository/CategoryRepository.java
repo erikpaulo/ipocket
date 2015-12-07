@@ -15,7 +15,7 @@ public interface CategoryRepository extends JpaRepository<Category, Integer> {
 	
 	@Query("select c from Category c where c.userId = :userId")
 	List<Category> listAllByUser(@Param("userId") Integer userId) throws DataAccessException;
-//	
+	
 	@Query("select c from Category c where c.id = :id and c.userId = :userId")
 	Category findOneByUser(@Param("id") Integer id, @Param("userId") Integer userId) throws DataAccessException;
 	

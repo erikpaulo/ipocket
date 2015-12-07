@@ -26,7 +26,6 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
-import com.codahale.metrics.MetricRegistry;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.hibernate4.Hibernate4Module;
 import com.fasterxml.jackson.datatype.hibernate4.Hibernate4Module.Feature;
@@ -41,6 +40,7 @@ import com.softb.system.web.filter.gzip.GZipServletFilter;
 		"com.softb.ipocket.account.web",
 		"com.softb.ipocket.configuration.web",
 		"com.softb.ipocket.bill.web",
+		"com.softb.ipocket.budget.web",
 		"com.softb.system.security.service", 
 		"com.softb.system.security.web"
 })
@@ -48,9 +48,6 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter implements ServletCont
 
 	private final Logger logger = LoggerFactory.getLogger(WebMvcConfig.class);
 	
-    @Inject
-    private MetricRegistry metricRegistry;
-    
     @Inject
     private Environment env;
     

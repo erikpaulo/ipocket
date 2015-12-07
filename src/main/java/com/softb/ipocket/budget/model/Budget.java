@@ -1,85 +1,57 @@
 package com.softb.ipocket.budget.model;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import com.softb.ipocket.bill.model.BillEntry;
-import com.softb.ipocket.configuration.model.CategoryGroup;
 import com.softb.system.repository.BaseEntity;
 
 /**
- * Classe que representa as Contas dos Usuários.
+ * Classe que representa o orçamento de um usuário para um determinado ano. Só pode haver 
+ * 01 budget por ano.
  * @author Erik Lacerda
  *
  */
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @Entity
 @Table(name = "BUDGET")
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Budget extends BaseEntity<Integer> implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
-	@Column(name = "DESCRIPTION")
+	@Column(name = "NAME")
 	@NotEmpty
-	protected String description;
+	protected String name;
 	
-	@Column(name="CALC_TYPE")
-	@NotEmpty
-	protected String calcType;
+	@Column(name = "OBJECTIVE")
+	protected String objective;
 	
-	@Column(name="AVERAGE_COUNT")
-	protected Integer averageCount;
+	@Column(name="YEAR")
+	@NotNull
+	protected Integer year;
+
+	@OneToMany(fetch = FetchType.EAGER)
+	@JoinColumn(name = "BUDGET_ID", referencedColumnName = "ID")
+	protected List<BudgetEntryGroup> entryGroups;
 	
 	@Column(name="USER_ID")
 	@NotNull
 	protected Integer userId;
-
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "CATEGORY_ID", referencedColumnName = "ID")
-	protected CategoryGroup category;
-	
-//	@ManyToOne(fetch = FetchType.EAGER)
-//	@JoinColumn(name = "ACCOUNT_ID", referencedColumnName = "ID")
-//	protected Account account;
-	
-	@Column(name="ACCOUNT_ID")
-	@NotNull
-	protected Integer accountId;
-
-	@Column(name="DESTINY_ACCOUNT_ID")
-	protected Integer destinyAccountId;
-	
-	@OneToMany(fetch = FetchType.EAGER)
-	@JoinColumn(name= "BILL_ID", referencedColumnName = "ID")
-	protected List<BillEntry> billEntries;
-	
-	@Transient
-	protected Date date;
-	
-	@Transient
-	protected Integer times;
-	
-	@Transient
-	protected Double amount;
-	
 }

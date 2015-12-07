@@ -1,4 +1,4 @@
-define(['./module', '../../shared/services/constants-service', '../services/report-expenses-service', '../../account/controllers/account-resources', '../../configuration/services/category-resources'], function (app) {
+define(['./module', '../../shared/services/constants-service', '../services/report-expenses-service', '../../account/services/account-resources', '../../configuration/services/category-resources'], function (app) {
 	
 	app.controller('ExpensesReportController', ['$scope', '$filter', 'AccountResource', 'CategoryResource', 'ExpenseReportService', 'ConstantsService',
 	   function($scope, $filter, Account, Category, ExpenseReport, Constants) {

@@ -20,6 +20,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.softb.ipocket.configuration.model.Category;
 import com.softb.system.repository.BaseEntity;
@@ -74,4 +75,8 @@ public class AccountEntry extends BaseEntity<Integer> implements Serializable {
 	
 	@Transient
 	protected Integer destinyAccountId;
+	
+	@Transient
+	@JsonIgnore
+	protected boolean selected;
 }
