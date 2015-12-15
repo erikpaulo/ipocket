@@ -22,6 +22,7 @@
 
 <!-- BEGIN PLUGIN CSS FRAMEWORK -->
 <!-- <link href="resources/lib/angular-loading-bar/build/loading-bar.min.css" rel="stylesheet" type="text/css" /> -->
+<link href="resources/legacy/fullcalendar/fullcalendar.css" rel="stylesheet" type="text/css" />
 <!-- BEGIN PLUGIN CSS FRAMEWORK -->
 
 <link href="resources/styles/animate.min.css" rel="stylesheet" type="text/css" />
@@ -35,11 +36,11 @@
 	<link href="resources/styles/slider.css" rel="stylesheet" type="text/css" />
 <!-- 	<link href="resources/styles/form-elements.css" rel="stylesheet" type="text/css" /> -->
 <!-- 	<link href="resources/styles/table.css" rel="stylesheet" type="text/css" /> -->
-	<link href="resources/styles/responsive.css" rel="stylesheet" type="text/css" />
 	<link href="resources/styles/custom-icon-set.css" rel="stylesheet" type="text/css" />
 	<link href="resources/styles/famfamfam-flags.css" rel="stylesheet" type="text/css" />
 	<link href="resources/lib/angular-ui-grid/ui-grid.css" rel="stylesheet" type="text/css" />
 	<link href="resources/styles/forms.css" rel="stylesheet" type="text/css" />
+	<link href="resources/styles/responsive.css" rel="stylesheet" type="text/css" />
 <!-- END CSS TEMPLATE -->
 
 </head>
@@ -50,9 +51,9 @@
 <!-- pace-done -->
 	
 	<!-- BEGIN HEADER -->
-	<div class="header navbar navbar-inverse">
+	<div class="header navbar navbar-inverse" ng-show="!currentUser.authenticated">
 		<!-- BEGIN TOP USER NOT AUTHENTICATED BAR -->
-		<div ng-show="!currentUser.authenticated">
+		<div>
 			<div class="pull-right">
 				<div class="nav quick-section">
 					<ul class="nav pull-right">
@@ -65,118 +66,27 @@
 				</div>	
 			</div>
 			<div class="pull-left" style="display:-webkit-box;">
-				<a href="/"> 
-					<img class="logo" data-src="resources/images/ipocket-logo.png" data-src-retina="resources/images/ipocket-logo.png" width="35" height="46"/>
-				</a>
-				<div class="logo-title">
-					<span class="semi-bold">iPocket</span>
-				</div>
 			</div>
 		</div>
 		<!-- END TOP USER NOT AUTHENTICATED BAR -->
 		<!-- BEGIN TOP NAVIGATION BAR -->
-		<div class="navbar-inner" ng-show="currentUser.authenticated">
-			<div class="header-seperation" style="display: none">
-				<ul class="nav pull-left notifcation-center" id="main-menu-toggle-wrapper" style="display: none">
-					<li class="dropdown"><a id="main-menu-toggle" href="#main-menu" class="">
-							<div class="iconset top-menu-toggle-white"></div>
-					</a></li>
-				</ul>
-				<!-- BEGIN LOGO -->
-				<div class="logo-wrapper-mini">
-					<a href="/"> 
-						<img class="logo" data-src="resources/images/ipocket-logo.png" data-src-retina="resources/images/ipocket-logo.png" width="106" height="21" />
-					</a>
-					<div class="logo-title">
-						<span class="semi-bold">iPocket</span>
-					</div>
-				</div>
-				<!-- END LOGO -->
-				<ul class="nav pull-right notifcation-center">
-					<li class="dropdown" >
-						<a href="#/home" >
-							<div class="iconset top-home"></div>
-						</a>
-					</li>					
-				</ul>
-			</div>
-			<!-- END RESPONSIVE MENU TOGGLER -->
+	</div>
+	<div class="header">
+		<div class="box-header">
+               <div class="profile">
+                   <div class="avatar">
+                       <img class="img-avatar" src="resources/images/avatar.jpg" alt="moldura">
+                   </div>
+                   <div class="link-profile">
+                       Olá,
 
-			<div class="header-quick-nav">
-				<!-- BEGIN TOP NAVIGATION MENU -->
-				<div class="pull-left" style="display:grid;">
-					<!-- BEGIN LOGO -->
-					<div class="logo-wrapper">
-						<a href="/"> 
-							<img class="logo" data-src="resources/images/ipocket-logo.png" data-src-retina="resources/images/ipocket-logo.png" width="106" height="21" />
-						</a>
-						<div class="logo-title">
-							<span class="semi-bold">iPocket</span>
-						</div>
-					</div>
-					<!-- END LOGO -->
-					<ul class="nav quick-section">
-						<li class="quicklinks"><a href="" class="" id="layout-condensed-toggle">
-								<div class="iconset top-menu-toggle-dark"></div>
-						</a></li>
-					</ul>
-					<ul class="nav quick-section">
-						<li class="quicklinks"><a href="#" class=""><div class="iconset top-reload"></div> </a></li>
-						<li class="quicklinks"><span class="h-seperate"></span></li>
-						<li class="quicklinks"><a href="#" class=""><div class="iconset top-tiles"></div></a></li>
-						<div class="input-prepend inside search-form no-boarder">
-							<span class="add-on"> <a href="#" class=""><div class="iconset top-search"></div></a></span> <input name="" type="text" class="no-boarder " placeholder="Search Dashboard"
-								style="width: 250px; height: 35px !important">
-						</div>
-					</ul>
-				</div>
-				<!-- END TOP NAVIGATION MENU -->
-
-				<!-- BEGIN CHAT TOGGLER -->
-				<div class="pull-right">
-					<div class="nav quick-section">
-						<ul id="headmenu" class="nav pull-right">
-<!-- 							<li class="quicklinks" id="homemenu"><a href="#/" ><i class="fa fa-home"></i> <span translate="global.menu.home">Home</span></a></li> -->
-<!-- 							<li class="quicklinks" id="homemenu"><a href="#/about"><i class="fa fa-info-circle"></i> <span translate="global.menu.about">About</span></a></li> -->
-							
-							<li class="quicklinks"><span class="h-seperate"></span></li>
-							
-							<li class="quicklinks" ng-show="!currentUser.authenticated"> 
-								<a dclass="pull-right" href="#/login"> 
-									<i class="fa fa-sign-in"></i> Login
-								</a>							
-							</li>
-							<li class="quicklinks" ng-show="currentUser.authenticated"> 
-								<a data-toggle="dropdown" class="dropdown-toggle pull-right" href=""> 
-									<i class="{{adminMenu.iconClass}}"></i> {{adminMenu.title}} <b class="caret"></b>
-								</a>							
-
-								<ul class="dropdown-menu  pull-right" role="menu" aria-labelledby="dropdownMenu">
-									<li ng-repeat="item in adminMenu.items" class="{{item.dividerClass}}">
-										<a ng-show="item.menu" href="{{item.url}}" ><i class="{{item.iconClass}}"></i>{{item.title}}</a>
-									</li>
-									<li>
-										<a href="signout" ng-click="logout()"><i class="fa fa-sign-out"></i>Logout</a>
-									</li>										
-								</ul>
-							</li>
-							<li class="quicklinks">
-									<div class="profile-pic" ng-show="currentUser.authenticated">
-										<img alt="" data-src="{{currentUser.imageUrl}}" data-src-retina="{{currentUser.imageUrl}}" width="35" height="35" />
-									</div>
-							</li>
-<!-- 							<li class="quicklinks"><span class="h-seperate"></span></li> -->
-							
-						</ul>
-					</div>	
-
-				</div>
-				<!-- END CHAT TOGGLER -->
-
-			</div>
-			<!-- END TOP NAVIGATION MENU -->
-		</div>
-		<!-- END TOP NAVIGATION BAR -->
+                       <a id="abrir-profile" href="javascript:void(0);">ERIK</a>
+                   </div>
+                   <div class="drop-profile" id="menu-perfil">
+                       <span class="drop-seta"></span>
+                   </div>
+               </div>
+          	</div>
 	</div>
 	<!-- END HEADER -->
 
@@ -184,25 +94,19 @@
 	<div class="page-container row" >
 		
 		<!-- BEGIN SIDEBAR -->
-		<div class="page-sidebar mini" id="main-menu" ng-show="currentUser.authenticated">
+		<div ng-class="{'sidebar-open':hover}" class="page-sidebar mini" id="main-menu" ng-show="currentUser.authenticated" ng-mouseover="doHover(true)" ng-mouseleave="doHover(false)">
 			<!-- BEGIN MINI-PROFILE -->
-			<div class="scroll-wrapper page-sidebar-wrapper" style="position: relative; overflow: hidden; width: auto; height: 595.2px;">
-				<div class="page-sidebar-wrapper" id="main-menu-wrapper" style="overflow: hidden; width: auto; height: 595.2px;">
-	      			<div class="user-info-wrapper">
-	       				 <div class="profile-wrapper"> 
-	       				 	<img src="assets/img/profiles/avatar.jpg" alt="" data-src="assets/img/profiles/avatar.jpg" data-src-retina="assets/img/profiles/avatar2x.jpg" width="69" height="69"> 
-	       				 </div>
-	        			<div class="user-info">
-	       					<div class="greeting">Welcome</div>
-	       					<div class="username">John <span class="semi-bold">Smith</span></div>
-	       					<div class="status">Status
-	       						<a href="#">
-	         						<div class="status-icon green"></div>Online
-	         					</a>
-	         				</div>
-	        			</div>
-	      			</div>
-	      			<!-- END MINI-PROFILE -->
+			<div class="scroll-wrapper page-sidebar-wrapper" style="position: relative; overflow: hidden; width: 100%; height: 595.2px;">
+				<div class="page-sidebar-wrapper" id="main-menu-wrapper" style="overflow: hidden; width: 100%; height: 595.2px;">
+				
+					<div class="logo-wrapper-mini">
+						<a href="/"> 
+							<img class="logo" data-src="resources/images/ipocket-logo.png" data-src-retina="resources/images/ipocket-logo.png" width="106" height="21" />
+						</a>
+						<div class="logo-title" ng-class="{open:hover}">
+							<span class="semi-bold">iPocket</span>
+						</div>
+					</div>
 	
 					<!-- BEGIN SIDEBAR MENU -->
 					<p class="menu-title">
@@ -210,11 +114,9 @@
 					</p>
 					<ul>
 						<li class="start" ng-class="{active: appContext.modules[module.id]}" ng-repeat="module in modules | hasPermission:currentUser">
-							<a id="menu-{{module.id}} " href="{{module.originalPath != undefined ? '#' + module.originalPath : 'javascript:;'}}"  ng-click="handleMenuClick($event, module.id)"> 
+							<a  id="menu-{{module.id}} " href="{{module.originalPath != undefined ? '#' + module.originalPath : 'javascript:;'}}"  ng-click="handleMenuClick($event, module.id)"> 
 								<i class="{{module.icon}}" ></i> 
-								<span class="title">{{module.name}}</span> 
-								<span ng-if="appContext.modules[module.id]" ng-class="{selected: appContext.modules[module.id]}">&#10151;</span> 
-								<!-- <span class="badge badge-important pull-right">5</span> -->
+								<span ng-class="{open:hover}" class="title">{{module.name}}</span> 
 							</a>
 							<ul class="sub-menu" ng-show="module.items != undefined" style="display: none;">
 								<li ng-repeat="item in module.items | filter:{ visible:true }">
@@ -243,7 +145,7 @@
 		</div>
 	</div>
 	<!-- END CONTAINER -->
-<!-- 	<script src="resources/legacy/pace/pace.min.js" type="text/javascript"></script> -->
+	<script type="text/javascript" src="resources/lib/string-mask/src/string-mask.js"></script>
 	<script type="text/javascript" src="resources/lib/requirejs/require.js" data-main="system/main.js"></script>	
 </body>
 </html>

@@ -13,7 +13,7 @@
         "angular-dragdrop": "latest",
         "angular-bootstrap": "latest",
         "angular-ui-router": "#master",
-        "angular-cookies": "1.2.16",
+        "angular-cookies": "1.4",
         
 		"angular-translate": "2.0.0",
 		"angular-translate-storage-cookie": "2.0.0",
@@ -38,6 +38,11 @@
         
         "angular-loading-bar":"0.7.1",
         "angular-spinner": "0.6.1",
-        "angular-loading-spinner":"latest"
+        "angular-loading-spinner":"latest",
+        
+        "angular-animate":"latest",
+        "angular-input-masks": "1.5.1",
+        
+        "angular-ui-calendar":"1.0.0"
     }
 }

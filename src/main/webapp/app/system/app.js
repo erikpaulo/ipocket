@@ -12,7 +12,7 @@ function(angular, layout, config, dependencyResolverFor, errorHandler, menuHandl
     
 	// TODO [marcus] app.directives foi iniciada no arquivo 'system/directives/index'. Alterar esse index para retornar o módulo e pegar o nome aqui para evitar hardcoded
 	
-    var app = angular.module('app', ['ngRoute', 'ui.grid', 'angularFileUpload', 'ui.grid.cellNav', 'ui.grid.autoResize', 'ui.grid.pinning', 'ui.grid.edit', 'ui.grid.selection', 'angular-loading-bar', 'angularSpinner', 'ngLoadingSpinner', 'highcharts-ng', 'ngResource', 'ngDragDrop', 'ui.select2', 'ui.bootstrap', 'ngCookies', 'tmh.dynamicLocale', 'pascalprecht.translate',  errorHandler.name, menuHandler.name, authHandler.name, 'app.directives', 'app.filters' ]);
+    var app = angular.module('app', ['ngRoute', 'ngAnimate', 'ui.grid', 'angularFileUpload', 'angular-loading-bar', 'angularSpinner', 'ngLoadingSpinner', 'highcharts-ng', 'ui.calendar', 'ngResource', 'ngDragDrop', 'ui.select2', 'ui.bootstrap', 'ngCookies', 'tmh.dynamicLocale', 'pascalprecht.translate',  errorHandler.name, menuHandler.name, authHandler.name, 'app.directives', 'app.filters' ]);
 
     app.config(
     [
@@ -118,6 +118,13 @@ function(angular, layout, config, dependencyResolverFor, errorHandler, menuHandl
         	$rootScope.ajaxCompleted = true;
 	    });
     
+//        $rootScope.format = function (value, type){
+//        	var formats = [];
+//        	formats['currency'] = new StringMask('R$ #.##0,00', {reverse: true}); 
+//        	
+//			var formatter = formats[type];
+//			return formatter.apply(value.toString());
+//        }
     });
 
    return app;

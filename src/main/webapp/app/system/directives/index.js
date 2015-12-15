@@ -6,5 +6,5 @@ define([
     './mg-message-box',
     './mg-validation-alert',
     './mg-active-language',
-    './ng-mask'
+    './format'
 ]);

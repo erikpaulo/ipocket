@@ -49,12 +49,7 @@
 .align-currency {
 	text-align: right;
 }
-.positive {
-	color: blue;
-}
-.negative {
-	color: red;
-}
+
 
 .align-date {
 	text-align: center;

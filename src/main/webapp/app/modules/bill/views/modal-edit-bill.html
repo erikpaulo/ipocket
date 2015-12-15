@@ -31,7 +31,7 @@
 									<div class="controls">
 										<select ui-select2	ng-model="bill.category.id" name="bill.category.id" data-placeholder="Selecione" class="select2 form-control" ng-required="true" ng-class="" mg-validation-alert>
 											<option value=""></option>
-											<option	ng-repeat="category in categories"	value="{{category.id}}"	ng-selected="{{category.id == bill.category.id}}">{{category.name +" : "+ category.subCategoryName}}</option>
+											<option	ng-repeat="category in categories"	value="{{category.id}}"	ng-selected="{{category.id == bill.category.id}}">{{category.fullName}}</option>
 										</select>
 									</div>
 								</div>
@@ -62,23 +62,25 @@
 						
 						<div class="col-md-7">
 							<div class="row" ng-show="bill.billEntries.length>0">
-								<div class="col-md-11 col-md-offset-1">
+								<div class="col-md-12">
 									<br>
-									<div style="height:215px; overflow:auto;">
-										<table class="table table-bordered">
-											<thead>
-												<tr>
-													<th>Data</th>
-													<th>Valor</th>
-												</tr>
-											</thead>
-											<tbody>
-												<tr ng-repeat="entry in bill.billEntries">
-													<td><input type="date" ng-model="entry.date"/> </td>
-													<td><input type="number" ng-model="entry.amount" ng-class="{positive: entry.amount>0, negative: entry.amount<0}"/></td>
-												</tr>
-											</tbody>
-										</table>
+									<div style="height:215px; overflow-y:auto;">
+										<div class="table table-bordered">
+											<div class="table-header">
+												<div class="table-row">
+													<div class="table-cell text-center">Data</div>
+													<div class="table-cell text-right">Valor</div>
+													<div class="table-cell text-right"> </div>
+												</div>
+											</div>
+											<div class="table-body">
+												<div class="table-row" ng-repeat="entry in bill.billEntries">
+													<div class="table-cell text-center"><input type="date" ng-model="entry.date" style="width:106px"/></div>
+													<div class="table-cell text-right zebra"><input type="text" ng-model="entry.amount" style="width:120px" ng-class="{positive: entry.amount>0, negative: entry.amount<0}" format="currency"/></div>
+													<div class="table-cell text-right"><a href style="position:relative;top:5px;"><i class="glyphicon glyphicon-remove-circle"></i></a></div>
+												</div>
+											</div>
+										</div>
 									</div>
 								</div>
 							</div>
@@ -88,10 +90,8 @@
 					<!-- Linha 04 -->
 					<div class="form-actions">
 						<div class="pull-right">
-							<button type="button" class="btn btn-white btn-cons"
-								ng-click="cancel()">Cancelar</button>
-							<button type="submit" class="btn btn-success btn-cons"
-								ng-click="ok(form_edit_bill)">
+							<button type="button" class="btn btn-white btn-cons" ng-click="cancel()">Cancelar</button>
+							<button type="submit" class="btn btn-success btn-cons" ng-click="ok(form_edit_bill)">
 								<i class="icon-ok"></i> Salvar
 							</button>
 						</div>

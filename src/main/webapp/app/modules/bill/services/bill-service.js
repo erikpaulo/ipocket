@@ -1,6 +1,6 @@
 define(['./module', '../../shared/services/constants-service'], function (app) {
 	
-	app.service('BillService', ['ConstantsService', function(Constants) {
+	app.service('BillService', ['$q', 'ConstantsService', function($q, Constants) {
 		return{
 
 			newInstance: function(accounts, bills){

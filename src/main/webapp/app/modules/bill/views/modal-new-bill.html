@@ -57,7 +57,7 @@
 							<div class="controls">
 								<select ui-select2	ng-model="bill.category.id" name="bill.category.id" data-placeholder="Selecione" class="select2 form-control" ng-required="true" ng-class="" mg-validation-alert>
 									<option value=""></option>
-									<option	ng-repeat="category in categories"	value="{{category.id}}"	ng-selected="{{category.id == bill.category.id}}">{{category.name +" : "+ category.subCategoryName}}</option>
+									<option	ng-repeat="category in categories"	value="{{category.id}}"	ng-selected="{{category.id == bill.category.id}}">{{category.fullName}}</option>
 								</select>
 							</div>
 						</div>
@@ -71,7 +71,7 @@
 				  		<div class="col-md-3" ng-show="bill.calcType!='A'">
 							<label class="form-label">Valor</label>
 							<div class="controls">
-								<input ng-disabled="bill.calcType=='A'" type="number" name="bill.amount" ng-model="bill.amount" class="form-control" ng-required="bill.calcType == 'F'" ng-class=""	mg-validation-alert>
+								<input ng-disabled="bill.calcType=='A'" type="text" name="bill.amount" ng-model="bill.amount" class="form-control" ng-required="bill.calcType == 'F'" format="currency">
 							</div>
 						</div>
 						<div class="col-md-3" ng-show="bill.calcType=='A'">

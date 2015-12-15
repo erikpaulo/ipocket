@@ -90,7 +90,11 @@ define(['angular-resource', 'jquery'], function (resource, $) {
         $scope.changeLanguage = function (languageKey) {
             $translate.use(languageKey);
         };
-		
+        
+        $scope.doHover = function (state){
+        	$scope.hover = state;
+        }
+        
 		$scope.handleMenuClick = function($event, id) {
 			$scope.clickMenu($event, $('#menu-'+id));
 		};

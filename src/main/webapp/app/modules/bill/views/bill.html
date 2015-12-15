@@ -4,55 +4,48 @@
 <section ng-controller="BillController">
 <div class="lock-screen" ng-hide="bills" ng-show="!bills"></div>
 	<div class="content" ng-if="bills">
-		<div class="row">
-			<div class="col-md-12">
-				<div class="grid simple ">
-					<div class="grid-title">
-						<h3>
-							Pagamentos <span class="semi-bold">Programados</span>
-						</h3>
-						<div class="tools">
-							<span class="dropdown" dropdown on-toggle="toggled(open)">
-							<span class="glyphicon glyphicon-option-vertical" aria-hidden="true" class="dropdown-toggle" dropdown-toggle></span>
-							  <ul class="dropdown-menu dropdown-menu-right">
-							    <li>
-							      <a href ng-click="new()"><i class="glyphicon glyphicon-plus-sign"></i>Novo</a>
-							    </li>
-							    <li>
-							      <a href ng-click="edit()"><i class="glyphicon glyphicon-edit"></i>Editar</a>
-							    </li>
-							    <li>
-							      <a href ng-click="delete()"><i class="glyphicon glyphicon-remove-circle"></i>Excluir</a>
-							    </li>
-							    <li>
-							      <a href ng-click="register()"><i class="glyphicon glyphicon-save"></i>Registrar em Conta</a>
-							    </li>
-							    <li>
-							      <a href ng-click="skip()"><i class="glyphicon glyphicon-new-window"></i>Pular Pagamento</a>
-							    </li>
-							  </ul>
-							</span>
-						</div>
+		<div class="grid simple ">
+			<div class="grid-title">
+				<div class="trail">
+					<h3>
+						Lançamentos <span class="semi-bold">Programados</span>
+					</h3>
+				</div>
+<!-- 				<div class="tools"> -->
+<!-- 					<span class="menu" dropdown on-toggle="toggled(open)"> -->
+<!-- 						<span class="glyphicon glyphicon-option-vertical" aria-hidden="true" class="dropdown-toggle" dropdown-toggle></span> -->
+<!-- 						  <ul class="menu-itens"> -->
+<!-- 						    <li> -->
+<!-- 						      <a href ng-click="new()"><i class="glyphicon glyphicon-plus-sign"></i>Novo</a> -->
+<!-- 						    </li> -->
+<!-- 						    <li> -->
+<!-- 						      <a href ng-click="edit()"><i class="glyphicon glyphicon-edit"></i>Editar</a> -->
+<!-- 						    </li> -->
+<!-- 						    <li> -->
+<!-- 						      <a href ng-click="delete()"><i class="glyphicon glyphicon-remove-circle"></i>Excluir</a> -->
+<!-- 						    </li> -->
+<!-- 						    <li> -->
+<!-- 						      <a href ng-click="register()"><i class="glyphicon glyphicon-save"></i>Registrar em Conta</a> -->
+<!-- 						    </li> -->
+<!-- 						    <li> -->
+<!-- 						      <a href ng-click="skip()"><i class="glyphicon glyphicon-new-window"></i>Pular Pagamento</a> -->
+<!-- 						    </li> -->
+<!-- 						  </ul> -->
+<!-- 					</span> -->
+<!-- 				</div> -->
+			</div>
+			<div class="grid-body">
+				<div class="row">
+					<div class="col-md-8">
+						<div ui-calendar="uiConfig.calendar" class="span8 calendar" ng-model="eventSources" calendar="calendar"></div>
 					</div>
-					<div class="grid-body">
-						<div class="row">
-							<div class="col-md-12" id="line-chart">
-								<accordion close-others="oneAtATime">
-									<accordion-group is-open="status.open">
-										<accordion-heading>
-										Fluxo de Caixa <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}"></i>
-										</accordion-heading>
-										
-<!-- 										<div class="panel-body"> -->
-											<highchart id="chart1" config="chartConfig"></highchart>
-<!-- 										</div> -->
-									</accordion-group>
-								</accordion>
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-md-12">
-								<div ui-grid="gridOptions" ui-grid-selection ui-grid-cellNav class="grid-no-filter"></div>
+					<div class="col-md-4" id="line-chart">
+						<div class="panel panel-chart ng-scope">
+							<div class="panel-heading">Fluxo de Caixa</div>
+							<div class="panel-body">
+								<div class="chart-container">
+									<highchart id="chart1" config="chartConfig"></highchart>
+								</div>
 							</div>
 						</div>
 					</div>
