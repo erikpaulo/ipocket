@@ -41,7 +41,8 @@ import com.softb.system.web.filter.gzip.GZipServletFilter;
 		"com.softb.ipocket.configuration.web",
 		"com.softb.ipocket.bill.web",
 		"com.softb.ipocket.budget.web",
-		"com.softb.system.security.service", 
+		"com.softb.system.security.service",
+		"com.softb.system.security.provider",
 		"com.softb.system.security.web"
 })
 public class WebMvcConfig extends WebMvcConfigurerAdapter implements ServletContextInitializer {

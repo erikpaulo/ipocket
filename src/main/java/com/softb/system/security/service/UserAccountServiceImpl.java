@@ -1,11 +1,13 @@
 package com.softb.system.security.service;
 
 import javax.annotation.Resource;
+import javax.inject.Inject;
 
 import org.apache.commons.lang.math.NumberUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -26,9 +28,13 @@ import com.softb.system.security.repository.UserAccountRepository;
  */
 @Service
 public class UserAccountServiceImpl implements UserAccountService {
+    private static final String APP_SECURITY_KEY = "application.social.google.clientId";
     private static final Logger logger = LoggerFactory.getLogger(UserAccountServiceImpl.class);
 
     public static final String USER_ID_PREFIX = "user";
+
+    @Inject
+    private Environment environment;
 
     @Autowired
     private UserAccountRepository accountRepository;
@@ -85,6 +91,16 @@ public class UserAccountServiceImpl implements UserAccountService {
     }
 
     @Override
+    public UserAccount loadUserByGoogleId(String googleId) throws UsernameNotFoundException {
+
+        UserAccount account = accountRepository.findByGoogleId(googleId);
+        if (account == null) {
+            throw new EntityNotFoundException("Cannot find user by userId " + googleId);
+        }
+        return account;
+    }
+
+    @Override
     public UserAccount loadUserByUsername(String username) throws UsernameNotFoundException {
     	UserAccount account = accountRepository.findByEmail(username);
         if (account == null) {
@@ -95,9 +111,9 @@ public class UserAccountServiceImpl implements UserAccountService {
 
     @Override
     public UserAccount getCurrentUser() {
-    	Integer userId = getUserId();
-    	if (userId != null ) {
-        	return accountRepository.findOne(userId);
+    	String email = getUserName();
+    	if (email != null ) {
+        	return accountRepository.findByEmail ( email );
     	} else {
     		return null;
     	}
@@ -132,5 +148,9 @@ public class UserAccountServiceImpl implements UserAccountService {
     private String getUserName() {
     	Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     	return (authentication != null) ? authentication.getName() : null;
+    }
+
+    public String getClientId(){
+        return environment.getProperty(APP_SECURITY_KEY);
     }
 }

@@ -21,6 +21,7 @@ import lombok.ToString;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import javax.persistence.Table;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -40,7 +41,8 @@ import com.softb.system.repository.BaseEntity;
 @ToString
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
-@Entity(name = "USER_ACCOUNT")
+@Entity
+@Table(name = "USER_ACCOUNT")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class UserAccount extends BaseEntity<Integer> implements SocialUserDetails {
     
@@ -71,6 +73,10 @@ public class UserAccount extends BaseEntity<Integer> implements SocialUserDetail
 	@Column
 	@NotNull
     private boolean trustedAccount;
+
+    @Column
+    @NotEmpty
+    private String googleId;
     
 	@ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name="user_role",joinColumns={@JoinColumn(name="user_id")})
@@ -116,7 +122,7 @@ public class UserAccount extends BaseEntity<Integer> implements SocialUserDetail
 
     @Override
     public String getUsername() {
-        return getUserId();
+        return this.email;
     }
     
 	@Override

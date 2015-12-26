@@ -4,11 +4,11 @@ define(['app'], function (module) {
 	 * 
 	 */
 	
-	module.factory('LogsService', ['$resource',
-    function ($resource) {
-        return $resource('api/admin/logs', {}, {
-            'findAll': { method: 'GET', isArray: true},
-            'changeLevel':  { method: 'PUT'}
-        });
-    }]);
+//	module.factory('LogsService', ['$resource',
+//    function ($resource) {
+//        return $resource('api/admin/logs', {}, {
+//            'findAll': { method: 'GET', isArray: true},
+//            'changeLevel':  { method: 'PUT'}
+//        });
+//    }]);
 });		

@@ -50,6 +50,9 @@ public interface UserAccountService extends SocialUserDetailsService, UserDetail
      * return UserAccount.
      */
     UserAccount loadUserByUsername(String username) throws UsernameNotFoundException;
+
+
+    UserAccount loadUserByGoogleId(String googleId) throws UsernameNotFoundException;
     
     /**
      * Recupara o usuário corrent logado. Recupera os detalhes do UserAccount object do database. 
@@ -57,5 +60,11 @@ public interface UserAccountService extends SocialUserDetailsService, UserDetail
      * @return UserAccount. Null se o usuário não estiver logado.
      */
     UserAccount getCurrentUser();
+
+    /**
+     * Recupera o clientId da aplicação.
+     * @return
+     */
+    String getClientId();
 
 }

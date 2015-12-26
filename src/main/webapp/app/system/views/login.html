@@ -1,77 +1,59 @@
-<!-- BEGIN PAGE LEVEL STYLES -->
-<link href="resources/lib/hint.css/hint.min.css" rel="stylesheet" type="text/css" />
-<link href="resources/styles/forms.css" rel="stylesheet" type="text/css" />
-<!-- END PAGE LEVEL STYLESE -->
+<link rel="stylesheet" href="resources/styles/login.css">
 
-<section ng-controller="AuthController">
-	<link href="resources/styles/login.css" rel="stylesheet" type="text/css" />
+<div id="AuthController" ng-controller="AuthController" ng-cloak class="ng-cloak login mdl-layout mdl-js-layout mdl-layout--fixed-header">
+	<header class="mdl-layout__header mdl-color--indigo-900">
+		<div class="mdl-layout__header-row">
+			<img src="./resources/images/1cent-logo-1.png" aria-label="Smiley face" height="42" width="42">
+			<span class="mdl-layout-title"><h3>1Coin</h3></span>
+			<div class="mdl-layout-spacer"></div>
+			<nav class="mdl-navigation mdl-layout--large-screen-only">
+				<a class="mdl-navigation__link" href="">Registrar</a>
+			</nav>
+		</div>
+	</header>
 
-	<div class="content">
-		<!-- Display messagens from error-handler.js -->
-		<div message-box handler="messageHandler" enable-remove="true" style="margin-bottom: 10px"></div>
-
-<!-- 		<div class="content"> -->
-			<div class="row">
-				<div class="row-body">
-					<div class="col-md-12">
-						<div class="grid-body">
-	<!-- 					<div class="row login-container column-seperation"> -->
-							<div class="col-md-5">
-	<!-- 							<div class="row"> -->
-									<h2>Login</h2>
-									<p>
-										Você pode utilizar o Google ou o seu email para se conectar no sistema.
-									</p>
-									<br>
-									<button class="btn btn-block btn-gplus" type="button" ng-click="go('auth/facebook')">
-										<div class="pull-left">
-											<i class="fa fa-google-plus"></i>
-										</div>
-										<span class="bold">Entrar com Google</span>
-									</button>
-									<br><br>
-	<!-- 							</div> -->
+	<div layout="row" class="content">
+		<div flex="15" flex-xs="10" flex-sm="25">
+		</div>
+		<div flex="50" class="front-welcome">
+			<h2><strong>Bem Vindo ao 1Coin</strong></h2>
+            <h4>Toda riqueza começa na economia da primeira moeda.</h4>
+		</div>
+		<div flex="25" flex-xs="80" flex-sm="50">
+			<md-card class="mdl-color--white md-card-border-radius-6">
+                <form name="loginForm" ng-submit="appAuthenticate()" novalidate style="margin-top:22px">
+					<md-card-content>
+						<md-input-container class="md-block">
+							<label>E-mail</label>
+							<input required type="email" name="email" ng-model="user.email"
+								   minlength="10" maxlength="100" ng-pattern="/^.+@.+\..+$/" />
+							<div ng-messages="loginForm.email.$error" role="alert">
+								<div ng-message-exp="['required', 'minlength', 'maxlength', 'pattern']">
+									Entre com um e-mail válido.
+								</div>
 							</div>
-							<div class="col-md-5 ">
-	<!-- 							<div class="grid"> -->
-									<form name="loginForm" ng-submit="login()" novalidate style="margin-top:22px">
-										<div class="row">
-											<div class="form-group col-md-12">
-												<label class="form-label">Email*</label>
-												<div class="controls">
-													<input id="email" name="email" ng-model="email" type="email" class="form-control" ng-class mg-validation-alert mg-validation-message="Email informado não é válido" required/>
-												</div>
-											</div>
-										</div>
-										
-										<div class="row">
-											<div class="form-group col-md-12">
-												<label class="form-label">Senha*</label>
-												<div class="controls">
-													<input id="password" name="password" ng-model="password" type="password" class="form-control" ng-class  mg-validation-alert required mg-validation-message="Campo senha é obrigatório"/>
-												</div>
-											</div>
-										</div>
-										<div class="row">
-											<div class="control-group  col-md-12">
-												<div class="checkbox checkbox check-success">
-													<input type="checkbox" id="checkbox1" ng-model="rememberMe"> <label for="checkbox1">Lembrar meu login </label>
-												</div>
-											</div>
-										</div>
-										<div class="row">
-											<div class="col-md-12">
-												<button class="btn btn-primary btn-cons pull-right" type="submit" >Login</button>
-											</div>
-										</div>
-									</form>
-	<!-- 							</div> -->
-							</div>
-	<!-- 					</div> -->
-						</div>
-					</div>
-				</div>
-			</div>
-<!-- 		</div> -->
+						</md-input-container>
+						<md-input-container class="md-block">
+							<label>Senha</label>
+							<input required type="password" name="password" ng-model="user.password" />
+						</md-input-container>
+                        <ng-messages for="user.$error" role="alert" class="error">
+                            <ng-message when="login">Usuário/Senha Inválidos.</ng-message>
+                        </ng-messages>
+						<md-card-actions layout="column" layout-align="end none">
+
+							<md-button class="md-raised md-primary" type="submit">Login</md-button>
+
+							<div id="google-signin" class="google-signin"></div>
+
+							<md-checkbox ng-model="user.rememberMe" name="remember-me" class="indigo">
+								Lembrar meu usuário
+							</md-checkbox>
+						</md-card-actions>
+					</md-card-content>
+				</form>
+            </md-card>
+		</div>
+		<div flex></div>
 	</div>
-</section>
+</div>

@@ -1,6 +1,0 @@
-ID;NAME;SUBCATEGORY_NAME;FIXED_COST;KIND;USER_ID
-1;"Custo de Casa";"Condomínio";'S';"D";10
-2;"Custo de Casa";"NET";'S';"D";10
-3;"Automóvel";"Combustível";'N';"D";10
-4;"Entrada";"Salário";'N';"C";10
-5;"Entrada";"Reembolso";'N';"C";10

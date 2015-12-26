@@ -1,7 +1,7 @@
 /* Menu Module */
 define(['angular-resource', 'jquery'], function (resource, $) {
 
-    var MenuModule = angular.module('MenuModule', ['ngResource', 'tmh.dynamicLocale', 'pascalprecht.translate']);
+    var MenuModule = angular.module('MenuModule', ['ngResource']);
     
 	/*
 	 * AppContext que pode ser injetado nos controlladores para recuperar informações sobre:
@@ -12,8 +12,9 @@ define(['angular-resource', 'jquery'], function (resource, $) {
     MenuModule.factory('AppContext', 
 	function() { 
 		
-		var context = {};
-		
+        var context = {};
+/*
+
 		context.modules = {dashboard:false, rebanho:false};
 		
 		var itemAnterior = '';
@@ -23,7 +24,8 @@ define(['angular-resource', 'jquery'], function (resource, $) {
 			context.modules[pr] = true; 
 	        itemAnterior = pr;
 	    };
-	    
+
+*/
 	    return context;
 	});
     
@@ -33,7 +35,7 @@ define(['angular-resource', 'jquery'], function (resource, $) {
 	 */
 	MenuModule.run(function ($rootScope, AppContext) {
 		$rootScope.modules = [];
-		
+
         $.ajax({dataType: "json", url: 'modules/routes.json', async: false}).done( function(json) {
       		$rootScope.modules = json;
       	});
@@ -45,25 +47,31 @@ define(['angular-resource', 'jquery'], function (resource, $) {
 	/**
 	 * Resource para com.softb.system.security.webAccountRestService
 	 */
-	MenuModule.factory('User', 
+	MenuModule.factory('User',
 	function($resource) {
 	    return $resource('public/user/current');
 	});
     
-    MenuModule.controller('IndexController', [ '$scope', '$window', '$location', '$rootScope', 'User', '$translate', 
-     function($scope, $window, $location, $rootScope, User, $translate) {
+    MenuModule.controller('IndexController', [ '$scope', '$window', '$location', '$rootScope', 'User', 'UserService',
+     function($scope, $window, $location, $rootScope, User, UserService) {
     		
-    	console.log('==>AdminMenuController');
+/*    	$scope.adminMenu = {};
+    	$scope.adminMenu.items = [];*/
+    	$scope.currentUser = null;
 
-    	$scope.adminMenu = {};
-    	$scope.adminMenu.items = [];
-                                           		
-    	$scope.currentUser = User.get( function(user) {
+//        $scope.currentUser = UserService;
+        UserService.currentUser().then(function(user){
+            $scope.currentUser = user;
+            if (!user.authenticated){
+                $location.path('login');
+            }
+        });
+/*    	$scope.currentUser = User.get( function(user) {
     		$rootScope.authToken = user.token
     		
-			console.log('==>AdminMenuCtrl: get Current User, user is '+user.displayName);
 			if (user.authenticated) {
 				console.log('  user authenticated, is '+(user.admin? '' : 'NOT ')+ 'admin');
+*//*
 				$scope.adminMenu.iconClass = 'icon-user';
 				$scope.adminMenu.title = ' ' + user.displayName;
 				var index = 0;
@@ -71,7 +79,7 @@ define(['angular-resource', 'jquery'], function (resource, $) {
 				//Account menu
 				$scope.adminMenu.items[index++] = {menu : true, url : '#/account/', title : ' Profile', iconClass : "fa fa-wrench"};
 				$scope.adminMenu.items[index++] = {menu : true, url : '#/tasks', title : ' Tarefas', iconClass : "fa fa-tasks"};
-							
+
 				if (user.admin) {
 					$scope.adminMenu.items[index++] = {menu : false, dividerClass : 'divider'};
 					$scope.adminMenu.items[index++] = {menu : true, url : '#/admin/', title : ' Admin', iconClass : "fa fa-cogs"};
@@ -80,25 +88,22 @@ define(['angular-resource', 'jquery'], function (resource, $) {
 					$scope.adminMenu.items[index++] = {menu : true, url : '#/docs-api/', title : ' API', iconClass : "fa fa-book"};
 					$scope.adminMenu.items[index++] = {menu : false, dividerClass : 'divider'};
 				}
-				
+*//*
+
 			} else {
 				console.log('  user is not authenticated, add social signin menu.');
 				$location.path('login');
 			}
-		});
+		});*/
     	
-        $scope.changeLanguage = function (languageKey) {
-            $translate.use(languageKey);
-        };
-        
-        $scope.doHover = function (state){
+/*        $scope.doHover = function (state){
         	$scope.hover = state;
         }
         
 		$scope.handleMenuClick = function($event, id) {
 			$scope.clickMenu($event, $('#menu-'+id));
 		};
-		
+
 		$scope.handleSubMenuClick = function($event, id) {
 			$scope.clickMenu($event, $('#submenu-'+id));
 		};
@@ -106,12 +111,12 @@ define(['angular-resource', 'jquery'], function (resource, $) {
 		$scope.clickMenu = function (event, e) {
 			var grupoMenu = e;
 			var isSubMenu = false;
-			
+
 		    if (grupoMenu.hasClass('item-menu') == true) {
 		    	grupoMenu = grupoMenu.parent().parent().parent().children();
 		    	isSubMenu = true;
 		    }
-		    
+
 		    // caso não tenha submenu, pode retornar
 		    if (grupoMenu.next().children().length == 0) {
 		    	handleCloseSideMenu();
@@ -146,7 +151,7 @@ define(['angular-resource', 'jquery'], function (resource, $) {
 	        	event.preventDefault();
 	        }
 	    };
-	    
+
 	    function handleCloseSideMenu(){
 			// Esconde o menú após o click quando resolução menor que 480px.
 			if ($window.innerWidth<480){
@@ -169,10 +174,11 @@ define(['angular-resource', 'jquery'], function (resource, $) {
 	            content.css("min-height", content.attr("data-height"));
 	        }
 	    };
-	    
+*/
+
 	} ]);
     
-	// TODO [marcus]: Esse filtro é utilizado para esconder o menu de modulos se o usuário não estiver authenticated. Solução precisa
+/*	// TODO [marcus]: Esse filtro é utilizado para esconder o menu de modulos se o usuário não estiver authenticated. Solução precisa
 	// ser incrementada quando tiver controle de acesso no nível de módulo
 	MenuModule.filter('hasPermission', function(){
 
@@ -190,7 +196,7 @@ define(['angular-resource', 'jquery'], function (resource, $) {
 			
 			return arr;
 		};
-	});
+	});*/
 	
     return MenuModule;
 });

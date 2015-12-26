@@ -10,4 +10,6 @@ import lombok.NoArgsConstructor;
 public class AuthenticationResource {
 	private String email;
 	private String password;
+	private String googleTokenId;
+	private Boolean rememberMe;
 }

@@ -40,7 +40,7 @@ cache:
 application:
     social:
         google:
-            clientId: 306590615940-9g1g7915avoaga23h5lpltb33p5nbhir.apps.googleusercontent.com
+            clientId: 316087946070-9qge3fgub11tvvh1vl87jt6ell13l12f.apps.googleusercontent.com
             clientSecret: otHjsiw9GrRL4uRtwSnsG2_A
     security: 
         secureChannel: http

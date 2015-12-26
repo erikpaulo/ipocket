@@ -1,23 +1,28 @@
 package com.softb.system.security.web;
 
+import com.softb.system.security.provider.GoogleAuthenticationToken;
+import com.softb.system.security.service.AppPersistentTokenBasedRememberMeServices;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.core.env.Environment;
+import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import com.softb.system.security.model.UserAccount;
 import com.softb.system.security.service.UserAccountService;
 import com.softb.system.security.web.resource.AuthenticationResource;
-import com.softb.system.security.web.resource.RegisterResource;
 import com.softb.system.security.web.resource.UserResource;
+
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * RESTful Service para o usuário logado no Spring Security.
@@ -40,64 +45,53 @@ import com.softb.system.security.web.resource.UserResource;
 public class SignInController {
 	private static final Logger logger = LoggerFactory.getLogger(SignInController.class);
 
+    private static final String APP_SECURITY_KEY = "application.security.key";
+
+    @Inject
+    private Environment environment;
+
 	@Autowired
 	private UserAccountService userAccountService;
 
 	@Autowired
 	private AuthenticationManager authManager;
 
+    @Autowired
+    ApplicationContext context;
+
+
 	/**
 	 * Autentica o usuário
 	 * 
-	 * @param username
-	 *            The name of the user.
-	 * @param password
-	 *            The password of the user.
 	 * @return A transfer containing the authentication token.
 	 */
 	@RequestMapping(value = "authenticate", method = RequestMethod.POST)
 	@ResponseBody
-//	@Timed
-	public UserResource authenticate(@RequestBody AuthenticationResource user) {
-		logger.debug("==>REST: /rest/user/authenticate");
-		
-		Authentication authentication = this.authManager.authenticate(new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword()));
+	public UserResource authenticate(@RequestBody AuthenticationResource user, HttpServletRequest request, HttpServletResponse response) {
+        AbstractAuthenticationToken token;
+
+		// Verifica se realizando login pelo google.
+		if (user.getGoogleTokenId() != null && !user.getGoogleTokenId().isEmpty()){
+            token = new GoogleAuthenticationToken (user.getGoogleTokenId());
+		} else {
+            token = new UsernamePasswordAuthenticationToken (user.getEmail (), user.getPassword ());
+		}
+        Authentication	authentication = this.authManager.authenticate(token);
+        if (authentication.isAuthenticated () && user.getRememberMe ()){
+            ((AppPersistentTokenBasedRememberMeServices)context.getBean ( "rememberMeServices" )).onLoginSuccess(request, response, authentication);
+        }
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 
 		return getCurrentUser();
 	}
-	
-	@RequestMapping(value = "register", method = RequestMethod.POST)
-	@ResponseBody
-//	@Timed
-	public UserResource register(@RequestBody RegisterResource user) {
-		logger.debug("==>REST: /public/user/register");
-		
-		UserAccount account = new UserAccount();
-		
-		account.setEmail(user.getEmail());
-		account.setDisplayName(user.getDisplayName());
-		account.setPassword(user.getPassword());
-		account.setImageUrl("resources/images/avatar.jpg"); //defult image profile
-		
-		account = userAccountService.createUserAccount(account);
-		
-		// autentica o usuário imediatamente após o registro
-		return authenticate(new AuthenticationResource(account.getEmail(), account.getPassword()));
-	}
-	
+
 	@RequestMapping(value = "current", method = RequestMethod.GET)
 	@ResponseBody
-//	@Timed
 	public UserResource getCurrentUser() {
-		logger.debug("==>REST: /public/user/current");
-		
 		UserAccount account = userAccountService.getCurrentUser();
 		if (account != null) {
-			logger.info("      user authenticated, name is " + account.getDisplayName());
 			return new UserResource(account);
 		}
-		logger.info("      user not logged in!");
 		return new UserResource();
 	} 
 }
