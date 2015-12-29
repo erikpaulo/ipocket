@@ -1,12 +1,6 @@
-define(['./module'], function (app) {
-
-	app.controller('DashboardController', ['$scope', '$http',
-	function($scope, $http) {
-	 	
-		$scope.appContext.changeCurrentContext($scope.modules[0].id);
-		
-		$scope.items = [];
-	
+define([ 'app' ], function(app) {
+	app.controller('DashboardViewController', [ '$scope',
+	function($scope) {
+	    console.log('dashboard')
 	}]);
-
 });

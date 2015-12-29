@@ -111,12 +111,24 @@ public class UserAccountServiceImpl implements UserAccountService {
 
     @Override
     public UserAccount getCurrentUser() {
-    	String email = getUserName();
-    	if (email != null ) {
-        	return accountRepository.findByEmail ( email );
-    	} else {
-    		return null;
-    	}
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication.isAuthenticated ()){
+
+            UserAccount user = null;
+            try{
+                user = (UserAccount) authentication.getPrincipal ();
+            } catch (ClassCastException e){
+                logger.debug("Authentication principal does not have a UserAccount");
+            }
+            return user;
+        } else {
+            String email = getUserName();
+            if (email != null ) {
+                return accountRepository.findByEmail ( email );
+            } else {
+                return null;
+            }
+        }
     }
     
     private void validate(String objectName, Object validated) throws FormValidationError {

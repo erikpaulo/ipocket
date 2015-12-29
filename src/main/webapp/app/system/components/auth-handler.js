@@ -19,56 +19,95 @@ function (angular, resource, cookie, errorHandler) {
 		    			var authToken = $rootScope.authToken;
 		    			config.headers['X-Auth-Token'] = authToken;
 		    			//config.url = config.url + "?token=" + authToken;
-		        		}
-		        		return config || $q.when(config);
 		        	}
-		        };
-		    }
-		);
+		        	return config || $q.when(config);
+		        }
+		    };
+		});
 
 	}]);
 
-	AuthHandler.factory('AuthService', function($resource) {
+	AuthHandler.factory('UserService', function($resource) {
 		return $resource('public/user/:action', {},
 				{
 					authenticate: { method: 'POST', params: {'action' : 'authenticate'} },
 					register: { method: 'POST', params: {'action' : 'register'} },
-					current: { method: 'GET', params: {'action' : 'current'} }
+					current: { method: 'GET', params: {'action' : 'current'} },
+					logout: { method: 'GET', params: {'action' : 'logout'} }
 				}
 			);
 	});
 
-	AuthHandler.factory('UserService', ['$rootScope', '$q', '$cookieStore', 'AuthService',
-        function($rootScope, $q, $cookieStore, AuthService) {
+	AuthHandler.factory('AuthService', ['$rootScope', '$q', '$location', '$cookieStore', 'UserService',
+        function($rootScope, $q, $location, $cookieStore, UserService) {
+
+            function authenticate(service){
+                var deferred = $q.defer();
+
+                service.$authenticate(function(result) {
+                    window.location = $location.absUrl().substr(0, $location.absUrl().lastIndexOf("#"));
+                    deferred.resolve(result);
+                }, function (err){
+                    //@TODO: Adicionar mensagem de erro após serviço pronto.
+                    deferred.reject(err);
+                });
+
+                return deferred.promise;
+            }
 
             return {
-                currentUser: function(){
+                getUser: function(){
                     var deferred = $q.defer();
 
-                    var authToken = $cookieStore.get('authToken');
-                    if (authToken !== undefined) {
-                        $rootScope.authToken = authToken;
+                    if ($rootScope.appContext.currentUser == null){
+                        UserService.current( function(user) {
+                            $rootScope.appContext.currentUser = user
+
+                            deferred.resolve(user);
+                        }, function(err){
+                            deferred.reject(err);
+                        });
+                    } else {
+                        deferred.resolve(user);
                     }
 
-                    AuthService.current( function(user) {
-                        console.log('  user authenticated, is '+(user.admin? '' : 'NOT ')+ 'admin');
-                        $rootScope.user = user
+                    return deferred.promise;
+                },
+                googleAuthenticate: function ($scope, user, tokenId){
+                    var service = new UserService({ googleTokenId: tokenId.token,
+                                                    rememberMe: user.rememberMe});
 
-                        deferred.resolve(user);
-                    }, function(err){
-                        console.log('  user is not authenticated, add social signin menu.');
-                        deferred.reject(err);
+                    authenticate(service).then(function(user){
+                        user.isLoggedOnGoogle = true;
+                        $scope.appContext.currentUser = user;
+                    }, function (error) {
+                        //@TODO: Adicionar mensagem de erro após serviço pronto.
                     });
 
+                },
+                appAuthenticate: function($scope, user, loginForm) {
+                    if (loginForm.$valid) {
+                        var service = new UserService({email: user.email,
+                                                       password: user.password,
+                                                       rememberMe: user.rememberMe});
 
-                    return deferred.promise;
+                        authenticate(service).then(function(user) {
+                            user.isLoggedOnGoogle = false;
+                            $scope.appContext.currentUser = user;
+                        }, function (error) {
+                            $scope.user.$error = {login: true};
+                        });
+                    } else {
+                        //MessageHandler.addError({message: "Formulário possiu erros. Preencha os dados corretamente e tente novamente."});
+                        //@TODO: Adicionar mensagem de erro após serviço pronto.
+                    }
+
                 }
             }
 	    }
 	]);
-	
-	
-	AuthHandler.run(function($rootScope, $location, $cookieStore, AuthService) {
+
+	AuthHandler.run(function($rootScope, $location, $cookieStore) {
 			
 			$rootScope.hasRole = function(role) {
 				
@@ -86,85 +125,25 @@ function (angular, resource, cookie, errorHandler) {
 			
 		});
 
-	AuthHandler.controller('AuthController', [ '$scope', '$rootScope', '$location', '$cookieStore', 'AuthService', 'MessageHandler',
-    function($scope, $rootScope, $location, $cookieStore, AuthService, MessageHandler) {
+	AuthHandler.controller('AuthController', [ '$scope', '$rootScope', '$location', 'AuthService',
+    function($scope, $rootScope, $location, AuthService) {
 		
-		MessageHandler.clear();
-		
-		$scope.messageHandler = MessageHandler;
-
 		$scope.user = {$error: {}, rememberMe: false}
 		
 		$scope.go = function(link) {
 			window.location = link;
 		}
-		
-		$scope.appAuthenticate = function() {
-			MessageHandler.clear();
-			if ($scope.loginForm.$valid) {
-				var service = new AuthService({email: $scope.user.email,
-				                               password: $scope.user.password,
-				                               rememberMe: $scope.user.rememberMe});
-				
-				service.$authenticate(function(result) {
-                    $rootScope.authToken = result.token;
-//                    if ($scope.user.rememberMe) {
-//                        $cookieStore.put('authToken', authToken);
-//                    }
 
-                    // recupera o contextpath da aplicacao
-                    var path = $location.absUrl().substr(0, $location.absUrl().lastIndexOf("#"));
-                    // força o redirect para recarregar novamente o IndexController
-                    window.location = path;
-				}, function (error) {
-				    $scope.user.$error = {login: true};
-				});
-			} else {
-				MessageHandler.addError({message: "Formulário possiu erros. Preencha os dados corretamente e tente novamente."});
-			}
-
-		};
-
-		$scope.googleTokenAuthenticate = function (tokenId){
-		    var service = new AuthService({googleTokenId: tokenId.token, rememberMe: $scope.user.rememberMe});
-
-		    service.$authenticate(function(result) {
-                $rootScope.authToken = result.token;
-                // recupera o contextpath da aplicacao
-                var path = $location.absUrl().substr(0, $location.absUrl().lastIndexOf("#"));
-                // força o redirect para recarregar novamente o IndexController
-                window.location = path;
-		    }, function (err){
-		        $scope.user.$error = {login: true};
-		    });
+		$scope.appAuthenticate = function(){
+		    AuthService.appAuthenticate($scope, $scope.user, $scope.loginForm);
 		}
 
-		var authenticate = function (auth){
-		}
-		
-		$scope.register = function() {
-			MessageHandler.clear();
-			if ($scope.registerForm.$valid) {
-				var service = new AuthService({displayName: $scope.displayName, password: $scope.password, email: $scope.email});
-				
-				service.$register(function(result) {
-					$rootScope.authToken = result.token;;
-					// recupera o contextpath da aplicacao
-					var path = $location.absUrl().substr(0, $location.absUrl().lastIndexOf("#"));
-					// força o redirect para recarregar novamente o IndexController
-					window.location = path;
-				});
-			} else {
-				MessageHandler.addError({message: "Formulário possiu erros. Preencha os dados corretamente e tente novamente."});
-			}
-			
+		$scope.googleAuthenticate = function (tokenId){
+		    AuthService.googleAuthenticate($scope, $scope.user, tokenId);
+		    AuthService.googleAuth2 = tokenId.auth2;
 		}
 	}]);
 	
 	
 	return AuthHandler;
 });
-
-function teste(){
-console.log('teste success')
-}

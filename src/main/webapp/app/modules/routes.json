@@ -1,78 +1,18 @@
 [
-    {
-        "id": "dashboard", 
-		"name":"Dashboard", 
-		"icon": "glyphicon glyphicon-dashboard",
-		"originalPath": "/dashboard", 	
-		"templateUrl": "modules/dashboard/views/dashboard.html",
-		"dependencies": ["modules/dashboard/controllers/index"]
-
-    },
-     {
-        "id": "account", 
-		"name":"Contas", 
-		"icon": "glyphicon glyphicon-usd",
-		"originalPath": "/account",
-		"templateUrl": "modules/account/views/accounts.html",
-		"dependencies": ["modules/account/controllers/account-controller", "app", "layout-form"],
-		"hasSubMenu": true,
-		"items" : [
-		    {
-		        "id": "accountEntry", 
-				"name":"Lançamentos", 
-				"originalPath": "/account/:accountID/entries", 	
-				"templateUrl": "modules/account/views/account-entries.html",
-				"visible": false,
-				"dependencies": ["modules/account/controllers/account-entry-controller", "app", "layout-form"]
-		    }
-		]
-    },
-    {
-        "id": "bills", 
-		"name":"Lançamentos Programados", 
-		"icon": "glyphicon glyphicon-calendar",
-		"originalPath": "/bill",
-		"templateUrl": "modules/bill/views/bill.html",
-		"dependencies": ["modules/bill/controllers/bill-controller", "app", "layout-form"]
-    },  
-     {
-        "id": "reports", 
-		"name":"Relatórios", 
-		"icon": "fa fa-bar-chart-o",
-		"hasSubMenu": true,
-		"items" : [
-		    {
-		        "id": "casflow", 
-				"name":"Fluxo de Caixa", 
-				"originalPath": "/dashboard/reports/cashflow", 	
-				"templateUrl": "modules/dashboard/views/report-cashflow.html",
-				"visible": true,
-				"dependencies": ["modules/dashboard/controllers/report-cashflow-controller", "app", "layout-form"]
-		    },
-		    {
-		        "id": "expenses", 
-				"name":"Análise de Despesas", 
-				"originalPath": "/dashboard/reports/expenses", 	
-				"templateUrl": "modules/dashboard/views/report-expenses.html",
-				"visible": true,
-				"dependencies": ["modules/dashboard/controllers/report-expenses-controller", "app", "layout-form"]
-		    }
-		]
-    },
-    {
-        "id": "configuration", 
-		"name":"Configurações", 
-		"icon": "glyphicon glyphicon-cog",
-		"hasSubMenu": true,
-		"items" : [
-        	{
-	    	"id": "category",
-			"name": "Categorias",
-			"originalPath": "/configuration", 	
-			"templateUrl": "modules/configuration/views/category.html",
-			"visible": true,
-			"dependencies": ["modules/configuration/controllers/category-controller", "app", "layout-form"]
-	        }      
-        ]
-    }
+  {
+    "id": "dashboard",
+    "name":"Dashboard",
+    "icon": "dashboard",
+    "originalPath": "/dashboard",
+    "templateUrl": "modules/dashboard/views/dashboard.html",
+    "dependencies": ["modules/dashboard/controllers/index"]
+  },
+  {
+    "id": "account",
+    "name":"Contas",
+    "icon": "account_balance",
+    "originalPath": "/account",
+    "templateUrl": "modules/dashboard/views/dashboard.html",
+    "dependencies": ["modules/dashboard/controllers/index"]
+  }
 ]

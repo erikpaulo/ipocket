@@ -5,24 +5,101 @@
 
 	<head >
 		<title>iPocket</title>
-		<link rel="shortcut icon" href="resources/images/ipocket-logo.png">
+		<link rel="shortcut icon" href="resources/images/1cent-logo-1.png">
 
 		<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:300,400,500,700" type="text/css">
 		<link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Raleway:400,700' type='text/css'>
-
 		<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 
-		<link rel="stylesheet" href="resources/lib/angular-material/angular-material.min.css">
 		<link rel="stylesheet" href="resources/lib/material-design-lite/material.min.css">
+		<link rel="stylesheet" href="resources/lib/angular-material/angular-material.min.css">
+
 
 		<link rel="stylesheet" href="resources/styles/style.css">
 
 		<script type="text/javascript" src="resources/lib/requirejs/require.js" data-main="system/main.js"></script>
-<!--		<script type="text/javascript" src="resources/lib/xrayquire.js"></script>-->
+
+		<style type="text/css">
+			[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+				display: none !important;
+			}
+		</style>
 	</head>
 
-<body ng-controller="IndexController" ng-cloak>
-	<div ng-view class="view"></div>
-</body>
+	<body ng-controller="IndexController"  ng-cloak class="ng-cloak">
+
+		<div layout="row" ng-if="appContext.currentUser.authenticated">
+			<md-sidenav layout="column" class="md-sidenav-left md-whiteframe-z2" md-component-id="left">
+				<md-toolbar class="">
+					<span flex></span>
+					<div layout="row" class="md-toolbar-tools-bottom inset">
+						<img ng-src="{{appContext.currentUser.imageUrl}}" class="user-avatar" />
+						<!--<md-icon md-svg-src="{{user.imageUrl}}" class="user-avatar"></md-icon>-->
+                        <div layout="column">
+                            <h4 class="md-display-1">Bem-Vindo</h4>
+                            <div class="md-title">{{appContext.currentUser.displayName}}</div>
+                            <div class="md-subhead">erik.lacerda@gmail.com{{currentUser.email}}</div>
+                        </div>
+					</div>
+				</md-toolbar>
+                <md-list>
+                    <md-list-item ng-repeat="module in modules" md-ink-ripple ng-click="appContext.sidebarMenu.handleClick(module.originalPath)">
+                        <div class="inset">
+                            <ng-md-icon icon="{{module.icon}}"></ng-md-icon>
+                        </div>
+                        <div class="inset">{{module.name}}</div>
+                    </md-list-item>
+                </md-list>
+			</md-sidenav>
+			<div layout="column" class="relative" layout-fill role="main">
+				<md-toolbar class="header">
+					<div class="md-toolbar-tools">
+						<md-button ng-click="appContext.sidebarMenu.toggleSidenav('left')" aria-label="Menu">
+							<ng-md-icon icon="menu"></ng-md-icon>
+						</md-button>
+						<h3>
+							Dashboard
+						</h3>
+						<span flex></span>
+						<md-button class="md-icon-button" aria-label="Message">
+							<ng-md-icon icon="mail"></ng-md-icon>
+						</md-button>
+						<md-button class="md-icon-button" aria-label="logout" ng-click="logout()">
+							<md-icon class="material-icons">power_settings_new</md-icon>
+						</md-button>
+					</div>
+				</md-toolbar>
+
+
+				<md-fab-speed-dial md-open="appContext.contextMenu.isOpen" md-direction="up" class="md-fling md-fab-bottom-right"  ng-if="appContext.contextMenu.actions.length > 0">
+					<md-fab-trigger >
+						<md-button aria-label="menu" class="md-fab md-warn">
+							<ng-md-icon icon="{{appContext.contextMenu.icon}}" aria-label="{{appContext.contextMenu.name}}" options='{"duration": 375}'></ng-md-icon>
+						</md-button>
+					</md-fab-trigger>
+					<md-fab-actions>
+						<div ng-repeat="action in appContext.contextMenu.actions">
+							<md-tooltip md-direction="left">
+								{{action.description}}
+							</md-tooltip>
+							<md-button aria-label="{{action.name}}" class="md-fab md-mini mdl-color--blue-grey-500" ng-click="action.onClick">
+								<md-icon class="material-icons"> {{action.name}} </md-icon>
+							</md-button>
+						</div>
+					</md-fab-actions>
+				</md-fab-speed-dial>
+				<md-content flex md-scroll-y>
+					<ui-view layout="column" layout-fill layout-padding>
+						<div ng-if="appContext.currentUser.authenticated" ng-view class="view"></div>
+					</ui-view>
+				</md-content>
+			</div>
+		</div>
+
+		<div ng-if="!appContext.currentUser.authenticated">
+			<div ng-if="!appContext.currentUser.authenticated" ng-view class="view"></div>
+		</div>
+
+	</body>
 
 </html>

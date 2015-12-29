@@ -3,11 +3,12 @@ define(['angular',
         'system/routes',
         'system/components/dependency-resolver',
         'system/components/error-handler',
-        'system/components/menu-handler',
+//        'system/components/menu-handler',
         'system/components/auth-handler',
+        'system/components/index-handler',
         'system/directives/index',
-        'system/filters/index'], 
-function(angular, layout, config, dependencyResolverFor, errorHandler, menuHandler, authHandler)
+        'system/filters/index'],
+function(angular, layout, config, dependencyResolverFor, errorHandler, authHandler, indexHandler)
 {
     
 	// TODO [marcus] app.directives foi iniciada no arquivo 'system/directives/index'. Alterar esse index para retornar o módulo e pegar o nome aqui para evitar hardcoded
@@ -20,10 +21,11 @@ function(angular, layout, config, dependencyResolverFor, errorHandler, menuHandl
 
         'ngMessages',
 
-        'ngMaterial', 'ngAria',
+        'ngMaterial', 'ngAria', 'ngMdIcons',
         errorHandler.name,
-        menuHandler.name,
+//        menuHandler.name,
         authHandler.name,
+        indexHandler.name,
         'app.directives',
         'app.filters'
     ]);
@@ -49,11 +51,11 @@ function(angular, layout, config, dependencyResolverFor, errorHandler, menuHandl
 
             //$locationProvider.html5Mode(true);
             // ==== PUBLIC MODULE ====
-	        $routeProvider.when('/', {templateUrl: 'system/views/home.html', resolve:dependencyResolverFor(['system/controllers/home-controller']) });
-	        $routeProvider.when('/about', {templateUrl: 'system/views/about.html', resolve:dependencyResolverFor(['system/controllers/about-controller']) });
+	        $routeProvider.when('/', {templateUrl: 'system/views/dashboard.html', resolve:dependencyResolverFor(['modules/dashboard/controllers/dashboard-controller']) });
+//	        $routeProvider.when('/about', {templateUrl: 'system/views/about.html', resolve:dependencyResolverFor(['system/controllers/about-controller']) });
 	        
 	        $routeProvider.when('/login', {templateUrl : 'system/views/login.html'});
-	        $routeProvider.when('/register', {templateUrl : 'system/views/register.html'});
+//	        $routeProvider.when('/register', {templateUrl : 'system/views/register.html'});
 	        
 	        $routeProvider.when('/404', {templateUrl : 'system/views/error/404.html'});
 	        $routeProvider.when('/403', {templateUrl : 'system/views/error/403.html'});
@@ -64,11 +66,10 @@ function(angular, layout, config, dependencyResolverFor, errorHandler, menuHandl
 	        // Redireciona para página default.
 	        $routeProvider.otherwise({redirectTo: '/'});
 
-
         }
     ]);
     
-    app.run(function ($rootScope, $http, AppContext) {
+    app.run(function ($rootScope, $http) {
     	
     	app.modules = $rootScope.modules;
     	app.context = $rootScope.appContext;

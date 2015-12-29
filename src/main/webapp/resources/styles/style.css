@@ -1,12 +1,47 @@
-/********** >>> LOGIN <<< ***********/
+/********** >>> INDEX <<< ***********/
+.view {
+    height: 100%;
+}
 
-/********** ^^^ LOGIN ^^^ ***********/
 
-/***/
+
+/* Header */
+md-toolbar.header {
+    background-color: #22262e !important;
+}
+md-toolbar.header button.md-icon-button:hover{
+    background-color: rgba(158,158,158,0.2) !important;
+}
+
+/* Navegação Lateral */
+md-sidenav md-toolbar {
+    background-color: #22262e !important;
+/*    height: 144px;
+    min-height: 144px;
+    max-height: 144px;*/
+}
+md-sidenav {
+  fill: #737373;
+}
+md-sidenav md-list md-list-item:hover {
+    background-color: #ECEFF1;
+    cursor:pointer;
+}
+.user-avatar {
+  border-radius: 99%;
+  width: 85px;
+  height: 85px;
+  margin: 10px;
+}
+md-toolbar:not(.md-hue-1),
+.md-fab {
+  fill: #fff;
+}
+
+
+/********** ^^^ INDEX ^^^ ***********/
+
 .md-card-border-radius-6 {
     border-radius: 6px;
 }
 
-.view {
-    height: 100%;
-}

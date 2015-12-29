@@ -25,6 +25,8 @@ import javax.persistence.Table;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.social.security.SocialUserDetails;
@@ -82,7 +84,7 @@ public class UserAccount extends BaseEntity<Integer> implements SocialUserDetail
     @CollectionTable(name="user_role",joinColumns={@JoinColumn(name="user_id")})
     @Column(name="role") 
 	private Set<String> roles = new HashSet<String>();
-    
+
 	@Override
 	public Collection<GrantedAuthority> getAuthorities() {
 

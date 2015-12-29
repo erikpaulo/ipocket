@@ -93,5 +93,5 @@ public class SignInController {
 			return new UserResource(account);
 		}
 		return new UserResource();
-	} 
+	}
 }

@@ -21,7 +21,10 @@ require.config({
 		'angular-messages': 'resources/lib/angular-messages/angular-messages.min',
 
         // ANGULAR MATERIAL
+        'material-design': 'resources/lib/material-design-lite/material.min',
         'angular-aria': 'resources/lib/angular-aria/angular-aria.min',
+        "svg-morpheus": "resources/lib/svg-morpheus/compile/minified/svg-morpheus",
+        'angular-material-icons': 'resources/lib/angular-material-icons/angular-material-icons.min',
         'angular-material': 'resources/lib/angular-material/angular-material.min',
 
         // APP CORE MODULES
@@ -44,6 +47,7 @@ require.config({
 		'angular-messages': ['angular'],
 
         'angular-aria': ['angular'],
+        'angular-material-icons': ['angular'],
 		'angular-material': ['angular', 'angular-aria', 'angular-animate'],
 
         'layout-core': {
@@ -66,6 +70,9 @@ require.config({
 
                 'angular-messages',
 
+                'material-design',
+                'angular-material-icons',
+                'svg-morpheus',
                 'angular-material'
 		    ]
 		},
@@ -78,6 +85,8 @@ define(['layout-core', 'app'], function(app) {
      * place operations that need to initialize prior to app start here
      * using the `run` function on the top-level module
      */
+    require( ['material-design']);
+
     require(['domReady!'], function (document) {
         angular.bootstrap(document, ['app']);
 
@@ -91,15 +100,17 @@ define(['layout-core', 'app'], function(app) {
                     'theme': 'dark',
                     'onsuccess': function(googleUser){
                         angular.element(document.getElementById('AuthController')).scope()
-                        .googleTokenAuthenticate({token: googleUser.getAuthResponse().id_token});
+                        .googleAuthenticate({token: googleUser.getAuthResponse().id_token});
 
-                        window.gapi.auth.signOut();
+                        var auth2 = window.gapi.auth2.getAuthInstance();
+                        auth2.signOut();
                     },
                     'onfailure': function(fail){
                         console.log('fail');
                     }
                 });
             });
+
     });
 
 });

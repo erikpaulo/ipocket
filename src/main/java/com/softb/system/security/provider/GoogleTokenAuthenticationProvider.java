@@ -39,11 +39,13 @@ public class GoogleTokenAuthenticationProvider implements AuthenticationProvider
 
         if (!tokenId.isEmpty ()) {
 
-            if (validateGoogleToken ( tokenId )){
+            GoogleTokenResponseResource token = validateGoogleToken ( tokenId );
+            if ( token != null){
 
                 List<GrantedAuthority> grantedAuths = new ArrayList<> ();
                 grantedAuths.add ( new SimpleGrantedAuthority ( "ROLE_USER" ) );
                 UserAccount userAccount = userDetailsService.loadUserByGoogleId ( "erik.lacerda@gmail.com" );
+                userAccount.setImageUrl ( token.getPicture () );
 
                 auth = new UsernamePasswordAuthenticationToken ( userAccount, userAccount.getPassword (), grantedAuths );
             }
@@ -61,9 +63,10 @@ public class GoogleTokenAuthenticationProvider implements AuthenticationProvider
         this.userDetailsService = userDetailsService;
     }
 
-    private Boolean validateGoogleToken(String tokenId){
+    private GoogleTokenResponseResource validateGoogleToken(String tokenId){
         Map<String, String> vars = new HashMap<String, String> ();
         RestTemplate restTemplate = new RestTemplate ();
+        GoogleTokenResponseResource ret = null;
 
         vars.put ( "id_token", tokenId );
         String json = restTemplate.getForObject ( "https://www.googleapis.com/oauth2/v3/tokeninfo?id_token={id_token}", String.class, vars );
@@ -77,7 +80,10 @@ public class GoogleTokenAuthenticationProvider implements AuthenticationProvider
         }
 
         String clientId = userDetailsService.getClientId ();
-        return clientId.equals ( token.getAud () );
-
+        if (token != null && clientId.equals ( token.getAud () ) ){
+            return token;
+        } else {
+            return null;
+        }
     }
 }
