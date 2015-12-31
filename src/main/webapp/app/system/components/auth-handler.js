@@ -129,7 +129,11 @@ function (angular, resource, cookie, errorHandler) {
     function($scope, $rootScope, $location, AuthService) {
 		
 		$scope.user = {$error: {}, rememberMe: false}
-		
+
+        if ($rootScope.appContext.currentUser && $rootScope.appContext.currentUser.authenticated){
+            $location.path('/');
+        }
+
 		$scope.go = function(link) {
 			window.location = link;
 		}

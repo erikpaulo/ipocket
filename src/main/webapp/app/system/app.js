@@ -38,8 +38,9 @@ function(angular, layout, config, dependencyResolverFor, errorHandler, authHandl
         '$compileProvider',
         '$filterProvider',
         '$provide',
+        '$mdThemingProvider',
 
-        function($routeProvider, $locationProvider, $controllerProvider, $compileProvider, $filterProvider, $provide)
+        function($routeProvider, $locationProvider, $controllerProvider, $compileProvider, $filterProvider, $provide, $mdThemingProvider)
         {
 	        app.controller = $controllerProvider.register;
 	        app.directive  = $compileProvider.directive;
@@ -51,7 +52,7 @@ function(angular, layout, config, dependencyResolverFor, errorHandler, authHandl
 
             //$locationProvider.html5Mode(true);
             // ==== PUBLIC MODULE ====
-	        $routeProvider.when('/', {templateUrl: 'system/views/dashboard.html', resolve:dependencyResolverFor(['modules/dashboard/controllers/dashboard-controller']) });
+//	        $routeProvider.when('/', {templateUrl: 'modules/dashboard/dashboard.html', resolve:dependencyResolverFor(['modules/dashboard/controllers/dashboard-controller']) });
 //	        $routeProvider.when('/about', {templateUrl: 'system/views/about.html', resolve:dependencyResolverFor(['system/controllers/about-controller']) });
 	        
 	        $routeProvider.when('/login', {templateUrl : 'system/views/login.html'});
@@ -65,6 +66,11 @@ function(angular, layout, config, dependencyResolverFor, errorHandler, authHandl
 
 	        // Redireciona para página default.
 	        $routeProvider.otherwise({redirectTo: '/'});
+
+            // Configuring default Material Design Theme
+            $mdThemingProvider.theme('default')
+//                .primaryPalette('blue-grey')
+                .accentPalette('blue-grey');
 
         }
     ]);

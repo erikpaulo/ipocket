@@ -27,6 +27,9 @@ require.config({
         'angular-material-icons': 'resources/lib/angular-material-icons/angular-material-icons.min',
         'angular-material': 'resources/lib/angular-material/angular-material.min',
 
+        // CHARTS
+        'highcharts-ng': 'resources/lib/highcharts-ng/dist/highcharts-ng.min',
+
         // APP CORE MODULES
 		'layout-core': 'system/layout-core',
 		'layout-form': 'system/layout-form',
@@ -49,6 +52,8 @@ require.config({
         'angular-aria': ['angular'],
         'angular-material-icons': ['angular'],
 		'angular-material': ['angular', 'angular-aria', 'angular-animate'],
+
+		'highcharts-ng': ['angular'],
 
         'layout-core': {
 			deps: ['jquery',
@@ -73,7 +78,9 @@ require.config({
                 'material-design',
                 'angular-material-icons',
                 'svg-morpheus',
-                'angular-material'
+                'angular-material',
+
+                'highcharts-ng'
 		    ]
 		},
 	}

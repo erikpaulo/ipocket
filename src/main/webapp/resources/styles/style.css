@@ -1,8 +1,10 @@
 /********** >>> INDEX <<< ***********/
 .view {
-    height: 100%;
+   /* height: 100%;*/
 }
-
+body{
+    font-family: Roboto,"Helvetica Neue",sans-serif;
+}
 
 
 /* Header */
@@ -41,7 +43,71 @@ md-toolbar:not(.md-hue-1),
 
 /********** ^^^ INDEX ^^^ ***********/
 
-.md-card-border-radius-6 {
-    border-radius: 6px;
+/********** >>> GERAL <<< ***********/
+.border-radius-5 {
+    border-radius: 5px;
+}
+.border-top-radius-5{
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
 }
 
+
+/********** >>> CARDS <<< ***********/
+
+md-card.mdl-color--green-600 {
+    color: #fff;
+}
+
+
+/********** >>> ICONS <<< ***********/
+.material-icons.md-18 {
+    font-size: 18px;
+}
+.material-icons.md-24 {
+    font-size: 24px;
+}
+.material-icons.md-36 {
+    font-size: 36px;
+}
+.material-icons.md-48{
+    font-size:48px;
+    width:48px;
+    height:48px;
+}
+
+
+/********** >>> TO-DO LIST <<< ***********/
+md-card.to-do-list md-card-header{
+/*    background-color: #d27261;*/
+    color: white;
+}
+md-card.to-do-list md-card-content{
+    min-height:385px;
+    max-height:385px;
+   /* background-color: #d57d6d !important;*/
+}
+md-card.to-do-list md-card-content md-list-item md-checkbox.md-icon{
+    border-color: white;
+
+}
+md-card.to-do-list md-card-content md-list-item .md-list-item-text.done{
+    text-decoration: line-through;
+    color: rgba(176,190,197,0.87);
+}
+md-card.to-do-list md-card-actions md-input-container{
+    margin-bottom: 0px;
+}
+md-card.to-do-list md-card-actions md-input-container.md-icon-right{
+    padding-left:5px;
+}
+md-card.to-do-list md-card-actions md-input-container.md-has-icon>input{
+    padding-left: 8px;
+    padding-right: 8px;
+}
+md-card.to-do-list md-card-actions md-input-container.md-has-icon>label{
+    left: 8px;
+}
+md-card.to-do-list md-card-actions md-input-container.md-has-icon>md-icon{
+    cursor:pointer;
+}

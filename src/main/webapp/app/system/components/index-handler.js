@@ -27,9 +27,7 @@ define(['angular-resource', 'jquery'], function (resource, $) {
             contextMenu: {
                 actions: [],
                 icon: 'add',
-                isOpen: false,
-                watchMenuState: function(){
-                }
+                isOpen: false
             },
             sidebarMenu: {
                 handleClick: function(url){
@@ -60,10 +58,11 @@ define(['angular-resource', 'jquery'], function (resource, $) {
 	IndexModule.controller('IndexController', ['$rootScope', '$scope', '$location', '$mdSidenav', '$mdDialog', 'AuthService',
 	    function($rootScope, $scope, $location, $mdSidenav, $mdDialog, AuthService){
             $scope.appContext.init($scope, $location, $mdSidenav);
+	        $scope.appContext.contextPage = 'Entrada'
 
             AuthService.getUser().then(function(user){
                 $scope.appContext.currentUser = user;
-                if (!$scope.appContext.currentUser || !$scope.appContext.currentUser.authenticated){
+                if (!$scope.appContext.currentUser.authenticated){
                     $location.path('login');
                 }
             });
@@ -71,10 +70,6 @@ define(['angular-resource', 'jquery'], function (resource, $) {
             $scope.logout = function(){
                 window.location = $location.absUrl().substr(0, $location.absUrl().lastIndexOf("#")) + 'signout';
             }
-
-            $scope.appContext.contextMenu.actions = [
-                { name: 'add_location', action:'', description: 'Adicionar'}, {name: 'directions_boad', action: '', description: 'Remover'}, {name: 'directions_bike', action:'', description: 'Importar CSV'}];
-
         }
     ]);
 

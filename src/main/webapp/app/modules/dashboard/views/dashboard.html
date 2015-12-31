@@ -1,10 +1,93 @@
-<!-- CALENDAR LIBS BEGIN -->
-<link href="resources/legacy/fullcalendar/fullcalendar.css" rel="stylesheet" type="text/css" media="screen" />
-<link href="resources/legacy/qtip/jquery.qtip.css" rel="stylesheet" type="text/css" media="screen" />
-<!-- CALENDAR LIBS END -->
+<div ng-controller="DashboardController" layout="row" layout-xs="column" layout-wrap>
+    <div layout="row" flex="25">
+        <div layout="column" flex="100">
+            <md-card layout="row" class="">
+                <md-card-header class="mdl-color--indigo-600">
+                    <md-icon class="material-icons step md-48" style="color:white;">
+                        attach_money
+                    </md-icon>
+                </md-card-header>
+                <md-divider></md-divider>
+                <md-card-content layout="column">
+                    <span class="md-display-1">R$61.453,78</span>
+                    <span class="">Patrimônio</span>
+                </md-card-content>
+            </md-card>
 
-<section ng-controller="DashboardController">
+            <md-card layout="row" class="">
+                <md-card-header class="mdl-color--green-600">
+                    <md-icon class="material-icons step md-48" style="color:white;">
+                        trending_up
+                    </md-icon>
+                </md-card-header>
+                <md-divider></md-divider>
+                <md-card-content layout="column">
+                    <span class="md-display-1">R$2.453,78</span>
+                    <span class="">Acumulado ultimo mês</span>
+                </md-card-content>
+            </md-card>
 
-	Teste
+            <md-card layout="row" class="">
+                <md-card-header class="mdl-color--red-600">
+                    <md-icon class="material-icons step md-48" style="color:white;">
+                        remove_circle
+                    </md-icon>
+                </md-card-header>
+                <md-divider></md-divider>
+                <md-card-content layout="column">
+                    <span class="md-display-1">R$8.453,78</span>
+                    <span class="">Custo fixo</span>
+                </md-card-content>
+            </md-card>
 
-</section>
+            <!--<md-card layout="row" class="">-->
+                <!--<md-card-header class="mdl-color&#45;&#45;indigo-600">-->
+                    <!--<md-icon class="material-icons step md-48" style="color:white;">-->
+                        <!--add_circle-->
+                    <!--</md-icon>-->
+                <!--</md-card-header>-->
+                <!--<md-divider></md-divider>-->
+                <!--<md-card-content layout="column">-->
+                    <!--<span class="md-display-1">R$12.000,78</span>-->
+                    <!--<span class="">Entradas ultimo mês</span>-->
+                <!--</md-card-content>-->
+            <!--</md-card>-->
+        </div>
+    </div>
+    <div flex>
+        <md-card layout="column">
+            <md-card-content>
+                
+            </md-card-content>
+        </md-card>
+    </div>
+    <div flex="30">
+        <md-card layout="column" class="border-radius-5 to-do-list">
+            <md-card-header class="border-top-radius-5 mdl-color--blue-grey-500">
+                <md-card-header-text layout-align="center center">
+                    <span class="md-title">To-do List</span>
+                </md-card-header-text>
+            </md-card-header>
+            <md-card-content style="overflow:scroll;">
+                <md-list>
+                    <md-list-item class="secondary-button-padding" ng-repeat="item in dashboard.todos">
+                        <md-checkbox ng-model="item.done" aria-label="{{'check'+$index}}"></md-checkbox>
+                        <div class="md-list-item-text" ng-class="{done:item.done}">
+                            <span>{{item.description}}</span>
+                        </div>
+                    </md-list-item>
+                </md-list>
+            </md-card-content>
+            <md-card-actions layout="row">
+                <md-input-container flex class="md-icon-float md-icon-right md-block">
+                    <label>To-do Item</label>
+                    <input type="text" ng-model="todoList.text" required class="mdl-color--blue-grey-100" >
+                    <md-icon class="material-icons step md-primary" ng-click="addTodo()">
+                        add_circle
+                    </md-icon>
+                </md-input-container>
+            </md-card-actions>
+        </md-card>
+    </div>
+
+</div>
