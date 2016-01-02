@@ -16,6 +16,7 @@ require.config({
 		'angular-animate':'resources/lib/angular-animate/angular-animate.min',
 		'angular-route': 'resources/lib/angular-route/angular-route',
 		'angular-cookies': 'resources/lib/angular-cookies/angular-cookies.min',
+		'angular-i18n-ptbr': 'resources/js/angular-locale_pt-br',
 
 		// ANGULAR PLUGINS MODULES
 		'angular-messages': 'resources/lib/angular-messages/angular-messages.min',
@@ -28,6 +29,9 @@ require.config({
         'angular-material': 'resources/lib/angular-material/angular-material.min',
 
         // CHARTS
+        'highcharts': 'resources/lib/highcharts/highcharts',
+        'highcharts-more': 'http://code.highcharts.com/highcharts-more',
+        'highcharts-solidgauge': 'http://code.highcharts.com/modules/solid-gauge.src',
         'highcharts-ng': 'resources/lib/highcharts-ng/dist/highcharts-ng.min',
 
         // APP CORE MODULES
@@ -47,13 +51,16 @@ require.config({
 		'angular-resource': ['angular'],
 		'angular-animate': ['angular'],
 
+        'angular-i18n-ptbr': ['angular'],
 		'angular-messages': ['angular'],
 
         'angular-aria': ['angular'],
         'angular-material-icons': ['angular'],
 		'angular-material': ['angular', 'angular-aria', 'angular-animate'],
 
-		'highcharts-ng': ['angular'],
+        'highcharts-more': ['jquery', 'highcharts'],
+        'highcharts-solidgauge': ['highcharts', 'highcharts-more'],
+		'highcharts-ng': ['jquery','angular', 'highcharts'],
 
         'layout-core': {
 			deps: ['jquery',
@@ -72,6 +79,7 @@ require.config({
 			    'angular',
 			    'angular-route',
                 'angular-cookies',
+                'angular-i18n-ptbr',
 
                 'angular-messages',
 
@@ -80,7 +88,9 @@ require.config({
                 'svg-morpheus',
                 'angular-material',
 
-                'highcharts-ng'
+                'highcharts-ng',
+                'highcharts-solidgauge',
+                'highcharts-more'
 		    ]
 		},
 	}

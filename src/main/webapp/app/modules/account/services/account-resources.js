@@ -5,12 +5,11 @@ function (module) {
 	    return $resource(
 	        'api/account/:id/:action', 
 	        {account: '@account'}, 
-//	        {start: 'start', end: 'end'}],
 	        {
 	            listAll:	{ method :'GET',  params: {}, isArray : true },
 	            summary:	{ method :'GET',  params: {action: 'summary'}, isArray : false },
 	            statement:	{ method :'GET',  params: {action: 'statement'}, isArray : false },
-	            get:		{ method :'GET',  params: {}, isArray : false },
+//	            get:		{ method :'GET',  params: {}, isArray : false },
 	            new: 		{ method :'POST', params: {}, isArray : false }
 	        }
 	    );

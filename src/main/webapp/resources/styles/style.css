@@ -1,7 +1,4 @@
 /********** >>> INDEX <<< ***********/
-.view {
-   /* height: 100%;*/
-}
 body{
     font-family: Roboto,"Helvetica Neue",sans-serif;
 }
@@ -18,9 +15,6 @@ md-toolbar.header button.md-icon-button:hover{
 /* Navegação Lateral */
 md-sidenav md-toolbar {
     background-color: #22262e !important;
-/*    height: 144px;
-    min-height: 144px;
-    max-height: 144px;*/
 }
 md-sidenav {
   fill: #737373;
@@ -83,9 +77,8 @@ md-card.to-do-list md-card-header{
     color: white;
 }
 md-card.to-do-list md-card-content{
-    min-height:385px;
-    max-height:385px;
-   /* background-color: #d57d6d !important;*/
+    min-height:381px;
+    max-height:381px;
 }
 md-card.to-do-list md-card-content md-list-item md-checkbox.md-icon{
     border-color: white;

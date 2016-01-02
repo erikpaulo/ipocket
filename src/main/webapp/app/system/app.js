@@ -18,10 +18,14 @@ function(angular, layout, config, dependencyResolverFor, errorHandler, authHandl
         'ngAnimate',
         'ngResource',
         'ngCookies',
+        'ngLocale',
 
         'ngMessages',
 
         'ngMaterial', 'ngAria', 'ngMdIcons',
+
+        'highcharts-ng',
+
         errorHandler.name,
 //        menuHandler.name,
         authHandler.name,

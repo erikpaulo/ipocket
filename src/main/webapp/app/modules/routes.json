@@ -12,7 +12,7 @@
     "name":"Contas",
     "icon": "account_balance",
     "originalPath": "/account",
-    "templateUrl": "modules/dashboard/views/dashboard.html",
-    "dependencies": ["modules/dashboard/controllers/index"]
+    "templateUrl": "modules/account/views/accounts.html",
+    "dependencies": ["modules/account/controllers/account-controller"]
   }
 ]
