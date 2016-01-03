@@ -3,6 +3,8 @@ define([ 'app' ], function(app) {
 	function($rootScope, $scope, $timeout, $filter, $locale) {
 	$rootScope.appContext.contextPage = 'Dashboard';
 
+    $scope.appContext.contextMenu.actions = [];
+
         $scope.dashboard = {};
         $scope.dashboard.todoList = {text: null}
         $scope.dashboard.todos = [

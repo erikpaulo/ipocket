@@ -1,12 +1,63 @@
 <section ng-controller="AccountController">
-	<div flex="60" layout="column">
-        <md-card>
-            <md-list>
-                <md-list-item></md-list-item>
-            </md-list>
-        </md-card>
-	</div>
-	<div flex="40" layout="column">
-
+    <div layout="row" class="md-padding">
+        <div layout="column" flex="50">
+            <div layout="column" flex>
+                <md-card style="min-height: 547px;">
+                    <md-card-content>
+                        <md-list ng-repeat="accountType in summary.types">
+                            <span class="md-subhead">{{accountType.type | accountTypeName}}</span>
+                            <md-divider class="md-hue-3" style="background-color:rgb(63,81,181)"></md-divider>
+                            <md-list-item style="padding-left: 15px;padding-right: 15px;"
+                                          ng-repeat="account in accountType.accounts">
+                                <span flex>{{ account.name }}</span>
+                                <span class="md-subhead" flex="35" layout="row" layout-align="end center">{{ account.balance | currency }}</span>
+                                <md-button aria-label="Account Details" class="md-icon-button" flex="10">
+                                    <md-icon class="material-icons">launch</md-icon>
+                                </md-button>
+                            </md-list-item>
+                        </md-list>
+                    </md-card-content>
+                </md-card>
+            </div>
+        </div>
+        <div flex></div>
+        <div layout="row" flex="50">
+            <div layout="column" flex>
+                <md-card>
+                    <md-card-header>
+                        <md-card-header-text>
+                            <span class="md-title">Resumo</span class="md-title">
+                        </md-card-header-text>
+                    </md-card-header>
+                    <md-content>
+                        <md-list>
+                            <div layout="row">
+                                <div layout="column" flex="60">
+                                    <md-list-item ng-repeat="accountType in summary.types" style="min-height:30px">
+                                        <span layout="row" flex>{{accountType.type | accountTypeName}}</span>
+                                        <span layout="row" flex="30" layout-align="end center">{{accountType.balance | currency}}</span>
+                                    </md-list-item>
+                                </div>
+                                <md-divider class="md-padding"></md-divider>
+                                <div layout="column" flex layout-align="center center">
+                                    <span class="md-headline">{{summary.balance | currency}}</span>
+                                    <span class="md-subhead" style="color: #7A7A7A;">Total Geral</span>
+                                </div>
+                            </div>
+                        </md-list>
+                    </md-content>
+                </md-card>
+                <md-card>
+                    <md-card-header>
+                        <md-card-header-text>
+                            <span class="md-title">Meus Investimentos</span>
+                        </md-card-header-text>
+                    </md-card-header>
+                    <md-card-content>
+                        <highchart id="moneyDistribution" config="moneyDistributionChartConfig"></highchart>
+                    </md-card-content>
+                </md-card>
+            </div>
+        </div>
     </div>
 </section>
