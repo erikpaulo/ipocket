@@ -1,4 +1,4 @@
-define(['./module', '../services/account-resources'], function (app) {
+define(['./module', '../services/account-resources', '../../shared/services/utils-service'], function (app) {
 
     app.filter('accountTypeName', function () {
         var typeNameHash = {
@@ -12,13 +12,19 @@ define(['./module', '../services/account-resources'], function (app) {
         };
     });
 
-	app.controller('AccountController', ['$rootScope', '$scope', '$location', '$filter', '$timeout', 'AccountResource',
-        function($rootScope, $scope, $location, $filter, $timeout, Account) {
-            $rootScope.appContext.contextPage = 'Contas';
-
+	app.controller('AccountController', ['$rootScope', '$scope', '$location', '$filter', '$timeout', '$mdDialog', 'AccountResource', 'Utils',
+        function($rootScope, $scope, $location, $filter, $timeout, $mdDialog, Account, Utils) {
+            $scope.appContext.contextPage = 'Contas';
             $scope.appContext.contextMenu.actions = [
-                {icon: 'playlist_add', tooltip: 'Nova Conta', onClick: 'newAccount()'}
+                {icon: 'playlist_add', tooltip: 'Nova Conta', onClick: function() {
+                    openDialog($scope, $mdDialog, Utils);
+               }}
             ];
+
+            $scope.openAccountDetail = function(){
+//                $scope.appContext.toast.addWarning('Add Warning');
+                $scope.appContext.toast.addError('Add Error');
+            }
 
             //TODO: Recuperar contas do usuário.
             $scope.summary = {
@@ -46,7 +52,7 @@ define(['./module', '../services/account-resources'], function (app) {
                         accounts:[
                             {
                                 id: 3,
-                                name: 'CC: Itaú Personalitè',
+                                name: 'Poupança Personalitè',
                                 balance: 61986.02
                             }
                         ]
@@ -57,8 +63,8 @@ define(['./module', '../services/account-resources'], function (app) {
                         accounts:[
                             {
                                 id: 3,
-                                name: 'CC: Itaú Personalitè',
-                                balance: 61986.02
+                                name: 'Maximime DI',
+                                balance: 986.02
                             }
                         ]
                     },
@@ -157,3 +163,47 @@ define(['./module', '../services/account-resources'], function (app) {
 
 	]);
 });
+
+function openDialog($scope, $mdDialog){
+   $mdDialog.show({
+       controller: DialogController,
+       templateUrl: 'modules/account/views/new-account-template.html',
+       parent: angular.element(document.body),
+       clickOutsideToClose:true
+   }).then(function(newAccount){
+
+        //TODO: Criar conta no server e recuperar summary atualizado.
+        angular.forEach($scope.summary.types, function(type){
+            if (type.type == newAccount.type){
+                newAccount.balance = newAccount.startBalance;
+                type.accounts.push(newAccount);
+                type.balance += newAccount.startBalance;
+            }
+        });
+        $scope.summary.balance += newAccount.startBalance;
+
+        $scope.appContext.toast.addWarning('Conta '+ newAccount.name +' incluída com sucesso!');
+   });
+}
+
+function DialogController($scope, $mdDialog, Utils) {
+    $scope.accountTypes = [
+        {id: 'CA',  name: 'Conta Corrente'},
+        {id: 'SA',  name: 'Conta Poupança'},
+        {id: 'IA',  name: 'Conta Investimento'},
+        {id: 'CCA', name: 'Cartão de Crédito'}
+    ];
+
+    $scope.newAccount = {};
+
+    $scope.hide = function() {
+        $mdDialog.hide();
+    };
+    $scope.cancel = function() {
+        $mdDialog.cancel();
+    };
+    $scope.submit = function() {
+        $scope.newAccount.startBalance = Utils.currencyToNumber($scope.newAccount.startBalance);
+        $mdDialog.hide($scope.newAccount);
+    };
+}

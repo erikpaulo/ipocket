@@ -6,7 +6,7 @@ define(['./module'], function(directives) {
 				if (!ctrl) return;
 		
 			    ctrl.$formatters.unshift(function (a) {
-			        return $filter('currencybr')(ctrl.$modelValue)
+			        return $filter('currency')(ctrl.$modelValue)
 			    });
 		
 			    ctrl.$parsers.unshift(function (viewValue) {

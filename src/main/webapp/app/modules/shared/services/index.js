@@ -1,4 +1,4 @@
 'use strict';
 define([
-    './chart-service.js'
+    './utils-service.js'
 ]);

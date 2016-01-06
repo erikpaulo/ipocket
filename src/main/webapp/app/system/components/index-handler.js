@@ -8,10 +8,11 @@ define(['angular-resource', 'jquery'], function (resource, $) {
         var scope = null;
         var location = null;
         var sideBarService = null;
+        var warnings = [], errors = [];
 
         var context = {
 
-            init: function($scope, $location, $mdSidenav){
+            init: function($scope, $location, $mdSidenav, $mdToast){
                 scope = $scope;
                 location = $location;
                 sideBarService = $mdSidenav;
@@ -21,6 +22,38 @@ define(['angular-resource', 'jquery'], function (resource, $) {
                         scope.appContext.contextMenu.icon = 'remove';
                     } else {
                         scope.appContext.contextMenu.icon = 'add';
+                    }
+                });
+
+                $scope.$watch('appContext.toast.$warnings.length', function(newValue, oldValue){
+                    if (scope.appContext.toast.$warnings.length > 0){
+                        var msg = scope.appContext.toast.$warnings.join('\n');
+
+                        var toast = $mdToast.simple()
+                            .textContent(msg)
+                            .parent(angular.element('#main-content'))
+                            .position('top right')
+                            .hideDelay(3000);
+
+                        $mdToast.show(toast);
+
+                        scope.appContext.toast.$warnings = [];
+                    }
+                });
+
+                $scope.$watch('appContext.toast.$errors.length', function(newValue, oldValue){
+                    if (scope.appContext.toast.$errors.length > 0) {
+                    var msg = scope.appContext.toast.$errors.join('\n');
+
+                        var toast = $mdToast.simple()
+                            .textContent(msg)
+                            .parent(angular.element('#main-content'))
+                            .position('top right')
+                            .action('OK')
+                            .hideDelay(false);
+
+                        $mdToast.show(toast);
+                        scope.appContext.toast.$errors = [];
                     }
                 });
             },
@@ -36,6 +69,16 @@ define(['angular-resource', 'jquery'], function (resource, $) {
                 },
                 toggleSidenav: function(menuId) {
                    sideBarService(menuId).toggle();
+                }
+            },
+            toast: {
+                $warnings: [],
+                $errors: [],
+                addWarning: function(warn){
+                    this.$warnings.push(warn)
+                },
+                addError: function(err){
+                    this.$errors.push(err);
                 }
             },
             currentUser: null
@@ -55,9 +98,9 @@ define(['angular-resource', 'jquery'], function (resource, $) {
 	    $rootScope.appContext = AppContext;
 	});
 
-	IndexModule.controller('IndexController', ['$rootScope', '$scope', '$location', '$mdSidenav', '$mdDialog', 'AuthService',
-	    function($rootScope, $scope, $location, $mdSidenav, $mdDialog, AuthService){
-            $scope.appContext.init($scope, $location, $mdSidenav);
+	IndexModule.controller('IndexController', ['$rootScope', '$scope', '$location', '$mdSidenav', '$mdDialog', '$mdToast', 'AuthService', 'ErrorHandler',
+	    function($rootScope, $scope, $location, $mdSidenav, $mdDialog, $mdToast, AuthService, ErrorHandler){
+            $scope.appContext.init($scope, $location, $mdSidenav, $mdToast);
 	        $scope.appContext.contextPage = 'Entrada'
 
             AuthService.getUser().then(function(user){
@@ -66,6 +109,10 @@ define(['angular-resource', 'jquery'], function (resource, $) {
                     $location.path('login');
                 }
             });
+
+            $scope.handleClick = function(action){
+                action.onClick();
+            }
 
             $scope.logout = function(){
                 window.location = $location.absUrl().substr(0, $location.absUrl().lastIndexOf("#")) + 'signout';

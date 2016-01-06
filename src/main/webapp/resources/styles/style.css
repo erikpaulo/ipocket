@@ -73,7 +73,6 @@ md-card.mdl-color--green-600 {
 
 /********** >>> TO-DO LIST <<< ***********/
 md-card.to-do-list md-card-header{
-/*    background-color: #d27261;*/
     color: white;
 }
 md-card.to-do-list md-card-content{
@@ -103,4 +102,19 @@ md-card.to-do-list md-card-actions md-input-container.md-has-icon>label{
 }
 md-card.to-do-list md-card-actions md-input-container.md-has-icon>md-icon{
     cursor:pointer;
+}
+
+
+/********** >>> DIVIDER <<< ***********/
+md-divider.blue{
+    background-color:rgb(63,81,181);
+}
+
+
+/********** >>> INPUT <<< ***********/
+md-input-container.md-input-invalid md-select md-select-value{
+    border-color: rgb(221,44,0);
+}
+md-option:hover{
+    background-color: #eceff1 !important;
 }

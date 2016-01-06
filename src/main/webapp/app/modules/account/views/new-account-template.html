@@ -1,0 +1,46 @@
+<md-dialog flex="50">
+    <form name="myForm" ng-submit="submit()">
+    <md-toolbar layout="row" layout-align="center center" class="header">
+        <div class="md-toolbar-tools">
+            <h2>Incluir Nova Conta</h2>
+        </div>
+        <div flex></div>
+        <div>
+            <md-button class="md-icon-button" layout="row" layout-align="right center" ng-click="hide()">X</md-button>
+        </div>
+    </md-toolbar>
+    <md-dialog-content class="md-padding">
+        <div layout="row" flex="100">
+            <md-input-container flex>
+                <label>Nome *</label>
+                <input ng-model="newAccount.name" required md-maxlength="50">
+                <div class="errors" ng-messages="newAccount.name.$error" ng-if="myForm.$dirty">
+                    <div ng-message="required">Required</div>
+                </div>
+            </md-input-container>
+        </div>
+        <div layout="row" flex="100">
+            <md-input-container flex="45" required>
+                <label>Tipo</label>
+                <md-select name="newAccount.type" ng-model="newAccount.type" required>
+                    <md-option ng-repeat="type in accountTypes" ng-value="type.id" required>
+                        {{type.name}}
+                    </md-option>
+                </md-select>
+                <div class="errors" ng-messages="myForm.newAccount.type.$error" ng-if="myForm.$dirty">
+                    <div ng-message="required">Required</div>
+                </div>
+            </md-input-container>
+            <div flex></div>
+            <md-input-container flex="45">
+                <label>Saldo Inicial</label>
+                <input ng-model="newAccount.startBalance" type="text" required format="number">
+            </md-input-container>
+        </div>
+    </md-dialog-content>
+    <md-dialog-actions layout="row" layout-align="right center">
+        <md-button class="md-warn" ng-click="cancel()">Cancelar</md-button>
+        <md-button class="md-primary" type="submit" ng-disabled="myForm.$invalid">Incluir</md-button>
+    </md-dialog-actions>
+    </form>
+</md-dialog>
