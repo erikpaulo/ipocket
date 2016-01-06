@@ -49,6 +49,7 @@ define(['angular-resource', 'jquery'], function (resource, $) {
                             .textContent(msg)
                             .parent(angular.element('#main-content'))
                             .position('top right')
+                            .theme("error-toast")
                             .action('OK')
                             .hideDelay(false);
 

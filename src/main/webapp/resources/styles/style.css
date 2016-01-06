@@ -118,3 +118,9 @@ md-input-container.md-input-invalid md-select md-select-value{
 md-option:hover{
     background-color: #eceff1 !important;
 }
+
+
+/********** >>> TOAST <<< ***********/
+md-toast.md-error-toast-theme .md-toast-content {
+    background-color: red;
+}
