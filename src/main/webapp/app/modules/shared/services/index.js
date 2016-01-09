@@ -1,4 +1,5 @@
 'use strict';
 define([
-    './utils-service.js'
+    './utils-service.js',
+    '.constants-service.js'
 ]);

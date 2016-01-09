@@ -7,6 +7,7 @@ define(['angular',
         'system/components/auth-handler',
         'system/components/index-handler',
         'system/directives/index',
+//        'modules/shared/services/constants-service.js',
         'system/filters/index'],
 function(angular, layout, config, dependencyResolverFor, errorHandler, authHandler, indexHandler)
 {
@@ -26,8 +27,11 @@ function(angular, layout, config, dependencyResolverFor, errorHandler, authHandl
 
         'highcharts-ng',
 
+        'ngFileUpload',
+
+        'materialCalendar',
+
         errorHandler.name,
-//        menuHandler.name,
         authHandler.name,
         indexHandler.name,
         'app.directives',
@@ -43,39 +47,43 @@ function(angular, layout, config, dependencyResolverFor, errorHandler, authHandl
         '$filterProvider',
         '$provide',
         '$mdThemingProvider',
+        '$mdDateLocaleProvider',
 
-        function($routeProvider, $locationProvider, $controllerProvider, $compileProvider, $filterProvider, $provide, $mdThemingProvider)
+        function($routeProvider, $locationProvider, $controllerProvider, $compileProvider, $filterProvider, $provide, $mdThemingProvider, $mdDateLocaleProvider)
         {
-	        app.controller = $controllerProvider.register;
-	        app.directive  = $compileProvider.directive;
-	        app.filter     = $filterProvider.register;
-	        app.factory    = $provide.factory;
-	        app.service    = $provide.service;
-	        app.routeProvider = $routeProvider;
-	        app.modules    = [];
+            app.controller = $controllerProvider.register;
+            app.directive  = $compileProvider.directive;
+            app.filter     = $filterProvider.register;
+            app.factory    = $provide.factory;
+            app.service    = $provide.service;
+            app.routeProvider = $routeProvider;
+            app.modules    = [];
 
             //$locationProvider.html5Mode(true);
             // ==== PUBLIC MODULE ====
-//	        $routeProvider.when('/', {templateUrl: 'modules/dashboard/dashboard.html', resolve:dependencyResolverFor(['modules/dashboard/controllers/dashboard-controller']) });
-//	        $routeProvider.when('/about', {templateUrl: 'system/views/about.html', resolve:dependencyResolverFor(['system/controllers/about-controller']) });
-	        
-	        $routeProvider.when('/login', {templateUrl : 'system/views/login.html'});
-//	        $routeProvider.when('/register', {templateUrl : 'system/views/register.html'});
-	        
-	        $routeProvider.when('/404', {templateUrl : 'system/views/error/404.html'});
-	        $routeProvider.when('/403', {templateUrl : 'system/views/error/403.html'});
-	        $routeProvider.when('/500', {templateUrl : 'system/views/error/500.html'});
-	        
-	        // EXTENSION-POINT: DEMAIS ROTAS PODEM SER ADICIONAS A PARTIS DO $scope.modules
+            //	        $routeProvider.when('/', {templateUrl: 'modules/dashboard/dashboard.html', resolve:dependencyResolverFor(['modules/dashboard/controllers/dashboard-controller']) });
+            //	        $routeProvider.when('/about', {templateUrl: 'system/views/about.html', resolve:dependencyResolverFor(['system/controllers/about-controller']) });
 
-	        // Redireciona para página default.
-	        $routeProvider.otherwise({redirectTo: '/'});
+            $routeProvider.when('/login', {templateUrl : 'system/views/login.html'});
+            //	        $routeProvider.when('/register', {templateUrl : 'system/views/register.html'});
+
+            $routeProvider.when('/404', {templateUrl : 'system/views/error/404.html'});
+            $routeProvider.when('/403', {templateUrl : 'system/views/error/403.html'});
+            $routeProvider.when('/500', {templateUrl : 'system/views/error/500.html'});
+
+            // EXTENSION-POINT: DEMAIS ROTAS PODEM SER ADICIONAS A PARTIS DO $scope.modules
+
+            // Redireciona para página default.
+            $routeProvider.otherwise({redirectTo: '/'});
 
             // Configuring default Material Design Theme
             $mdThemingProvider.theme('default')
-//                .primaryPalette('blue-grey')
+            //                .primaryPalette('blue-grey')
                 .accentPalette('blue-grey');
 
+//            $mdDateLocaleProvider.formatDate = function(date) {
+//                return moment(date).format('dd/MM/yyyy');
+//            };
         }
     ]);
     
@@ -117,6 +125,30 @@ function(angular, layout, config, dependencyResolverFor, errorHandler, authHandl
 */
     
     });
+
+    app.service('Constants', function() {
+		this.ACCOUNT = {
+		    TYPE: {
+                CA: {id: 'CA',  name: 'Conta Corrente'}, // checking account
+                SA: {id: 'SA',  name: 'Conta Poupança'}, // saving account
+                IA: {id: 'IA',  name: 'Conta Investimento',
+                    type:{
+                        ST:  {id: 'ST',  name: 'Ações'}, // stocks
+                        DB:  {id: 'DB',  name: 'Debêntures'}, // debentures
+                        FCP: {id: 'FCP', name: 'Fundo Curto Prazo'}, // fundo short-term
+                        FR:  {id: 'FR',  name: "Fundo Referenciado"},
+                        FRF: {id: 'FRF', name: 'Fundo de Renda Fixa'},
+                        FA:  {id: 'FA',  name: 'Fundo de Ações'},
+                        FC:  {id: 'FC',  name: 'Fundo Cambial'},
+                        FDE: {id: 'FDE', name: 'Fundo de Dívida Externa'},
+                        FM:  {id: 'FM',  name: 'Fundo Multimercado'}
+                    }
+                }, // investment account
+                CCA: {id: 'CCA', name: 'Cartão de Crédito'} // credit card account
+            }
+		}
+	});
+
 
    return app;
 });

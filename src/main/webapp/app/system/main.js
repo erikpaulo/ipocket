@@ -34,6 +34,15 @@ require.config({
         'highcharts-solidgauge': 'http://code.highcharts.com/modules/solid-gauge.src',
         'highcharts-ng': 'resources/lib/highcharts-ng/dist/highcharts-ng.min',
 
+        // FILE UPLOAD
+        'ng-file-upload': 'resources/lib/ng-file-upload/ng-file-upload.min',
+
+        // CALENDAR
+        'material-calendar': 'resources/lib/material-calendar/angular-material-calendar.min',
+
+        // OTHER PLUGINS
+        'moment': 'resources/lib/moment/min/moment.min',
+
         // APP CORE MODULES
 		'layout-core': 'system/layout-core',
 		'layout-form': 'system/layout-form',
@@ -56,11 +65,15 @@ require.config({
 
         'angular-aria': ['angular'],
         'angular-material-icons': ['angular'],
-		'angular-material': ['angular', 'angular-aria', 'angular-animate'],
+		'angular-material': ['angular', 'angular-aria', 'angular-animate', 'moment'],
 
         'highcharts-more': ['jquery', 'highcharts'],
         'highcharts-solidgauge': ['highcharts', 'highcharts-more'],
 		'highcharts-ng': ['jquery','angular', 'highcharts'],
+
+		'material-calendar': ['angular', 'angular-material'],
+
+		'ng-file-upload': ['angular'],
 
         'layout-core': {
 			deps: ['jquery',
@@ -90,11 +103,16 @@ require.config({
 
                 'highcharts-ng',
                 'highcharts-solidgauge',
-                'highcharts-more'
+                'highcharts-more',
+
+                'material-calendar',
+
+                'ng-file-upload'
 		    ]
 		},
 	}
 });
+
 
 define(['layout-core', 'app'], function(app) {
     // angular.bootstrap(document, ['app']);
@@ -107,26 +125,26 @@ define(['layout-core', 'app'], function(app) {
     require(['domReady!'], function (document) {
         angular.bootstrap(document, ['app']);
 
-            require( ['https://apis.google.com/js/platform.js'], function(){
+        require( ['https://apis.google.com/js/platform.js'], function(){
 
-                window.gapi.signin2.render('google-signin', {
-                    'scope': 'https://www.googleapis.com/auth/plus.login',
-                    'width': 2000,
-                    'height': 36,
-                    'longtitle': true,
-                    'theme': 'dark',
-                    'onsuccess': function(googleUser){
-                        angular.element(document.getElementById('AuthController')).scope()
-                        .googleAuthenticate({token: googleUser.getAuthResponse().id_token});
+            window.gapi.signin2.render('google-signin', {
+                'scope': 'https://www.googleapis.com/auth/plus.login',
+                'width': 2000,
+                'height': 36,
+                'longtitle': true,
+                'theme': 'dark',
+                'onsuccess': function(googleUser){
+                    angular.element(document.getElementById('AuthController')).scope()
+                    .googleAuthenticate({token: googleUser.getAuthResponse().id_token});
 
-                        var auth2 = window.gapi.auth2.getAuthInstance();
-                        auth2.signOut();
-                    },
-                    'onfailure': function(fail){
-                        console.log('fail');
-                    }
-                });
+                    var auth2 = window.gapi.auth2.getAuthInstance();
+                    auth2.signOut();
+                },
+                'onfailure': function(fail){
+                    console.log('fail');
+                }
             });
+        });
 
     });
 

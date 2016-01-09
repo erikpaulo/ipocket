@@ -13,6 +13,25 @@
     "icon": "account_balance",
     "originalPath": "/account",
     "templateUrl": "modules/account/views/accounts.html",
-    "dependencies": ["modules/account/controllers/account-controller"]
+    "dependencies": ["modules/account/controllers/account-controller"],
+    "hasSubMenu": true,
+    "items" : [
+      {
+        "id": "accountEntry",
+        "name":"Lançamentos",
+        "originalPath": "/account/:accountID/entries",
+        "templateUrl": "modules/account/views/account-entry.html",
+        "visible": false,
+        "dependencies": ["modules/account/controllers/account-entry-controller.js"]
+      }
+    ]
+  },
+  {
+    "id": "bills",
+    "name":"Pagamentos",
+    "icon": "add_shopping_cart",
+    "originalPath": "/bills",
+    "templateUrl": "modules/bill/views/bill.html",
+    "dependencies": ["modules/bill/controllers/bill-controller"]
   }
 ]

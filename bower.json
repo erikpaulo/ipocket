@@ -21,6 +21,13 @@
     "material-design-lite": "",
 
     "highcharts": "latest",
-    "highcharts-ng":"latest"
+    "highcharts-ng":"latest",
+
+    "ng-file-upload": "",
+
+    "moment": "",
+    "angular-moment": "",
+
+    "material-calendar": ""
   }
 }

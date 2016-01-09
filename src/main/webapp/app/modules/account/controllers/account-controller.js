@@ -12,18 +12,18 @@ define(['./module', '../services/account-resources', '../../shared/services/util
         };
     });
 
-	app.controller('AccountController', ['$rootScope', '$scope', '$location', '$filter', '$timeout', '$mdDialog', 'AccountResource', 'Utils',
-        function($rootScope, $scope, $location, $filter, $timeout, $mdDialog, Account, Utils) {
+	app.controller('AccountController', ['$rootScope', '$scope', '$location', '$filter', '$timeout', '$mdDialog', 'AccountResource', 'Utils', 'Constants',
+        function($rootScope, $scope, $location, $filter, $timeout, $mdDialog, Account, Utils, Constants) {
             $scope.appContext.contextPage = 'Contas';
             $scope.appContext.contextMenu.actions = [
                 {icon: 'playlist_add', tooltip: 'Nova Conta', onClick: function() {
-                    openDialog($scope, $mdDialog, Utils);
+                    openDialog($scope, $mdDialog, Utils, Constants);
                }}
             ];
 
-            $scope.openAccountDetail = function(){
-//                $scope.appContext.toast.addWarning('Add Warning');
-                $scope.appContext.toast.addError('Add Error');
+            // Open this account details, showing its entries.
+            $scope.detail = function(account){
+                $location.path('/account/'+ account.id +'/entries');
             }
 
             //TODO: Recuperar contas do usuário.
@@ -164,7 +164,7 @@ define(['./module', '../services/account-resources', '../../shared/services/util
 	]);
 });
 
-function openDialog($scope, $mdDialog){
+function openDialog($scope, $mdDialog, Constants){
    $mdDialog.show({
        controller: DialogController,
        templateUrl: 'modules/account/views/new-account-template.html',
@@ -186,13 +186,8 @@ function openDialog($scope, $mdDialog){
    });
 }
 
-function DialogController($scope, $mdDialog, Utils) {
-    $scope.accountTypes = [
-        {id: 'CA',  name: 'Conta Corrente'},
-        {id: 'SA',  name: 'Conta Poupança'},
-        {id: 'IA',  name: 'Conta Investimento'},
-        {id: 'CCA', name: 'Cartão de Crédito'}
-    ];
+function DialogController($scope, $mdDialog, Utils, Constants) {
+    $scope.accountTypes = Constants.ACCOUNT.TYPE;
 
     $scope.newAccount = {};
 

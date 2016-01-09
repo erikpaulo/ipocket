@@ -1,0 +1,42 @@
+<md-dialog flex="60">
+    <md-toolbar layout="row" layout-align="center center" class="header">
+        <div class="md-toolbar-tools">
+            <h2>Importar Lançamentos</h2>
+        </div>
+        <div flex></div>
+        <div>
+            <md-button class="md-icon-button" layout="row" layout-align="right center" ng-click="hide()">X</md-button>
+        </div>
+    </md-toolbar>
+    <md-dialog-content class="md-padding">
+        <div layout="row">
+            <div layout="column" flex="15" layout-align="center center">Data</div>
+            <div layout="column" flex>Categoria</div>
+            <div layout="column" flex="15" layout-align="center end">Valor</div>
+            <div layout="column" flex="15" layout-align="center center">Importar</div>
+        </div>
+        <div layout="row" ng-repeat="entry in entries">
+            <div layout="column" flex="15" layout-align="center center">{{entry.date | date: 'dd/MM/yyyy'}}</div>
+            <div layout="column" flex>
+                <md-input-container class="c-no-margin">
+                    <md-select name="category" ng-model="entry.category.id">
+                        <md-option ng-repeat="category in categories" ng-value="category.id">
+                            {{category.name}}
+                        </md-option>
+                    </md-select>
+                </md-input-container>
+            </div>
+            <div layout="column" flex="15" layout-align="center end">{{entry.amount | currency}}</div>
+            <div layout="column" flex="15" layout-align="center center">
+                <md-button class="md-icon-button" ng-click="entry.exists=!entry.exists">
+                    <md-icon class="material-icons step" ng-if="!entry.exists">thumb_up</md-icon>
+                    <md-icon class="material-icons step" ng-if="entry.exists">thumb_down</md-icon>
+                </md-button>
+            </div>
+        </div>
+    </md-dialog-content>
+    <md-dialog-actions layout="row" layout-align="end center">
+        <md-button ng-click="cancel()">Cancelar</md-button>
+        <md-button class="md-primary" ng-click="submit()">Incluir</md-button>
+    </md-dialog-actions>
+</md-dialog>

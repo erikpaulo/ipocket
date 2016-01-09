@@ -7,12 +7,11 @@
                         <md-list ng-repeat="accountType in summary.types">
                             <span class="md-subhead">{{accountType.type | accountTypeName}}</span>
                             <md-divider class="blue"></md-divider>
-                            <md-list-item style="padding-left: 15px;padding-right: 15px;"
-                                          ng-repeat="account in accountType.accounts">
+                            <md-list-item style="padding-left: 15px;" ng-repeat="account in accountType.accounts" class="c-hover" ng-click="detail(account)">
                                 <span flex>{{ account.name }}</span>
-                                <span class="md-subhead" flex="35" layout="row" layout-align="end center">{{ account.balance | currency }}</span>
-                                <md-button aria-label="Account Details" class="md-icon-button" flex="10">
-                                    <md-icon class="material-icons" ng-click="openAccountDetail()">launch</md-icon>
+                                <span class="md-subhead" layout="row" layout-align="end center" flex>{{ account.balance | currency }}</span>
+                                <md-button aria-label="Account Details" class="md-icon-button md-warn">
+                                    <md-icon class="material-icons" ng-click="inactivate()">delete</md-icon>
                                 </md-button>
                             </md-list-item>
                         </md-list>
