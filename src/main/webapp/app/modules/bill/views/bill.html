@@ -1,56 +1,132 @@
-<link href="resources/styles/table.css" rel="stylesheet" type="text/css" />
-<link href="resources/lib/angular-ui-grid/ui-grid.css" rel="stylesheet" type="text/css" />
-
 <section ng-controller="BillController">
-<div class="lock-screen" ng-hide="bills" ng-show="!bills"></div>
-	<div class="content" ng-if="bills">
-		<div class="grid simple ">
-			<div class="grid-title">
-				<div class="trail">
-					<h3>
-						Lançamentos <span class="semi-bold">Programados</span>
-					</h3>
-				</div>
-<!-- 				<div class="tools"> -->
-<!-- 					<span class="menu" dropdown on-toggle="toggled(open)"> -->
-<!-- 						<span class="glyphicon glyphicon-option-vertical" aria-hidden="true" class="dropdown-toggle" dropdown-toggle></span> -->
-<!-- 						  <ul class="menu-itens"> -->
-<!-- 						    <li> -->
-<!-- 						      <a href ng-click="new()"><i class="glyphicon glyphicon-plus-sign"></i>Novo</a> -->
-<!-- 						    </li> -->
-<!-- 						    <li> -->
-<!-- 						      <a href ng-click="edit()"><i class="glyphicon glyphicon-edit"></i>Editar</a> -->
-<!-- 						    </li> -->
-<!-- 						    <li> -->
-<!-- 						      <a href ng-click="delete()"><i class="glyphicon glyphicon-remove-circle"></i>Excluir</a> -->
-<!-- 						    </li> -->
-<!-- 						    <li> -->
-<!-- 						      <a href ng-click="register()"><i class="glyphicon glyphicon-save"></i>Registrar em Conta</a> -->
-<!-- 						    </li> -->
-<!-- 						    <li> -->
-<!-- 						      <a href ng-click="skip()"><i class="glyphicon glyphicon-new-window"></i>Pular Pagamento</a> -->
-<!-- 						    </li> -->
-<!-- 						  </ul> -->
-<!-- 					</span> -->
-<!-- 				</div> -->
-			</div>
-			<div class="grid-body">
-				<div class="row">
-					<div class="col-md-8">
-						<div ui-calendar="uiConfig.calendar" class="span8 calendar" ng-model="eventSources" calendar="calendar"></div>
-					</div>
-					<div class="col-md-4" id="line-chart">
-						<div class="panel panel-chart ng-scope">
-							<div class="panel-heading">Fluxo de Caixa</div>
-							<div class="panel-body">
-								<div class="chart-container">
-									<highchart id="chart1" config="chartConfig"></highchart>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+    <div layout="row" layout-align="center top" layout-padding>
+        <div layout="column" flex="65">
+            <md-card>
+                <md-card-header class="md-title">
+                    <span>Lançamentos</span>
+                </md-card-header>
+                <md-divider></md-divider>
+                <md-card-content layout layout-align="center center">
+                    <span layout-padding ng-if="!selectedBills" class="md-subhead" style="font-style: italic;">Sem lançamentos neste dia</span>
+                    <md-list ng-if="selectedBills" layout="column" flex="100">
+                        <md-list-item class="mdl-color--blue-grey-300" ng-if="selectedBills.length>0">
+                            <div layout="row" flex="100" layout-align="center center"
+                                 style="color:white;font-weight:600">
+                                <div layout="column" flex="15" layout-align="center center">Data</div>
+                                <div layout="column" flex>Categoria</div>
+                                <div layout="column" flex="25">Conta</div>
+                                <div layout="column" flex="10" layout-align="center end">Valor</div>
+                                <div layout="column" flex="15" layout-align="center end">
+                                    <div layout="row">
+                                        <md-button aria-label="1" class="md-icon-button"></md-button>
+                                        <md-button aria-label="2" class="md-icon-button"></md-button>
+                                    </div>
+                                </div>
+                            </div>
+                        </md-list-item>
+                        <md-list-item ng-repeat="bill in selectedBills">
+                            <div layout="row" flex="100" layout-align="center center" ng-if="!bill.edit">
+                                <div layout="column" flex="15" layout-align="center center">{{bill.date |
+                                    date:'dd/MM/yyyy'}}
+                                </div>
+                                <div layout="column" flex>{{bill.category.name}}</div>
+                                <div layout="column" flex="25">{{bill.accountTo.name}}</div>
+                                <div layout="column" flex="10" layout-align="center end">{{bill.amount | currency}}
+                                </div>
+                                <div layout="column" flex="15">
+                                    <div layout="row">
+                                        <md-button aria-label="delete" class="md-icon-button c-hover"
+                                                   ng-click="delete(bill)">
+                                            <md-icon class="material-icons">delete</md-icon>
+                                        </md-button>
+                                        <md-button aria-label="edit" class="md-icon-button c-hover"
+                                                   ng-click="edit(bill)">
+                                            <md-icon class="material-icons">create</md-icon>
+                                        </md-button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div layout="row" flex="100" layout-align="center center" ng-if="bill.edit" layout-padding
+                                 style="border:1px solid lightsteelblue;border-top:0px;">
+                                <div layout="column" flex="85">
+                                    <div layout="row">
+                                        <div layout="column" flex="30">
+                                            <md-datepicker name="date" ng-model="inEdit.date" md-placeholder="Data"
+                                                           required>
+                                                <div class="errors" ng-messages="entryForm.date.$error"
+                                                     ng-if="myForm.$dirty">
+                                                    <div ng-message="required">Obrigatório</div>
+                                                </div>
+                                            </md-datepicker>
+                                        </div>
+                                        <div layout="column" flex="50">
+                                            <md-input-container class="">
+                                                <label>Categoria</label>
+                                                <md-select name="category" ng-model="inEdit.category.id">
+                                                    <md-option ng-repeat="category in categories"
+                                                               ng-value="category.id">
+                                                        {{category.name}}
+                                                    </md-option>
+                                                </md-select>
+                                            </md-input-container>
+                                        </div>
+                                        <div layout="column" flex="20">
+                                            <md-input-container class="c-input-container-no-error" x>
+                                                <label>Valor *</label>
+                                                <input name="amount" ng-model="inEdit.amount" type="text" required
+                                                       format="number">
+                                            </md-input-container>
+                                        </div>
+                                    </div>
+                                    <div layout="row">
+                                        <div layout="column" flex="45" ng-if="bill.type=='T'">
+                                            <md-input-container>
+                                                <label>Conta Origem</label>
+                                                <md-select name="category" ng-model="inEdit.accountFrom.id">
+                                                    <md-option ng-repeat="account in accounts" ng-value="account.id">
+                                                        {{account.name}}
+                                                    </md-option>
+                                                </md-select>
+                                            </md-input-container>
+                                        </div>
+                                        <div flex ng-if="bill.type=='T'"></div>
+                                        <div layout="column" flex="45">
+                                            <md-input-container>
+                                                <label>Conta Destino</label>
+                                                <md-select name="category" ng-model="inEdit.accountTo.id">
+                                                    <md-option ng-repeat="account in accounts" ng-value="account.id">
+                                                        {{account.name}}
+                                                    </md-option>
+                                                </md-select>
+                                            </md-input-container>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div layout="column" flex="15">
+                                    <div layout="row">
+                                        <md-button aria-label="cancel" class="md-icon-button c-hover"
+                                                   ng-click="cancel(bill)">
+                                            <md-icon class="material-icons">highlight_off</md-icon>
+                                        </md-button>
+                                        <md-button aria-label="save" class="md-icon-button c-hover"
+                                                   ng-click="save(bill)">
+                                            <md-icon class="material-icons">done</md-icon>
+                                        </md-button>
+                                    </div>
+                                </div>
+                            </div>
+                            <md-divider></md-divider>
+                        </md-list-item>
+                    </md-list>
+                </md-card-content>
+            </md-card>
+        </div>
+        <div layout="column" flex>
+            <calendar-md flex layout
+                         on-day-click="dayClick"
+                         title-format="'MMMM y'"
+                         ng-model='selectedDate'>
+            </calendar-md>
+        </div>
+    </div>
 </section>

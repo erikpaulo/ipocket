@@ -15,11 +15,11 @@ define(['./module', '../services/account-resources', '../../shared/services/util
 	app.controller('AccountController', ['$rootScope', '$scope', '$location', '$filter', '$timeout', '$mdDialog', 'AccountResource', 'Utils', 'Constants',
         function($rootScope, $scope, $location, $filter, $timeout, $mdDialog, Account, Utils, Constants) {
             $scope.appContext.contextPage = 'Contas';
-            $scope.appContext.contextMenu.actions = [
+            $scope.appContext.contextMenu.setActions([
                 {icon: 'playlist_add', tooltip: 'Nova Conta', onClick: function() {
                     openDialog($scope, $mdDialog, Utils, Constants);
                }}
-            ];
+            ]);
 
             // Open this account details, showing its entries.
             $scope.detail = function(account){

@@ -45,6 +45,16 @@ define(['./module', '../services/account-resources', '../../configuration/servic
                 {id: 9, name: 'Education: Escola de Inglês'}
             ]
 
+            //TODO: recuperar as contas do usuário.
+            $scope.accounts = [
+                {id: 1,name: 'CC: Itaú Personalitè',balance: 3456.8},
+                {id: 2,name: 'CC: HSBC Premier',balance: 56.0},
+                {id: 3,name: 'Poupança Personalitè',balance: 61986.02},
+                {id: 3,name: 'Maximime DI',balance: 986.02},
+                {id: 4,name: 'Itaú Personalitè - Visa Carol',balance: -10000.02},
+                {id: 5,name: 'Itaú Personalitè - Visa Erik',balance: -2986.02}
+            ]
+
             // Select one entry, signaling it to user
             $scope.select = function(entry){
                 if (entry.selected) {

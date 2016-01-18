@@ -20,6 +20,7 @@ require.config({
 
 		// ANGULAR PLUGINS MODULES
 		'angular-messages': 'resources/lib/angular-messages/angular-messages.min',
+		'angular-sanitize': 'resources/lib/angular-sanitize/angular-sanitize.min',
 
         // ANGULAR MATERIAL
         'material-design': 'resources/lib/material-design-lite/material.min',
@@ -38,7 +39,7 @@ require.config({
         'ng-file-upload': 'resources/lib/ng-file-upload/ng-file-upload.min',
 
         // CALENDAR
-        'material-calendar': 'resources/lib/material-calendar/angular-material-calendar.min',
+        'material-calendar': 'resources/lib/material-calendar/angular-material-calendar',
 
         // OTHER PLUGINS
         'moment': 'resources/lib/moment/min/moment.min',
@@ -62,6 +63,7 @@ require.config({
 
         'angular-i18n-ptbr': ['angular'],
 		'angular-messages': ['angular'],
+		'angular-sanitize': ['angular'],
 
         'angular-aria': ['angular'],
         'angular-material-icons': ['angular'],
@@ -71,7 +73,7 @@ require.config({
         'highcharts-solidgauge': ['highcharts', 'highcharts-more'],
 		'highcharts-ng': ['jquery','angular', 'highcharts'],
 
-		'material-calendar': ['angular', 'angular-material'],
+		'material-calendar': ['angular', 'angular-material', 'angular-sanitize'],
 
 		'ng-file-upload': ['angular'],
 

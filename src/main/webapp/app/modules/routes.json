@@ -29,7 +29,7 @@
   {
     "id": "bills",
     "name":"Pagamentos",
-    "icon": "add_shopping_cart",
+    "icon": "today",
     "originalPath": "/bills",
     "templateUrl": "modules/bill/views/bill.html",
     "dependencies": ["modules/bill/controllers/bill-controller"]

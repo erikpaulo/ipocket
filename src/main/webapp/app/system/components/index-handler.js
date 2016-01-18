@@ -7,14 +7,16 @@ define(['angular-resource', 'jquery'], function (resource, $) {
 	function() {
         var scope = null;
         var location = null;
+        var timeout = null;
         var sideBarService = null;
         var warnings = [], errors = [];
 
         var context = {
 
-            init: function($scope, $location, $mdSidenav, $mdToast){
+            init: function($scope, $location, $timeout, $mdSidenav, $mdToast){
                 scope = $scope;
                 location = $location;
+                timeout = $timeout;
                 sideBarService = $mdSidenav;
 
                 scope.$watch('appContext.contextMenu.isOpen', function(newValue, oldValue) {
@@ -60,6 +62,13 @@ define(['angular-resource', 'jquery'], function (resource, $) {
             },
             contextMenu: {
                 actions: [],
+                setActions: function(acts){
+                    this.actions = [];
+
+                    timeout(function() {
+                        scope.appContext.contextMenu.actions = acts;
+                    },0);
+                },
                 icon: 'add',
                 isOpen: false
             },
@@ -99,9 +108,9 @@ define(['angular-resource', 'jquery'], function (resource, $) {
 	    $rootScope.appContext = AppContext;
 	});
 
-	IndexModule.controller('IndexController', ['$rootScope', '$scope', '$location', '$mdSidenav', '$mdDialog', '$mdToast', 'AuthService', 'ErrorHandler',
-	    function($rootScope, $scope, $location, $mdSidenav, $mdDialog, $mdToast, AuthService, ErrorHandler){
-            $scope.appContext.init($scope, $location, $mdSidenav, $mdToast);
+	IndexModule.controller('IndexController', ['$rootScope', '$scope', '$location', '$timeout', '$mdSidenav', '$mdDialog', '$mdToast', 'AuthService', 'ErrorHandler',
+	    function($rootScope, $scope, $location, $timeout, $mdSidenav, $mdDialog, $mdToast, AuthService, ErrorHandler){
+            $scope.appContext.init($scope, $location, $timeout, $mdSidenav, $mdToast);
 	        $scope.appContext.contextPage = 'Entrada'
 
             AuthService.getUser().then(function(user){

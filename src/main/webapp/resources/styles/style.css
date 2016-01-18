@@ -53,6 +53,17 @@ md-toolbar:not(.md-hue-1),
     margin: 0px !important;
 }
 
+.c-no-padding{
+    padding: 0 !important;
+}
+
+.c-number-positive{
+    color:blue;
+}
+.c-number-negative{
+    color:red;
+}
+
 /********** >>> CARDS <<< ***********/
 
 md-card.mdl-color--green-600 {
@@ -139,6 +150,10 @@ md-datepicker{
     margin: 18px 0;
 }
 
+.md-datepicker-input-container{
+    padding-bottom: 3px;
+}
+
 /********** >>> TOAST <<< ***********/
 md-toast.md-error-toast-theme .md-toast-content {
     background-color: red;
@@ -160,3 +175,15 @@ md-toast.md-error-toast-theme .md-toast-content {
 .file-drop-box-dragover md-icon{
     color:rgb(63,81,181);
 }
+
+
+/********** >>> CALENDAR <<< ***********/
+calendar-md{
+    margin-top: 8px;
+}
+calendar-md md-content{
+    min-height:0 !important;
+    height:425px !important;
+}
+
+
