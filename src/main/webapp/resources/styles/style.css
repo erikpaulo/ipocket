@@ -148,10 +148,15 @@ md-input-container.c-input-container-no-error div.md-errors-spacer{
 
 md-datepicker{
     margin: 18px 0;
+    height:43px;
 }
 
 .md-datepicker-input-container{
     padding-bottom: 3px;
+}
+
+.md-datepicker-button{
+    height:43px !important;
 }
 
 /********** >>> TOAST <<< ***********/

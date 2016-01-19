@@ -16,7 +16,7 @@ define(['./module', '../services/account-resources', '../../shared/services/util
         function($rootScope, $scope, $location, $filter, $timeout, $mdDialog, Account, Utils, Constants) {
             $scope.appContext.contextPage = 'Contas';
             $scope.appContext.contextMenu.setActions([
-                {icon: 'playlist_add', tooltip: 'Nova Conta', onClick: function() {
+                {icon: 'add_circle', tooltip: 'Nova Conta', onClick: function() {
                     openDialog($scope, $mdDialog, Utils, Constants);
                }}
             ]);
@@ -155,50 +155,50 @@ define(['./module', '../services/account-resources', '../../shared/services/util
                 credits: {enabled: false},
                 loading: false,
                 size: {
-//                   width: 400,
                    height: 260
                 }
             }
         }
 
 	]);
+
+    function openDialog($scope, $mdDialog, Constants){
+       $mdDialog.show({
+           controller: DialogController,
+           templateUrl: 'modules/account/views/new-account-template.html',
+           parent: angular.element(document.body),
+           clickOutsideToClose:true
+       }).then(function(newAccount){
+
+            //TODO: Criar conta no server e recuperar summary atualizado.
+            angular.forEach($scope.summary.types, function(type){
+                if (type.type == newAccount.type){
+                    newAccount.balance = newAccount.startBalance;
+                    type.accounts.push(newAccount);
+                    type.balance += newAccount.startBalance;
+                }
+            });
+            $scope.summary.balance += newAccount.startBalance;
+
+            $scope.appContext.toast.addWarning('Conta '+ newAccount.name +' incluída com sucesso!');
+       });
+    }
+
+    function DialogController($scope, $mdDialog, Utils, Constants) {
+        $scope.accountTypes = Constants.ACCOUNT.TYPE;
+
+        $scope.newAccount = {};
+
+        $scope.hide = function() {
+            $mdDialog.hide();
+        };
+        $scope.cancel = function() {
+            $mdDialog.cancel();
+        };
+        $scope.submit = function() {
+            $scope.newAccount.startBalance = Utils.currencyToNumber($scope.newAccount.startBalance);
+            $mdDialog.hide($scope.newAccount);
+        };
+    }
 });
 
-function openDialog($scope, $mdDialog, Constants){
-   $mdDialog.show({
-       controller: DialogController,
-       templateUrl: 'modules/account/views/new-account-template.html',
-       parent: angular.element(document.body),
-       clickOutsideToClose:true
-   }).then(function(newAccount){
-
-        //TODO: Criar conta no server e recuperar summary atualizado.
-        angular.forEach($scope.summary.types, function(type){
-            if (type.type == newAccount.type){
-                newAccount.balance = newAccount.startBalance;
-                type.accounts.push(newAccount);
-                type.balance += newAccount.startBalance;
-            }
-        });
-        $scope.summary.balance += newAccount.startBalance;
-
-        $scope.appContext.toast.addWarning('Conta '+ newAccount.name +' incluída com sucesso!');
-   });
-}
-
-function DialogController($scope, $mdDialog, Utils, Constants) {
-    $scope.accountTypes = Constants.ACCOUNT.TYPE;
-
-    $scope.newAccount = {};
-
-    $scope.hide = function() {
-        $mdDialog.hide();
-    };
-    $scope.cancel = function() {
-        $mdDialog.cancel();
-    };
-    $scope.submit = function() {
-        $scope.newAccount.startBalance = Utils.currencyToNumber($scope.newAccount.startBalance);
-        $mdDialog.hide($scope.newAccount);
-    };
-}

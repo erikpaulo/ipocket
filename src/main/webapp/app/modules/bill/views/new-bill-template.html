@@ -1,0 +1,93 @@
+<md-dialog flex="50">
+    <form name="myForm" ng-submit="submit()">
+        <md-toolbar layout="row" layout-align="center center" class="header">
+            <div class="md-toolbar-tools">
+                <h2>Incluir Novo Pagamento</h2>
+            </div>
+            <div flex></div>
+            <div>
+                <md-button class="md-icon-button" layout="row" layout-align="right center" ng-click="hide()">X
+                </md-button>
+            </div>
+        </md-toolbar>
+        <md-dialog-content class="md-padding">
+
+            <!--Line-->
+            <div layout="row">
+                <div layout="column" flex>
+                    <md-input-container>
+                        <label>Categoria *</label>
+                        <md-select name="category" ng-model="newBill.category.id" required>
+                            <md-option ng-repeat="category in categories"
+                                       ng-value="category.id">
+                                {{category.name}}
+                            </md-option>
+                        </md-select>
+                    </md-input-container>
+                </div>
+                <div layout="column" flex="30">
+                    <md-datepicker name="date" ng-model="newBill.date" md-placeholder="Data" required>
+                        <div class="errors" ng-messages="entryForm.date.$error"
+                             ng-if="myForm.$dirty">
+                            <div ng-message="required">Obrigatório</div>
+                        </div>
+                    </md-datepicker>
+                </div>
+                <div layout="column" flex="20">
+                    <md-input-container>
+                        <label>Ocorrências</label>
+                        <md-select name="events" ng-model="newBill.events">
+                            <md-option ng-repeat="event in events" ng-value="event.id">
+                                {{event.name}}
+                            </md-option>
+                        </md-select>
+                    </md-input-container>
+                </div>
+            </div>
+
+            <!--Line-->
+            <div layout="row">
+                <div layout="column" flex="40">
+                    <md-input-container>
+                        <label>Conta Destino *</label>
+                        <md-select name="category" ng-model="newBill.accountTo.id" required>
+                            <md-option ng-repeat="account in accounts" ng-value="account.id">
+                                {{account.name}}
+                            </md-option>
+                        </md-select>
+                    </md-input-container>
+                </div>
+                <div layout="column" flex="40" ng-if="!newBill.transfer"></div>
+                <div layout="column" flex="40" ng-if="newBill.transfer">
+                    <md-input-container>
+                        <label>Conta Origem</label>
+                        <md-select name="category" ng-model="newBill.accountFrom.id">
+                            <md-option ng-repeat="account in accounts" ng-value="account.id">
+                                {{account.name}}
+                            </md-option>
+                        </md-select>
+                    </md-input-container>
+                </div>
+                <div layout="column" flex="20">
+                    <md-input-container class="c-input-container-no-error">
+                        <label>Valor *</label>
+                        <input name="amount" ng-model="newBill.amount" type="text" required format="number">
+                    </md-input-container>
+                </div>
+            </div>
+
+            <!--Line-->
+            <div layout="row">
+                <div layout="column" flex="40" layout-align="center start" style="padding: 7px;">
+                    <md-checkbox ng-model="newBill.transfer" aria-label="Checkbox 1" class="c-no-margin">
+                        Transferência
+                    </md-checkbox>
+                </div>
+            </div>
+        </md-dialog-content>
+        <md-dialog-actions layout="row" layout-align="end center">
+            <md-button class="md-accent" ng-click="cancel()">Cancelar</md-button>
+            <md-button class="md-primary" type="submit" ng-disabled="myForm.$invalid">Incluir</md-button>
+        </md-dialog-actions>
+    </form>
+</md-dialog>

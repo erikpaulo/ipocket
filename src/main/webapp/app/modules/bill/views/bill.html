@@ -3,7 +3,7 @@
         <div layout="column" flex="65">
             <md-card>
                 <md-card-header class="md-title">
-                    <span>Lançamentos</span>
+                    <span>Lançamentos de {{label}}</span>
                 </md-card-header>
                 <md-divider></md-divider>
                 <md-card-content layout layout-align="center center">
@@ -49,6 +49,8 @@
                             <div layout="row" flex="100" layout-align="center center" ng-if="bill.edit" layout-padding
                                  style="border:1px solid lightsteelblue;border-top:0px;">
                                 <div layout="column" flex="85">
+
+                                    <!--Line-->
                                     <div layout="row">
                                         <div layout="column" flex="30">
                                             <md-datepicker name="date" ng-model="inEdit.date" md-placeholder="Data"
@@ -71,15 +73,17 @@
                                             </md-input-container>
                                         </div>
                                         <div layout="column" flex="20">
-                                            <md-input-container class="c-input-container-no-error" x>
+                                            <md-input-container class="c-input-container-no-error">
                                                 <label>Valor *</label>
                                                 <input name="amount" ng-model="inEdit.amount" type="text" required
                                                        format="number">
                                             </md-input-container>
                                         </div>
                                     </div>
+
+                                    <!--Line-->
                                     <div layout="row">
-                                        <div layout="column" flex="45" ng-if="bill.type=='T'">
+                                        <div layout="column" flex="45" ng-if="bill.transfer">
                                             <md-input-container>
                                                 <label>Conta Origem</label>
                                                 <md-select name="category" ng-model="inEdit.accountFrom.id">
@@ -89,7 +93,7 @@
                                                 </md-select>
                                             </md-input-container>
                                         </div>
-                                        <div flex ng-if="bill.type=='T'"></div>
+                                        <div flex ng-if="bill.transfer"></div>
                                         <div layout="column" flex="45">
                                             <md-input-container>
                                                 <label>Conta Destino</label>
