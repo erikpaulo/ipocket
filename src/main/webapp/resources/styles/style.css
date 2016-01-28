@@ -64,6 +64,10 @@ md-toolbar:not(.md-hue-1),
     color:red;
 }
 
+.c-caption{
+    color: #7A7A7A;
+}
+
 /********** >>> CARDS <<< ***********/
 
 md-card.mdl-color--green-600 {
@@ -159,6 +163,12 @@ md-datepicker{
     height:43px !important;
 }
 
+fieldset{
+    border: 1px solid lightgray;
+    padding-left: 8px;
+    margin: 0 2px;
+}
+
 /********** >>> TOAST <<< ***********/
 md-toast.md-error-toast-theme .md-toast-content {
     background-color: red;
@@ -192,3 +202,9 @@ calendar-md md-content{
 }
 
 
+/********** >>> TABLES <<< ***********/
+.table-head{
+    background-color: #90a4ae !important;
+    color:white;
+    font-weight:600;
+}

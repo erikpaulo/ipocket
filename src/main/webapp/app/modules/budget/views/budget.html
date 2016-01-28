@@ -1,0 +1,123 @@
+<section ng-controller="BudgetController" layout="row">
+    <div layout="column" flex="40">
+        <md-card >
+            <md-card-content class="c-no-padding">
+                <div layout="row" layout-padding>
+                    <div layout="column" flex="20" layout-align="center center">
+                            <span class="md-display-1">{{dashboard.track.entry.year}}</span>
+                    </div>
+                    <md-divider></md-divider>
+                    <div layout="column" flex>
+                        <div layout="row">
+                            <div layout="column" flex="100" class="md-padding" layout-align="center center">
+                                <div layout="row" layout-align="center center">
+                                    <md-icon class="material-icons md-48" style="margin-right:10px">local_library</md-icon>
+                                    <span class="md-display-1">{{dashboard.track.deviation | number:2}} %</span>
+                                </div>
+                                <div layout="row">
+                                    <span class="md-caption c-caption"><strong>Economia</strong> planejada</span>
+                                </div>
+                            </div>
+                        </div>
+                        <md-divider></md-divider>
+                        <div layout="row">
+                            <div layout="column" flex="50" class="md-padding" layout-align="center center">
+                                <div layout="row" layout-align="center center">
+                                    <md-icon class="material-icons md-36 md-warn" style="margin-right:10px">add_circle</md-icon>
+                                    <span class="md-headline">{{dashboard.track.track[0].deviation | number:2}} %</span>
+                                </div>
+                                <div layout="row">
+                                    <span class="md-caption c-caption"><strong>{{dashboard.track.track[0].entry.name}}</strong> planejadas</span>
+                                </div>
+
+                            </div>
+                            <md-divider></md-divider>
+                            <div layout="column" flex="50" class="md-padding" layout-align="center center">
+                                <span class="md-headline">{{dashboard.track.track[1].deviation | number:2}} %</span>
+                                <span class="md-caption c-caption"><strong>{{dashboard.track.track[1].entry.name}}</strong> planejada</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </md-card-content>
+        </md-card>
+        <md-card>
+            <md-card-header>
+                <span class="md-title">Acompanhamento Plano Macro</span>
+            </md-card-header>
+            <md-card-content>
+                <highchart id="budgetTrackReport" config="budgetTrackReport"></highchart>
+                <span class="md-caption c-caption">Você está a <strong>{{(dashboard.track.totalExecuted - dashboard.track.totalPlanned) | currency}}</strong> do plano original</span>
+            </md-card-content>
+        </md-card>
+
+    </div>
+
+    <div layout="column" flex="60">
+        <div layout="row">
+            <div layout="column" flex="100">
+                <md-card>
+                    <md-card-header>
+                        <span class="md-title">Principais Desvios</span>
+                    </md-card-header>
+                    <md-card-content>
+                        <md-list>
+                            <md-list-item class="table-head" style="min-height:30px !important">
+                                <div layout="column" flex="40">Categoria</div>
+                                <div layout="column" flex="20" layout-align="center center"> Planejado</div>
+                                <div layout="column" flex="20" layout-align="center center">Executado</div>
+                                <div layout="column" flex="20" layout-align="center center">Desvio</div>
+                            </md-list-item>
+                            <md-list-item ng-repeat="deviation in dashboard.mainDeviations" style="min-height:30px !important">
+                                <div layout="column" flex="40">{{deviation.category.name}}</div>
+                                <div layout="column" flex="20" layout-align="center center">{{deviation.totalPlanned | currency}}</div>
+                                <div layout="column" flex="20" layout-align="center center">{{deviation.totalExecuted | currency}}</div>
+                                <div layout="column" flex="20" layout-align="center center">{{deviation.deviation | number:0}}%</div>
+                            </md-list-item>
+                        </md-list>
+                    </md-card-content>
+                </md-card>
+            </div>
+        </div>
+        <div layout="row">
+            <div layout="column" flex="100">
+                <md-card>
+                    <md-card-header class="md-title">
+                        Plano Detalhado
+                    </md-card-header>
+                    <md-card-content>
+                        <div layout="row" class="md-subhead" layout-align="start center">
+                            <div style="padding:8px;">
+                                <span><strong>Trail:</strong></span>
+                            </div>
+                            <div ng-repeat="item in details.trail">
+                                <md-button ng-if="!$first" class="md-icon-button" aria-label="forward">
+                                    <md-icon class="material-icons">forward</md-icon>
+                                </md-button>
+                                <span>{{item.name}}</span>
+                                <md-button ng-if="$last && $index>0" aria-label="removeFromTrail" class="md-icon-button" ng-click="goBack(item)">
+                                    <md-icon class="material-icons">keyboard_return</md-icon>
+                                </md-button>
+                            </div>
+                        </div>
+                        <md-divider></md-divider>
+                        <md-list>
+                            <md-list-item class="table-head" style="min-height:30px !important">
+                                <div layout="column" flex="40">Nome</div>
+                                <div layout="column" flex="20" layout-align="center center"> Planejado</div>
+                                <div layout="column" flex="20" layout-align="center center">Executado</div>
+                                <div layout="column" flex="20" layout-align="center center">Desvio</div>
+                            </md-list-item>
+                            <md-list-item ng-repeat="detail in details.nodeSelected" ng-class="{'c-hover': detail.track}" style="min-height:30px !important" ng-click="goDown(detail)">
+                                <div layout="column" flex="40">{{detail.entry.name}}</div>
+                                <div layout="column" flex="20" layout-align="center center">{{detail.totalPlanned | currency}}</div>
+                                <div layout="column" flex="20" layout-align="center center">{{detail.totalExecuted | currency}}</div>
+                                <div layout="column" flex="20" layout-align="center center">{{detail.deviation | number:0}}%</div>
+                            </md-list-item>
+                        </md-list>
+                    </md-card-content>
+                </md-card>
+            </div>
+        </div>
+    </div>
+</section>

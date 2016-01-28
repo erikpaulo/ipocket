@@ -10,6 +10,7 @@
 		<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:100,200,300,400,500,700" type="text/css">
 		<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 
+		<!--TODO: Retirar referência para material design-->
 		<link rel="stylesheet" href="resources/lib/material-design-lite/material.min.css">
 		<link rel="stylesheet" href="resources/lib/angular-material/angular-material.min.css">
 
@@ -25,14 +26,12 @@
 	</head>
 
 	<body ng-controller="IndexController"  ng-cloak class="ng-cloak">
-
 		<section layout="column" ng-if="appContext.currentUser.authenticated" layout-fill>
 			<md-sidenav layout="column" class="md-sidenav-left md-whiteframe-z2" md-component-id="left">
 				<md-toolbar class="">
 					<span flex></span>
 					<div layout="row" class="md-toolbar-tools-bottom inset">
 						<img ng-src="{{appContext.currentUser.imageUrl}}" class="user-avatar" />
-						<!--<md-icon md-svg-src="{{user.imageUrl}}" class="user-avatar"></md-icon>-->
 						<div layout="column">
 							<h4 class="md-display-1">Bem-Vindo</h4>
 							<div class="md-title">{{appContext.currentUser.displayName}}</div>
