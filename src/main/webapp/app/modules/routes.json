@@ -60,5 +60,16 @@
         "dependencies": ["modules/budget/controllers/budget-controller"]
       }
     ]
+  },
+  {
+    "id": "categorization",
+    "name": "Categorização",
+    "icon": "list",
+    "originalPath": "/configuration",
+    "templateUrl": "modules/configuration/views/categorization.html",
+    "dependencies": [
+      "modules/configuration/controllers/categorization-controller"
+    ],
+    "hasSubMenu": false
   }
 ]

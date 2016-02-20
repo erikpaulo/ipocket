@@ -208,3 +208,37 @@ calendar-md md-content{
     color:white;
     font-weight:600;
 }
+
+/********** >>> ACCORDION <<< ***********/
+div.c-card-accordion-header{
+    margin-top: 15px;
+}
+div.c-card-accordion-header span{
+    padding:5px 10px;
+}
+div.c-card-accordion-header.closed{
+    border-bottom: 1px solid #ddd;
+}
+div.c-card-accordion-header.opened{
+    border-bottom: 2px solid rgb(124, 181, 236);
+}
+div.c-card-accordion{
+    /*margin: 10px 10px;*/
+    padding: 8px 8px 0px 8px;
+}
+div.c-card-accordion.opened{
+    display: inherit;
+    /*background: rgba(124, 181, 236, 0.0470588);*/
+    border: 1px solid #ddf;
+}
+div.c-card-accordion.closed{
+    display:none;
+}
+
+/********** >>> TOOLBAR <<< ***********/
+md-toolbar.thin{
+    min-height:0;
+}
+md-toolbar.thin div.md-toolbar-tools{
+    height: inherit;
+}

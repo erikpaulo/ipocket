@@ -1,0 +1,77 @@
+<section ng-controller="CategorizationController" layout layout-fill>
+    <div layout="column" flex="100">
+        <div layout="row" layout-fill>
+            <div layout="column" flex="50" ng-repeat="group in groups">
+                <md-card>
+                    <md-card-header>
+                        <div layout="row" layout-align="center center" flex="100">
+                            <span class="md-title">{{group.name}}</span>
+                            <span flex></span>
+                            <md-menu>
+                                <md-button aria-label="Open phone interactions menu" class="md-icon-button"
+                                           ng-click="openMenu($mdOpenMenu, $event)">
+                                    <md-icon md-menu-origin class="material-icons">more_vert</md-icon>
+                                </md-button>
+                                <md-menu-content width="4">
+                                    <md-menu-item>
+                                        <md-button ng-click="addCategory(group)">
+                                            Adicionar Categoria
+                                        </md-button>
+                                    </md-menu-item>
+                                    <md-menu-item>
+                                        <md-button ng-click="addSubCategory(group)">
+                                            Adicionar SubCategoria
+                                        </md-button>
+                                    </md-menu-item>
+                                </md-menu-content>
+                            </md-menu>
+                        </div>
+                    </md-card-header>
+                    <md-card-content style="overflow:auto;">
+                        <div layout="row" ng-repeat="category in group.categories" class="">
+                            <div layout="column" flex="100">
+                                <div layout="row" layout-align="center end" class="c-card-accordion-header"
+                                     ng-class="{opened: category.open, closed: !category.open}">
+                                    <span flex ng-if="!category.edit" class="c-hover"
+                                          ng-click="editCategory($event, group, category)">{{category.name}}</span>
+                                    <md-input-container ng-if="category.edit"
+                                                        class="c-input-container-no-error c-no-margin" flex>
+                                        <input id="inputc_{{category.id}}" name="name" ng-model="category.name"
+                                               ng-blur="editCategory($event, group, category)">
+                                    </md-input-container>
+                                    <md-button class="md-icon-button" aria-label="Expand/Collapse">
+                                        <md-icon ng-if="category.open" class="material-icons"
+                                                 ng-click="collapse(category)">keyboard_arrow_up
+                                        </md-icon>
+                                        <md-icon ng-if="!category.open" class="material-icons"
+                                                 ng-click="expand(category)">keyboard_arrow_down
+                                        </md-icon>
+                                    </md-button>
+                                </div>
+                                <div layout="row" class="c-card-accordion"
+                                     ng-class="{opened: category.open, closed: !category.open}">
+                                    <div layout="column" flex="100">
+                                        <md-list>
+                                            <md-list-item ng-repeat="subcategory in category.subcategories">
+                                                <span ng-if="!subcategory.edit"
+                                                      ng-click="editSubCategory($event, subcategory)" flex>{{subcategory.name}}</span>
+                                                <md-input-container ng-if="subcategory.edit"
+                                                                    class="c-input-container-no-error c-no-margin" flex>
+                                                    <input id="inputsc_{{subcategory.id}}" name="name"
+                                                           ng-model="subcategory.name"
+                                                           ng-blur="editSubCategory($event, subcategory)">
+                                                </md-input-container>
+                                                <md-switch ng-model="subcategory.activated" class="md-primary"
+                                                           aria-label="Category Activated"></md-switch>
+                                            </md-list-item>
+                                        </md-list>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </md-card-content>
+                </md-card>
+            </div>
+        </div>
+    </div>
+</section>

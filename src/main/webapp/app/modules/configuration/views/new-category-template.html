@@ -1,0 +1,37 @@
+<md-dialog flex="50">
+    <form name="myForm" ng-submit="submit()">
+        <md-toolbar layout="row" layout-align="center center" class="header">
+            <div class="md-toolbar-tools">
+                <h2><span ng-if="func=='I'">Editar</span><span ng-if="func=='E'">Incluir</span> Categoria</h2>
+            </div>
+            <div flex></div>
+            <div>
+                <md-button class="md-icon-button" layout="row" layout-align="right center" ng-click="hide()">X
+                </md-button>
+            </div>
+        </md-toolbar>
+        <md-dialog-content class="md-padding">
+            <div layout="row" flex="100">
+                <md-input-container flex="40">
+                    <label>Grupo *</label>
+                    <input name="name" ng-model="group.name" disabled>
+                </md-input-container>
+                <span flex></span>
+                <md-input-container flex="50">
+                    <label>Categoria *</label>
+                    <input name="name" ng-model="node.name" required md-maxlength="50">
+
+                    <div class="errors" ng-messages="myForm.name.$error" ng-if="myForm.$dirty">
+                        <div ng-message="required">Obrigatório</div>
+                    </div>
+                </md-input-container>
+            </div>
+        </md-dialog-content>
+        <md-dialog-actions layout="row" layout-align="end center">
+            <md-button class="md-accent" ng-click="cancel()">Cancelar</md-button>
+            <md-button class="md-primary" type="submit" ng-disabled="myForm.$invalid">
+                <span>Inserir</span>
+            </md-button>
+        </md-dialog-actions>
+    </form>
+</md-dialog>

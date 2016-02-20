@@ -24,6 +24,23 @@ function (module) {
                             {id: 8, name: 'Salário CI&T - Erik'},
                             {id: 9, name: 'Salário CI&T - Carol'},
                          ]
+                        },
+                        {id: 16,
+                         name: 'Aluguel',
+                         subcategories:[
+                            {id: 8, name: 'Val Thorens'}
+                         ]
+                        }
+                     ]
+                    },
+                    {id: 3,
+                     name: 'Investimento',
+                     categories:[
+                        {id: 6,
+                         name: 'Referenciado DI',
+                         subcategories:[
+                            {id: 8, name: 'Maxime DI'}
+                         ]
                         }
                      ]
                     },
@@ -43,6 +60,14 @@ function (module) {
                             {id: 5, name: 'Transporte: Gasolina'},
                             {id: 6, name: 'Transporte: IPVA'},
                             {id: 7, name: 'Transporte: Seguro'}
+                         ]
+                        },
+                        {id: 21,
+                         name: 'Compras',
+                         subcategories:[
+                            {id: 5, name: 'shop'},
+                            {id: 6, name: 'gmes'},
+                            {id: 7, name: 'etc'}
                          ]
                         },
                         {id: 3,

@@ -1,149 +1,151 @@
 <section ng-controller="AccountEntryController">
     <div layout="row" flex class="md-padding">
         <div layout="column" flex="65">
-            <div layout="column" flex>
-
-                <md-card ng-cloak>
-                    <md-card-header class="md-title">
-                        Lançamentos
-                    </md-card-header>
-                    <md-divider></md-divider>
-                    <md-card-content>
-                        <md-list >
-                            <md-list-item>
-                                <md-input-container flex="45" class="c-no-margin">
-                                    <md-select name="selected" ng-model="period.selected" aria-label="period">
-                                        <md-option ng-repeat="option in period.options" ng-value="option.id">
-                                            {{option.name}}
-                                        </md-option>
-                                    </md-select>
-                                </md-input-container>
-                                <div flex></div>
-                                <md-input-container flex="45" class="md-icon-float md-icon-right md-block c-no-margin c-input-container-no-error">
-                                    <input type="search" ng-model="search" aria-label="search">
-                                    <md-icon class="material-icons step">
-                                        search
-                                    </md-icon>
-                                </md-input-container>
-                            </md-list-item>
-                            <md-divider class="blue"></md-divider>
-                            <div layout="row" layout-align="center center" ng-if="account.entries.length <=0">
-                                <h6 style="color: #7A7A7A;font-style: italic;">Não existem lançamentos realizados no período.</h6>
-                            </div>
-                            <md-list-item class="md-body-2" ng-if="account.entries.length >0">
-                                <span layout="row" flex="20">Data</span>
-                                <span layout="row" flex>Categoria/Nome</span>
-                                <span layout="row" flex="20" layout-align="end center">Valor</span>
-                            </md-list-item>
-                            <md-list-item ng-if="account.entries.length > 0" class="md-body-1 c-hover"
-                                          ng-repeat="entry in account.entries | filter:search | orderBy: 'date'"
-                                          ng-class="{'mdl-color--blue-grey-100': entry.selected}"
-                                          ng-click="select(entry)" style="min-height:0px;">
-                                <md-divider></md-divider>
-                                <span layout="row" flex="20">{{entry.date | date: 'dd/MM/yyyy'}}</span>
-                                <span layout="row" flex>{{entry.category.name}}</span>
-                                <span layout="row" flex="20" layout-align="end center">{{entry.amount | currency}}</span>
-                            </md-list-item>
-                        </md-list>
-                    </md-card-content>
-                </md-card>
-            </div>
+            <md-card>
+                <md-card-header>
+                    <md-card-header-text>
+                        <span class="md-title">Lançamentos</span>
+                    </md-card-header-text>
+                </md-card-header>
+                <md-card-content>
+                    <md-divider class="blue"></md-divider>
+                    <md-list>
+                        <md-list-item>
+                            <md-input-container flex="45" class="c-no-margin">
+                                <md-select name="selected" ng-model="period.selected" aria-label="period">
+                                    <md-option ng-repeat="option in period.options" ng-value="option.id">
+                                        {{option.name}}
+                                    </md-option>
+                                </md-select>
+                            </md-input-container>
+                            <div flex></div>
+                            <md-input-container flex="45"
+                                                class="md-icon-float md-icon-right md-block c-no-margin c-input-container-no-error">
+                                <input type="search" ng-model="search" aria-label="search">
+                                <md-icon class="material-icons step">
+                                    search
+                                </md-icon>
+                            </md-input-container>
+                        </md-list-item>
+                        <md-divider class="blue"></md-divider>
+                        <div layout="row" layout-align="center center" ng-if="account.entries.length <=0">
+                            <h6 style="color: #7A7A7A;font-style: italic;">Não existem lançamentos realizados no
+                                período.</h6>
+                        </div>
+                        <md-list-item class="md-body-2" ng-if="account.entries.length >0">
+                            <span layout="row" flex="20">Data</span>
+                            <span layout="row" flex>Categoria/Nome</span>
+                            <span layout="row" flex="20" layout-align="end center">Valor</span>
+                        </md-list-item>
+                        <md-list-item ng-if="account.entries.length > 0" class="md-body-1 c-hover"
+                                      ng-repeat="entry in account.entries | filter:search | orderBy: 'date'"
+                                      ng-class="{'mdl-color--blue-grey-100': entry.selected}"
+                                      ng-click="select(entry)" style="min-height:0px;">
+                            <md-divider></md-divider>
+                            <span layout="row" flex="20">{{entry.date | date: 'dd/MM/yyyy'}}</span>
+                            <span layout="row" flex>{{entry.category.name}}</span>
+                            <span layout="row" flex="20" layout-align="end center">{{entry.amount | currency}}</span>
+                        </md-list-item>
+                    </md-list>
+                </md-card-content>
+            </md-card>
         </div>
         <div flex></div>
         <div layout="column" flex="35">
-            <div layout="column">
-                <md-card layout="row">
-                    <md-card-header class="mdl-color--indigo-600">
-                        <md-icon class="material-icons step md-48" style="color:white;">
-                            attach_money
-                        </md-icon>
-                    </md-card-header>
-                    <md-divider></md-divider>
-                    <md-card-content layout="row" flex>
-                        <div layout="column" flex layout-align="center start">
-                            <span class="md-display-1">{{account.balance | currency}}</span>
-                            <span style="color: #7A7A7A;">Última atualização: {{account.lastUpdate | date: 'dd/MM/yyyy'}}</span>
+            <md-card layout="row">
+                <md-card-header class="mdl-color--indigo-600">
+                    <md-icon class="material-icons step md-48" style="color:white;">
+                        attach_money
+                    </md-icon>
+                </md-card-header>
+                <md-divider></md-divider>
+                <md-card-content layout="row" flex>
+                    <div layout="column" flex layout-align="center start">
+                        <span class="md-display-1">{{account.balance | currency}}</span>
+                        <span style="color: #7A7A7A;">Última atualização: {{account.lastUpdate | date: 'dd/MM/yyyy'}}</span>
+                    </div>
+                </md-card-content>
+            </md-card>
+            <div ngf-drop="upload($file)" class="file-drop-box" ngf-drag-over-class="{accept:'file-drop-box-dragover'}"
+                 ngf-multiple="false" ngf-pattern="'text/csv'" layout="row" layout-align="center center"
+                 ng-controller="UploadFileController">
+
+                <div layout="column" layout-align="center center">
+                    <md-icon class="material-icons step md-36" style="margin-right: 10px;">backup</md-icon>
+                </div>
+                <div layout="column" layout-align="center center">
+                    <span>Solte seu CSV aqui para importar</span>
+                </div>
+            </div>
+            <div ngf-no-file-drop>File Drag/Drop is not supported for this browser</div>
+            <form name="entryForm">
+                <md-card>
+                    <md-toolbar md-scroll-shrink>
+                        <div class="md-toolbar-tools">
+                            <span>Alterar/Criar Lançamento</span>
+                        </div>
+                    </md-toolbar>
+                    <md-card-content>
+                        <div layout="row">
+                            <div layout="column" flex="100">
+                                <md-input-container>
+                                    <label>Categoria</label>
+                                    <md-select name="category" ng-model="editEntry.category.id">
+                                        <md-option ng-repeat="category in categories" ng-value="category.id">
+                                            {{category.name}}
+                                        </md-option>
+                                    </md-select>
+                                </md-input-container>
+                            </div>
+                        </div>
+                        <div layout="row" flex>
+                            <md-input-container class="md-block" flex="40">
+                                <label>Valor *</label>
+                                <input name="amount" ng-model="editEntry.amount" type="text" required format="number">
+
+                                <div class="errors" ng-messages="entryForm.amount.$error" ng-if="myForm.$dirty">
+                                    <div ng-message="required">Obrigatório</div>
+                                </div>
+                            </md-input-container>
+                            <div flex></div>
+                            <md-datepicker name="date" ng-model="editEntry.date" md-placeholder="Data" required>
+                                <div class="errors" ng-messages="entryForm.date.$error" ng-if="myForm.$dirty">
+                                    <div ng-message="required">Obrigatório</div>
+                                </div>
+                            </md-datepicker>
+                        </div>
+                        <div layout="row">
+                            <div layout="column" flex="40" layout-align="center start" style="padding: 7px;">
+                                <md-checkbox ng-model="editEntry.transfer" aria-label="Checkbox 1" class="c-no-margin">
+                                    Transferência
+                                </md-checkbox>
+                            </div>
+                            <div layout="column" flex="60">
+                                <md-input-container class="c-no-margin" ng-show="editEntry.transfer">
+                                    <label>Conta Destino</label>
+                                    <md-select name="category" ng-model="editEntry.category.id">
+                                        <md-option ng-repeat="category in categories" ng-value="category.id">
+                                            {{category.name}}
+                                        </md-option>
+                                    </md-select>
+                                </md-input-container>
+                            </div>
                         </div>
                     </md-card-content>
+                    <md-card-actions layout="row" layout-align="end center">
+                        <md-button class="" ng-click="cancel()" ng-show="!entryForm.$pristine">Cancelar</md-button>
+                        <md-button ng-show="editEntry.id" class="md-warn" type="submit"
+                                   ng-disabled="entryForm.$invalid">Excluir
+                        </md-button>
+                        <md-button ng-show="editEntry.id" class="md-primary" type="submit"
+                                   ng-disabled="entryForm.$invalid">Alterar
+                        </md-button>
+                        <md-button ng-show="!editEntry.id" class="md-primary" type="submit"
+                                   ng-disabled="entryForm.$invalid">Incluir
+                        </md-button>
+                    </md-card-actions>
                 </md-card>
-            </div>
-            <div layout="column">
-                <div ngf-drop="upload($file)" class="file-drop-box"  ngf-drag-over-class="{accept:'file-drop-box-dragover'}"
-                     ngf-multiple="false"  ngf-pattern="'text/csv'" layout="row" layout-align="center center"
-                     ng-controller="UploadFileController">
-
-                    <div layout="column" layout-align="center center">
-                        <md-icon class="material-icons step md-36" style="margin-right: 10px;">backup</md-icon>
-                    </div>
-                    <div layout="column" layout-align="center center">
-                        <span>Solte seu CSV aqui para importar</span>
-                    </div>
-                </div>
-                <div ngf-no-file-drop>File Drag/Drop is not supported for this browser</div>
-            </div>
-            <div layout="column">
-                <form name="entryForm">
-                    <md-card>
-                        <md-toolbar md-scroll-shrink>
-                            <div class="md-toolbar-tools">
-                                    <span>Alterar/Criar Lançamento</span>
-                            </div>
-                        </md-toolbar>
-                        <md-card-content>
-                            <div layout="row">
-                                <div layout="column" flex="100">
-                                    <md-input-container>
-                                        <label>Categoria</label>
-                                        <md-select name="category" ng-model="editEntry.category.id">
-                                            <md-option ng-repeat="category in categories" ng-value="category.id">
-                                                {{category.name}}
-                                            </md-option>
-                                        </md-select>
-                                    </md-input-container>
-                                </div>
-                            </div>
-                            <div layout="row" flex>
-                                <md-input-container class="md-block" flex="40">
-                                    <label>Valor *</label>
-                                    <input name="amount" ng-model="editEntry.amount" type="text" required format="number">
-                                    <div class="errors" ng-messages="entryForm.amount.$error" ng-if="myForm.$dirty">
-                                        <div ng-message="required">Obrigatório</div>
-                                    </div>
-                                </md-input-container>
-                                <div flex></div>
-                                <md-datepicker name="date" ng-model="editEntry.date" md-placeholder="Data" required>
-                                    <div class="errors" ng-messages="entryForm.date.$error" ng-if="myForm.$dirty">
-                                        <div ng-message="required">Obrigatório</div>
-                                    </div>
-                                </md-datepicker>
-                            </div>
-                            <div layout="row">
-                                <div  layout="column" flex="40" layout-align="center start" style="padding: 7px;">
-                                    <md-checkbox ng-model="editEntry.transfer" aria-label="Checkbox 1" class="c-no-margin">
-                                        Transferência
-                                    </md-checkbox>
-                                </div>
-                                <div layout="column" flex="60">
-                                    <md-input-container class="c-no-margin" ng-show="editEntry.transfer">
-                                        <label>Conta Destino</label>
-                                        <md-select name="category" ng-model="editEntry.category.id">
-                                            <md-option ng-repeat="category in categories" ng-value="category.id">
-                                                {{category.name}}
-                                            </md-option>
-                                        </md-select>
-                                    </md-input-container>
-                                </div>
-                            </div>
-                        </md-card-content>
-                        <md-card-actions layout="row" layout-align="end center">
-                            <md-button class="" ng-click="cancel()" ng-show="!entryForm.$pristine">Cancelar</md-button>
-                            <md-button ng-show="editEntry.id" class="md-warn" type="submit" ng-disabled="entryForm.$invalid">Excluir</md-button>
-                            <md-button ng-show="editEntry.id" class="md-primary" type="submit" ng-disabled="entryForm.$invalid">Alterar</md-button>
-                            <md-button ng-show="!editEntry.id" class="md-primary" type="submit" ng-disabled="entryForm.$invalid">Incluir</md-button>
-                        </md-card-actions>
-                    </md-card>
-                </form>
-            </div>
+            </form>
         </div>
     </div>
 </section>
