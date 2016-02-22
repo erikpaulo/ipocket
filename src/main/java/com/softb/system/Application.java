@@ -1,11 +1,10 @@
 package com.softb.system;
 
-import java.io.IOException;
-import java.util.Arrays;
-
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
-
+import com.softb.system.cache.config.CacheConfig;
+import com.softb.system.config.Constants;
+import com.softb.system.config.ServiceConfig;
+import com.softb.system.security.config.SecurityConfig;
+import com.softb.system.web.config.WebMvcConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
@@ -16,11 +15,10 @@ import org.springframework.context.annotation.Import;
 import org.springframework.core.env.Environment;
 import org.springframework.core.env.SimpleCommandLinePropertySource;
 
-import com.softb.system.cache.config.CacheConfig;
-import com.softb.system.config.Constants;
-import com.softb.system.config.ServiceConfig;
-import com.softb.system.security.config.SecurityConfig;
-import com.softb.system.web.config.WebMvcConfig;
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
+import java.io.IOException;
+import java.util.Arrays;
 
 /**
  * Startup spring boot
@@ -38,21 +36,6 @@ public class Application {
     @Inject
     private Environment env;
 
-    /**
-     * Initializes socialtravel.
-     * <p/>
-     * Spring profiles can be configured with a program arguments --spring.profiles.active=your-active-profile
-     * <p/>
-     */
-    @PostConstruct
-    public void initApplication() throws IOException {
-        if (env.getActiveProfiles().length == 0) {
-            log.warn("No Spring profile configured, running with default configuration");
-        } else {
-            log.info("Running with Spring profile(s) : {}", Arrays.toString(env.getActiveProfiles()));
-        }
-    }	
-	
     /**
      * Main method, used to run the application.
      *
@@ -82,8 +65,8 @@ public class Application {
         if (!source.containsProperty("spring.profiles.active")) {
             app.setAdditionalProfiles(Constants.SPRING_PROFILE_DEVELOPMENT);
         }
-    }    
-	
+    }
+
     /**
      * Set the liquibases.scan.packages to avoid an exception from ServiceLocator
      * <p/>
@@ -96,6 +79,21 @@ public class Application {
                 "liquibase.snapshot" + "," + "liquibase.logging" + "," + "liquibase.diff" + "," +
                 "liquibase.structure" + "," + "liquibase.structurecompare" + "," + "liquibase.lockservice" + "," +
                 "liquibase.ext" + "," + "liquibase.changelog");
+    }
+
+    /**
+     * Initializes socialtravel.
+     * <p>
+     * Spring profiles can be configured with a program arguments --spring.profiles.active=your-active-profile
+     * <p>
+     */
+    @PostConstruct
+    public void initApplication() throws IOException {
+        if (env.getActiveProfiles ().length == 0) {
+            log.warn ( "No Spring profile configured, running with default categorization" );
+        } else {
+            log.info ( "Running with Spring profile(s) : {}", Arrays.toString ( env.getActiveProfiles () ) );
+        }
     }
     
 //    @Bean

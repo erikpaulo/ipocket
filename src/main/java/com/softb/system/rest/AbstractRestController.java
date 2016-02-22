@@ -1,22 +1,18 @@
 package com.softb.system.rest;
 
-import java.io.Serializable;
-import java.util.List;
-
-import javax.annotation.Resource;
-
+import com.softb.system.errorhandler.exception.FormValidationError;
+import com.softb.system.security.model.UserAccount;
+import com.softb.system.security.service.UserAccountService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Validator;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
-import com.softb.system.errorhandler.exception.FormValidationError;
+import javax.annotation.Resource;
+import javax.inject.Inject;
+import java.io.Serializable;
 
 /**
  * Base controller to abstract base REST operations. If you need, you can extends <code>RESTBaseController</code> and
@@ -38,21 +34,22 @@ import com.softb.system.errorhandler.exception.FormValidationError;
 public abstract class AbstractRestController<T, ID extends Serializable> {
 
 	protected final static Logger logger = LoggerFactory.getLogger(AbstractRestController.class);
-	
-    public abstract JpaRepository<T, ID> getRepository();
-    
+    @Inject
+    private UserAccountService userAccountService;
     @Resource
     private Validator validator;
+
+    public abstract JpaRepository<T, ID> getRepository();
 
     @RequestMapping(value="/{id}", method=RequestMethod.GET)
     public T get(@PathVariable ID id) {
         return getRepository().findOne(id);
     }
-    
-    @RequestMapping(method=RequestMethod.GET)
-    public List<T> listAll() {
-        return getRepository().findAll();
-    }
+
+//    @RequestMapping(method=RequestMethod.GET)
+//    public List<T> listAll() {
+//        return getRepository().findAll();
+//    }
 
     @RequestMapping(method=RequestMethod.POST)
     public @ResponseBody T create(@RequestBody T json) throws FormValidationError {
@@ -101,5 +98,11 @@ public abstract class AbstractRestController<T, ID extends Serializable> {
         	logger.debug("Validation errors found:" + bindingResult.getFieldErrors());
             throw new FormValidationError(bindingResult.getFieldErrors());
         }
+    }
+
+    protected Integer getUserId() {
+        // Recupera o id do usuário logado para filtro dos dados.
+        UserAccount user = userAccountService.getCurrentUser ();
+        return user.getId ();
     }
 }

@@ -37,7 +37,7 @@
                                     <md-input-container ng-if="category.edit"
                                                         class="c-input-container-no-error c-no-margin" flex>
                                         <input id="inputc_{{category.id}}" name="name" ng-model="category.name"
-                                               ng-blur="editCategory($event, group, category)">
+                                               ng-blur="editCategory($event, group, category)" aria-label="Categoria">
                                     </md-input-container>
                                     <md-button class="md-icon-button" aria-label="Expand/Collapse">
                                         <md-icon ng-if="category.open" class="material-icons"
@@ -58,7 +58,7 @@
                                                 <md-input-container ng-if="subcategory.edit"
                                                                     class="c-input-container-no-error c-no-margin" flex>
                                                     <input id="inputsc_{{subcategory.id}}" name="name"
-                                                           ng-model="subcategory.name"
+                                                           aria-label="Sub Categoria" ng-model="subcategory.name"
                                                            ng-blur="editSubCategory($event, subcategory)">
                                                 </md-input-container>
                                                 <md-switch ng-model="subcategory.activated" class="md-primary"

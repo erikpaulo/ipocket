@@ -1,18 +1,10 @@
 package com.softb.system.web.config;
 
-import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.inject.Inject;
-import javax.servlet.DispatcherType;
-import javax.servlet.FilterRegistration;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.hibernate4.Hibernate4Module;
+import com.fasterxml.jackson.datatype.hibernate4.Hibernate4Module.Feature;
+import com.softb.system.config.Constants;
+import com.softb.system.web.filter.gzip.GZipServletFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.embedded.ServletContextInitializer;
@@ -26,11 +18,13 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.hibernate4.Hibernate4Module;
-import com.fasterxml.jackson.datatype.hibernate4.Hibernate4Module.Feature;
-import com.softb.system.config.Constants;
-import com.softb.system.web.filter.gzip.GZipServletFilter;
+import javax.inject.Inject;
+import javax.servlet.DispatcherType;
+import javax.servlet.FilterRegistration;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Configuration
 //@EnableWebMvc
@@ -38,7 +32,7 @@ import com.softb.system.web.filter.gzip.GZipServletFilter;
 		"com.softb.system.rest", 
 		"com.softb.system.errorhandler.web",
 		"com.softb.ipocket.account.web",
-		"com.softb.ipocket.configuration.web",
+		"com.softb.ipocket.categorization.web",
 		"com.softb.ipocket.bill.web",
 		"com.softb.ipocket.budget.web",
 		"com.softb.system.security.service",
@@ -54,8 +48,8 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter implements ServletCont
     
     @Override
     public void onStartup(ServletContext servletContext) throws ServletException {
-        logger.info("Web application configuration, using profiles: {}", Arrays.toString(env.getActiveProfiles()));
-        EnumSet<DispatcherType> disps = EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD, DispatcherType.ASYNC);
+		logger.info ( "Web application categorization, using profiles: {}", Arrays.toString ( env.getActiveProfiles () ) );
+		EnumSet<DispatcherType> disps = EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD, DispatcherType.ASYNC);
         
 //        AnnotationConfigWebApplicationContext rootContext = new AnnotationConfigWebApplicationContext();
 //        rootContext.register(Application.class);

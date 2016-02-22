@@ -1,12 +1,6 @@
 package com.softb.system.repository.config;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-
-import javax.sql.DataSource;
-
 import liquibase.integration.spring.SpringLiquibase;
-
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,13 +11,17 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
+import javax.sql.DataSource;
+import java.net.URI;
+import java.net.URISyntaxException;
+
 @Configuration
 @EnableJpaRepositories(basePackages = { 
 		"com.softb.system.security.repository", 
 		"com.softb.ipocket.account.repository",
 		"com.softb.ipocket.bill.repository",
 		"com.softb.ipocket.budget.repository",
-		"com.softb.ipocket.configuration.repository"
+        "com.softb.ipocket.categorization.repository"
 })
 @EntityScan(basePackages = { 
 		"com.softb.system.security.model", 
@@ -31,7 +29,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 		"com.softb.ipocket.bill.model",
 		"com.softb.ipocket.budget.model",
 		"com.softb.ipocket.general.model",
-		"com.softb.ipocket.configuration.model"
+        "com.softb.ipocket.categorization.model"
 })
 public class RepositoryConfig  {
 

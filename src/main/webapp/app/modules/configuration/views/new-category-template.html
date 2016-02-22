@@ -14,12 +14,12 @@
             <div layout="row" flex="100">
                 <md-input-container flex="40">
                     <label>Grupo *</label>
-                    <input name="name" ng-model="group.name" disabled>
+                    <input name="name" ng-model="group.name" aria-label="Grupo" disabled>
                 </md-input-container>
                 <span flex></span>
                 <md-input-container flex="50">
                     <label>Categoria *</label>
-                    <input name="name" ng-model="node.name" required md-maxlength="50">
+                    <input name="name" ng-model="node.name" aria-label="Categoria" required md-maxlength="50">
 
                     <div class="errors" ng-messages="myForm.name.$error" ng-if="myForm.$dirty">
                         <div ng-message="required">Obrigatório</div>
