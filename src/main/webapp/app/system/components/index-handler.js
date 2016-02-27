@@ -132,3 +132,12 @@ define(['angular-resource', 'jquery'], function (resource, $) {
 
     return IndexModule;
 });
+
+function addWarning($scope, msg){
+    $scope.appContext.toast.addWarning(msg);
+}
+
+function addError($scope, msg, err){
+    $scope.appContext.toast.addError(msg);
+    console.log('error: '+ err.data.error +' - message: '+ err.data.message);
+}

@@ -2,18 +2,14 @@ define(['./module'], function (app) {
 
 	app.filter('mapType', function() {
 		var typeHash = {
-                'F' : 'Despesa Fixa',
-             	'V' : 'Despesa Variável',
-             	'I' : 'Despesa Irregular',
-             	'E' : 'Entrada',
-  	            'RF': 'Renda Fixa',
-  	            'RV': 'Renda Variável',
-             	'T' : 'Transferência'
+                'FC' : 'Despesa Mensal Fixa',
+             	'VC' : 'Despesa Mensal Variável',
+             	'IC' : 'Despesa Irregular'
 		};
 
-				return function(input) {
-					if (!input){
-						return '';
+        return function(input) {
+            if (!input){
+                return '';
 			} else {
 				return typeHash[input];
 			}

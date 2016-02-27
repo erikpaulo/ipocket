@@ -2,12 +2,14 @@
 * Changeset 0.0.1
 * Criação da aplicação.
 * heroku pg:psql --app ipocket < /Users/eriklacerda/Documents/Personal/Projetos/ipocket/src/main/resources/config/postgres/db-postgres-001.sql
+* Localhost  -- \i /Users/eriklacerda/Projects/ipocket/src/main/resources/config/postgres/db-postgres-1coin-0.0.1.sql
 */
 
+DROP TABLE IF EXISTS SUBCATEGORY;
+DROP TABLE IF EXISTS CATEGORY;
 DROP TABLE IF EXISTS user_role;
 DROP TABLE IF EXISTS remember_me_token;
 DROP TABLE IF EXISTS user_account;
-DROP TABLE IF EXISTS CATEGORY;
 
 CREATE TABLE remember_me_token (
 	id 			SERIAL PRIMARY KEY,
@@ -30,54 +32,27 @@ CREATE TABLE user_account (
 );
 
 CREATE TABLE user_role (
-	user_id	INTEGER REFERENCES user_account(id),
-	role	VARCHAR(255),
+	user_id INTEGER REFERENCES user_account(id),
+	role    VARCHAR(255),
 	PRIMARY KEY (user_id, role)
 );
 
 CREATE TABLE CATEGORY (
 	ID      SERIAL PRIMARY KEY,
-	NAME    VARCHAR(255),
-	TYPE    VARCHAR(3),
+	NAME    VARCHAR(50),
+	TYPE    VARCHAR(3), --EXP - expenses, INC - incomes, INV - investiments
 	USER_ID INTEGER REFERENCES user_account(id),
 
 	CONSTRAINT U_CONST_01 UNIQUE (USER_ID,NAME)
 );
 
---CREATE TABLE user_social_connection (
---	id 					SERIAL PRIMARY KEY,
---	access_token 		VARCHAR(255),
---	display_name 		VARCHAR(255),
---	expire_time 		BIGINT,
---	image_url 			VARCHAR(255),
---	profile_url 		VARCHAR(255),
---	provider_id			VARCHAR(255),
---	provider_user_id	VARCHAR(255),
---	rank 				INTEGER,
---	refresh_token 		VARCHAR(255),
---	secret 				VARCHAR(255),
---	user_id 			VARCHAR(255)
---);
+CREATE TABLE SUBCATEGORY (
+	ID             SERIAL PRIMARY KEY,
+	NAME           VARCHAR(50),
+	ACTIVATED      BOOLEAN NOT NULL,
+	TYPE           VARCHAR(2), --FC - fixed cost, IC - irregular cost, VC - variable cost
+	CATEGORY_ID    INTEGER NOT NULL REFERENCES CATEGORY(ID),
+	USER_ID        INTEGER REFERENCES user_account(id),
 
-
---CREATE TABLE ACCOUNT (
---	ID				SERIAL PRIMARY KEY,
---	NAME			VARCHAR(255),
---	TYPE			VARCHAR(255),
---	USER_ID			INTEGER REFERENCES user_account(id),
---	BRANCH			VARCHAR(255),
---	NUMBER			VARCHAR(255),
---	START_BALANCE	DECIMAL
---);
---
---
---CREATE TABLE ACCOUNT_ENTRY (
---	ID				SERIAL PRIMARY KEY,
---	ACCOUNT_ID		INTEGER REFERENCES ACCOUNT(ID),
---	DESCRIPTION		VARCHAR(255),
---	CATEGORY_ID		INTEGER REFERENCES CATEGORY(ID),
---	DATE			DATE,
---	RECONCILED		VARCHAR(1),
---	AMOUNT			DECIMAL,
---	USER_ID			INTEGER REFERENCES user_account(id)
---);
+	CONSTRAINT U_CONST_02 UNIQUE (USER_ID,CATEGORY_ID,NAME)
+);

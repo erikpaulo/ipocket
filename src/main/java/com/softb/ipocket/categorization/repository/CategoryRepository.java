@@ -12,6 +12,6 @@ import java.util.List;
 @Repository("AppCategoryRepository")
 public interface CategoryRepository extends JpaRepository<Category, Integer> {
 	
-	@Query("select c from Category c where c.userId = :userId")
+	@Query("select c from Category c where c.userId = :userId order by c.name")
 	List<Category> listAllByUser(@Param("userId") Integer userId) throws DataAccessException;
 }

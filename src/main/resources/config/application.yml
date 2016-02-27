@@ -13,6 +13,7 @@ spring:
 
     jpa:
         database: HSQL
+        database-platform: org.hibernate.dialect.PostgreSQLDialect
         openInView: true
         show_sql: true
         generate-ddl: false

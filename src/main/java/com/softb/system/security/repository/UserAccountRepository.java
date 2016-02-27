@@ -1,14 +1,13 @@
 package com.softb.system.security.repository;
 
-import java.util.List;
-
+import com.softb.system.security.model.UserAccount;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.softb.system.security.model.UserAccount;
+import java.util.List;
 
 
 /**
@@ -17,7 +16,7 @@ import com.softb.system.security.model.UserAccount;
  * TODO [marcus]: Avaliar possibilidade de utilizar MongoDB para esse tipo de repositório
  */
 //@Repository
-@Repository("iPocketUserAccountRepository")
+@Repository("AppUserAccountRepository")
 public interface UserAccountRepository extends JpaRepository<UserAccount, Integer>{
     
     UserAccount findByEmail(String email);

@@ -6,12 +6,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.NotEmpty;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import javax.persistence.Transient;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Classe que representa as Categorias de lançamentos
@@ -26,25 +25,31 @@ import java.io.Serializable;
 public class Category extends BaseEntity<Integer> implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
+
+	public Category (String name, String type, Integer userId){
+		this.name = name;
+		this.type = Type.valueOf( type );
+		this.subcategories = new ArrayList<SubCategory>(  );
+		this.userId = userId;
+	}
+
 	@Column(name = "NAME")
 	@NotEmpty
 	protected String name;
 
 	@Column(name = "TYPE")
-	@NotEmpty
-	protected String type;
+	@NotNull
+	@Enumerated(EnumType.STRING)
+	protected Type type;
 
-//	@JsonBackReference
-//	@ManyToOne(fetch = FetchType.EAGER)
-//	@JoinColumn(name = "GROUP_ID", referencedColumnName = "ID")
-//	@NotNull
-//	protected CategoryGroup group;
+	@OneToMany(fetch = FetchType.EAGER)
+	@JoinColumn(name = "CATEGORY_ID", referencedColumnName = "ID")
+	protected List<SubCategory> subcategories;
 
     @Column(name="USER_ID")
 	@NotNull
 	protected Integer userId;
-	
+
 	@Transient
 	protected String fullName;
 

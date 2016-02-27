@@ -1,7 +1,9 @@
 package com.softb.ipocket.categorization.web;
 
 import com.softb.ipocket.categorization.model.Category;
+import com.softb.ipocket.categorization.model.SubCategory;
 import com.softb.ipocket.categorization.repository.CategoryRepository;
+import com.softb.ipocket.categorization.repository.SubCategoryRepository;
 import com.softb.ipocket.categorization.web.resource.CategoryGroupResource;
 import com.softb.system.errorhandler.exception.FormValidationError;
 import com.softb.system.rest.AbstractRestController;
@@ -12,18 +14,18 @@ import javax.transaction.Transactional;
 import java.util.*;
 
 @RestController("AppCategoryController")
-@RequestMapping("/api/categorization/")
+@RequestMapping("/api/categorization")
 public class CategoryController extends AbstractRestController<Category, Integer> {
 
-	public static final String OBJECT_NAME = "Category";
+	public static final String CATEGORY_OBJECT_NAME = "Category";
+	public static final String SUBCATEGORY_OBJECT_NAME = "SubCategory";
+    public static final String FULL_NAME_SEPARATOR = ":";
 	
 	@Autowired
 	private CategoryRepository categoryRepository;
+    @Autowired
+    private SubCategoryRepository subCategoryRepository;
 	
-	@Override
-	public CategoryRepository getRepository() {
-		return categoryRepository;
-	}
 
     /**
      * This URL lists all categories created by the current user. This categories are grouped into
@@ -34,58 +36,105 @@ public class CategoryController extends AbstractRestController<Category, Integer
     @RequestMapping(method = RequestMethod.GET)
     public List<CategoryGroupResource> listAll() {
         List<CategoryGroupResource> groups = new ArrayList<CategoryGroupResource> ();
-        Map<String, ArrayList<Category>> map = new HashMap<String, ArrayList<Category>> ();
+
+        // Creates structure that groups categories by its types.
+        Iterator<Category.Type> k = new ArrayList<> ( Arrays.asList ( Category.Type.values () ) ).iterator ();
+        while (k.hasNext ()) {
+            Category.Type key = k.next();
+            CategoryGroupResource groupR = new CategoryGroupResource ( key, key.getName () );
+            groups.add( groupR );
+        }
 
         // Gets all categories of the logged user, grouping by category types
         List<Category> categories = categoryRepository.listAllByUser ( getUserId () );
+        Iterator<Category> categs = categories.iterator ();
+        while (categs.hasNext ()){
+            Category category = categs.next ();
 
-        Iterator<Category> c = categories.iterator ();
-        while (c.hasNext ()) {
-            Category category = c.next ();
-            if (!map.containsKey ( category.getType () )) {
-                map.put ( category.getType (), new ArrayList<Category> () );
+            // find out the correct group to use.
+            CategoryGroupResource groupR = null;
+            Iterator<CategoryGroupResource> gi = groups.iterator();
+            while (gi.hasNext()) {
+                groupR = gi.next();
+                if (groupR.getId() == category.getType()) {
+                    break;
+                }
             }
-            map.get ( category.getType () ).add ( category );
-        }
 
-        Iterator<Category.Type> k = new ArrayList<> ( Arrays.asList ( Category.Type.values () ) ).iterator ();
-        while (k.hasNext ()) {
-            Category.Type key = k.next ();
+            //Sort its subcategories by name
+            List<SubCategory> subcategories = category.getSubcategories();
+            Collections.sort(subcategories, new Comparator<SubCategory>(){
+                public int compare(SubCategory o1, SubCategory o2) {
+                    return o1.getName().compareTo(o2.getName());
+                }
+            });
+            category.setSubcategories( subcategories );
 
-            CategoryGroupResource group = new CategoryGroupResource ( key, key.getName () );
-            groups.add ( group );
+            groupR.getCategories ().add ( category );
         }
 
         return groups;
     }
 
-	@Override
-	public Category create(@RequestBody Category json) throws FormValidationError {
+    /**
+     * This point creates a new Category into the system.
+     * @param category Category to create
+     * @return Category created
+     * @throws FormValidationError
+     */
+    @RequestMapping(value = "/category", method = RequestMethod.POST)
+	public Category create(@RequestBody Category category) throws FormValidationError {
 
-		// Recupera o id do usuário logado para filtro dos dados.
-//		UserAccount user = userAccountService.getCurrentUser();
-//		json.setUserId(user.getId());
-//		json.getGroup().setUserId(user.getId());
+        category.setUserId( getUserId() );
+        validate( CATEGORY_OBJECT_NAME,  category);
 
         // Salva a categoria.
-		Category category = categoryRepository.save(json);
+		category = categoryRepository.save(category);
+        category.setSubcategories( new ArrayList<SubCategory>(  ) );
 		return category;
 	}
-	
-	
-	
-	@Override
-	@Transactional
-	public Category update(@PathVariable Integer id, @RequestBody Category json) {
-		
-		// Recupera o id do usuário logado para filtro dos dados.
-//		UserAccount user = userAccountService.getCurrentUser();
-//		json.setUserId(user.getId());
-//		json.getGroup().setUserId(user.getId());
+
+    /**
+     * This point creates a new Sub Category into the system.
+     * @param subCategory SubCategory to create
+     * @return SubCategory created
+     * @throws FormValidationError
+     */
+    @RequestMapping(value = "/category/{categoryId}/subcategory", method = RequestMethod.POST)
+	public SubCategory create(@PathVariable Integer categoryId, @RequestBody SubCategory subCategory) throws FormValidationError {
+
+        subCategory.setUserId( getUserId() );
+        subCategory.setActivated( true );
+        validate( SUBCATEGORY_OBJECT_NAME,  subCategory);
 
         // Salva a categoria.
-		Category category = categoryRepository.save(json);
+        subCategory = subCategoryRepository.save(subCategory);
+		return subCategory;
+	}
+
+	
+	@Transactional
+    @RequestMapping(value = "/category/{id}", method = RequestMethod.PUT)
+	public Category update(@PathVariable Integer id, @RequestBody Category category) {
+		
+        category.setUserId( getUserId() );
+        validate( CATEGORY_OBJECT_NAME, category );
+
+        // Salva a categoria.
+		category = categoryRepository.save( category );
 		return category;
+	}
+
+	@Transactional
+    @RequestMapping(value = "/category/{categoryId}/subcategory/{id}", method = RequestMethod.PUT)
+	public SubCategory update(@PathVariable Integer id, @RequestBody SubCategory subCategory) {
+
+        subCategory.setUserId( getUserId() );
+        validate( SUBCATEGORY_OBJECT_NAME, subCategory );
+
+        // Salva a categoria.
+        subCategory = subCategoryRepository.save( subCategory );
+		return subCategory;
 	}
 
 	@Transactional
@@ -101,9 +150,5 @@ public class CategoryController extends AbstractRestController<Category, Integer
 //			}
 //		}
 	}
-	
-	@Override
-	public String getEntityName() {
-		return OBJECT_NAME;
-	}
 }
+

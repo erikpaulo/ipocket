@@ -2,7 +2,7 @@
     <form name="myForm" ng-submit="submit()">
         <md-toolbar layout="row" layout-align="center center" class="header">
             <div class="md-toolbar-tools">
-                <h2><span ng-if="func=='I'">Editar</span><span ng-if="func=='E'">Incluir</span> Categoria</h2>
+                <h2>SubCategoria</h2>
             </div>
             <div flex></div>
             <div>
@@ -19,7 +19,7 @@
                 <span flex></span>
                 <md-input-container flex="40">
                     <label>Categoria *</label>
-                    <md-select name="category" ng-model="node.category.id" required>
+                    <md-select name="category" ng-model="node.categoryId" required aria-label="Categoria">
                         <md-option ng-repeat="category in categories" ng-value="category.id">
                             {{category.name}}
                         </md-option>
@@ -34,6 +34,15 @@
                     <div class="errors" ng-messages="myForm.name.$error" ng-if="myForm.$dirty">
                         <div ng-message="required">Obrigatório</div>
                     </div>
+                </md-input-container>
+                <span flex></span>
+                <md-input-container flex="40" ng-if="group.id == 'EXP'">
+                    <label>Tipo *</label>
+                    <md-select name="subcategory" ng-model="node.type" required aria-label="Tipo Subcategoria">
+                        <md-option ng-repeat="type in expensiveTypes" ng-value="type.id">
+                            {{type.name}}
+                        </md-option>
+                    </md-select>
                 </md-input-container>
             </div>
         </md-dialog-content>
