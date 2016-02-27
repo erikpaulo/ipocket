@@ -5,10 +5,8 @@ import com.softb.system.security.model.UserAccount;
 import com.softb.system.security.service.UserAccountService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Validator;
-import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.inject.Inject;
@@ -39,53 +37,53 @@ public abstract class AbstractRestController<T, ID extends Serializable> {
     @Resource
     private Validator validator;
 
-    public abstract JpaRepository<T, ID> getRepository();
+//    public abstract JpaRepository<T, ID> getRepository();
 
-    @RequestMapping(value="/{id}", method=RequestMethod.GET)
-    public T get(@PathVariable ID id) {
-        return getRepository().findOne(id);
-    }
+//    @RequestMapping(value="/{id}", method=RequestMethod.GET)
+//    public T get(@PathVariable ID id) {
+//        return getRepository().findOne(id);
+//    }
 
 //    @RequestMapping(method=RequestMethod.GET)
 //    public List<T> listAll() {
 //        return getRepository().findAll();
 //    }
 
-    @RequestMapping(method=RequestMethod.POST)
-    public @ResponseBody T create(@RequestBody T json) throws FormValidationError {
-    	logger.debug("create() with body {} of type {}", json, json.getClass());
+//    @RequestMapping(method=RequestMethod.POST)
+//    public @ResponseBody T create(@RequestBody T json) throws FormValidationError {
+//    	logger.debug("create() with body {} of type {}", json, json.getClass());
+//
+//    	validate(getEntityName(), json);
+//    	T created = getRepository().save(json);
+//
+//        return created;
+//    }
 
-    	validate(getEntityName(), json);
-    	T created = getRepository().save(json);
+//    public abstract String getEntityName();
 
-        return created;
-    }
+//	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+//    public T update(@PathVariable("id") ID id, @RequestBody T json) {
+//        logger.debug("update() of id#{} with body {}", id, json);
+//        logger.debug("T json is of type {}", json.getClass());
+//
+//        // TODO - Valid if exists. If not, throw exception
+//        // T entity = repository.findOne(id);
+//
+//        validate(getEntityName(), json);
+//        T updated = getRepository().save(json);
+//
+//        return updated;
+//    }
 
-    public abstract String getEntityName();
-
-	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-    public T update(@PathVariable("id") ID id, @RequestBody T json) {
-        logger.debug("update() of id#{} with body {}", id, json);
-        logger.debug("T json is of type {}", json.getClass());
-
-        // TODO - Valid if exists. If not, throw exception
-        // T entity = repository.findOne(id);
-        
-        validate(getEntityName(), json);
-        T updated = getRepository().save(json);
-
-        return updated;
-    }
-
-    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-    public @ResponseBody void delete(@PathVariable("id") ID id) {
-    	getRepository().delete(id);
-    }
+//    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+//    public @ResponseBody void delete(@PathVariable("id") ID id) {
+//    	getRepository().delete(id);
+//    }
     
-	@RequestMapping(value = "deleteAll", method = RequestMethod.DELETE)
-	public @ResponseBody void deleteAll() {
-		getRepository().deleteAll();
-	}    
+//	@RequestMapping(value = "deleteAll", method = RequestMethod.DELETE)
+//	public @ResponseBody void deleteAll() {
+//		getRepository().deleteAll();
+//	}
 	
 	
     protected void validate(String objectName, Object validated) throws FormValidationError {
