@@ -65,6 +65,7 @@
 					</md-button>
 				</div>
 			</md-toolbar>
+			<md-progress-linear ng-show="!ajaxCompleted" md-mode="indeterminate"></md-progress-linear>
 			<md-fab-speed-dial md-open="appContext.contextMenu.isOpen" md-direction="up" class="md-fling md-fab-bottom-right"  ng-if="appContext.contextMenu.actions.length > 0" ng-cloak>
 				<md-fab-trigger >
 					<md-button aria-label="menu" class="md-fab md-primary md-whiteframe-7dp">

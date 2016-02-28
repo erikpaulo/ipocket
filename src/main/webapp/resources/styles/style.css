@@ -242,3 +242,10 @@ md-toolbar.thin{
 md-toolbar.thin div.md-toolbar-tools{
     height: inherit;
 }
+
+/********** >>> PROGRESS BAR <<< ***********/
+md-progress-linear{
+    position: absolute;
+    top: 59px;
+    z-index: 2;
+}

@@ -6,10 +6,11 @@ define(['angular',
 //        'system/components/menu-handler',
         'system/components/auth-handler',
         'system/components/index-handler',
+        'system/components/interceptors',
         'system/directives/index',
 //        'modules/shared/services/constants-service.js',
         'system/filters/index'],
-function(angular, layout, config, dependencyResolverFor, errorHandler, authHandler, indexHandler)
+function(angular, layout, config, dependencyResolverFor, errorHandler, authHandler, indexHandler, InterceptorModule)
 {
     
 	// TODO [marcus] app.directives foi iniciada no arquivo 'system/directives/index'. Alterar esse index para retornar o módulo e pegar o nome aqui para evitar hardcoded
@@ -34,6 +35,7 @@ function(angular, layout, config, dependencyResolverFor, errorHandler, authHandl
         errorHandler.name,
         authHandler.name,
         indexHandler.name,
+        InterceptorModule.name,
         'app.directives',
         'app.filters'
     ]);
