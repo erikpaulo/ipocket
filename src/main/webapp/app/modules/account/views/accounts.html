@@ -1,61 +1,63 @@
-<section ng-controller="AccountController">
-    <div layout="row" layout-xs="column" class="md-padding">
+<section ng-controller="AccountController" ng-cloak>
+    <div layout="row" layout-xs="column" class="">
         <div layout="column" flex="50" flex-xs="100">
-            <!--<div layout="column" flex>-->
-                <md-card>
-                    <md-card-content style="min-height:517px">
-                        <md-list ng-repeat="accountType in summary.types">
-                            <span class="md-subhead">{{accountType.type | accountTypeName}}</span>
-                            <md-divider class="blue"></md-divider>
-                            <md-list-item style="padding-left: 15px;" ng-repeat="account in accountType.accounts" class="c-hover" ng-click="detail(account)">
-                                <span flex>{{ account.name }}</span>
-                                <span class="md-subhead" layout="row" layout-align="end center" flex>{{ account.balance | currency }}</span>
-                                <md-button aria-label="Account Details" class="md-icon-button md-warn">
-                                    <md-icon class="material-icons" ng-click="inactivate()">delete</md-icon>
-                                </md-button>
-                            </md-list-item>
-                        </md-list>
-                    </md-card-content>
-                </md-card>
-            <!--</div>-->
+            <md-card>
+                <md-card-content style="min-height:517px;overflow:auto;">
+                    <md-list ng-repeat="group in summary.groups">
+                        <span class="md-subhead">{{group.id | accountTypeName}}</span>
+                        <md-divider class="blue"></md-divider>
+                        <md-list-item ng-if="group.accounts.length<=0">
+                            <span class="c-caption">Não há contas cadastradas.</span>
+                        </md-list-item>
+                        <md-list-item style="padding-left: 15px;" ng-repeat="account in group.accounts" class="">
+                            <span flex>{{ account.name }}</span>
+                            <span class="md-subhead secondary-button-padding" layout="row" layout-align="end center" flex>{{ account.balance | currency }}</span>
+                            <md-button aria-label="Account Details" class="md-icon-button c-hover" style="margin-left: 10px;">
+                                <md-icon class="material-icons" ng-click="detail(account)">open_in_browser</md-icon>
+                            </md-button>
+                            <md-button aria-label="Account Details" class="md-icon-button md-warn c-hover">
+                                <md-icon class="material-icons" ng-click="delete(account)">delete</md-icon>
+                            </md-button>
+                        </md-list-item>
+                    </md-list>
+                </md-card-content>
+            </md-card>
         </div>
         <div layout="column" flex="50" hide-xs>
-            <!--<div layout="column" flex>-->
-                <md-card>
-                    <md-card-header>
-                        <md-card-header-text>
-                            <span class="md-title">Resumo</span>
-                        </md-card-header-text>
-                    </md-card-header>
-                    <md-content>
-                        <md-list>
-                            <div layout="row">
-                                <div layout="column" flex="60">
-                                    <md-list-item ng-repeat="accountType in summary.types" style="min-height:30px;margin-right:10px;">
-                                        <span layout="row" flex>{{accountType.type | accountTypeName}}</span>
-                                        <span layout="row" flex="30" layout-align="end center">{{accountType.balance | currency}}</span>
-                                    </md-list-item>
-                                </div>
-                                <md-divider class="blue"></md-divider>
-                                <div layout="column" flex layout-align="center center">
-                                    <span class="md-headline">{{summary.balance | currency}}</span>
-                                    <span class="md-subhead" style="color: #7A7A7A;">Total Geral</span>
-                                </div>
+            <md-card>
+                <md-card-header>
+                    <md-card-header-text>
+                        <span class="md-title">Resumo</span>
+                    </md-card-header-text>
+                </md-card-header>
+                <md-content>
+                    <md-list>
+                        <div layout="row">
+                            <div layout="column" flex="60">
+                                <md-list-item ng-repeat="group in summary.groups" style="min-height:30px;margin-right:10px;">
+                                    <span layout="row" flex>{{group.id | accountTypeName}}</span>
+                                    <span layout="row" flex="30" layout-align="end center">{{group.balance | currency}}</span>
+                                </md-list-item>
                             </div>
-                        </md-list>
-                    </md-content>
-                </md-card>
-                <md-card>
-                    <md-card-header>
-                        <md-card-header-text>
-                            <span class="md-title">Meus Dinheiro</span>
-                        </md-card-header-text>
-                    </md-card-header>
-                    <md-card-content>
-                        <highchart id="moneyDistribution" config="moneyDistributionChartConfig"></highchart>
-                    </md-card-content>
-                </md-card>
-            <!--</div>-->
+                            <md-divider class="blue"></md-divider>
+                            <div layout="column" flex layout-align="center center">
+                                <span class="md-headline">{{summary.balance | currency}}</span>
+                                <span class="md-subhead c-caption">Total Geral</span>
+                            </div>
+                        </div>
+                    </md-list>
+                </md-content>
+            </md-card>
+            <md-card>
+                <md-card-header>
+                    <md-card-header-text>
+                        <span class="md-title">Meu Dinheiro</span>
+                    </md-card-header-text>
+                </md-card-header>
+                <md-card-content>
+                    <highchart id="moneyDistribution" config="moneyDistributionChartConfig"></highchart>
+                </md-card-content>
+            </md-card>
         </div>
     </div>
 </section>

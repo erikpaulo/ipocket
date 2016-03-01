@@ -1,4 +1,5 @@
-define(['./module', '../services/account-resources', '../../configuration/services/category-resources'], function (app) {
+define(['./module', '../services/account-resources',
+        '../../configuration/services/category-resources'], function (app) {
 
 	
 	app.controller('AccountEntryController', ['$scope', '$http', '$window', '$filter', '$routeParams', 'AccountResource', 'CategoryResource',
@@ -8,29 +9,10 @@ define(['./module', '../services/account-resources', '../../configuration/servic
 
             $scope.editEntry = undefined;
 
-            //TODO: Recupera todos os dados da conta selecionada.
-            $scope.account = {
-                name: 'Mock Account 01',
-                lastUpdate: new Date(),
-                balance: 31937.96,
-                entries: [
-                    {id:1, date: new Date('2015/12/13'), category:{id: 1, name: 'Household: Diarista'}, amount:-400},
-                    {id:2, date: new Date('2015/12/16'), category:{id: 9, name: 'Education: Escola de Inglês'}, amount:-295},
-                    {id:3, date: new Date('2015/12/28'), category:{id: 3, name: 'House: Financiamento Santander'}, amount:-5487.98},
-                    {id:4, date: new Date('2015/12/20'), category:{id: 8, name: 'Income: Salário CI&T - Erik'}, amount:3465.54},
-                    {id:5, date: new Date('2015/12/20'), category:{id: 8, name: 'Income: Salário CI&T - Erik'}, amount:3465.54},
-                    {id:6, date: new Date('2015/12/20'), transfer:true, category:{id: 8, name: 'Income: Salário CI&T - Erik'}, amount:3465.54},
-                    {id:7, date: new Date('2015/12/20'), category:{id: 8, name: 'Income: Salário CI&T - Erik'}, amount:3465.54},
-                    {id:8, date: new Date('2015/12/20'), category:{id: 8, name: 'Income: Salário CI&T - Erik'}, amount:3465.54},
-                    {id:9, date: new Date('2015/12/20'), category:{id: 8, name: 'Income: Salário CI&T - Erik'}, amount:3465.54},
-                    {id:10, date: new Date('2015/12/20'), category:{id: 8, name: 'Income: Salário CI&T - Erik'}, amount:3465.54},
-                    {id:11, date: new Date('2015/12/20'), category:{id: 8, name: 'Income: Salário CI&T - Erik'}, amount:3465.54},
-                    {id:12, date: new Date('2015/12/20'), category:{id: 8, name: 'Income: Salário CI&T - Erik'}, amount:3465.54},
-                    {id:13, date: new Date('2015/12/20'), category:{id: 8, name: 'Income: Salário CI&T - Erik'}, amount:3465.54},
-                    {id:14, date: new Date('2015/12/20'), category:{id: 8, name: 'Income: Salário CI&T - Erik'}, amount:3465.54}
-
-                ]
-            }
+            // Get the account being detailed
+            new Account({id: $routeParams.accountID}).$get(function(account){
+                $scope.account = account;
+            });
 
             //TODO: Recuperar as categorias definidas no sistema.
             $scope.categories = [

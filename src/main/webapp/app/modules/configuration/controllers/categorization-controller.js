@@ -2,7 +2,7 @@ define([ './module',
          '../services/category-group-resources',
          '../services/category-resources',
          '../services/subcategory-resources',
-         '../../shared/services/constants-service'], function(module) {
+         '../../shared/services/app-filters'], function(module) {
 
 	module.controller('CategorizationController', ['$scope', '$filter', '$timeout', '$mdDialog', 'CategoryGroupResource', 'CategoryResource', 'SubCategoryResource',
 	    function($scope, $filter, $timeout, $mdDialog, CategoryGroup, Category, SubCategory) {

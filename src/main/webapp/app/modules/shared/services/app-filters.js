@@ -15,4 +15,16 @@ define(['./module'], function (app) {
 			}
 		};
 	});
+
+    app.filter('accountTypeName', function () {
+        var typeNameHash = {
+            CKA:  'Conta Corrente',
+            SVA:  'Conta Poupança',
+            INV:  'Conta Investimento',
+            CCA: 'Cartão de Crédito'
+        }
+        return function (input) {
+            return (typeNameHash[input] ? typeNameHash[input] : 'Not Found');
+        };
+    });
 });

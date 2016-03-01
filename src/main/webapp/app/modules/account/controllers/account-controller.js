@@ -1,16 +1,6 @@
-define(['./module', '../services/account-resources', '../../shared/services/utils-service'], function (app) {
-
-    app.filter('accountTypeName', function () {
-        var typeNameHash = {
-            CA:  'Conta Corrente',
-            SA:  'Conta Poupança',
-            IA:  'Conta Investimento',
-            CCA: 'Cartão de Crédito'
-        }
-        return function (input) {
-            return (typeNameHash[input] ? typeNameHash[input] : 'Not Found');
-        };
-    });
+define(['./module',
+        '../services/account-resources',
+        '../../shared/services/utils-service'], function (app) {
 
 	app.controller('AccountController', ['$rootScope', '$scope', '$location', '$filter', '$timeout', '$mdDialog', 'AccountResource', 'Utils', 'Constants',
         function($rootScope, $scope, $location, $filter, $timeout, $mdDialog, Account, Utils, Constants) {
@@ -26,67 +16,32 @@ define(['./module', '../services/account-resources', '../../shared/services/util
                 $location.path('/account/'+ account.id +'/entries');
             }
 
-            //TODO: Recuperar contas do usuário.
-            $scope.summary = {
-                balance: 77543.89,
-                types:[
-                    {
-                        type: 'CA', // Checking Account
-                        balance: 15435.87,
-                        accounts:[
-                            {
-                                id: 1,
-                                name: 'CC: Itaú Personalitè',
-                                balance: 3456.8
-                            },
-                            {
-                                id: 2,
-                                name: 'CC: HSBC Premier',
-                                balance: 56.0
+            Account.summary(function(summary){
+                $scope.summary = summary;
+                updateChart();
+            });
+
+            $scope.delete = function(account){
+                new Account(account).$delete(function(){
+                    for (var g in $scope.summary.groups){
+                        for (var a in $scope.summary.groups[g].accounts){
+                            if ($scope.summary.groups[g].accounts[a].id == account.id){
+                                $scope.summary.groups[g].balance -= $scope.summary.groups[g].accounts[a].balance;
+                                $scope.summary.balance -= $scope.summary.groups[g].accounts[a].balance;
+                                $scope.summary.groups[g].accounts.splice(a,1);
                             }
-                        ]
-                    },
-                    {
-                        type: 'SA', // Saving Account
-                        balance: 61986.02,
-                        accounts:[
-                            {
-                                id: 3,
-                                name: 'Poupança Personalitè',
-                                balance: 61986.02
-                            }
-                        ]
-                    },
-                    {
-                        type: 'IA', // Investiment Account
-                        balance: 61986.02,
-                        accounts:[
-                            {
-                                id: 3,
-                                name: 'Maximime DI',
-                                balance: 986.02
-                            }
-                        ]
-                    },
-                    {
-                        type: 'CCA', // Credit Card Account
-                        balance: -12986.02,
-                        accounts:[
-                            {
-                                id: 4,
-                                name: 'Itaú Personalitè - Visa Carol',
-                                balance: -10000.02
-                            },
-                            {
-                                id: 5,
-                                name: 'Itaú Personalitè - Visa Erik',
-                                balance: -2986.02
-                            }
-                        ]
+                        }
                     }
-                ]
+                    updateChart();
+                    addWarning($scope, 'Conta removida com sucesso!');
+                }, function(err){
+                    addError($scope, 'Não foi possível remover conta.', err);
+                });
             }
 
+            $scope.detail = function(account){
+                $location.path('/account/'+ account.id +'/entries');
+            }
 
             $scope.moneyDistributionChartConfig = {
                 options: {
@@ -95,10 +50,8 @@ define(['./module', '../services/account-resources', '../../shared/services/util
                     },
                     tooltip: {
                         enabled: true,
-//                        headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
                         pointFormatter: function(){
                             return $filter('currency')(this.y)
-                            //'<b>{point.y:.2f}</b> '
                         }
                     },
                     plotOptions: {
@@ -136,20 +89,20 @@ define(['./module', '../services/account-resources', '../../shared/services/util
                     name: 'Tipo de Conta',
                     colorByPoint: true,
                     data: [
-                        {
-                            name: 'Corrente',
-                            y: 15435.87
-                        },
-                        {
-                            name: 'Poupança',
-                            y: 61986.02/*,
-                            sliced: true,
-                            selected: true*/
-                        },
-                        {
-                            name: 'Investimento',
-                            y: 61986.02
-                        }
+//                        {
+//                            name: 'Corrente',
+//                            y: 15435.87
+//                        },
+//                        {
+//                            name: 'Poupança',
+//                            y: 61986.02/*,
+//                            sliced: true,
+//                            selected: true*/
+//                        },
+//                        {
+//                            name: 'Investimento',
+//                            y: 61986.02
+//                        }
                     ],
                 }],
                 credits: {enabled: false},
@@ -158,31 +111,43 @@ define(['./module', '../services/account-resources', '../../shared/services/util
                    height: 260
                 }
             }
+
+            function updateChart(){
+                $scope.moneyDistributionChartConfig.series[0].data = [];
+                angular.forEach($scope.summary.groups, function(group){
+                    if (group.id != Constants.ACCOUNT.TYPE.CCA.id)
+                        $scope.moneyDistributionChartConfig.series[0].data.push({name: group.name, y:group.balance});
+                });
+
+            }
+
+
+            function openDialog($scope, $mdDialog, Constants){
+               $mdDialog.show({
+                   controller: DialogController,
+                   templateUrl: 'modules/account/views/new-account-template.html',
+                   parent: angular.element(document.body),
+                   clickOutsideToClose:true
+               }).then(function(newAccount){
+
+                    new Account(newAccount).$save(function(account){
+                        angular.forEach($scope.summary.groups, function(group){
+                            if (group.id == account.type){
+                                group.accounts.push(account);
+                                group.balance += account.startBalance;
+                                updateChart();
+                            }
+                        });
+                        $scope.summary.balance += account.startBalance;
+                        addWarning($scope, 'Conta cadastrada com sucesso!');
+                    }, function(err){
+                        addError($scope, 'Não foi possível cadastrar conta.', err);
+                    });
+               });
+            }
         }
 
 	]);
-
-    function openDialog($scope, $mdDialog, Constants){
-       $mdDialog.show({
-           controller: DialogController,
-           templateUrl: 'modules/account/views/new-account-template.html',
-           parent: angular.element(document.body),
-           clickOutsideToClose:true
-       }).then(function(newAccount){
-
-            //TODO: Criar conta no server e recuperar summary atualizado.
-            angular.forEach($scope.summary.types, function(type){
-                if (type.type == newAccount.type){
-                    newAccount.balance = newAccount.startBalance;
-                    type.accounts.push(newAccount);
-                    type.balance += newAccount.startBalance;
-                }
-            });
-            $scope.summary.balance += newAccount.startBalance;
-
-            $scope.appContext.toast.addWarning('Conta '+ newAccount.name +' incluída com sucesso!');
-       });
-    }
 
     function DialogController($scope, $mdDialog, Utils, Constants) {
         $scope.accountTypes = Constants.ACCOUNT.TYPE;

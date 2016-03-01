@@ -131,9 +131,9 @@ function(angular, layout, config, dependencyResolverFor, errorHandler, authHandl
     app.service('Constants', function() {
 		this.ACCOUNT = {
 		    TYPE: {
-                CA: {id: 'CA',  name: 'Conta Corrente'}, // checking account
-                SA: {id: 'SA',  name: 'Conta Poupança'}, // saving account
-                IA: {id: 'IA',  name: 'Conta Investimento',
+                CKA: {id: 'CKA',  name: 'Conta Corrente'}, // checking account
+                SVA: {id: 'SVA',  name: 'Conta Poupança'}, // saving account
+                INV: {id: 'INV',  name: 'Conta Investimento',
                     type:{
                         ST:  {id: 'ST',  name: 'Ações'}, // stocks
                         DB:  {id: 'DB',  name: 'Debêntures'}, // debentures
