@@ -83,7 +83,7 @@ define([ './module',
             function openDialog(func, group){
                 $mdDialog.show({
                     controller: DialogController,
-                    templateUrl: ( func == 'C' ? 'modules/configuration/views/new-category-template.html' : 'modules/configuration/views/new-subcategory-template.html'),
+                    templateUrl: ( func == 'C' ? 'modules/categorization/views/new-category-template.html' : 'modules/categorization/views/new-subcategory-template.html'),
                     parent: angular.element(document.body),
                     locals: {
                         func: func,

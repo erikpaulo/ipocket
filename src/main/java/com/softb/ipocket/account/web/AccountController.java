@@ -3,31 +3,50 @@ package com.softb.ipocket.account.web;
 import com.softb.ipocket.account.model.Account;
 import com.softb.ipocket.account.model.AccountEntry;
 import com.softb.ipocket.account.repository.AccountRepository;
+import com.softb.ipocket.account.service.AccountService;
 import com.softb.ipocket.account.web.resource.AccountGroupResource;
 import com.softb.ipocket.account.web.resource.AccountSummaryResource;
-import com.softb.ipocket.categorization.model.Category;
-import com.softb.ipocket.categorization.model.SubCategory;
 import com.softb.system.errorhandler.exception.EntityNotFoundException;
 import com.softb.system.errorhandler.exception.FormValidationError;
 import com.softb.system.rest.AbstractRestController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
+import javax.inject.Inject;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @RestController("AppAccountController")
 @RequestMapping("/api/account")
-public class AccountController extends AbstractRestController<Category, Integer> {
+public class AccountController extends AbstractRestController<Account, Integer> {
 
 	public static final String ACCOUNT_OBJECT_NAME = "Account";
-	public static final String ACCOUNT_ENTRY_OBJECT_NAME = "AccountEntry";
 
 	@Autowired
 	private AccountRepository accountRepository;
+
+    @Inject
+    private AccountService accountService;
+
+
+
+
+    /**
+     * Lists all account registered for this user, but its entries aren't loaded.
+     *
+     * @return List Accounts without its entries
+     */
+    @RequestMapping(method = RequestMethod.GET)
+    public List<Account> listAll() {
+        List<Account> accounts = accountRepository.listAllByUser( getUserId() );
+        for (Account account: accounts.subList( 0, accounts.size()-1 )) {
+            account.setEntries( null );
+        }
+
+        return accounts;
+    }
 
 
     /**
@@ -36,7 +55,7 @@ public class AccountController extends AbstractRestController<Category, Integer>
      * @return List
      */
     @RequestMapping(value = "/summary", method = RequestMethod.GET)
-    public AccountSummaryResource listAll() {
+    public AccountSummaryResource summary() {
         List<AccountGroupResource> groups = new ArrayList<AccountGroupResource> ();
         AccountSummaryResource summary = new AccountSummaryResource( );
 
@@ -77,6 +96,19 @@ public class AccountController extends AbstractRestController<Category, Integer>
     }
 
     /**
+     * Lists the account statement for the selected period
+     * @return Lista de lançamentos do período.
+     * @throws ParseException
+     */
+    @RequestMapping(value="/{id}/statement", method=RequestMethod.GET)
+    public Account getAccountStatement(@PathVariable Integer id, @RequestParam String start, @RequestParam String end) throws ParseException {
+        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+        Date s = formatter.parse(start);
+        Date e = formatter.parse(end);
+        return accountService.getAccountStatement(id, s, e);
+    }
+
+    /**
      * Returns the informed account with all its entries.
      * @param id Id of the account
      * @return The Account selected
@@ -84,11 +116,8 @@ public class AccountController extends AbstractRestController<Category, Integer>
      */
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public Account get(@PathVariable Integer id) throws FormValidationError {
-        Account account = accountRepository.findOne( id, getUserId() );
-        return account;
+        return accountRepository.findOne( id, getUserId() );
     }
-
-//    public List<>
 
     /**
      * This point creates a new Account into the system.
@@ -101,6 +130,7 @@ public class AccountController extends AbstractRestController<Category, Integer>
 
         account.setUserId( getUserId() );
         account.setActivated( true );
+        account.setLastUpdate( new Date(  ) );
         validate( ACCOUNT_OBJECT_NAME, account );
 
         account = accountRepository.save( account );
@@ -131,33 +161,6 @@ public class AccountController extends AbstractRestController<Category, Integer>
         }
     }
 
-    /**
-     * This point creates a new Sub Category into the system.
-     * @param subCategory SubCategory to create
-     * @return SubCategory created
-     * @throws FormValidationError
-     */
-    @RequestMapping(value = "/category/{categoryId}/subcategory", method = RequestMethod.POST)
-	public SubCategory create(@PathVariable Integer categoryId, @RequestBody SubCategory subCategory) throws FormValidationError {
-
-		return subCategory;
-	}
-
-	
-	@Transactional
-    @RequestMapping(value = "/category/{id}", method = RequestMethod.PUT)
-	public Category update(@PathVariable Integer id, @RequestBody Category category) {
-		
-		return category;
-	}
-
-	@Transactional
-    @RequestMapping(value = "/category/{categoryId}/subcategory/{id}", method = RequestMethod.PUT)
-	public SubCategory update(@PathVariable Integer id, @RequestBody SubCategory subCategory) {
-
-		return subCategory;
-	}
-
     private Account calculateAccountBalance (Account account){
         Double balance = account.getStartBalance();
 
@@ -169,6 +172,13 @@ public class AccountController extends AbstractRestController<Category, Integer>
         account.setBalance( balance );
 
         return account;
+    }
+
+    protected void updateLastUpdate(Integer accountId){
+
+        Account account = accountRepository.findOne( accountId );
+        account.setLastUpdate( new Date() );
+        accountRepository.save( account );
     }
 }
 

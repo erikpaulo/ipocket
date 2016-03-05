@@ -23,9 +23,10 @@ public class CategoryController extends AbstractRestController<Category, Integer
 	
 	@Autowired
 	private CategoryRepository categoryRepository;
+
     @Autowired
     private SubCategoryRepository subCategoryRepository;
-	
+
 
     /**
      * This URL lists all categories created by the current user. This categories are grouped into
@@ -34,7 +35,7 @@ public class CategoryController extends AbstractRestController<Category, Integer
      * @return List
      */
     @RequestMapping(method = RequestMethod.GET)
-    public List<CategoryGroupResource> listAll() {
+    public List<CategoryGroupResource> listAllCategories() {
         List<CategoryGroupResource> groups = new ArrayList<CategoryGroupResource> ();
 
         // Creates structure that groups categories by its types.
@@ -74,6 +75,43 @@ public class CategoryController extends AbstractRestController<Category, Integer
         }
 
         return groups;
+    }
+
+    /**
+     * Gets all subcategories registered for this user with its full name
+     * @return
+     * @throws FormValidationError
+     */
+    @RequestMapping(value = "/category/all/subcategory", method = RequestMethod.GET)
+    public List<SubCategory> listAllSubcategories() throws FormValidationError {
+        List<SubCategory> listToReturn = new ArrayList<>(  );
+
+        // Gets all categories of the logged user, grouping by category types
+        List<Category> categories = categoryRepository.listAllByUser( getUserId () );
+        Iterator<Category> categs = categories.iterator ();
+        while (categs.hasNext ()){
+            Category category = categs.next ();
+
+            // Define each subcategory full name.
+            List<SubCategory> subcategories = category.getSubcategories();
+            Iterator<SubCategory> s = subcategories.iterator();
+            while (s.hasNext()){
+                SubCategory subCategory = s.next();
+                if (subCategory.getActivated()){
+                    subCategory.setFullName( /*category.getType().getName() +':'+ */category.getName() +" : "+ subCategory.getName());
+                    listToReturn.add( subCategory );
+                }
+            }
+
+        }
+
+        Collections.sort(listToReturn, new Comparator<SubCategory>(){
+            public int compare(SubCategory o1, SubCategory o2) {
+                return o1.getName().compareTo(o2.getName());
+            }
+        });
+
+        return listToReturn;
     }
 
     /**

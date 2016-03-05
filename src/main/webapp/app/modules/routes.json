@@ -67,9 +67,9 @@
     "name": "Categorização",
     "icon": "list",
     "originalPath": "/configuration",
-    "templateUrl": "modules/configuration/views/categorization.html",
+    "templateUrl": "modules/categorization/views/categorization.html",
     "dependencies": [
-      "modules/configuration/controllers/categorization-controller"
+      "modules/categorization/controllers/categorization-controller"
     ],
     "hasSubMenu": false
   }

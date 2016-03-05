@@ -9,6 +9,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
@@ -44,5 +45,8 @@ public class SubCategory extends BaseEntity<Integer> implements Serializable {
     @Column(name="USER_ID")
 	@NotNull
 	protected Integer userId;
+
+	@Transient
+	protected String fullName;
 
 }

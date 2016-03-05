@@ -1,70 +1,15 @@
-define(['./module', '../services/account-resources',
-        '../../configuration/services/category-resources'], function (app) {
+define(['./module',
+        '../services/account-resources',
+        '../../categorization/services/subcategory-resources',
+        '../services/account-entry-resources',
+        '../../shared/services/utils-service.js'], function (app) {
 
-	
-	app.controller('AccountEntryController', ['$scope', '$http', '$window', '$filter', '$routeParams', 'AccountResource', 'CategoryResource',
-        function($scope, $http, $window, $filter, $routeParams, Account, Category) {
-            $scope.appContext.contextPage = 'Contas: Conta Tralala';
+
+	app.controller('AccountEntryController', ['$scope', '$http', '$window', '$filter', '$routeParams', 'AccountResource', 'SubCategoryResource', 'AccountEntryResource', '$mdDialog', 'Utils',
+        function($scope, $http, $window, $filter, $routeParams, Account, SubCategory, AccountEntry, $mdDialog, Utils) {
             $scope.appContext.contextMenu.actions = [];
 
-            $scope.editEntry = undefined;
-
-            // Get the account being detailed
-            new Account({id: $routeParams.accountID}).$get(function(account){
-                $scope.account = account;
-            });
-
-            //TODO: Recuperar as categorias definidas no sistema.
-            $scope.categories = [
-                {id: 1, name: 'Household: Diarista'},
-                {id: 2, name: 'Household: Cemig'},
-                {id: 3, name: 'House: Financiamento Santander'},
-                {id: 4, name: 'Alimentação: Alimentação'},
-                {id: 5, name: 'Transporte: Gasolina'},
-                {id: 6, name: 'Transporte: IPVA'},
-                {id: 7, name: 'Transporte: Seguro'},
-                {id: 8, name: 'Income: Salário CI&T - Erik'},
-                {id: 9, name: 'Education: Escola de Inglês'}
-            ]
-
-            //TODO: recuperar as contas do usuário.
-            $scope.accounts = [
-                {id: 1,name: 'CC: Itaú Personalitè',balance: 3456.8},
-                {id: 2,name: 'CC: HSBC Premier',balance: 56.0},
-                {id: 3,name: 'Poupança Personalitè',balance: 61986.02},
-                {id: 3,name: 'Maximime DI',balance: 986.02},
-                {id: 4,name: 'Itaú Personalitè - Visa Carol',balance: -10000.02},
-                {id: 5,name: 'Itaú Personalitè - Visa Erik',balance: -2986.02}
-            ]
-
-            // Select one entry, signaling it to user
-            $scope.select = function(entry){
-                if (entry.selected) {
-                    entry.selected = false;
-                    $scope.editEntry = undefined;
-                    $scope.entryForm.$setUntouched();
-                    $scope.entryForm.$setPristine();
-                } else {
-                    unselectAll();
-                    entry.selected = true;
-                    $scope.editEntry = angular.copy(entry);
-                }
-            }
-
-            // Cancels some edit or create process.
-            $scope.cancel = function(){
-                $scope.editEntry = undefined;
-                $scope.entryForm.$setUntouched();
-                $scope.entryForm.$setPristine();
-                unselectAll();
-            }
-
-            // Unselect all entries in this account.
-            function unselectAll(){
-                angular.forEach($scope.account.entries, function(entry){
-                    entry.selected = false;
-                });
-            }
+            resetEditingEntry();
 
 			var end = new Date();
 			end.setMonth(end.getMonth()+1);
@@ -102,23 +47,110 @@ define(['./module', '../services/account-resources',
 			    	return end;
 			    }},
 			]
-		
+
+            // Get the account being detailed
+//            new Account({id: $routeParams.accountID}).$get(function(account){
+//                $scope.account = account;
+//            });
+
+            SubCategory.listAll(function(data){
+                $scope.subCategories = data;
+            });
+
+			// gets the account statement for the selected period.
+			$scope.getStatement = function(){
+				Account.statement({	id: $routeParams.accountID,
+									start: $scope.period.options[$scope.period.selected].start(),
+									end: $scope.period.options[$scope.period.selected].end()}).$promise.then(function(data){
+					$scope.account = data;
+                    $scope.appContext.contextPage = 'Contas: '+ $scope.account.name;
+				});
+			}
+			$scope.getStatement();
+
+            // Gets all user baking accounts.
+            Account.listAll(function(accounts){
+                $scope.accounts = accounts;
+            })
+
+            // Select one entry, signaling it to user
+            $scope.select = function(entry){
+                if (entry.selected) {
+                    entry.selected = false;
+                    $scope.editEntry = undefined;
+                    $scope.entryForm.$setUntouched();
+                    $scope.entryForm.$setPristine();
+                } else {
+                    unselectAll();
+                    entry.selected = true;
+                    $scope.editEntry = angular.copy(entry);
+                    if (!angular.isDate($scope.editEntry.date))
+                        $scope.editEntry.date = new Date($scope.editEntry.date);
+                }
+            }
+
+            // Unselect all entries in this account.
+            function unselectAll(){
+                angular.forEach($scope.account.entries, function(entry){
+                    entry.selected = false;
+                });
+            }
+
+            // Cancels some edit or create process.
+            $scope.cancel = function(){
+                resetEditingEntry();
+                $scope.entryForm.$setUntouched();
+                $scope.entryForm.$setPristine();
+                unselectAll();
+            }
+
+            // Create a new entry in current account
+            $scope.new = function(){
+                if (!angular.isNumber($scope.editEntry.amount))
+                    $scope.editEntry.amount = Utils.currencyToNumber($scope.editEntry.amount)
+                new AccountEntry($scope.editEntry).$new(function(data){
+                    resetEditingEntry();
+                    $scope.getStatement();
+                    addWarning($scope, 'Lançamento incluído com sucesso.')
+                }, function (err){
+                    addError($scope, 'Problemas ao incluir o lançamento', err);
+                });
+            }
+
+			// Save an existing entry
+			$scope.save = function(){
+				if (!angular.isNumber($scope.editEntry.amount))
+			        $scope.editEntry.amount = Utils.currencyToNumber($scope.editEntry.amount)
+
+                new AccountEntry($scope.editEntry).$save(function(data){
+                    resetEditingEntry();
+                    $scope.getStatement();
+                    addWarning($scope, 'Lançamento alterado com sucesso.')
+                }, function (err){
+                    addError($scope, 'Problemas ao alterar o lançamento.', err);
+                });
+			};
+
+			// Removes this entry from the current account
+			$scope.remove = function (){
+
+                new AccountEntry($scope.editEntry).$delete(function(data){
+                    resetEditingEntry();
+                    $scope.getStatement();
+                    addWarning($scope, 'Lançamento excluído com sucesso.')
+                }, function (err){
+                    addError($scope, 'Problemas ao excluir o lançamento.', err);
+                });
+
+			}
+
+
 			// Recupera a lista de categorias disponível no sistema.
 //			Category.listAll(function(data){
 //				$scope.categories = data;
 //			});
-			
-			// Atualiza o extrato de acordo com o período selecionado.
-//			$scope.getStatement = function(){
-//				// Recupera a conta selecionada com seu extrato.
-//				Account.statement({	id: $routeParams.accountID,
-//									start: $scope.periodOptions[$scope.Selected.period].start(),
-//									end: $scope.periodOptions[$scope.Selected.period].end()}).$promise.then(function(data){
-//					$scope.account = data;
-//				});
-//			}
-//			$scope.getStatement();
-			
+
+
 //			// Sensibiliza um dos lançamentos da conta como selecionado pelo usuário.
 //			$scope.selectEntry = function(entry){
 //				if (!angular.isDate(entry.date)) entry.date = new Date(entry.date);
@@ -137,7 +169,7 @@ define(['./module', '../services/account-resources',
 //					$scope.accountEntry = {};
 //				}
 //			}
-			
+
 //			// Salva um novo ou já existente lançamento na conta selecionada.
 //			$scope.save = function(form){
 //				if (!angular.isNumber($scope.accountEntry.amount))
@@ -165,7 +197,7 @@ define(['./module', '../services/account-resources',
 //					dirtyFormFields(form);
 //				}
 //			};
-				
+
 //			// Remove o lançamento selecionado na tabela.
 //			$scope.remove = function (form){
 //				if ($scope.accountEntry.id){
@@ -181,7 +213,7 @@ define(['./module', '../services/account-resources',
 //				}
 //
 //			}
-				
+
 //			// Limpa o form e remove seleção no grid.
 //			// Cancela a operação de edição ou inclusão de um novo lançamento na conta.
 //			$scope.clear = function(form){
@@ -192,7 +224,7 @@ define(['./module', '../services/account-resources',
 //				$scope.accountEntry = {};
 //				form.$setPristine();
 //			}
-			
+
 //			$scope.uploadFile = function() {
 //				// Abre a modal.
 //				var modalInstance = openModal($scope, $filter, $modal, ModalInstanceCtrl)
@@ -211,8 +243,8 @@ define(['./module', '../services/account-resources',
 //					  });
 //				});
 //			}
-			
-			
+
+
 //	        // Abre a modal.
 //	        function openModal($scope, $filter, $modal, ModalInstanceCtrl){
 //
@@ -235,7 +267,7 @@ define(['./module', '../services/account-resources',
 //
 //	    		return modalInstance;
 //	        }
-	        
+
 //	     	/***********************************************************************
 //			 * Controlador para tratamento da modal de edição/inserção.
 //			 **********************************************************************/
@@ -273,39 +305,53 @@ define(['./module', '../services/account-resources',
 //	     			$modalInstance.dismiss('cancel');
 //	     		};
 //	     	}
+
+            // open a modal with the file entries to be complemented.
+            $scope.import = function(entriesToComplement){
+                openDialog($scope, $mdDialog, entriesToComplement).then(function(entries){
+                    var entriesToImport = [];
+                    angular.forEach(entries, function(entry){
+                        if (!entry.exists){
+                            this.push(entry);
+                        }
+                    }, entriesToImport);
+
+                    $http.post('api/account/'+ $scope.account.id +'/entries/import', entriesToImport)
+                        .success(function(data, status, headers, config) {
+                            $scope.getStatement();
+                            addWarning($scope, '('+ entries.length +') lançamentos importados com sucesso!');
+                        })
+                        .error(function(data, status, headers, config) {
+                            addError($scope, 'Não foi possível importar os lançamentos', {data:{error: data.status, message: data.message}});
+                        }
+                    );
+                });
+            }
+
+            function resetEditingEntry(){
+                $scope.editEntry = {accountId: $routeParams.accountID};
+            }
 	}]);
 
 
-    app.controller('UploadFileController', ['$scope', 'Upload', '$mdDialog',
-        function($scope, Upload, $mdDialog) {
+    app.controller('UploadFileController', ['$scope', 'Upload',
+        function($scope, Upload) {
 
             // upload on file select or drop
             $scope.upload = function (file) {
                 if (file){
-//                    Upload.upload({
-//                        url: 'upload/url',
-//                        data: {file: file, 'username': $scope.username}
-//                    }).then(function (resp) {
-//                        console.log('Success ' + resp.config.data.file.name + 'uploaded. Response: ' + resp.data);
-//                    }, function (resp) {
-//                        console.log('Error status: ' + resp.status);
-//                    }, function (evt) {
-//                        var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
-//                        console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
-//                    });
-                    //TODO: Enviar arquivo para servidor
-                    var entriesToImport = [
-                        {id: 1, date: new Date(), amount:-345.8, exists:true},
-                        {id: 2, date: new Date(), amount:34566.8, exists:false},
-                        {id: 3, date: new Date(), amount:-45.8, exists:false},
-                        {id: 4, date: new Date(), amount:-4345.8, exists:false}
-                    ]
-                    openDialog($scope, $mdDialog, entriesToImport).then(function(entries){
-                        $scope.appContext.toast.addWarning('('+ entries.length +') lançamentos importados com sucesso.')
+                    Upload.upload({
+                        url: 'api/account/'+ $scope.account.id +'/entries/upload',
+                        data: {file: file}
+                    }).then(function (resp) {
+                        // start the import process.
+                        $scope.import(resp.data);
+                    }, function (resp) {
+                        addError($scope, 'Error status: ' + resp.status, '');
+                    }, function (evt) {
                     });
-
                 } else {
-                    $scope.appContext.toast.addError('Tipo de arquivo inválido');
+                    addError($scope, 'Tipo de arquivo inválido');
                 }
             };
         }
@@ -320,15 +366,15 @@ function openDialog($scope, $mdDialog, entriesToImport){
             parent: angular.element(document.body),
             clickOutsideToClose:false,
             locals: {
-                categories: $scope.categories,
+                subCategories: $scope.subCategories,
                 entries: entriesToImport
             }
    });
 }
 
-function DialogController($scope, $mdDialog, categories, entries) {
+function DialogController($scope, $mdDialog, subCategories, entries) {
     $scope.entries = entries;
-    $scope.categories = categories;
+    $scope.subCategories = subCategories;
 
     $scope.hide = function() {
         $mdDialog.hide();

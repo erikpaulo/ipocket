@@ -1,5 +1,5 @@
 <section ng-controller="AccountEntryController">
-    <div layout="row" flex class="md-padding">
+    <div layout="row" flex class="">
         <div layout="column" flex="65">
             <md-card>
                 <md-card-header>
@@ -7,12 +7,12 @@
                         <span class="md-title">Lançamentos</span>
                     </md-card-header-text>
                 </md-card-header>
-                <md-card-content>
+                <md-card-content style="overflow:auto;">
                     <md-divider class="blue"></md-divider>
                     <md-list>
                         <md-list-item>
                             <md-input-container flex="45" class="c-no-margin">
-                                <md-select name="selected" ng-model="period.selected" aria-label="period">
+                                <md-select name="selected" ng-model="period.selected" aria-label="period" ng-change="getStatement()">
                                     <md-option ng-repeat="option in period.options" ng-value="option.id">
                                         {{option.name}}
                                     </md-option>
@@ -36,6 +36,7 @@
                             <span layout="row" flex="20">Data</span>
                             <span layout="row" flex>Categoria/Nome</span>
                             <span layout="row" flex="20" layout-align="end center">Valor</span>
+                            <span layout="row" flex="20" layout-align="end center">Saldo</span>
                         </md-list-item>
                         <md-list-item ng-if="account.entries.length > 0" class="md-body-1 c-hover"
                                       ng-repeat="entry in account.entries | filter:search | orderBy: 'date'"
@@ -43,8 +44,9 @@
                                       ng-click="select(entry)" style="min-height:0px;">
                             <md-divider></md-divider>
                             <span layout="row" flex="20">{{entry.date | date: 'dd/MM/yyyy'}}</span>
-                            <span layout="row" flex>{{entry.category.name}}</span>
-                            <span layout="row" flex="20" layout-align="end center">{{entry.amount | currency}}</span>
+                            <span layout="row" flex>{{entry.subCategory.name}}</span>
+                            <span layout="row" flex="20" layout-align="end center" ng-class="{'c-number-negative': entry.amount<0}">{{entry.amount | currency}}</span>
+                            <span layout="row" flex="20" layout-align="end center" ng-class="{'c-number-negative': entry.balance<0}">{{entry.balance | currency}}</span>
                         </md-list-item>
                     </md-list>
                 </md-card-content>
@@ -90,9 +92,9 @@
                             <div layout="column" flex="100">
                                 <md-input-container>
                                     <label>Categoria</label>
-                                    <md-select name="category" ng-model="editEntry.category.id">
-                                        <md-option ng-repeat="category in categories" ng-value="category.id">
-                                            {{category.name}}
+                                    <md-select name="category" ng-model="editEntry.subCategory.id">
+                                        <md-option ng-repeat="subcategory in subCategories" ng-value="subcategory.id">
+                                            {{subcategory.fullName}}
                                         </md-option>
                                     </md-select>
                                 </md-input-container>
@@ -123,9 +125,9 @@
                             <div layout="column" flex="60">
                                 <md-input-container class="c-no-margin" ng-show="editEntry.transfer">
                                     <label>Conta Destino</label>
-                                    <md-select name="category" ng-model="editEntry.category.id">
-                                        <md-option ng-repeat="category in categories" ng-value="category.id">
-                                            {{category.name}}
+                                    <md-select name="category" ng-model="editEntry.accountDestinyId">
+                                        <md-option ng-repeat="account in accounts" ng-value="account.id">
+                                            {{account.name}}
                                         </md-option>
                                     </md-select>
                                 </md-input-container>
@@ -134,14 +136,14 @@
                     </md-card-content>
                     <md-card-actions layout="row" layout-align="end center">
                         <md-button class="" ng-click="cancel()" ng-show="!entryForm.$pristine">Cancelar</md-button>
-                        <md-button ng-show="editEntry.id" class="md-warn" type="submit"
+                        <md-button ng-show="editEntry.id" class="md-warn" type="submit" ng-click="remove()"
                                    ng-disabled="entryForm.$invalid">Excluir
                         </md-button>
-                        <md-button ng-show="editEntry.id" class="md-primary" type="submit"
+                        <md-button ng-show="editEntry.id" class="md-primary" type="submit" ng-click="save()"
                                    ng-disabled="entryForm.$invalid">Alterar
                         </md-button>
-                        <md-button ng-show="!editEntry.id" class="md-primary" type="submit"
-                                   ng-disabled="entryForm.$invalid">Incluir
+                        <md-button ng-show="!editEntry.id" class="md-primary" type="submit" ng-click="new()" ng-disabled="entryForm.$invalid">
+                            Incluir
                         </md-button>
                     </md-card-actions>
                 </md-card>

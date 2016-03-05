@@ -89,20 +89,6 @@ define(['./module',
                     name: 'Tipo de Conta',
                     colorByPoint: true,
                     data: [
-//                        {
-//                            name: 'Corrente',
-//                            y: 15435.87
-//                        },
-//                        {
-//                            name: 'Poupança',
-//                            y: 61986.02/*,
-//                            sliced: true,
-//                            selected: true*/
-//                        },
-//                        {
-//                            name: 'Investimento',
-//                            y: 61986.02
-//                        }
                     ],
                 }],
                 credits: {enabled: false},
@@ -115,7 +101,7 @@ define(['./module',
             function updateChart(){
                 $scope.moneyDistributionChartConfig.series[0].data = [];
                 angular.forEach($scope.summary.groups, function(group){
-                    if (group.id != Constants.ACCOUNT.TYPE.CCA.id)
+                    if (group.id != Constants.ACCOUNT.TYPE.CCA.id && group.balance >= 0)
                         $scope.moneyDistributionChartConfig.series[0].data.push({name: group.name, y:group.balance});
                 });
 

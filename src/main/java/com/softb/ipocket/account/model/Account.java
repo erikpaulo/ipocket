@@ -9,6 +9,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -34,7 +35,7 @@ public class Account extends BaseEntity<Integer> implements Serializable {
 	@Enumerated(EnumType.STRING)
 	protected Type type;
 
-	@OneToMany(fetch = FetchType.EAGER)
+	@OneToMany(fetch = FetchType.LAZY)
 	@JoinColumn(name = "ACCOUNT_ID", referencedColumnName = "ID")
 	protected List<AccountEntry> entries;
 
@@ -49,6 +50,10 @@ public class Account extends BaseEntity<Integer> implements Serializable {
     @Column(name="START_BALANCE")
     @NotNull
     protected Double startBalance;
+
+    @Column(name="LAST_UPDATE")
+    @NotNull
+    protected Date lastUpdate;
 
 	@Transient
     protected Double balance;
