@@ -141,8 +141,11 @@ public class CategoryController extends AbstractRestController<Category, Integer
     @RequestMapping(value = "/category/{categoryId}/subcategory", method = RequestMethod.POST)
 	public SubCategory create(@PathVariable Integer categoryId, @RequestBody SubCategory subCategory) throws FormValidationError {
 
+        Category category = categoryRepository.findOneByUser( categoryId, getUserId() );
         subCategory.setUserId( getUserId() );
         subCategory.setActivated( true );
+        subCategory.setCategory( category );
+
         validate( SUBCATEGORY_OBJECT_NAME,  subCategory);
 
         // Salva a categoria.
@@ -165,9 +168,12 @@ public class CategoryController extends AbstractRestController<Category, Integer
 
 	@Transactional
     @RequestMapping(value = "/category/{categoryId}/subcategory/{id}", method = RequestMethod.PUT)
-	public SubCategory update(@PathVariable Integer id, @RequestBody SubCategory subCategory) {
+	public SubCategory update(@PathVariable Integer categoryId, @RequestBody SubCategory subCategory) {
 
+        Category category = categoryRepository.findOneByUser( categoryId, getUserId() );
+        subCategory.setCategory( category );
         subCategory.setUserId( getUserId() );
+
         validate( SUBCATEGORY_OBJECT_NAME, subCategory );
 
         // Salva a categoria.
@@ -179,14 +185,6 @@ public class CategoryController extends AbstractRestController<Category, Integer
 	@RequestMapping(value="/{id}", method=RequestMethod.DELETE)
 	public @ResponseBody void delete(@PathVariable Integer id) throws FormValidationError{
 		categoryRepository.delete(id);
-		
-//		// Remove o grupo caso não exista categoria associada
-//		for (Category categorization : json){
-//			List<Category> categories = categoryRepository.findByGroupUser(categorization.getGroup().getId(), categorization.getUserId());
-//			if (categories != null && categories.size() == 0){
-//				categoryGroupRepository.delete(categorization.getGroup().getId());
-//			}
-//		}
 	}
 }
 

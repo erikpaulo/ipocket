@@ -36,7 +36,7 @@
                                           ng-click="editCategory($event, group, category)">{{category.name}}</span>
                                     <md-input-container ng-if="category.edit"
                                                         class="c-input-container-no-error c-no-margin" flex>
-                                        <input id="inputc_{{category.id}}" name="name" ng-model="category.name" aria-label="Categoria">
+                                        <input id="inputc_{{category.id}}" name="name" ng-model="category.name" aria-label="Categoria" ng-blur="editCategory($event, group, category)">
                                     </md-input-container>
                                     <md-button class="md-icon-button" aria-label="Expand/Collapse">
                                         <md-icon ng-if="category.open" class="material-icons" ng-click="category.open=!category.open">keyboard_arrow_up
@@ -49,14 +49,14 @@
                                      ng-class="{opened: category.open, closed: !category.open}">
                                     <div layout="column" flex="100">
                                         <div layout="row" ng-repeat="subcategory in category.subcategories" layout-align="center center">
-                                            <md-button ng-if="subcategory.edit" class="md-icon-button c-hover md-primary" ng-click="editSubCategory($event, subcategory)">
+                                            <md-button ng-if="subcategory.edit" class="md-icon-button c-hover md-primary" ng-click="editSubCategory($event, category, subcategory)">
                                                 <md-icon  class="material-icons">done</md-icon>
                                             </md-button>
-                                            <span ng-if="!subcategory.edit" ng-click="editSubCategory($event, subcategory)" flex>{{subcategory.name}}</span>
+                                            <span ng-if="!subcategory.edit" ng-click="editSubCategory($event, category, subcategory)" flex>{{subcategory.name}}</span>
                                             <md-input-container ng-if="subcategory.edit" class="c-input-container-no-error c-no-margin" flex>
                                                 <input id="inputsc_{{subcategory.id}}" name="name" aria-label="Sub Categoria" ng-model="subcategory.name">
                                             </md-input-container>
-                                            <span ng-if="!subcategory.edit" ng-click="editSubCategory($event, subcategory)" flex="10">
+                                            <span ng-if="!subcategory.edit" ng-click="editSubCategory($event, category, subcategory)" flex="10">
                                                 {{subcategory.type}}
                                                 <md-tooltip md-direction="left">
                                                     {{subcategory.type | mapType}}
@@ -69,7 +69,7 @@
                                                     </md-option>
                                                 </md-select>
                                             </md-input-container>
-                                            <md-switch ng-model="subcategory.activated" class="md-primary" aria-label="Category Activated" ng-change="changeStatus(subcategory)"></md-switch>
+                                            <md-switch ng-model="subcategory.activated" class="md-primary" aria-label="Category Activated" ng-change="changeStatus(category, subcategory)"></md-switch>
                                         </div>
                                     </div>
                                 </div>

@@ -55,6 +55,9 @@ public class AccountEntryController extends AbstractRestController<AccountEntry,
     public AccountEntry create(@RequestBody AccountEntry entry) throws FormValidationError, CloneNotSupportedException {
         AccountEntry twinEntry = null;
 
+        SubCategory subCategory = subcategoryRepository.findOneByUser( entry.getSubCategory().getId(), getUserId() );
+
+        entry.setSubCategory( subCategory );
         entry.setTransfer( entry.getTransfer() != null ? entry.getTransfer() : false );
         entry = save(entry);
 

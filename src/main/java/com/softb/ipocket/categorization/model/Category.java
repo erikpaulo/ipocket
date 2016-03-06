@@ -1,5 +1,6 @@
 package com.softb.ipocket.categorization.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.softb.system.repository.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -44,6 +45,7 @@ public class Category extends BaseEntity<Integer> implements Serializable {
 
 	@OneToMany(fetch = FetchType.EAGER)
 	@JoinColumn(name = "CATEGORY_ID", referencedColumnName = "ID")
+	@JsonManagedReference
 	protected List<SubCategory> subcategories;
 
     @Column(name="USER_ID")

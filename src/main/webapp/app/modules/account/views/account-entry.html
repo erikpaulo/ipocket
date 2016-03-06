@@ -44,7 +44,7 @@
                                       ng-click="select(entry)" style="min-height:0px;">
                             <md-divider></md-divider>
                             <span layout="row" flex="20">{{entry.date | date: 'dd/MM/yyyy'}}</span>
-                            <span layout="row" flex>{{entry.subCategory.name}}</span>
+                            <span layout="row" flex>{{entry.subCategory.fullName}}</span>
                             <span layout="row" flex="20" layout-align="end center" ng-class="{'c-number-negative': entry.amount<0}">{{entry.amount | currency}}</span>
                             <span layout="row" flex="20" layout-align="end center" ng-class="{'c-number-negative': entry.balance<0}">{{entry.balance | currency}}</span>
                         </md-list-item>

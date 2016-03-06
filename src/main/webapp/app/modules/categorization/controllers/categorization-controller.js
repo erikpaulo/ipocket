@@ -52,22 +52,24 @@ define([ './module',
             $scope.addSubCategory = function(group){
                 openDialog('S', group);
             }
-            $scope.editSubCategory = function($event, subcategory){
+            $scope.editSubCategory = function($event, category, subcategory){
                 if (!subcategory.edit){ // open for edition
                     subcategory.edit = true;
                     $timeout(function() {
                         angular.element('#inputsc_'+subcategory.id).focus()
                     }, 0);
                 } else { // send the change to server
-                    saveSubCategory(subcategory)
+                    saveSubCategory(category, subcategory)
                 }
             }
-            $scope.changeStatus = function(subcategory){
-                 saveSubCategory(subcategory);
+            $scope.changeStatus = function(category, subcategory){
+                 saveSubCategory(category, subcategory);
             }
-            function saveSubCategory(subcategory){
+            function saveSubCategory(category, subcategory){
                 var subcategoryResource = new SubCategory(subcategory);
+                subcategoryResource.categoryId = category.id;
                 delete subcategoryResource.edit;
+
                 subcategoryResource.$save(function(subcateg){
                     addWarning($scope, 'Subcategoria alterada com sucesso!');
                     delete subcategory.edit;
