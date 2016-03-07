@@ -141,7 +141,7 @@ define(['./module',
         $scope.newAccount = {};
 
         $scope.hide = function() {
-            $mdDialog.hide();
+            $mdDialog.cancel();
         };
         $scope.cancel = function() {
             $mdDialog.cancel();

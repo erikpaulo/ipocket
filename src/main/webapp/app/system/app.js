@@ -83,6 +83,8 @@ function(angular, layout, config, dependencyResolverFor, errorHandler, authHandl
             //                .primaryPalette('blue-grey')
                 .accentPalette('blue-grey');
 
+            $compileProvider.debugInfoEnabled(true);
+
 //            $mdDateLocaleProvider.formatDate = function(date) {
 //                return moment(date).format('dd/MM/yyyy');
 //            };

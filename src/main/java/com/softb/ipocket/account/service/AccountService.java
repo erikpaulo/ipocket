@@ -32,11 +32,11 @@ public class AccountService {
         Account account = accountRepository.getOne(accountId);
 
         // Recupera o saldo até o início do período.
-        Double balance = accountEntryRepository.getBalanceByDateAccount(accountId, start, userAccountService.getCurrentUser().getId());
+        Double balance = accountEntryRepository.getBalanceByDateAccount(accountId, start, userAccountService.getCurrentUser().getGroupId());
         if (balance == null) balance = 0.0;
 
         // Recupera lançamentos do usuário para o mês corrente e anterior.
-        List<AccountEntry> entries = accountEntryRepository.listAllByUserDateAccount(accountId, start, userAccountService.getCurrentUser().getId());
+        List<AccountEntry> entries = accountEntryRepository.listAllByUserDateAccount(accountId, start, userAccountService.getCurrentUser().getGroupId());
 
         // Calcula o saldo acumulativo.
         balance += account.getStartBalance();

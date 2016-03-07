@@ -39,9 +39,9 @@ public class SubCategory extends BaseEntity<Integer> implements Serializable {
     @JsonBackReference
     protected Category category;
 
-    @Column(name="USER_ID")
+    @Column(name="USER_GROUP_ID")
 	@NotNull
-	protected Integer userId;
+	protected Integer groupId;
 
     @Transient
     protected Integer categoryId;
@@ -81,12 +81,12 @@ public class SubCategory extends BaseEntity<Integer> implements Serializable {
         this.category = category;
     }
 
-    public Integer getUserId() {
-        return userId;
+    public Integer getGroupId() {
+        return groupId;
     }
 
-    public void setUserId(Integer userId) {
-        this.userId = userId;
+    public void setGroupId(Integer groupId) {
+        this.groupId = groupId;
     }
 
     public Integer getCategoryId() {

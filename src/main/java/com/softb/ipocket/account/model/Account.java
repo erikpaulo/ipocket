@@ -43,9 +43,9 @@ public class Account extends BaseEntity<Integer> implements Serializable {
     @NotNull
     protected Boolean activated;
 
-    @Column(name="USER_ID")
+    @Column(name="USER_GROUP_ID")
 	@NotNull
-	protected Integer userId;
+	protected Integer groupId;
 
     @Column(name="START_BALANCE")
     @NotNull

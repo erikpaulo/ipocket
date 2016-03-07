@@ -19,8 +19,7 @@ public class CategoryController extends AbstractRestController<Category, Integer
 
 	public static final String CATEGORY_OBJECT_NAME = "Category";
 	public static final String SUBCATEGORY_OBJECT_NAME = "SubCategory";
-    public static final String FULL_NAME_SEPARATOR = ":";
-	
+
 	@Autowired
 	private CategoryRepository categoryRepository;
 
@@ -47,7 +46,7 @@ public class CategoryController extends AbstractRestController<Category, Integer
         }
 
         // Gets all categories of the logged user, grouping by category types
-        List<Category> categories = categoryRepository.listAllByUser ( getUserId () );
+        List<Category> categories = categoryRepository.listAllByUser ( getGroupId() );
         Iterator<Category> categs = categories.iterator ();
         while (categs.hasNext ()){
             Category category = categs.next ();
@@ -87,7 +86,7 @@ public class CategoryController extends AbstractRestController<Category, Integer
         List<SubCategory> listToReturn = new ArrayList<>(  );
 
         // Gets all categories of the logged user, grouping by category types
-        List<Category> categories = categoryRepository.listAllByUser( getUserId () );
+        List<Category> categories = categoryRepository.listAllByUser( getGroupId() );
         Iterator<Category> categs = categories.iterator ();
         while (categs.hasNext ()){
             Category category = categs.next ();
@@ -98,11 +97,9 @@ public class CategoryController extends AbstractRestController<Category, Integer
             while (s.hasNext()){
                 SubCategory subCategory = s.next();
                 if (subCategory.getActivated()){
-                    subCategory.setFullName( /*category.getType().getName() +':'+ */category.getName() +" : "+ subCategory.getName());
                     listToReturn.add( subCategory );
                 }
             }
-
         }
 
         Collections.sort(listToReturn, new Comparator<SubCategory>(){
@@ -123,7 +120,7 @@ public class CategoryController extends AbstractRestController<Category, Integer
     @RequestMapping(value = "/category", method = RequestMethod.POST)
 	public Category create(@RequestBody Category category) throws FormValidationError {
 
-        category.setUserId( getUserId() );
+        category.setGroupId( getGroupId() );
         validate( CATEGORY_OBJECT_NAME,  category);
 
         // Salva a categoria.
@@ -141,8 +138,8 @@ public class CategoryController extends AbstractRestController<Category, Integer
     @RequestMapping(value = "/category/{categoryId}/subcategory", method = RequestMethod.POST)
 	public SubCategory create(@PathVariable Integer categoryId, @RequestBody SubCategory subCategory) throws FormValidationError {
 
-        Category category = categoryRepository.findOneByUser( categoryId, getUserId() );
-        subCategory.setUserId( getUserId() );
+        Category category = categoryRepository.findOneByUser( categoryId, getGroupId() );
+        subCategory.setGroupId( getGroupId() );
         subCategory.setActivated( true );
         subCategory.setCategory( category );
 
@@ -158,7 +155,7 @@ public class CategoryController extends AbstractRestController<Category, Integer
     @RequestMapping(value = "/category/{id}", method = RequestMethod.PUT)
 	public Category update(@PathVariable Integer id, @RequestBody Category category) {
 		
-        category.setUserId( getUserId() );
+        category.setGroupId( getGroupId() );
         validate( CATEGORY_OBJECT_NAME, category );
 
         // Salva a categoria.
@@ -170,9 +167,9 @@ public class CategoryController extends AbstractRestController<Category, Integer
     @RequestMapping(value = "/category/{categoryId}/subcategory/{id}", method = RequestMethod.PUT)
 	public SubCategory update(@PathVariable Integer categoryId, @RequestBody SubCategory subCategory) {
 
-        Category category = categoryRepository.findOneByUser( categoryId, getUserId() );
+        Category category = categoryRepository.findOneByUser( categoryId, getGroupId() );
         subCategory.setCategory( category );
-        subCategory.setUserId( getUserId() );
+        subCategory.setGroupId( getGroupId() );
 
         validate( SUBCATEGORY_OBJECT_NAME, subCategory );
 

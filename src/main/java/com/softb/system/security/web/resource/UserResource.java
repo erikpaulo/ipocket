@@ -1,14 +1,15 @@
 package com.softb.system.security.web.resource;
 
-import lombok.Data;
-
 import com.softb.system.security.model.UserAccount;
+import lombok.Data;
 
 @Data
 public class UserResource {
 	private boolean authenticated;
 	
 	private String displayName;
+
+	private String email;
 	
 	private String imageUrl;
 	
@@ -23,5 +24,6 @@ public class UserResource {
 		this.displayName = account.getDisplayName();
 		this.imageUrl = account.getImageUrl();
 		this.admin = account.isAdmin();
+        this.email = account.getEmail();
 	}
 }

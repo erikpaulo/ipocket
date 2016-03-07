@@ -1,8 +1,10 @@
 package com.softb.system.security.service;
 
-import javax.annotation.Resource;
-import javax.inject.Inject;
-
+import com.softb.system.errorhandler.exception.BusinessException;
+import com.softb.system.errorhandler.exception.EntityNotFoundException;
+import com.softb.system.errorhandler.exception.FormValidationError;
+import com.softb.system.security.model.UserAccount;
+import com.softb.system.security.repository.UserAccountRepository;
 import org.apache.commons.lang.math.NumberUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,11 +18,8 @@ import org.springframework.util.StringUtils;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Validator;
 
-import com.softb.system.errorhandler.exception.BusinessException;
-import com.softb.system.errorhandler.exception.EntityNotFoundException;
-import com.softb.system.errorhandler.exception.FormValidationError;
-import com.softb.system.security.model.UserAccount;
-import com.softb.system.security.repository.UserAccountRepository;
+import javax.annotation.Resource;
+import javax.inject.Inject;
 
 /**
  * Implementation for UserAccountService.
@@ -60,7 +59,7 @@ public class UserAccountServiceImpl implements UserAccountService {
         
         account = accountRepository.save(account);
         
-        logger.info(String.format("A new user is created (userId='%s') for '%s'.", account.getUserId(), account.getDisplayName()));
+        logger.info(String.format("A new user is created (groupId='%s') for '%s'.", account.getUserId(), account.getDisplayName()));
         return account;
     }
 
@@ -85,7 +84,7 @@ public class UserAccountServiceImpl implements UserAccountService {
     	String[] tokens = userId.split(":");
     	UserAccount account = accountRepository.findOne(Integer.parseInt(tokens[1]));
         if (account == null) {
-            throw new EntityNotFoundException("Cannot find user by userId " + userId);
+            throw new EntityNotFoundException("Cannot find user by groupId " + userId);
         } 
         return account;
     }
@@ -95,7 +94,7 @@ public class UserAccountServiceImpl implements UserAccountService {
 
         UserAccount account = accountRepository.findByGoogleId(googleId);
         if (account == null) {
-            throw new EntityNotFoundException("Cannot find user by userId " + googleId);
+            throw new EntityNotFoundException("Cannot find user by groupId " + googleId);
         }
         return account;
     }

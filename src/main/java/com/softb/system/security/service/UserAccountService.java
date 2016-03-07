@@ -1,10 +1,9 @@
 package com.softb.system.security.service;
 
+import com.softb.system.security.model.UserAccount;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.social.security.SocialUserDetailsService;
-
-import com.softb.system.security.model.UserAccount;
 
 /**
  * Domain Service para administração do usuário, Extende SocialUserDetailsService,
@@ -40,7 +39,7 @@ public interface UserAccountService extends SocialUserDetailsService, UserDetail
     UserAccount revoke(String userId, String role);
     
     /**
-     * Override SocialUserDetailsService.loadUserByUserId(String userId) to 
+     * Override SocialUserDetailsService.loadUserByUserId(String groupId) to
      * return UserAccount.
      */
     UserAccount loadUserByUserId(String userId) throws UsernameNotFoundException;

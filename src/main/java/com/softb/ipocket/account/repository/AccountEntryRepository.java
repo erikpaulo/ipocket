@@ -13,21 +13,15 @@ import java.util.List;
 @Repository("AppAccountEntryRepository")
 public interface AccountEntryRepository extends JpaRepository<AccountEntry, Integer> {
 
-    @Query("select ae from AccountEntry ae where ae.id = :id and ae.userId = :userId")
-    AccountEntry findOne(@Param("id") Integer id, @Param("userId") Integer userId) throws DataAccessException;
+    @Query("select ae from AccountEntry ae where ae.id = :id and ae.groupId = :groupId")
+    AccountEntry findOne(@Param("id") Integer id, @Param("groupId") Integer groupId) throws DataAccessException;
 
-    @Query("select ae from AccountEntry ae where ae.userId = :userId and ae.accountId = :accountId and ae.date = :date and ae.amount = :amount")
-    List<AccountEntry> listAllByUserDateAmount(@Param("userId") Integer userId, @Param("accountId") Integer accountId, @Param("date") Date date, @Param("amount") Double amount) throws DataAccessException;
+    @Query("select ae from AccountEntry ae where ae.groupId = :groupId and ae.accountId = :accountId and ae.date = :date and ae.amount = :amount")
+    List<AccountEntry> listAllByUserDateAmount(@Param("groupId") Integer groupId, @Param("accountId") Integer accountId, @Param("date") Date date, @Param("amount") Double amount) throws DataAccessException;
 
-    @Query("select sum(ae.amount) from AccountEntry ae where ae.userId = :userId and ae.date < :date and ae.accountId = :accountId")
-    Double getBalanceByDateAccount(@Param("accountId") Integer accountId, @Param("date") Date date, @Param("userId") Integer userId) throws DataAccessException;
+    @Query("select sum(ae.amount) from AccountEntry ae where ae.groupId = :groupId and ae.date < :date and ae.accountId = :accountId")
+    Double getBalanceByDateAccount(@Param("accountId") Integer accountId, @Param("date") Date date, @Param("groupId") Integer groupId) throws DataAccessException;
 
-//    @Query("select ae from AccountEntry ae, Account a where ae.accountId = a.id and a.type = 'CH' and ae.userId = :userId and ae.category.id = :catId order by ae.date  DESC")
-//    List<AccountEntry> listByUserCategory(@Param("userId") Integer userId, @Param("catId") Integer catId) throws DataAccessException;
-//
-//    @Query("select ae from AccountEntry ae, Account a where ae.accountId = a.id and a.type = 'CH' and ae.userId = :userId and ae.date between :dateStart and :dateEnd")
-//    List<AccountEntry> listAllByUserPeriod(@Param("userId") Integer userId, @Param("dateStart") Date dateStart, @Param("dateEnd") Date dateEnd) throws DataAccessException;
-//
-    @Query("select ae from AccountEntry ae, Account a where ae.accountId = a.id and ae.userId = :userId and ae.date >= :dateStart and a.id = :accountId order by ae.date ASC")
-    List<AccountEntry> listAllByUserDateAccount(@Param("accountId") Integer accountId, @Param("dateStart") Date dateStart, @Param("userId") Integer userId) throws DataAccessException;
+    @Query("select ae from AccountEntry ae, Account a where ae.accountId = a.id and ae.groupId = :groupId and ae.date >= :dateStart and a.id = :accountId order by ae.date ASC")
+    List<AccountEntry> listAllByUserDateAccount(@Param("accountId") Integer accountId, @Param("dateStart") Date dateStart, @Param("groupId") Integer groupId) throws DataAccessException;
 }

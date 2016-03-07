@@ -40,7 +40,7 @@ public class AccountController extends AbstractRestController<Account, Integer> 
      */
     @RequestMapping(method = RequestMethod.GET)
     public List<Account> listAll() {
-        List<Account> accounts = accountRepository.listAllByUser( getUserId() );
+        List<Account> accounts = accountRepository.listAllByUser( getGroupId() );
         for (Account account: accounts.subList( 0, accounts.size()-1 )) {
             account.setEntries( null );
         }
@@ -68,7 +68,7 @@ public class AccountController extends AbstractRestController<Account, Integer> 
         }
 
         // Gets all accounts of the logged user, grouping by account types
-        List<Account> accounts = accountRepository.listAllByUser ( getUserId () );
+        List<Account> accounts = accountRepository.listAllByUser ( getGroupId() );
         Iterator<Account> accs = accounts.iterator ();
         while (accs.hasNext ()){
             Account account = accs.next ();
@@ -116,7 +116,7 @@ public class AccountController extends AbstractRestController<Account, Integer> 
      */
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public Account get(@PathVariable Integer id) throws FormValidationError {
-        return accountRepository.findOne( id, getUserId() );
+        return accountRepository.findOne( id, getGroupId() );
     }
 
     /**
@@ -128,7 +128,7 @@ public class AccountController extends AbstractRestController<Account, Integer> 
     @RequestMapping(method = RequestMethod.POST)
 	public Account create(@RequestBody Account account) throws FormValidationError {
 
-        account.setUserId( getUserId() );
+        account.setGroupId( getGroupId() );
         account.setActivated( true );
         account.setLastUpdate( new Date(  ) );
         validate( ACCOUNT_OBJECT_NAME, account );
@@ -147,7 +147,7 @@ public class AccountController extends AbstractRestController<Account, Integer> 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public void delete(@PathVariable Integer id) throws FormValidationError {
 
-        Account account = accountRepository.findOne( id, getUserId() );
+        Account account = accountRepository.findOne( id, getGroupId() );
         if (account == null){
             throw new EntityNotFoundException( "This account doesn't belong to the current user." );
         }

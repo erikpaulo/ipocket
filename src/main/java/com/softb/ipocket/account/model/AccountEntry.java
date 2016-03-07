@@ -55,9 +55,9 @@ public class AccountEntry extends BaseEntity<Integer> implements Serializable {
 	@Column(name = "TWIN_ENTRY_ID")
 	protected Integer twinEntryId;
 
-    @Column(name="USER_ID")
+    @Column(name="USER_GROUP_ID")
 	@NotNull
-	protected Integer userId;
+	protected Integer groupId;
 
     @Transient
     protected Double balance;
@@ -65,7 +65,7 @@ public class AccountEntry extends BaseEntity<Integer> implements Serializable {
     @Override
     public AccountEntry clone() throws CloneNotSupportedException {
         return new AccountEntry( this.date,      this.subCategory, this.amount, this.transfer,
-                                 this.accountId, this.accountDestinyId, this.twinEntryId, this.userId,
+                                 this.accountId, this.accountDestinyId, this.twinEntryId, this.groupId,
                                  this.balance);
     }
 }

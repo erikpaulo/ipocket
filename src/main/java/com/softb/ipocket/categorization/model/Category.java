@@ -27,11 +27,11 @@ public class Category extends BaseEntity<Integer> implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	public Category (String name, String type, Integer userId){
+	public Category (String name, String type, Integer groupId){
 		this.name = name;
 		this.type = Type.valueOf( type );
 		this.subcategories = new ArrayList<SubCategory>(  );
-		this.userId = userId;
+		this.groupId = groupId;
 	}
 
 	@Column(name = "NAME")
@@ -48,9 +48,9 @@ public class Category extends BaseEntity<Integer> implements Serializable {
 	@JsonManagedReference
 	protected List<SubCategory> subcategories;
 
-    @Column(name="USER_ID")
+    @Column(name="USER_GROUP_ID")
 	@NotNull
-	protected Integer userId;
+	protected Integer groupId;
 
 	@Transient
 	protected String fullName;

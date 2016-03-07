@@ -1,10 +1,11 @@
 package com.softb.system.security.web;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.inject.Inject;
-
+import com.softb.system.security.model.UserAccount;
+import com.softb.system.security.model.UserSocialConnection;
+import com.softb.system.security.repository.UserAccountRepository;
+import com.softb.system.security.repository.UserSocialConnectionRepository;
+import com.softb.system.security.service.UserAccountService;
+import com.softb.system.security.web.resource.UserAccountResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Sort;
@@ -15,18 +16,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.softb.system.security.model.UserAccount;
-import com.softb.system.security.model.UserSocialConnection;
-import com.softb.system.security.repository.UserAccountRepository;
-import com.softb.system.security.repository.UserSocialConnectionRepository;
-import com.softb.system.security.service.UserAccountService;
-import com.softb.system.security.web.resource.UserAccountResource;
+import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
  * RESTful Service para gerenciar os usuários do sistema.
  * 
- * <p>API: '<b>api/admin/users/:action:userId/:userAction</b>'</p>
+ * <p>API: '<b>api/admin/users/:action:groupId/:userAction</b>'</p>
  * <p><b>:action</b> can be
  * <ul>
  * <li>'list' - retorna todos os usuários do sistema.</li>
@@ -34,12 +32,12 @@ import com.softb.system.security.web.resource.UserAccountResource;
  * </p>
  * <p><b>:userAction</b> can be
  * <ul>
- * <li>'{userId}/lock' - lock user account.</li>
- * <li>'{userId}/unlock' - unlock user account.</li>
- * <li>'{userId}/trust' - set user as trusted.</li>
- * <li>'{userId}/untrust' - set user as not trusted.</li>
- * <li>'{userId}/grant/{role}' - add a new role</li>
- * <li>'{userId}/revoke/{role} - remove an existing role'</li> * 
+ * <li>'{groupId}/lock' - lock user account.</li>
+ * <li>'{groupId}/unlock' - unlock user account.</li>
+ * <li>'{groupId}/trust' - set user as trusted.</li>
+ * <li>'{groupId}/untrust' - set user as not trusted.</li>
+ * <li>'{groupId}/grant/{role}' - add a new role</li>
+ * <li>'{groupId}/revoke/{role} - remove an existing role'</li> *
  * </ul>
  * </p>
  */
@@ -74,9 +72,9 @@ public class AccountAdminController {
         return result;
     }
 
-    @RequestMapping(value = "/{userId}/lock", method = RequestMethod.PUT)
+    @RequestMapping(value = "/{groupId}/lock", method = RequestMethod.PUT)
     @ResponseBody
-    public UserAccountResource lockUser(@PathVariable("userId") String userId) {
+    public UserAccountResource lockUser(@PathVariable("groupId") String userId) {
         UserAccount userAccount = userAccountService.loadUserByUserId(userId);
 
         userAccount.setAccountLocked(true);
@@ -85,9 +83,9 @@ public class AccountAdminController {
         return UserAccountResource.transferForAccountOverview(userAccount, connections);
     }
 
-    @RequestMapping(value = "/{userId}/unlock", method = RequestMethod.PUT)
+    @RequestMapping(value = "/{groupId}/unlock", method = RequestMethod.PUT)
     @ResponseBody
-    public UserAccountResource unlockUser(@PathVariable("userId") String userId) {
+    public UserAccountResource unlockUser(@PathVariable("groupId") String userId) {
         UserAccount userAccount = userAccountService.loadUserByUserId(userId);
 
         userAccount.setAccountLocked(false);
@@ -96,9 +94,9 @@ public class AccountAdminController {
         return UserAccountResource.transferForAccountOverview(userAccount, connections);
     }
 
-    @RequestMapping(value = "/{userId}/trust", method = RequestMethod.PUT)
+    @RequestMapping(value = "/{groupId}/trust", method = RequestMethod.PUT)
     @ResponseBody
-    public  UserAccountResource trustUser(@PathVariable("userId") String userId) {
+    public  UserAccountResource trustUser(@PathVariable("groupId") String userId) {
         UserAccount userAccount = userAccountService.loadUserByUserId(userId);
 
         userAccount.setTrustedAccount(true);
@@ -107,9 +105,9 @@ public class AccountAdminController {
         return UserAccountResource.transferForAccountOverview(userAccount, connections);
     }
 
-    @RequestMapping(value = "/{userId}/untrust", method = RequestMethod.PUT)
+    @RequestMapping(value = "/{groupId}/untrust", method = RequestMethod.PUT)
     @ResponseBody
-    public UserAccountResource untrustUser(@PathVariable("userId") String userId) {
+    public UserAccountResource untrustUser(@PathVariable("groupId") String userId) {
         UserAccount userAccount = userAccountService.loadUserByUserId(userId);
 
         userAccount.setTrustedAccount(false);
@@ -118,7 +116,7 @@ public class AccountAdminController {
         return UserAccountResource.transferForAccountOverview(userAccount, connections);
     }
     
-    @RequestMapping(value="/{userId}/grant/{role}", method=RequestMethod.GET)
+    @RequestMapping(value="/{groupId}/grant/{role}", method=RequestMethod.GET)
     @ResponseBody
     public UserAccountResource grant(@PathVariable String userId, @PathVariable String role) {
 	
@@ -129,7 +127,7 @@ public class AccountAdminController {
 
     }
     
-    @RequestMapping(value="/{userId}/revoke/{role}", method=RequestMethod.GET)
+    @RequestMapping(value="/{groupId}/revoke/{role}", method=RequestMethod.GET)
     @ResponseBody
     public UserAccountResource revoke(@PathVariable String userId, @PathVariable String role) {
 

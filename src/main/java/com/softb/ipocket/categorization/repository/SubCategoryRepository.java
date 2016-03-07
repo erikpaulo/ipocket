@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 @Repository("AppSubCategoryRepository")
 public interface SubCategoryRepository extends JpaRepository<SubCategory, Integer> {
 
-    @Query("select s from SubCategory s where s.id = :id and s.userId = :userId")
-    SubCategory findOneByUser(@Param("id") Integer id, @Param("userId") Integer userId) throws DataAccessException;
+    @Query("select s from SubCategory s where s.id = :id and s.groupId = :groupId")
+    SubCategory findOneByUser(@Param("id") Integer id, @Param("groupId") Integer groupId) throws DataAccessException;
 
 }

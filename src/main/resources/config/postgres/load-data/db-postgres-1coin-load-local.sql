@@ -1,0 +1,3 @@
+COPY USER_GROUP FROM '/Users/eriklacerda/Projects/ipocket/src/main/resources/config/postgres/load-data/db-postgres-load-1coin-group.csv' DELIMITER ',' CSV;
+COPY USER_ACCOUNT FROM '/Users/eriklacerda/Projects/ipocket/src/main/resources/config/postgres/load-data/db-postgres-load-1coin-user_account.csv' DELIMITER ',' CSV;
+COPY USER_ROLE FROM '/Users/eriklacerda/Projects/ipocket/src/main/resources/config/postgres/load-data/db-postgres-load-1coin-roles.csv' DELIMITER ',' CSV;

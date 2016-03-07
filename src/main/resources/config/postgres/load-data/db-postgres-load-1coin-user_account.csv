@@ -1,2 +1,3 @@
-10,false,Administrator,admin@system.com,resources/images/avatar.jpg,admin,true,erik.lacerda@gmail.com,null
-11,false,User,user@system.com,resources/images/avatar.jpg,user,true,null,null
+1,false,Erik Lacerda,erik.lacerda@gmail.com,resources/images/avatar-male.png,admin,true,erik.lacerda@gmail.com,null,1
+2,false,Carolina Moreira,carolinalle.paula@gmail.com,resources/images/avatar-female.png,user,true,carolinalle.paula@gmail.com,null,1
+3,false,Marcus Lacerda,marcus.lacerda@gmail.com,resources/images/avatar-male.png,paraiba,true,marcus.lacerda@gmail.com,null,2

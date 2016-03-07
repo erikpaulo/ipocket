@@ -55,7 +55,7 @@ public class AccountEntryController extends AbstractRestController<AccountEntry,
     public AccountEntry create(@RequestBody AccountEntry entry) throws FormValidationError, CloneNotSupportedException {
         AccountEntry twinEntry = null;
 
-        SubCategory subCategory = subcategoryRepository.findOneByUser( entry.getSubCategory().getId(), getUserId() );
+        SubCategory subCategory = subcategoryRepository.findOneByUser( entry.getSubCategory().getId(), getGroupId() );
 
         entry.setSubCategory( subCategory );
         entry.setTransfer( entry.getTransfer() != null ? entry.getTransfer() : false );
@@ -81,7 +81,7 @@ public class AccountEntryController extends AbstractRestController<AccountEntry,
     @Transactional
     public AccountEntry update(@RequestBody AccountEntry entry) throws FormValidationError, CloneNotSupportedException {
 
-        AccountEntry currentEntry = accountEntryRepository.findOne( entry.getId(), getUserId() );
+        AccountEntry currentEntry = accountEntryRepository.findOne( entry.getId(), getGroupId() );
 
         // Check if it's a transfer
         if (currentEntry.getTransfer()){
@@ -110,7 +110,7 @@ public class AccountEntryController extends AbstractRestController<AccountEntry,
     @Transactional
     public @ResponseBody void delete(@PathVariable Integer id) {
 
-        AccountEntry entry = accountEntryRepository.findOne( id, getUserId() );
+        AccountEntry entry = accountEntryRepository.findOne( id, getGroupId() );
 
         if (entry.getTransfer()){
             accountEntryRepository.delete( entry.getTwinEntryId() );
@@ -174,10 +174,10 @@ public class AccountEntryController extends AbstractRestController<AccountEntry,
 
             SubCategory subCategory = null;
             if (entryToImport.getCategoryId() != null){
-                subCategory = subcategoryRepository.findOneByUser(entryToImport.getCategoryId(), getUserId());
+                subCategory = subcategoryRepository.findOneByUser(entryToImport.getCategoryId(), getGroupId());
             }
 
-            AccountEntry entry = new AccountEntry( entryToImport.getDate(), subCategory, entryToImport.getAmount(),	false, accountId, null, null, getUserId(), null);
+            AccountEntry entry = new AccountEntry( entryToImport.getDate(), subCategory, entryToImport.getAmount(),	false, accountId, null, null, getGroupId(), null);
 
             validate(ACCOUNT_ENTRY_OBJECT_NAME, entry);
             entries.add(entry);
@@ -188,7 +188,7 @@ public class AccountEntryController extends AbstractRestController<AccountEntry,
     }
 
     private AccountEntry save(AccountEntry entry) throws FormValidationError{
-        entry.setUserId( getUserId() );
+        entry.setGroupId( getGroupId() );
         validate( ACCOUNT_ENTRY_OBJECT_NAME, entry );
 
         AccountEntry accountEntry = accountEntryRepository.save( entry );

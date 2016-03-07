@@ -98,9 +98,8 @@ public abstract class AbstractRestController<T, ID extends Serializable> {
         }
     }
 
-    protected Integer getUserId() {
-        // Recupera o id do usuário logado para filtro dos dados.
+    protected Integer getGroupId() {
         UserAccount user = userAccountService.getCurrentUser ();
-        return user.getId ();
+        return user.getGroupId ();
     }
 }
