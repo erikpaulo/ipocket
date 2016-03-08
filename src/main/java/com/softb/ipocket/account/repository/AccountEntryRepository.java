@@ -24,4 +24,7 @@ public interface AccountEntryRepository extends JpaRepository<AccountEntry, Inte
 
     @Query("select ae from AccountEntry ae, Account a where ae.accountId = a.id and ae.groupId = :groupId and ae.date >= :dateStart and a.id = :accountId order by ae.date ASC")
     List<AccountEntry> listAllByUserDateAccount(@Param("accountId") Integer accountId, @Param("dateStart") Date dateStart, @Param("groupId") Integer groupId) throws DataAccessException;
+
+    @Query("select ae from AccountEntry ae where ae.groupId = :groupId and ae.date between :dateStart and :dateEnd order by ae.date ASC")
+    List<AccountEntry> listAllByUserPeriod(@Param("dateStart") Date dateStart, @Param("dateEnd") Date dateEnd, @Param("groupId") Integer groupId) throws DataAccessException;
 }

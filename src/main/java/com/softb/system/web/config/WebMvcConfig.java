@@ -33,6 +33,7 @@ import java.util.*;
 		"com.softb.system.errorhandler.web",
 		"com.softb.ipocket.account.web",
 		"com.softb.ipocket.categorization.web",
+		"com.softb.ipocket.dashboard.web",
 		"com.softb.ipocket.bill.web",
 		"com.softb.ipocket.budget.web",
 		"com.softb.system.security.service",

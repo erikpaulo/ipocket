@@ -117,6 +117,8 @@ define(['angular-resource', 'jquery'], function (resource, $) {
                 $scope.appContext.currentUser = user;
                 if (!$scope.appContext.currentUser.authenticated){
                     $location.path('login');
+                } else {
+                    $location.path('dashboard');
                 }
             });
 

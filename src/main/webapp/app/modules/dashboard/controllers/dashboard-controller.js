@@ -1,27 +1,36 @@
-define([ 'app' ], function(app) {
-	app.controller('DashboardController', ['$rootScope', '$scope', '$timeout', '$filter', '$locale',
-	function($rootScope, $scope, $timeout, $filter, $locale) {
+define(['app',
+        '../services/dashboard-resources' ], function(app) {
+	app.controller('DashboardController', ['$rootScope', '$scope', '$timeout', '$filter', '$locale', 'DashboardResource',
+	function($rootScope, $scope, $timeout, $filter, $locale, Dashboard) {
 	$rootScope.appContext.contextPage = 'Dashboard';
 
     $scope.appContext.contextMenu.actions = [];
 
         $scope.dashboard = {};
-        $scope.dashboard.todoList = {text: null}
-        $scope.dashboard.todos = [
-            {done: false, description: 'Planejamento Financeiro 2016'},
-            {done: true, description: 'Verificar valor do seguro do golzim e lançar'},
-            {done: false, description: 'Movimentar saldo de 2015 para Maxime DI - Melhor opção?'}
-        ]
-        $scope.dashboard.nextBills = [
-            {date: new Date(2016, 0, 5), category:'Household:Condomínio', amount:1256},
-            {date: new Date(2016, 0, 12), category:'Educação : Escola de Inglês', amount:310},
-            {date: new Date(2016, 0, 28), category:'House:Financiamento Santander', amount:6000}
-        ]
 
-        $scope.addTodo = function(){
-            $scope.dashboard.todos.push({done:false, description:$scope.todoList.text});
-            $scope.dashboard.todoList.text = null;
-        }
+        Dashboard.get(function(dashboard){
+            $scope.dashboard = dashboard;
+
+            $scope.savingChartConfig.series.push({id:"series-0", name: "Acumulado", data: $scope.dashboard.savings.accumulated});
+            $scope.savingChartConfig.series.push({id:"series-1", name: "Mensal", data: $scope.dashboard.savings.monthly, type:"column"});
+
+            $scope.dashboard.todoList = {text: null}
+            $scope.dashboard.todos = [
+                {done: false, description: 'Planejamento Financeiro 2016'},
+                {done: true, description: 'Verificar valor do seguro do golzim e lançar'},
+                {done: false, description: 'Movimentar saldo de 2015 para Maxime DI - Melhor opção?'}
+            ]
+            $scope.dashboard.nextBills = [
+                {date: new Date(2016, 0, 5), category:'Household:Condomínio', amount:1256},
+                {date: new Date(2016, 0, 12), category:'Educação : Escola de Inglês', amount:310},
+                {date: new Date(2016, 0, 28), category:'House:Financiamento Santander', amount:6000}
+            ]
+
+            $scope.addTodo = function(){
+                $scope.dashboard.todos.push({done:false, description:$scope.todoList.text});
+                $scope.dashboard.todoList.text = null;
+            }
+        });
 
         $scope.savingChartConfig = {
             options:{
@@ -45,8 +54,7 @@ define([ 'app' ], function(app) {
                 }, 0);
             },
             series:[
-                {name:"Acumulado", data:[1200,2776,3121,7653,12653, 18085, 20430, 24214, 24448, 24641, 32276, 34276],id:"series-0"},
-                {name:"Mensal",data:[1200,1576,345,4532,5000,5432, 2345, 3784,234,193,7635,2000],type:"column",id:"series-1"}
+
             ],
             title:{text:""},
             credits:{enabled:false},
@@ -70,6 +78,7 @@ define([ 'app' ], function(app) {
                 gridLineWidth: 1
             }
         }
+
 
         $scope.savingPlanChartConfig = {
             options: {
