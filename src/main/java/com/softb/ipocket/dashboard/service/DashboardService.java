@@ -103,7 +103,7 @@ public class DashboardService {
             averageCount.put( getKey( entry.getDate() ), "" );
         }
         Integer count = averageCount.size();
-        fixedCostAverage = fixedCostAverage / count;
+        if (count > 0) fixedCostAverage = fixedCostAverage / count;
 
         return new SumarizedInfosResource( patrimony, accumulatedLastMonth, fixedCostAverage );
     }
