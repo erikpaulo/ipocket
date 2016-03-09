@@ -32,7 +32,8 @@ public class SubCategory extends BaseEntity<Integer> implements Serializable {
 	protected Boolean activated;
 
 	@Column(name = "TYPE")
-	protected String type;
+    @Enumerated(EnumType.STRING)
+	protected Type type;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "CATEGORY_ID", referencedColumnName = "ID")
@@ -49,6 +50,19 @@ public class SubCategory extends BaseEntity<Integer> implements Serializable {
 	@Transient
 	protected String fullName;
 
+    public enum Type {
+        FC ( "Despesa Mensal Fixa" ), IC ( "Despesa Irregular" ), VC ( "Despesa Mensal Variável" );
+        private String name;
+
+        Type(String name) {
+            this.name = name;
+        }
+
+        public String getName() {
+            return this.name;
+        }
+    }
+
     public String getName() {
         return name;
     }
@@ -63,14 +77,6 @@ public class SubCategory extends BaseEntity<Integer> implements Serializable {
 
     public void setActivated(Boolean activated) {
         this.activated = activated;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
     }
 
     public Category getCategory() {
@@ -103,5 +109,13 @@ public class SubCategory extends BaseEntity<Integer> implements Serializable {
 
     public void setFullName(String fullName) {
         this.fullName = fullName;
+    }
+
+    public Type getType() {
+        return type;
+    }
+
+    public void setType(Type type) {
+        this.type = type;
     }
 }

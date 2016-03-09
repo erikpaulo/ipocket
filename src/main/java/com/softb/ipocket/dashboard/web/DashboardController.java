@@ -3,6 +3,7 @@ package com.softb.ipocket.dashboard.web;
 import com.softb.ipocket.dashboard.service.DashboardService;
 import com.softb.ipocket.dashboard.web.resource.DashboardResource;
 import com.softb.ipocket.dashboard.web.resource.SavingResource;
+import com.softb.ipocket.dashboard.web.resource.SumarizedInfosResource;
 import com.softb.system.rest.AbstractRestController;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -33,9 +34,9 @@ public class DashboardController extends AbstractRestController<DashboardResourc
         SavingResource savings = dashboardService.getSavingInfo( getGroupId() );
 
         // Generate sumarized informations.
+        SumarizedInfosResource sumarized = dashboardService.genSumarizedInfo ( getGroupId() );
 
-
-        return new DashboardResource(savings);
+        return new DashboardResource(savings, sumarized);
     }
 }
 

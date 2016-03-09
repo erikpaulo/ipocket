@@ -77,7 +77,7 @@ define(['./module',
             $scope.select = function(entry){
                 if (entry.selected) {
                     entry.selected = false;
-                    $scope.editEntry = undefined;
+                    resetEditingEntry();
                     $scope.entryForm.$setUntouched();
                     $scope.entryForm.$setPristine();
                 } else {

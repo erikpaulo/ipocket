@@ -1,6 +1,7 @@
 package com.softb.ipocket.account.repository;
 
 import com.softb.ipocket.account.model.AccountEntry;
+import com.softb.ipocket.categorization.model.SubCategory;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -27,4 +28,7 @@ public interface AccountEntryRepository extends JpaRepository<AccountEntry, Inte
 
     @Query("select ae from AccountEntry ae where ae.groupId = :groupId and ae.date between :dateStart and :dateEnd order by ae.date ASC")
     List<AccountEntry> listAllByUserPeriod(@Param("dateStart") Date dateStart, @Param("dateEnd") Date dateEnd, @Param("groupId") Integer groupId) throws DataAccessException;
+
+    @Query("select ae from AccountEntry ae, SubCategory sc where ae.groupId = :groupId and ae.date between :dateStart and :dateEnd and ae.subCategory.id = sc.id and sc.type = :type order by ae.date ASC")
+    List<AccountEntry> listAllByUserSubcategoryTypePeriod(@Param("type") SubCategory.Type type, @Param("dateStart") Date dateStart, @Param("dateEnd") Date dateEnd, @Param("groupId") Integer groupId) throws DataAccessException;
 }

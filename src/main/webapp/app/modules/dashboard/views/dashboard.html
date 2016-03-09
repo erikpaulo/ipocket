@@ -9,7 +9,7 @@
                 </md-card-header>
                 <md-divider></md-divider>
                 <md-card-content layout="column">
-                    <span class="md-display-1">R$61.453,78</span>
+                    <span class="md-display-1">{{dashboard.sumarized.patrimony | currency}}</span>
                     <span style="color: #7A7A7A;">Patrimônio</span>
                 </md-card-content>
             </md-card>
@@ -22,7 +22,7 @@
                 </md-card-header>
                 <md-divider></md-divider>
                 <md-card-content layout="column">
-                    <span class="md-display-1">R$2.453,78</span>
+                    <span class="md-display-1">{{dashboard.sumarized.accumulatedLastMonth | currency}}</span>
                     <span style="color: #7A7A7A;">Acumulado ultimo mês</span>
                 </md-card-content>
             </md-card>
@@ -35,7 +35,7 @@
                 </md-card-header>
                 <md-divider></md-divider>
                 <md-card-content layout="column">
-                    <span class="md-display-1">R$8.453,78</span>
+                    <span class="md-display-1">{{dashboard.sumarized.fixedCostAverage | currency}}</span>
                     <span style="color: #7A7A7A;">Custo fixo médio</span>
                 </md-card-content>
             </md-card>
