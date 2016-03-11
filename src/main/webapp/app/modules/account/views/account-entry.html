@@ -28,6 +28,9 @@
                             </md-input-container>
                         </md-list-item>
                         <md-divider class="blue"></md-divider>
+                        <div layout layout-align="center center" flex>
+                            <md-progress-circular class="md-hue-2" ng-show="!account.entries" md-diameter="40"></md-progress-circular>
+                        </div>
                         <div layout="row" layout-align="center center" ng-if="account.entries.length <=0">
                             <h6 style="color: #7A7A7A;font-style: italic;">Não existem lançamentos realizados no
                                 período.</h6>
@@ -54,15 +57,18 @@
         </div>
         <div flex></div>
         <div layout="column" flex="35">
-            <md-card layout="row">
+            <md-card layout="row" class="summary-card">
                 <md-card-header class="mdl-color--indigo-600">
                     <md-icon class="material-icons step md-48" style="color:white;">
                         attach_money
                     </md-icon>
                 </md-card-header>
                 <md-divider></md-divider>
-                <md-card-content layout="row" flex style="min-height: 95px;">
-                    <div layout="column" flex layout-align="center start">
+                <md-card-content layout="column" flex>
+                    <div layout layout-align="center center" flex>
+                        <md-progress-circular class="md-hue-2" ng-show="!account.balance" md-diameter="40"></md-progress-circular>
+                    </div>
+                    <div layout="column" ng-show="account.balance">
                         <span class="md-display-1">{{account.balance | currency}}</span>
                         <span style="color: #7A7A7A;">Última atualização: {{account.lastUpdate | date: 'dd/MM/yyyy'}}</span>
                     </div>

@@ -1,45 +1,60 @@
 <div ng-controller="DashboardController" layout="row" layout-xs="column" layout-wrap>
     <div layout="row" flex="25">
         <div layout="column" flex="100">
-            <md-card layout="row" class="">
+            <md-card layout="row" class="summary-card">
                 <md-card-header class="mdl-color--indigo-600">
                     <md-icon class="material-icons step md-48" style="color:white;">
                         attach_money
                     </md-icon>
                 </md-card-header>
                 <md-divider></md-divider>
-                <md-card-content layout="column">
-                    <span class="md-display-1">{{dashboard.sumarized.patrimony | currency}}</span>
-                    <span style="color: #7A7A7A;">Patrimônio</span>
+                <md-card-content layout="column" flex>
+                    <div layout layout-align="center center" flex>
+                        <md-progress-circular class="md-hue-2" ng-show="!dashboard.sumarized.patrimony" md-diameter="40"></md-progress-circular>
+                    </div>
+                    <div ng-show="dashboard.sumarized.patrimony">
+                        <span class="md-display-1">{{dashboard.sumarized.patrimony | currency}}</span>
+                        <span style="color: #7A7A7A;">Patrimônio</span>
+                    </div>
                 </md-card-content>
             </md-card>
 
-            <md-card layout="row" class="">
+            <md-card layout="row" class="summary-card">
                 <md-card-header class="mdl-color--green-600">
                     <md-icon class="material-icons step md-48" style="color:white;">
                         trending_up
                     </md-icon>
                 </md-card-header>
                 <md-divider></md-divider>
-                <md-card-content layout="column">
-                    <span class="md-display-1">{{dashboard.sumarized.accumulatedLastMonth | currency}}</span>
-                    <span style="color: #7A7A7A;">Acumulado ultimo mês</span>
+                <md-card-content layout="column" flex>
+                    <div layout layout-align="center center" flex>
+                        <md-progress-circular class="md-hue-2" ng-show="!dashboard.sumarized.accumulatedLastMonth" md-diameter="40"></md-progress-circular>
+                    </div>
+                    <div ng-show="dashboard.sumarized.accumulatedLastMonth">
+                        <span class="md-display-1">{{dashboard.sumarized.accumulatedLastMonth | currency}}</span>
+                        <span style="color: #7A7A7A;">Acumulado ultimo mês</span>
+                    </div>
                 </md-card-content>
             </md-card>
 
-            <md-card layout="row" class="">
+            <md-card layout="row" class="summary-card">
                 <md-card-header class="mdl-color--red-600">
                     <md-icon class="material-icons step md-48" style="color:white;">
                         remove_circle
                     </md-icon>
                 </md-card-header>
                 <md-divider></md-divider>
-                <md-card-content layout="column">
-                    <span class="md-display-1">{{dashboard.sumarized.fixedCostAverage * -1 | currency}}</span>
-                    <span style="color: #7A7A7A;">Custo fixo médio</span>
+                <md-card-content layout="column" flex>
+                    <div layout layout-align="center center" flex>
+                        <md-progress-circular class="md-hue-2" ng-show="!dashboard.sumarized.fixedCostAverage" md-diameter="40"></md-progress-circular>
+                    </div>
+                    <div ng-show="dashboard.sumarized.fixedCostAverage">
+                        <span class="md-display-1">{{dashboard.sumarized.fixedCostAverage * -1 | currency}}</span>
+                        <span style="color: #7A7A7A;">Custo fixo médio</span>
+                    </div>
                 </md-card-content>
             </md-card>
-            <md-card>
+            <md-card class="summary-card">
                 <md-card-content>
                     <highchart id="savingPlanEvaluation" config="savingPlanChartConfig"></highchart>
                     <span style="color: #7A7A7A;">Economia Acumulada: R$8.348,87</span>

@@ -105,6 +105,7 @@ define(['./module',
                 $scope.entryForm.$setUntouched();
                 $scope.entryForm.$setPristine();
                 unselectAll();
+                $scope.searchText = undefined;
             }
 
             // Create a new entry in current account

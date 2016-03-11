@@ -74,6 +74,10 @@ md-card.mdl-color--green-600 {
     color: #fff;
 }
 
+md-card.summary-card md-card-content{
+    min-height: 95px;
+}
+
 
 /********** >>> ICONS <<< ***********/
 .material-icons.md-18 {
