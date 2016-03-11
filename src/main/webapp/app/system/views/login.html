@@ -1,16 +1,16 @@
 <link rel="stylesheet" href="resources/styles/login.css">
 
-<div id="AuthController" ng-controller="AuthController" ng-cloak class="ng-cloak login mdl-layout mdl-js-layout mdl-layout--fixed-header">
-	<div layout="row" class="content">
-		<div flex="15" flex-xs="10" flex-sm="25" >
+<section id="AuthController" ng-controller="AuthController" ng-cloak class="ng-cloak login mdl-layout mdl-js-layout mdl-layout--fixed-header">
+	<div layout="row" class="content" flex>
+		<div flex="15" layout="colun" flex-xs="10" flex-sm="25" >
 		</div>
-		<div flex="50" class="front-welcome" hide-xs>
+		<div layout="column" flex="50" class="front-welcome" hide-xs>
 			<h2><strong>Bem Vindo ao 1Coin</strong></h2>
             <h4>Toda riqueza começa na economia da primeira moeda.</h4>
 		</div>
-		<div flex="25" flex-xs="80" flex-sm="50">
-			<md-card class="mdl-color--white md-card-border-radius-6">
-                <form name="loginForm" ng-submit="appAuthenticate()" novalidate style="margin-top:22px">
+		<div layout="column" flex="25" flex-xs="80" flex-sm="50">
+			<md-card class="mdl-color--white md-card-border-radius-6" layout-padding>
+                <form name="loginForm" ng-submit="appAuthenticate()" novalidate>
 					<md-card-content>
 						<md-input-container class="md-block">
 							<label>E-mail</label>
@@ -29,11 +29,11 @@
                         <ng-messages for="user.$error" role="alert" class="error">
                             <ng-message when="login">Usuário/Senha Inválidos.</ng-message>
                         </ng-messages>
-						<md-card-actions layout="column" layout-align="end none">
-
-							<md-button class="md-raised md-primary" type="submit">Login</md-button>
-
-							<div id="google-signin" class="google-signin"></div>
+						<md-card-actions>
+							<div layout="row">
+								<md-button class="md-raised md-primary" flex type="submit">Login</md-button>
+							</div>
+                            <div id="google-signin" class="google-signin"></div>
 
 							<md-checkbox ng-model="user.rememberMe" name="remember-me" class="indigo">
 								Lembrar meu usuário
@@ -45,4 +45,4 @@
 		</div>
 		<div flex></div>
 	</div>
-</div>
+</section>

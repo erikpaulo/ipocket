@@ -104,7 +104,7 @@ public class CategoryController extends AbstractRestController<Category, Integer
 
         Collections.sort(listToReturn, new Comparator<SubCategory>(){
             public int compare(SubCategory o1, SubCategory o2) {
-                return o1.getName().compareTo(o2.getName());
+                return o1.getFullName().compareTo(o2.getFullName());
             }
         });
 

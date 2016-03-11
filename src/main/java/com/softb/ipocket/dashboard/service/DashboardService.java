@@ -75,13 +75,21 @@ public class DashboardService {
             patrimony += ((balance != null ? balance : 0.0) + account.getStartBalance());
         }
 
-        // Last month
+        // Accumulated Last month
         Calendar lastMonthStart = Calendar.getInstance();
         Calendar lastMonthEnd = Calendar.getInstance();
         lastMonthStart.add( Calendar.MONTH, -1 );
         lastMonthEnd.add( Calendar.MONTH, -1 );
         lastMonthStart.set( Calendar.DAY_OF_MONTH, 1 );
-        lastMonthEnd.set( Calendar.DAY_OF_MONTH, lastMonthEnd.getMaximum( Calendar.DAY_OF_MONTH ) );
+        lastMonthStart.set( Calendar.HOUR_OF_DAY, 0 );
+        lastMonthStart.set( Calendar.MINUTE, 0 );
+        lastMonthStart.set( Calendar.SECOND, 1 );
+        lastMonthStart.set( Calendar.MILLISECOND, 0 );
+        lastMonthEnd.set( Calendar.DAY_OF_MONTH, lastMonthEnd.getActualMaximum( Calendar.DAY_OF_MONTH ) );
+        lastMonthEnd.set( Calendar.HOUR_OF_DAY, 23 );
+        lastMonthEnd.set( Calendar.MINUTE, 59 );
+        lastMonthEnd.set( Calendar.SECOND, 59 );
+        lastMonthEnd.set( Calendar.MILLISECOND, 0 );
 
         List<AccountEntry> entriesLastMonth = accountEntryRepository.listAllByUserPeriod( lastMonthStart.getTime(), lastMonthEnd.getTime(), groupId );
         for (AccountEntry entry: entriesLastMonth) {

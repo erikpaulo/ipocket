@@ -56,6 +56,9 @@ define(['./module',
             SubCategory.listAll(function(data){
                 $scope.subCategories = data;
             });
+            $scope.querySearch = function(query){
+                return $filter('filter')($scope.subCategories, query);
+            }
 
 			// gets the account statement for the selected period.
 			$scope.getStatement = function(){
@@ -144,168 +147,6 @@ define(['./module',
 
 			}
 
-
-			// Recupera a lista de categorias disponível no sistema.
-//			Category.listAll(function(data){
-//				$scope.categories = data;
-//			});
-
-
-//			// Sensibiliza um dos lançamentos da conta como selecionado pelo usuário.
-//			$scope.selectEntry = function(entry){
-//				if (!angular.isDate(entry.date)) entry.date = new Date(entry.date);
-//				if (!entry.selected) entry.selected = false;
-//
-//				entry.selected = !entry.selected;
-//				if (selectedEntry && entry.id != selectedEntry.id ){
-//					selectedEntry.selected = false;
-//				}
-//
-//				if (entry.selected){
-//					selectedEntry = entry;
-//					angular.extend($scope.accountEntry, entry);
-//				} else {
-//					selectedEntry = null;
-//					$scope.accountEntry = {};
-//				}
-//			}
-
-//			// Salva um novo ou já existente lançamento na conta selecionada.
-//			$scope.save = function(form){
-//				if (!angular.isNumber($scope.accountEntry.amount))
-//					$scope.accountEntry.amount = parseFloat($scope.accountEntry.amount.replace('R$ ', '').replace('.', '').replace(',', '.'));
-//				if (form.$valid){
-//					for (var i in $scope.categories){
-//						if ($scope.categories[i].id == $scope.accountEntry.category.id){
-//							$scope.accountEntry.category =  $scope.categories[i];
-//						}
-//					}
-//					$scope.accountEntry.type = $filter('filter')($scope.tabs, {active: true})[0].type;
-//
-//					var entry = new AccountEntry({accountId: $scope.account.id});
-//					angular.extend(entry, $scope.accountEntry);
-//
-//					// Salva
-//					entry.$save(function(data){
-//						// Recupera o extrato atualizado.
-//						$scope.getStatement();
-//						$scope.clear(form);
-//					},function(err){
-//						console.log('Não foi possível salvar o lançamento da conta. err: '+ err);
-//					});
-//				} else {
-//					dirtyFormFields(form);
-//				}
-//			};
-
-//			// Remove o lançamento selecionado na tabela.
-//			$scope.remove = function (form){
-//				if ($scope.accountEntry.id){
-//					new AccountEntry({accountId: $scope.account.id, id: $scope.accountEntry.id}).$delete(function(data){
-//						// Recupera o extrato atualizado.
-//						$scope.getStatement();
-//						$scope.clear(form);
-//					},function(err){
-//						console.log('Não foi possível remover o lançamento selecionado. err: '+ err);
-//					});
-//				} else {
-//					$scope.clear(form);
-//				}
-//
-//			}
-
-//			// Limpa o form e remove seleção no grid.
-//			// Cancela a operação de edição ou inclusão de um novo lançamento na conta.
-//			$scope.clear = function(form){
-//				if (selectedEntry) {
-//					selectedEntry.selected = false;
-//					selectedEntry = null;
-//				}
-//				$scope.accountEntry = {};
-//				form.$setPristine();
-//			}
-
-//			$scope.uploadFile = function() {
-//				// Abre a modal.
-//				var modalInstance = openModal($scope, $filter, $modal, ModalInstanceCtrl)
-//				modalInstance.result.then(function (entries) {
-//					var entriesToImport = [];
-//					angular.forEach(entries, function(row){
-//						if (row.ok)	entriesToImport.push(row);
-//					})
-//					$http.post('api/account/'+ $scope.account.id +'/entries/import', entriesToImport).
-//					  success(function(data, status, headers, config) {
-//						  // Recupera o extrato atualizado.
-//						  $scope.getStatement();
-//					  }).
-//					  error(function(data, status, headers, config) {
-//						  console.log('NOK')
-//					  });
-//				});
-//			}
-
-
-//	        // Abre a modal.
-//	        function openModal($scope, $filter, $modal, ModalInstanceCtrl){
-//
-//	    		var modalInstance = $modal.open({
-//	    			templateUrl: 'modules/account/views/modal-upload-entries.html',
-//	    			controller: ModalInstanceCtrl,
-//	    			size: 'lg',
-//	    			resolve: {
-//	    				file: function () {
-//	    					return $scope.fileWithEntries;
-//	    				},
-//	    				categories: function(){
-//	    					return $scope.categories;
-//	    				},
-//	    				accountId: function(){
-//	    					return $routeParams.accountID;
-//	    				}
-//	    			}
-//	    		});
-//
-//	    		return modalInstance;
-//	        }
-
-//	     	/***********************************************************************
-//			 * Controlador para tratamento da modal de edição/inserção.
-//			 **********************************************************************/
-//	     	var ModalInstanceCtrl = function ($scope, $filter, $modalInstance, FileUploader, file, accountId, categories) {
-//
-//	     		$scope.file = file;
-//	     		$scope.entriesToImport = [];
-//	     		$scope.categories = categories;
-//
-//	     		$scope.getConflictsText = function(conflicts){
-//	     			var text = "";
-//
-//	     			angular.forEach(conflicts, function(row){
-//	     				var date = $filter('date')(row.date, 'dd/MM/yyyy', 'GMT+3');
-//	     				var amount = $filter('currency')(row.amount, 'R$ ', 2)
-//	     				text += (text.length>0 ? '\n\n' : '') + '('+ date +' - '+ row.description +' - '+ amount +')';
-//	     			});
-//
-//	     			return text;
-//	     		}
-//
-//	     		 var uploader = $scope.uploader = new FileUploader({
-//	 	        	url: 'api/account/'+ accountId +'/entries/upload'
-//	     		 });
-//
-//		        uploader.onSuccessItem = function(fileItem, response, status, headers) {
-//		        		$scope.entriesToImport = response;
-//		        };
-//
-//	     		$scope.ok = function ( form ) {
-//	     			$modalInstance.close($scope.entriesToImport);
-//	     		};
-//
-//	     		$scope.cancel = function () {
-//	     			$modalInstance.dismiss('cancel');
-//	     		};
-//	     	}
-
             // open a modal with the file entries to be complemented.
             $scope.import = function(entriesToComplement){
                 openDialog($scope, $mdDialog, entriesToComplement).then(function(entries){
@@ -372,9 +213,14 @@ function openDialog($scope, $mdDialog, entriesToImport){
    });
 }
 
-function DialogController($scope, $mdDialog, subCategories, entries) {
+function DialogController($scope, $mdDialog, $filter, subCategories, entries) {
     $scope.entries = entries;
     $scope.subCategories = subCategories;
+
+
+    $scope.querySearch = function(query){
+        return $filter('filter')($scope.subCategories, query);
+    }
 
     $scope.hide = function() {
         $mdDialog.hide();

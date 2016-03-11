@@ -169,6 +169,26 @@ fieldset{
     margin: 0 2px;
 }
 
+
+/********** >>> AUTOCOMPLETE <<< ***********/
+md-autocomplete {
+    background: white;
+}
+md-autocomplete input:not(.md-input) {
+/*-webkit-order: 2;*/
+    /*-ms-flex-order: 2;*/
+    padding: 2px 2px 1px;
+    border-width: 0 0 1px;
+    line-height: 26px;
+    -ms-flex-preferred-size: 26px;
+    border-style: solid;
+    border-color: rgba(0,0,0,0.12);
+}
+
+md-autocomplete-wrap{
+    box-shadow: none !important;
+}
+
 /********** >>> TOAST <<< ***********/
 md-toast.md-error-toast-theme .md-toast-content {
     background-color: red;

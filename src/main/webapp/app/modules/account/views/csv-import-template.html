@@ -18,13 +18,28 @@
         <div layout="row" ng-repeat="entry in entries">
             <div layout="column" flex="15" layout-align="center center">{{entry.date | date: 'dd/MM/yyyy'}}</div>
             <div layout="column" flex>
-                <md-input-container class="c-no-margin">
-                    <md-select name="category" ng-model="entry.categoryId" aria-label="Categoria">
-                        <md-option ng-repeat="subcategory in subCategories" ng-value="subcategory.id">
-                            {{subcategory.fullName}}
-                        </md-option>
-                    </md-select>
-                </md-input-container>
+                <!--<md-input-container class="c-no-margin">-->
+                    <!--<md-select name="category" ng-model="entry.categoryId" aria-label="Categoria">-->
+                        <!--<md-option ng-repeat="subcategory in subCategories" ng-value="subcategory.id">-->
+                            <!--{{subcategory.fullName}}-->
+                        <!--</md-option>-->
+                    <!--</md-select>-->
+                <!--</md-input-container>-->
+                <md-autocomplete
+                        md-selected-item="entry.categoryId"
+                        md-search-text="searchText"
+                        md-items="subcategory in querySearch(searchText)"
+                        md-min-length="0"
+                        md-autoselect="true"
+                        md-no-cache="true"
+                        md-item-text="subcategory.fullName">
+                    <md-item-template>
+                        <span md-highlight-text="searchText" md-highlight-flags="^i">{{subcategory.fullName}}</span>
+                    </md-item-template>
+                    <md-not-found>
+                        No matches found.
+                    </md-not-found>
+                </md-autocomplete>
             </div>
             <div layout="column" flex="15" layout-align="center end">{{entry.amount | currency}}</div>
             <div layout="column" flex="15" layout-align="center center">

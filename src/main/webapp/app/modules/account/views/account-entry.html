@@ -61,7 +61,7 @@
                     </md-icon>
                 </md-card-header>
                 <md-divider></md-divider>
-                <md-card-content layout="row" flex>
+                <md-card-content layout="row" flex style="min-height: 95px;">
                     <div layout="column" flex layout-align="center start">
                         <span class="md-display-1">{{account.balance | currency}}</span>
                         <span style="color: #7A7A7A;">Última atualização: {{account.lastUpdate | date: 'dd/MM/yyyy'}}</span>
@@ -90,14 +90,21 @@
                     <md-card-content>
                         <div layout="row">
                             <div layout="column" flex="100">
-                                <md-input-container>
-                                    <label>Categoria</label>
-                                    <md-select name="category" ng-model="editEntry.subCategory.id">
-                                        <md-option ng-repeat="subcategory in subCategories" ng-value="subcategory.id">
-                                            {{subcategory.fullName}}
-                                        </md-option>
-                                    </md-select>
-                                </md-input-container>
+                                <md-autocomplete
+                                        md-selected-item="editEntry.subCategory.id"
+                                        md-search-text="searchText"
+                                        md-items="subcategory in querySearch(searchText)"
+                                        md-min-length="0"
+                                        md-autoselect="true"
+                                        md-no-cache="true"
+                                        md-item-text="subcategory.fullName">
+                                    <md-item-template>
+                                        <span md-highlight-text="searchText" md-highlight-flags="^i">{{subcategory.fullName}}</span>
+                                    </md-item-template>
+                                    <md-not-found>
+                                        No matches found.
+                                    </md-not-found>
+                                </md-autocomplete>
                             </div>
                         </div>
                         <div layout="row" flex>
