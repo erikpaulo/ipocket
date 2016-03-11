@@ -64,8 +64,11 @@ define(['app',
             },
             xAxis: {
                 labels: {
-                    enabled: false
+                    enabled: true
                 },
+                categories: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun',
+                                 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'
+                ],
                 lineWidth: 1
             },
             yAxis: {
