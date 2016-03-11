@@ -172,6 +172,7 @@ define(['./module',
 
             function resetEditingEntry(){
                 $scope.editEntry = {accountId: $routeParams.accountID};
+                $scope.searchText = "";
             }
 	}]);
 
