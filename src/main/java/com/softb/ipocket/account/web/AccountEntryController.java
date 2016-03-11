@@ -173,8 +173,8 @@ public class AccountEntryController extends AbstractRestController<AccountEntry,
             AccountEntryImport entryToImport = i.next();
 
             SubCategory subCategory = null;
-            if (entryToImport.getCategoryId() != null){
-                subCategory = subcategoryRepository.findOneByUser(entryToImport.getCategoryId(), getGroupId());
+            if (entryToImport.getSubCategory() != null){
+                subCategory = subcategoryRepository.findOneByUser(entryToImport.getSubCategory().getId(), getGroupId());
             }
 
             AccountEntry entry = new AccountEntry( entryToImport.getDate(), subCategory, entryToImport.getAmount(),	false, accountId, null, null, getGroupId(), null);

@@ -29,7 +29,7 @@
                         </md-list-item>
                         <md-divider class="blue"></md-divider>
                         <div layout layout-align="center center" flex>
-                            <md-progress-circular class="md-hue-2" ng-show="!account.entries" md-diameter="40"></md-progress-circular>
+                            <md-progress-circular class="md-hue-2" ng-show="!account" md-diameter="40"></md-progress-circular>
                         </div>
                         <div layout="row" layout-align="center center" ng-if="account.entries.length <=0">
                             <h6 style="color: #7A7A7A;font-style: italic;">Não existem lançamentos realizados no
@@ -66,9 +66,9 @@
                 <md-divider></md-divider>
                 <md-card-content layout="column" flex>
                     <div layout layout-align="center center" flex>
-                        <md-progress-circular class="md-hue-2" ng-show="!account.balance" md-diameter="40"></md-progress-circular>
+                        <md-progress-circular class="md-hue-2" ng-show="account.balance == null" md-diameter="40"></md-progress-circular>
                     </div>
-                    <div layout="column" ng-show="account.balance">
+                    <div layout="column" ng-show="account.balance != null">
                         <span class="md-display-1">{{account.balance | currency}}</span>
                         <span style="color: #7A7A7A;">Última atualização: {{account.lastUpdate | date: 'dd/MM/yyyy'}}</span>
                     </div>
@@ -97,11 +97,12 @@
                         <div layout="row">
                             <div layout="column" flex="100">
                                 <md-autocomplete
-                                        md-selected-item="editEntry.subCategory.id"
+                                        md-selected-item="editEntry.subCategory"
                                         md-search-text="searchText"
                                         md-items="subcategory in querySearch(searchText)"
                                         md-min-length="0"
                                         md-autoselect="true"
+                                        md-floating-label="Categoria"
                                         md-no-cache="true"
                                         md-item-text="subcategory.fullName">
                                     <md-item-template>

@@ -1,6 +1,7 @@
 package com.softb.ipocket.account.web.resource;
 
 import com.softb.ipocket.account.model.AccountEntry;
+import com.softb.ipocket.categorization.model.SubCategory;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,7 +16,7 @@ public class AccountEntryImport {
     private Date date;
 //    private String description;
     private Double amount;
-    private Integer categoryId;
+    private SubCategory subCategory;
     private List<AccountEntry> conflicts;
     private Boolean exists;
 }
