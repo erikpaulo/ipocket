@@ -12,7 +12,7 @@
                     <div layout layout-align="center center" flex>
                         <md-progress-circular class="md-hue-2" ng-show="!dashboard.sumarized.patrimony" md-diameter="40"></md-progress-circular>
                     </div>
-                    <div ng-show="dashboard.sumarized.patrimony">
+                    <div ng-show="dashboard.sumarized.patrimony" layout="column">
                         <span class="md-display-1">{{dashboard.sumarized.patrimony | currency}}</span>
                         <span style="color: #7A7A7A;">Patrimônio</span>
                     </div>
@@ -30,7 +30,7 @@
                     <div layout layout-align="center center" flex>
                         <md-progress-circular class="md-hue-2" ng-show="!dashboard.sumarized.accumulatedLastMonth" md-diameter="40"></md-progress-circular>
                     </div>
-                    <div ng-show="dashboard.sumarized.accumulatedLastMonth">
+                    <div ng-show="dashboard.sumarized.accumulatedLastMonth" layout="column">
                         <span class="md-display-1">{{dashboard.sumarized.accumulatedLastMonth | currency}}</span>
                         <span style="color: #7A7A7A;">Acumulado ultimo mês</span>
                     </div>
@@ -48,7 +48,7 @@
                     <div layout layout-align="center center" flex>
                         <md-progress-circular class="md-hue-2" ng-show="!dashboard.sumarized.fixedCostAverage" md-diameter="40"></md-progress-circular>
                     </div>
-                    <div ng-show="dashboard.sumarized.fixedCostAverage">
+                    <div ng-show="dashboard.sumarized.fixedCostAverage" layout="column">
                         <span class="md-display-1">{{dashboard.sumarized.fixedCostAverage * -1 | currency}}</span>
                         <span style="color: #7A7A7A;">Custo fixo médio</span>
                     </div>
