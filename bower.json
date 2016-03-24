@@ -28,6 +28,6 @@
     "moment": "",
     "angular-moment": "",
 
-    "material-calendar": ""
+    "material-calendar": "0.2.14"
   }
 }

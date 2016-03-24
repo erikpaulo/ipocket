@@ -2,11 +2,11 @@
     <div layout="row" layout-align="center top" layout-padding>
         <div layout="column" flex="65">
             <md-card>
-                <md-card-header class="md-title">
+                <md-card-header class="md-title" style="min-height: 20px;">
                     <span>Lançamentos de {{label}}</span>
                 </md-card-header>
                 <md-divider></md-divider>
-                <md-card-content layout layout-align="center center">
+                <md-card-content style="overflow:auto;">
                     <span layout-padding ng-if="!selectedBills" class="md-subhead" style="font-style: italic;">Sem lançamentos neste dia</span>
                     <md-list ng-if="selectedBills" layout="column" flex="100">
                         <md-list-item class="mdl-color--blue-grey-300" ng-if="selectedBills.length>0">
@@ -24,12 +24,12 @@
                                 </div>
                             </div>
                         </md-list-item>
-                        <md-list-item ng-repeat="bill in selectedBills">
+                        <md-list-item ng-repeat="bill in selectedBills track by $index" class="bill-item" ng-class="{open: bill.edit}">
                             <div layout="row" flex="100" layout-align="center center" ng-if="!bill.edit">
                                 <div layout="column" flex="15" layout-align="center center">{{bill.date |
                                     date:'dd/MM/yyyy'}}
                                 </div>
-                                <div layout="column" flex>{{bill.category.name}}</div>
+                                <div layout="column" flex>{{bill.subCategory.fullName}}</div>
                                 <div layout="column" flex="25">{{bill.accountTo.name}}</div>
                                 <div layout="column" flex="10" layout-align="center end">{{bill.amount | currency}}
                                 </div>
@@ -52,25 +52,27 @@
 
                                     <!--Line-->
                                     <div layout="row">
-                                        <div layout="column" flex="30">
-                                            <md-datepicker name="date" ng-model="inEdit.date" md-placeholder="Data"
-                                                           required>
-                                                <div class="errors" ng-messages="entryForm.date.$error"
-                                                     ng-if="myForm.$dirty">
-                                                    <div ng-message="required">Obrigatório</div>
-                                                </div>
+                                        <div layout="column" flex>
+                                            <md-datepicker name="inEdit.date" ng-model="inEdit.date" md-placeholder="Data" required>
                                             </md-datepicker>
                                         </div>
                                         <div layout="column" flex="50">
-                                            <md-input-container class="">
-                                                <label>Categoria</label>
-                                                <md-select name="category" ng-model="inEdit.category.id">
-                                                    <md-option ng-repeat="category in categories"
-                                                               ng-value="category.id">
-                                                        {{category.name}}
-                                                    </md-option>
-                                                </md-select>
-                                            </md-input-container>
+                                            <md-autocomplete
+                                                    md-selected-item="inEdit.subCategory"
+                                                    md-search-text="searchText"
+                                                    md-items="subcategory in querySearch(searchText)"
+                                                    md-min-length="0"
+                                                    md-floating-label="Categoria"
+                                                    md-autoselect="true"
+                                                    md-no-cache="true"
+                                                    md-item-text="subcategory.fullName">
+                                                <md-item-template>
+                                                    <span md-highlight-text="searchText" md-highlight-flags="^i">{{subcategory.fullName}}</span>
+                                                </md-item-template>
+                                                <md-not-found>
+                                                    No matches found.
+                                                </md-not-found>
+                                            </md-autocomplete>
                                         </div>
                                         <div layout="column" flex="20">
                                             <md-input-container class="c-input-container-no-error">
@@ -129,6 +131,8 @@
             <calendar-md flex layout
                          on-day-click="dayClick"
                          title-format="'MMMM y'"
+                         on-prev-month="monthClick"
+                         on-next-month="monthClick"
                          ng-model='selectedDate'>
             </calendar-md>
         </div>

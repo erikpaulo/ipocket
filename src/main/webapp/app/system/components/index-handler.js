@@ -139,7 +139,11 @@ function addWarning($scope, msg){
     $scope.appContext.toast.addWarning(msg);
 }
 
+function addSuccess($scope){
+    addWarning($scope, 'Operação realizada com sucesso.');
+}
+
 function addError($scope, msg, err){
     $scope.appContext.toast.addError(msg);
-    console.log('error: '+ err.data.error +' - message: '+ err.data.message);
+    console.log('message: '+ err.data.message);
 }

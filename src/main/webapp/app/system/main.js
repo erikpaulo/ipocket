@@ -39,7 +39,7 @@ require.config({
         'ng-file-upload': 'resources/lib/ng-file-upload/ng-file-upload.min',
 
         // CALENDAR
-        'material-calendar': 'resources/lib/material-calendar/angular-material-calendar',
+        'material-calendar': 'resources/lib/material-calendar/angular-material-calendar.min',
 
         // OTHER PLUGINS
         'moment': 'resources/lib/moment/min/moment.min',

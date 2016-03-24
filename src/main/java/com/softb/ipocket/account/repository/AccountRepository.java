@@ -13,7 +13,7 @@ import java.util.List;
 public interface AccountRepository extends JpaRepository<Account, Integer> {
 	
 	@Query("select a from Account a where a.groupId = :groupId order by a.name")
-	List<Account> listAllByUser(@Param("groupId") Integer groupId) throws DataAccessException;
+	List<Account> findAllByUser(@Param("groupId") Integer groupId) throws DataAccessException;
 
 	@Query("select a from Account a where a.id = :id and a.groupId = :groupId")
 	Account findOne(@Param("id") Integer id, @Param("groupId") Integer groupId) throws DataAccessException;

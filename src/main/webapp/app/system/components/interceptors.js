@@ -31,12 +31,25 @@ function () {
         return progressLinear;
     });
 
+
+    InterceptorModule.factory('defaultMessage', function($rootScope, $q) {
+        var defaultMessage = {
+            responseError: function(rejection) {
+               if (isRestCall(rejection.config))
+                    addError($rootScope, 'Problemas para concluir operação.', rejection);
+                return $q.reject(rejection);
+            }
+        };
+        return defaultMessage;
+    });
+
     function isRestCall(config){
         return (config.url.indexOf('api') == 0 || config.url.indexOf('public') == 0);
     }
 
     InterceptorModule.config(['$httpProvider', function($httpProvider) {
         $httpProvider.interceptors.push('progressLinear');
+        $httpProvider.interceptors.push('defaultMessage');
     }]);
 
     return InterceptorModule;

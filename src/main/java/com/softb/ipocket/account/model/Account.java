@@ -39,6 +39,10 @@ public class Account extends BaseEntity<Integer> implements Serializable {
 	@JoinColumn(name = "ACCOUNT_ID", referencedColumnName = "ID")
 	protected List<AccountEntry> entries;
 
+    @Column(name="CREATE_DATE")
+    @NotNull
+    protected Date createDate;
+
     @Column(name="ACTIVATED")
     @NotNull
     protected Boolean activated;

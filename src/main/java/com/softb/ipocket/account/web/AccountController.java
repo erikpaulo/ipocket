@@ -40,7 +40,7 @@ public class AccountController extends AbstractRestController<Account, Integer> 
      */
     @RequestMapping(method = RequestMethod.GET)
     public List<Account> listAll() {
-        List<Account> accounts = accountRepository.listAllByUser( getGroupId() );
+        List<Account> accounts = accountRepository.findAllByUser( getGroupId() );
         for (Account account: accounts.subList( 0, accounts.size()-1 )) {
             account.setEntries( null );
         }
@@ -68,7 +68,7 @@ public class AccountController extends AbstractRestController<Account, Integer> 
         }
 
         // Gets all accounts of the logged user, grouping by account types
-        List<Account> accounts = accountRepository.listAllByUser ( getGroupId() );
+        List<Account> accounts = accountRepository.findAllByUser( getGroupId() );
         Iterator<Account> accs = accounts.iterator ();
         while (accs.hasNext ()){
             Account account = accs.next ();
@@ -130,7 +130,8 @@ public class AccountController extends AbstractRestController<Account, Integer> 
 
         account.setGroupId( getGroupId() );
         account.setActivated( true );
-        account.setLastUpdate( new Date(  ) );
+        account.setLastUpdate( new Date( ) );
+        account.setCreateDate( new Date( ) );
         validate( ACCOUNT_OBJECT_NAME, account );
 
         account = accountRepository.save( account );

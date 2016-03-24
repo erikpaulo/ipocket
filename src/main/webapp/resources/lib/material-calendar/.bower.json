@@ -28,6 +28,6 @@
     "commit": "c9987d4270e9f31324cc607e968db03c7a2f5e81"
   },
   "_source": "git://github.com/BitolaCo/angular-material-calendar.git",
-  "_target": "*",
+  "_target": "0.2.14",
   "_originalSource": "material-calendar"
 }

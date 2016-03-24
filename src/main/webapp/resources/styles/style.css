@@ -273,3 +273,11 @@ md-progress-linear{
     top: 59px;
     z-index: 2;
 }
+
+/********** >>> BILL <<< ***********/
+.bill-item{
+    overflow:auto;
+}
+.bill-item.open{
+    min-height:221px;
+}

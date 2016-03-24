@@ -1,18 +1,17 @@
 define(['./module'
         , '../services/bill-resources'
-        , '../services/bill-entry-resources'
-        , '../../configuration/services/category-resources'
+        , '../../categorization/services/subcategory-resources'
         , '../../account/services/account-resources'
         , '../../shared/services/utils-service'],
 
         function (app) {
 
-	app.controller('BillController', ['$scope', '$filter', '$http', '$timeout', '$mdBottomSheet', '$mdDialog', 'MaterialCalendarData', 'BillResource', 'CategoryResource', 'AccountResource', 'Utils',
-        function($scope, $filter, $http, $timeout, $mdBottomSheet, $mdDialog, MaterialCalendarData, Bill, Category, Account, Util) {
+	app.controller('BillController', ['$scope', '$filter', '$http', '$timeout', '$mdBottomSheet', '$mdDialog', 'MaterialCalendarData', 'BillResource', 'SubCategoryResource', 'AccountResource', 'Utils',
+        function($scope, $filter, $http, $timeout, $mdBottomSheet, $mdDialog, MaterialCalendarData, Bill, SubCategory, Account, Util) {
             $scope.appContext.contextPage = 'Pagamentos Programados';
             $scope.appContext.contextMenu.setActions([
                 {icon: 'add_circle', tooltip: 'Novo Pagamento', onClick: function() {
-                    openDialog($scope, $mdDialog, MaterialCalendarData, $scope.categories, $scope.accounts);
+                    openDialog($scope, $filter, $mdDialog, MaterialCalendarData, Bill, $scope.subCategories, $scope.accounts);
                }},
                {icon: 'insert_chart', tooltip: 'Gráfico de Projeção', onClick: function() {
                     $mdBottomSheet.show({
@@ -22,6 +21,10 @@ define(['./module'
                }}
             ]);
 
+            $scope.querySearch = function(query){
+                return $filter('filter')($scope.subCategories, query);
+            }
+
             // gets all bills
             $scope.billsHash = [];
             Bill.listAll(function(bills){
@@ -29,20 +32,21 @@ define(['./module'
                 // Use CalendarData to setup the bills in the correct date.
                 var billsHash = [];
                 angular.forEach(bills, function(bill){
-                    addBillHash($scope, MaterialCalendarData, bill)
+                    addBillHash($scope, $filter, MaterialCalendarData, bill)
                 });
+                selectBills($scope, $filter);
             });
 
             // To select a single date, make sure the ngModel is not an array.
             $scope.selectedDate = null;
+            $scope.currentMonth = getFormattedMonth($filter, new Date());
 
             $scope.label = "";
             $scope.selectedBills = null;
-            selectBills($scope, $filter);
 
             // gets all configured categories
-            Category.listAll(function(categories){
-                $scope.categories = categories;
+            SubCategory.listAll(function(data){
+                $scope.subCategories = data;
             })
 
             // gets all accounts
@@ -57,6 +61,7 @@ define(['./module'
                     $scope.cancel($scope.inEdit.bill);
                 }
                 bill.edit = true;
+                bill.date = new Date(bill.date);
                 $scope.inEdit = angular.copy(bill);
                 $scope.inEdit.bill = bill;
             }
@@ -67,48 +72,42 @@ define(['./module'
             }
 
             $scope.save = function(bill){
-                $scope.inEdit.amount = Util.currencyToNumber($scope.inEdit.amount);
-                delete $scope.inEdit.bill;
+                var billToSave = new Bill($scope.inEdit)
 
-                // get the correct category entity
-                angular.forEach($scope.categories, function(category){
-                    if (category.id == $scope.inEdit.category.id){
-                        $scope.inEdit.category = angular.copy(category);
-                    }
-                })
+                billToSave.amount = Util.currencyToNumber($scope.inEdit.amount);
+                delete billToSave.edit
+                delete billToSave.bill
 
-                // get entities of selected accounts
-                angular.forEach($scope.accounts, function(account){
-                    if (account.id == $scope.inEdit.accountTo.id){
-                        $scope.inEdit.accountTo = angular.copy(account);
-                    }
-                    if ($scope.inEdit.accountFrom && account.id == $scope.inEdit.accountFrom.id){
-                        $scope.inEdit.accountFrom = angular.copy(account);
-                    }
+                billToSave.$save(function(data){
+                    angular.extend(bill, data);
+                    bill.edit = false;
+                    $scope.inEdit = null;
+
+                    addSuccess($scope);
                 });
-                angular.extend(bill, $scope.inEdit);
-
-                //TODO: send the edited bill to the server.
-                $scope.inEdit = null;
-                bill.edit = false;
             }
 
             $scope.delete = function(bill){
-                //TODO: delete this bill on server
-                var billsThisDay = $scope.billsHash[bill.date];
-                for (var i in billsThisDay){
-                    if (billsThisDay[i].id == bill.id){
-                        billsThisDay.splice(i,1);
+                bill.date = new Date(bill.date);
+
+                new Bill(bill).$delete(function(){
+                    var billsThisDay = $scope.billsHash[getFormattedDate($filter, bill.date)];
+                    for (var i in billsThisDay){
+                        if (billsThisDay[i].id == bill.id){
+                            billsThisDay.splice(i,1);
+                        }
                     }
-                }
 
-                // if there is no more bills in this day, remove the icon from calendar.
-                if (billsThisDay.length ==0){
-                    MaterialCalendarData.data[MaterialCalendarData.getDayKey($scope.selectedDate)] = "";
-                    delete $scope.billsHash[$scope.selectedDate];
-                }
+                    // if there is no more bills in this day, remove the icon from calendar.
+                    if (billsThisDay.length ==0){
+                        MaterialCalendarData.data[MaterialCalendarData.getDayKey(bill.date)] = "";
+                        delete $scope.billsHash[getFormattedDate($filter, bill.date)];
+                    }
 
-                selectBills($scope, $filter);
+                    selectBills($scope, $filter);
+
+                    addSuccess($scope);
+                });
             }
 
             // select one day of the calendar
@@ -117,11 +116,31 @@ define(['./module'
                 selectBills($scope, $filter);
             };
 
+            // select one day of the calendar
+            $scope.monthClick = function(date) {
+                if ($scope.inEdit) $scope.cancel($scope.inEdit.bill);
+                $scope.selectedDate = null;
+                $scope.currentMonth = getFormattedMonth($filter, new Date( date.year +'/'+ date.month +'/01' ))
+                selectBills($scope, $filter);
+            };
+
 	    }
 	]);
 
-    app.controller('ChartBottomSheetCtrl', function($scope, $timeout, $mdBottomSheet) {
-           $scope.billProjectionChartConfig = {
+    app.controller('ChartBottomSheetCtrl', ['$scope', '$timeout', '$mdBottomSheet', 'BillResource',
+        function($scope, $timeout, $mdBottomSheet, Bill) {
+
+            // List all cashflows impacted throw bills
+            Bill.listCashFlow(function(cashFlow){
+                $scope.billProjectionChartConfig.xAxis.categories = cashFlow.labels;
+
+                angular.forEach(cashFlow.series, function(serie){
+                    $scope.billProjectionChartConfig.series.push({name: serie.name, data: serie.data, id: serie.name})
+                });
+            });
+
+
+            $scope.billProjectionChartConfig = {
                 options:{
                     chart:{
                         type:"areaspline"
@@ -143,7 +162,7 @@ define(['./module'
                     }, 0);
                 },
                 series:[
-                    {name:"Acumulado", data:[1200,2776,3121,7653,12653, 18085, 20430, 24214, 24448, 24641, 32276, 34276],id:"series-0"},
+//                    {name:"Acumulado", data:[1200,2776,3121,7653,12653, 18085, 20430, 24214, 24448, 24641, 32276, 34276],id:"series-0"},
                 ],
                 title:{text:""},
                 credits:{enabled:false},
@@ -156,8 +175,8 @@ define(['./module'
                     labels: {
                         enabled: true
                     },
-                    categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-                                    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                    categories: [],
+//                    categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
                     lineWidth: 1
                 },
                 yAxis: {
@@ -170,9 +189,11 @@ define(['./module'
                     gridLineWidth: 1
                 }
             }
-    });
+        }
+    ]);
 
-    function openDialog($scope, $mdDialog, MaterialCalendarData, categories, accounts){
+
+    function openDialog($scope, $filter, $mdDialog, MaterialCalendarData, Bill, categories, accounts){
         $mdDialog.show({
             controller: DialogController,
             templateUrl: 'modules/bill/views/new-bill-template.html',
@@ -184,17 +205,30 @@ define(['./module'
             clickOutsideToClose:true
         }).then(function(newBill){
 
-            //TODO: Criar pagamento no server.
-            addBillHash($scope, MaterialCalendarData, newBill)
-            $scope.appContext.toast.addWarning('Pagamento incluído com sucesso!');
+            new Bill(newBill).$new(function(data){
+                var bills = data.relatedBills;
+                bills.push(data);
+
+                angular.forEach(bills, function(bill){
+                    bill.date = new Date(bill.date);
+                    addBillHash($scope, $filter, MaterialCalendarData, bill)
+                });
+                selectBills($scope, $filter)
+
+                addSuccess($scope);
+            });
         });
     }
 
-    function DialogController($scope, $mdDialog, categories, accounts, Utils) {
-        $scope.categories = categories;
+    function DialogController($scope, $filter, $mdDialog, categories, accounts, Utils) {
+        $scope.subCategories = categories;
         $scope.accounts = accounts;
 
         $scope.newBill = {events: 1}
+
+        $scope.querySearch = function(query){
+            return $filter('filter')($scope.subCategories, query);
+        }
 
         $scope.events = [];
         for (var i=1;i<=12;i++){
@@ -209,39 +243,57 @@ define(['./module'
         };
         $scope.submit = function() {
             $scope.newBill.amount = Utils.currencyToNumber($scope.newBill.amount);
+
+            angular.forEach(accounts, function(account){
+                if (account.id == $scope.newBill.accountTo.id){
+                    $scope.newBill.accountTo = account;
+                }
+
+                if ($scope.newBill.accountFrom && account.id == $scope.newBill.accountFrom.id){
+                    $scope.newBill.accountFrom = account;
+                }
+            });
+
             $mdDialog.hide($scope.newBill);
         };
     }
 
     function selectBills($scope, $filter){
-        var today = new Date();
+        var selectedDate = getFormattedDate($filter, $scope.selectedDate);
 
-        if ($scope.selectedDate){
-            $scope.selectedBills = $scope.billsHash[$scope.selectedDate];
+        if (selectedDate){
+            $scope.selectedBills = $scope.billsHash[selectedDate];
             $scope.label = $filter('date')($scope.selectedDate, 'dd/MM/yyyy')
         } else {
             $scope.selectedBills = [];
 
             for (var date in $scope.billsHash){
-                var date = new Date(date);
-
-                // as a first load, verify if this bill belongs to current month.
-                if (date.getMonth() == today.getMonth() && date.getFullYear() == today.getFullYear()){
+                if ( $scope.currentMonth == getFormattedMonth($filter, new Date(date)) ){
                     $scope.selectedBills = $scope.selectedBills.concat($scope.billsHash[date])
                 }
             }
             $scope.selectedBills = $filter('orderBy')($scope.selectedBills, 'date', false);
-            $scope.label = $filter('date')(today, 'MMMM/yyyy')
+            $scope.label = $filter('date')(new Date($scope.currentMonth+'/01'), 'MMMM/yyyy')
         }
     }
 
 
-    function addBillHash($scope, MaterialCalendarData, bill){
-        if (!$scope.billsHash[bill.date]){
-            $scope.billsHash[bill.date] = [];
+    function addBillHash($scope, $filter, MaterialCalendarData, bill){
+        var key = getFormattedDate($filter, bill.date);
+
+        if (!$scope.billsHash[key]){
+            $scope.billsHash[key] = [];
             MaterialCalendarData.setDayContent(new Date(bill.date), 'content');
         }
 
-        $scope.billsHash[bill.date].push(bill);
+        $scope.billsHash[key].push(bill);
+    }
+
+    function getFormattedDate($filter, date){
+        return $filter('date')(date, 'yyyy/MM/dd');
+    }
+
+    function getFormattedMonth($filter, date){
+        return $filter('date')(date, 'yyyy/MM');
     }
 });
