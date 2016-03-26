@@ -115,7 +115,10 @@ public class AccountEntryController extends AbstractRestController<AccountEntry,
             }
 
             Double catBalance = map.get( entry.getSubCategory().getCategory().getName() ) + entry.getAmount();
-            map.put( entry.getSubCategory().getCategory().getName(), catBalance * (catBalance<0?-1:1));
+            map.put( entry.getSubCategory().getCategory().getName(), catBalance);
+        }
+        for (Map.Entry<String, Double> mapEntry: map.entrySet()){
+            mapEntry.setValue(mapEntry.getValue() * (mapEntry.getValue()<0?-1:1) );
         }
 
         return new AccountEntryReportResource(entries, balance, map);

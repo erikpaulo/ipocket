@@ -8,6 +8,7 @@ server:
 spring:
     application:
         name: ipocket
+        version: 0.2.0
 
     jpa:
         database: HSQL

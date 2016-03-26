@@ -30,8 +30,8 @@ public class DashboardService {
 
         Calendar start = Calendar.getInstance();
         Calendar end = Calendar.getInstance();
-        start.set( start.get( Calendar.YEAR), Calendar.JANUARY, 1 ); // first day of this year
-        end.set( end.get( Calendar.YEAR ), Calendar.DECEMBER, 31 ); // last day of the year
+        start.set( start.get( Calendar.YEAR), Calendar.JANUARY, 1,0,0,0 ); // first day of this year
+        end.set( end.get( Calendar.YEAR ), Calendar.DECEMBER, 31,0,0,0 ); // last day of the year
 
         List<AccountEntry> entries = accountEntryRepository.listAllByUserPeriod( start.getTime(), end.getTime(), groupId );
 

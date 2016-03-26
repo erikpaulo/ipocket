@@ -49,7 +49,9 @@ define(['app',
                     // Update chart
                     $scope.entriesDistributionChartConfig.series[0].data = [];
                     angular.forEach($scope.report.groupedEntries, function(groupValue, groupName){
-                        $scope.entriesDistributionChartConfig.series[0].data.push({name: groupName, y:groupValue});
+                        if (groupValue > 0){
+                            $scope.entriesDistributionChartConfig.series[0].data.push({name: groupName, y:groupValue});
+                        }
                     });
                 });
             }
