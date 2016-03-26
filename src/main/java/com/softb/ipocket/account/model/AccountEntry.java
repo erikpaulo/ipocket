@@ -62,10 +62,13 @@ public class AccountEntry extends BaseEntity<Integer> implements Serializable {
     @Transient
     protected Double balance;
 
+	@Transient
+	protected Account account;
+
     @Override
     public AccountEntry clone() throws CloneNotSupportedException {
         return new AccountEntry( this.date,      this.subCategory, this.amount, this.transfer,
                                  this.accountId, this.accountDestinyId, this.twinEntryId, this.groupId,
-                                 this.balance);
+                                 this.balance,   this.account);
     }
 }

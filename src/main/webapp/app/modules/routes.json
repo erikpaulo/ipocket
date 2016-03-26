@@ -72,5 +72,26 @@
       "modules/categorization/controllers/categorization-controller"
     ],
     "hasSubMenu": false
+  },
+  {
+    "id": "reports",
+    "name": "Relatórios",
+    "icon": "insert_chart",
+    "originalPath": "/reports",
+    "templateUrl": "modules/reports/views/reports.html",
+    "dependencies": [
+      "modules/reports/controllers/reports-controller"
+    ],
+    "hasSubMenu": true,
+    "items" : [
+      {
+        "id": "accountEntries",
+        "name":"",
+        "originalPath": "/reports/accountEntries",
+        "templateUrl": "modules/reports/views/report-account-entries.html",
+        "visible": false,
+        "dependencies": ["modules/reports/controllers/report-account-entries-controller"]
+      }
+    ]
   }
 ]

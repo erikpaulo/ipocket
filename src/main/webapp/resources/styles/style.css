@@ -74,8 +74,36 @@ md-card.mdl-color--green-600 {
     color: #fff;
 }
 
-md-card.summary-card md-card-content{
-    min-height: 95px;
+md-card.summary-card{
+    height: 95px;
+}
+
+md-card.report-card, md-card.report-card md-icon{
+    color:white !important;
+}
+md-card.report-card md-card-title-text span.md-subhead {
+    font-style: italic;
+}
+md-card.report-card:hover{
+    box-shadow: 0 8px 9px -5px rgba(0,0,0,.2),0 15px 22px 2px rgba(0,0,0,.14),0 6px 28px 5px rgba(0,0,0,.12);
+    cursor:pointer;
+}
+
+.c-vertical-title{
+    transition: rotate(270deg);
+    writing-mode: tb-rl;
+    -webkit-transform: rotate(90deg);
+    -moz-transform: rotate(90deg);
+    -o-transform: rotate(90deg);
+    -ms-transform: rotate(90deg);
+    transform: rotate(180deg);
+    white-space: nowrap;
+    display: block;
+    bottom: 0;
+    width: 20px;
+    padding: 16px 0;
+    font-size: x-large;
+    letter-spacing: 0.08em;
 }
 
 
@@ -171,6 +199,11 @@ fieldset{
     border: 1px solid lightgray;
     padding-left: 8px;
     margin: 0 2px;
+}
+
+.c-no-error md-input-container{
+    padding-bottom: 0 !important;
+    margin-bottom: 0;
 }
 
 

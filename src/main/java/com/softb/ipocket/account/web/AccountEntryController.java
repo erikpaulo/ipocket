@@ -1,10 +1,16 @@
 package com.softb.ipocket.account.web;
 
+import com.softb.ipocket.account.model.Account;
 import com.softb.ipocket.account.model.AccountEntry;
 import com.softb.ipocket.account.repository.AccountEntryRepository;
+import com.softb.ipocket.account.repository.AccountRepository;
 import com.softb.ipocket.account.service.AccountEntryUploadService;
+import com.softb.ipocket.account.web.resource.AccountEntryFilterResource;
 import com.softb.ipocket.account.web.resource.AccountEntryImport;
+import com.softb.ipocket.account.web.resource.AccountEntryReportResource;
+import com.softb.ipocket.categorization.model.Category;
 import com.softb.ipocket.categorization.model.SubCategory;
+import com.softb.ipocket.categorization.repository.CategoryRepository;
 import com.softb.ipocket.categorization.repository.SubCategoryRepository;
 import com.softb.system.errorhandler.exception.FormValidationError;
 import com.softb.system.errorhandler.exception.SystemException;
@@ -22,9 +28,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 @RestController("AppAccountEntryController")
 @RequestMapping("/api/account/{accountId}/entries")
@@ -36,7 +40,13 @@ public class AccountEntryController extends AbstractRestController<AccountEntry,
 	private AccountEntryRepository accountEntryRepository;
 
     @Autowired
+    private AccountRepository accountRepository;
+
+    @Autowired
     private SubCategoryRepository subcategoryRepository;
+
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     @Autowired
     private AccountController accountController;
@@ -44,6 +54,72 @@ public class AccountEntryController extends AbstractRestController<AccountEntry,
     @Inject
     private AccountEntryUploadService uploadService;
 
+
+    @RequestMapping(value="/listByFilter", method = RequestMethod.POST)
+    public AccountEntryReportResource listAllByFilter (@RequestBody AccountEntryFilterResource filter){
+        Double balance = 0.0;
+
+        Calendar start = Calendar.getInstance();
+        start.setTime( filter.getStart() );
+
+        // Filter the account entries according to te parameters informed
+        List<AccountEntry> entries = accountEntryRepository.listAllByUserPeriod( start.getTime(), filter.getEnd(), getGroupId() );
+        for (int i=0;i<entries.size();) {
+            AccountEntry entry = entries.get( i );
+
+            // Filter selected subcategories
+            if (filter.getSubCategory() != null && entry.getSubCategory().getId() != filter.getSubCategory().getId()){
+                entries.remove( i );
+                continue;
+            }
+
+            // Filter selected accounts
+            if (filter.getAccounts() != null && filter.getAccounts().size() > 0) {
+                Boolean found = false;
+                for (Account account: filter.getAccounts()){
+                    if (entry.getAccountId() == account.getId()){
+                        found=true;
+                        break;
+                    }
+                }
+
+                if (!found){
+                    entries.remove( i );
+                    continue;
+                }
+            }
+
+            // Filter Subcategory Type
+            if (filter.getCategoryType() != null){
+                Category category = entry.getSubCategory().getCategory();
+
+                if (!category.getType().toString().equalsIgnoreCase( filter.getCategoryType() ) ){
+                    entries.remove( i );
+                    continue;
+                }
+            }
+
+            // Add the related account in case the view wants to show the account name.
+            Account account = accountRepository.findOne( entry.getAccountId(), getGroupId() );
+            entry.setAccount( account );
+
+            balance += entry.getAmount();
+            i++;
+        }
+
+        // Group entries by its categories
+        Map<String, Double> map = new HashMap<>(  );
+        for (AccountEntry entry: entries) {
+            if (map.get( entry.getSubCategory().getCategory().getName() ) == null){
+                map.put( entry.getSubCategory().getCategory().getName(), 0.0 );
+            }
+
+            Double catBalance = map.get( entry.getSubCategory().getCategory().getName() ) + entry.getAmount();
+            map.put( entry.getSubCategory().getCategory().getName(), catBalance * (catBalance<0?-1:1));
+        }
+
+        return new AccountEntryReportResource(entries, balance, map);
+    }
 
     /**
      * Create one entry in this account.
@@ -177,7 +253,7 @@ public class AccountEntryController extends AbstractRestController<AccountEntry,
                 subCategory = subcategoryRepository.findOneByUser(entryToImport.getSubCategory().getId(), getGroupId());
             }
 
-            AccountEntry entry = new AccountEntry( entryToImport.getDate(), subCategory, entryToImport.getAmount(),	false, accountId, null, null, getGroupId(), null);
+            AccountEntry entry = new AccountEntry( entryToImport.getDate(), subCategory, entryToImport.getAmount(),	false, accountId, null, null, getGroupId(), null, null);
 
             validate(ACCOUNT_ENTRY_OBJECT_NAME, entry);
             entries.add(entry);

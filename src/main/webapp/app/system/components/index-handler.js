@@ -118,7 +118,7 @@ define(['angular-resource', 'jquery'], function (resource, $) {
                 if (!$scope.appContext.currentUser.authenticated){
                     $location.path('login');
                 } else {
-                    $location.path('dashboard');
+//                    $location.path('dashboard');
                 }
             });
 
@@ -145,5 +145,5 @@ function addSuccess($scope){
 
 function addError($scope, msg, err){
     $scope.appContext.toast.addError(msg);
-    console.log('message: '+ err.data.message);
+    console.log('message: '+ (err ? err.data.message : ''));
 }
