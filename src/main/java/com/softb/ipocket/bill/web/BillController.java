@@ -128,7 +128,6 @@ public class BillController extends AbstractRestController<Category, Integer> {
     public CashFlowProjectionResource genCashFlowProjection() {
         Calendar start = Calendar.getInstance();
         Calendar end = Calendar.getInstance();
-//        start.set( Calendar.DAY_OF_MONTH, 1 );
         end.set( Calendar.MONTH, start.get( Calendar.MONTH ) + 11 );
         end.set( Calendar.DAY_OF_MONTH, end.getActualMaximum( Calendar.DAY_OF_MONTH ) );
 

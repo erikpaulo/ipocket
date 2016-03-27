@@ -4,6 +4,8 @@ import com.softb.ipocket.account.model.Account;
 import com.softb.ipocket.account.model.AccountEntry;
 import com.softb.ipocket.account.repository.AccountEntryRepository;
 import com.softb.ipocket.account.repository.AccountRepository;
+import com.softb.ipocket.bill.model.Bill;
+import com.softb.ipocket.bill.repository.BillRepository;
 import com.softb.ipocket.categorization.model.SubCategory;
 import com.softb.ipocket.dashboard.web.resource.SavingResource;
 import com.softb.ipocket.dashboard.web.resource.SumarizedInfosResource;
@@ -21,6 +23,9 @@ public class DashboardService {
 
     @Autowired
     private AccountRepository accountRepository;
+
+    @Autowired
+    private BillRepository billRepository;
 
     public SavingResource getSavingInfo(Integer groupId) {
         List<Double> monthly = new ArrayList<Double>(  );
@@ -46,6 +51,18 @@ public class DashboardService {
         }
 
         return new SavingResource(monthly, accumulated);
+    }
+
+    public List<Bill> getNextBills(Integer groupId){
+        List<Bill> bills = billRepository.findAllByUser( groupId );
+        List<Bill> nextBills;
+        if (bills.size() > 3){
+            nextBills = bills.subList( 0, 3 );
+        } else {
+            nextBills = bills;
+        }
+
+        return nextBills;
     }
 
     private Integer getIndex(Date date){

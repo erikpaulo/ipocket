@@ -12,7 +12,7 @@ import java.util.List;
 @Repository("AppBillRepository")
 public interface BillRepository extends JpaRepository<Bill, Integer> {
 
-    @Query("select b from Bill b where b.groupId = :groupId")
+    @Query("select b from Bill b where b.groupId = :groupId order by b.date")
     List<Bill> findAllByUser(@Param("groupId") Integer groupId) throws DataAccessException;
 
     @Query("select b from Bill b where b.id = :id and b.groupId = :groupId")

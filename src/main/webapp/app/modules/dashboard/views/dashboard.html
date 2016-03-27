@@ -84,7 +84,7 @@
                 <md-list>
                     <md-list-item ng-repeat="bill in dashboard.nextBills">
                         <span flex="20" layout-align="center center"  layout="row">{{bill.date | date:"dd/MM/yyyy"}}</span>
-                        <span flex layout-align="start center"  layout="row">{{bill.category}}</span>
+                        <span flex layout-align="start center"  layout="row">{{bill.subCategory.fullName}}</span>
                         <span flex="30" layout-align="end center" layout="row">{{bill.amount | currency}}</span>
                         <md-divider></md-divider>
                     </md-list-item>

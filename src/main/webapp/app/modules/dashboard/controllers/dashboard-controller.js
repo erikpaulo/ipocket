@@ -20,11 +20,11 @@ define(['app',
                 {done: true, description: 'Verificar valor do seguro do golzim e lançar'},
                 {done: false, description: 'Movimentar saldo de 2015 para Maxime DI - Melhor opção?'}
             ]
-            $scope.dashboard.nextBills = [
-                {date: new Date(2016, 0, 5), category:'Household:Condomínio', amount:1256},
-                {date: new Date(2016, 0, 12), category:'Educação : Escola de Inglês', amount:310},
-                {date: new Date(2016, 0, 28), category:'House:Financiamento Santander', amount:6000}
-            ]
+//            $scope.dashboard.nextBills = [
+//                {date: new Date(2016, 0, 5), category:'Household:Condomínio', amount:1256},
+//                {date: new Date(2016, 0, 12), category:'Educação : Escola de Inglês', amount:310},
+//                {date: new Date(2016, 0, 28), category:'House:Financiamento Santander', amount:6000}
+//            ]
 
             $scope.addTodo = function(){
                 $scope.dashboard.todos.push({done:false, description:$scope.todoList.text});

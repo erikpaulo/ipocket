@@ -1,5 +1,6 @@
 package com.softb.ipocket.dashboard.web;
 
+import com.softb.ipocket.bill.model.Bill;
 import com.softb.ipocket.dashboard.service.DashboardService;
 import com.softb.ipocket.dashboard.web.resource.DashboardResource;
 import com.softb.ipocket.dashboard.web.resource.SavingResource;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.inject.Inject;
+import java.util.List;
 
 @RestController("AppDashboardController")
 @RequestMapping("/api/dashboard")
@@ -17,6 +19,8 @@ public class DashboardController extends AbstractRestController<DashboardResourc
 
     @Inject
     DashboardService dashboardService;
+
+
 
     /**
      * Lists some useful information for the current user.
@@ -36,7 +40,11 @@ public class DashboardController extends AbstractRestController<DashboardResourc
         // Generate sumarized informations.
         SumarizedInfosResource sumarized = dashboardService.genSumarizedInfo ( getGroupId() );
 
-        return new DashboardResource(savings, sumarized);
+        // Next Bills
+        List<Bill> bills = dashboardService.getNextBills( getGroupId() );
+
+        return new DashboardResource(savings, sumarized, bills);
     }
+
 }
 
