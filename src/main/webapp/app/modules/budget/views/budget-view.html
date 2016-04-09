@@ -1,10 +1,13 @@
-<section ng-controller="BudgetController" layout="row">
-    <div layout="column" flex="40">
+<section ng-controller="BudgetViewController" layout="row" ng-cloak>
+    <div layout="column" flex="40"ng-if="dashboard">
         <md-card >
             <md-card-content class="c-no-padding">
                 <div layout="row" layout-padding>
                     <div layout="column" flex="20" layout-align="center center">
-                            <span class="md-display-1">{{dashboard.track.entry.year}}</span>
+                            <span class="md-display-1">{{dashboard.data.year}}</span>
+                        <md-button class="md-primary" ng-click="edit(dashboard.data.id)">
+                            <span class="">editar</span>
+                        </md-button>
                     </div>
                     <md-divider></md-divider>
                     <div layout="column" flex>
@@ -12,7 +15,7 @@
                             <div layout="column" flex="100" class="md-padding" layout-align="center center">
                                 <div layout="row" layout-align="center center">
                                     <md-icon class="material-icons md-48" style="margin-right:10px">local_library</md-icon>
-                                    <span class="md-display-1">{{dashboard.track.deviation | number:2}} %</span>
+                                    <span class="md-display-1">{{dashboard.data.deviation | number:0}} %</span>
                                 </div>
                                 <div layout="row">
                                     <span class="md-caption c-caption"><strong>Economia</strong> planejada</span>
@@ -23,18 +26,24 @@
                         <div layout="row">
                             <div layout="column" flex="50" class="md-padding" layout-align="center center">
                                 <div layout="row" layout-align="center center">
-                                    <md-icon class="material-icons md-36 md-warn" style="margin-right:10px">add_circle</md-icon>
-                                    <span class="md-headline">{{dashboard.track.track[0].deviation | number:2}} %</span>
+                                    <md-icon class="material-icons md-36 md-primary" style="margin-right:10px">add_circle</md-icon>
+                                    <span class="md-headline">{{dashboard.data.data[0].deviation | number:0}} %</span>
                                 </div>
                                 <div layout="row">
-                                    <span class="md-caption c-caption"><strong>{{dashboard.track.track[0].entry.name}}</strong> planejadas</span>
+                                    <span class="md-caption c-caption"><strong>{{dashboard.data.data[0].name}}</strong> planejadas</span>
                                 </div>
 
                             </div>
                             <md-divider></md-divider>
                             <div layout="column" flex="50" class="md-padding" layout-align="center center">
-                                <span class="md-headline">{{dashboard.track.track[1].deviation | number:2}} %</span>
-                                <span class="md-caption c-caption"><strong>{{dashboard.track.track[1].entry.name}}</strong> planejada</span>
+                                <div layout="row" layout-align="center center">
+                                    <md-icon class="material-icons md-36 md-warn" style="margin-right:10px">remove_circle</md-icon>
+                                    <span class="md-headline">{{dashboard.data.data[1].deviation | number:0}} %</span>
+                                </div>
+                                <div layout="row">
+                                    <span class="md-caption c-caption"><strong>{{dashboard.data.data[1].name}}</strong> planejadas</span>
+                                </div>
+
                             </div>
                         </div>
                     </div>
@@ -45,15 +54,15 @@
             <md-card-header>
                 <span class="md-title">Acompanhamento Plano Macro</span>
             </md-card-header>
-            <md-card-content>
+            <md-card-content ng-init="balance = dashboard.data.totalSpent - dashboard.data.totalPlanned">
                 <highchart id="budgetTrackReport" config="budgetTrackReport"></highchart>
-                <span class="md-caption c-caption">Você está a <strong>{{(dashboard.track.totalExecuted - dashboard.track.totalPlanned) | currency}}</strong> do plano original</span>
+                <span class="md-caption c-caption">Você está <span ng-if="balance>0">atrasado</span><span ng-if="balance<0">adiantado</span> <strong>{{(balance * (balance<0 ? -1 : 1)) | currency}}</strong> do plano original.</span>
             </md-card-content>
         </md-card>
 
     </div>
 
-    <div layout="column" flex="60">
+    <div layout="column" flex="60" ng-if="dashboard">
         <div layout="row">
             <div layout="column" flex="100">
                 <md-card>
@@ -69,9 +78,9 @@
                                 <div layout="column" flex="20" layout-align="center center">Desvio</div>
                             </md-list-item>
                             <md-list-item ng-repeat="deviation in dashboard.mainDeviations" style="min-height:30px !important">
-                                <div layout="column" flex="40">{{deviation.category.name}}</div>
+                                <div layout="column" flex="40">{{deviation.name}}</div>
                                 <div layout="column" flex="20" layout-align="center center">{{deviation.totalPlanned | currency}}</div>
-                                <div layout="column" flex="20" layout-align="center center">{{deviation.totalExecuted | currency}}</div>
+                                <div layout="column" flex="20" layout-align="center center">{{deviation.totalSpent | currency}}</div>
                                 <div layout="column" flex="20" layout-align="center center">{{deviation.deviation | number:0}}%</div>
                             </md-list-item>
                         </md-list>
@@ -85,7 +94,7 @@
                     <md-card-header class="md-title">
                         Plano Detalhado
                     </md-card-header>
-                    <md-card-content>
+                    <md-card-content style="height: 251px;overflow: auto;">
                         <div layout="row" class="md-subhead" layout-align="start center">
                             <div style="padding:8px;">
                                 <span><strong>Trail:</strong></span>
@@ -109,9 +118,9 @@
                                 <div layout="column" flex="20" layout-align="center center">Desvio</div>
                             </md-list-item>
                             <md-list-item ng-repeat="detail in details.nodeSelected" ng-class="{'c-hover': detail.track}" style="min-height:30px !important" ng-click="goDown(detail)">
-                                <div layout="column" flex="40">{{detail.entry.name}}</div>
+                                <div layout="column" flex="40">{{detail.name}}</div>
                                 <div layout="column" flex="20" layout-align="center center">{{detail.totalPlanned | currency}}</div>
-                                <div layout="column" flex="20" layout-align="center center">{{detail.totalExecuted | currency}}</div>
+                                <div layout="column" flex="20" layout-align="center center">{{detail.totalSpent | currency}}</div>
                                 <div layout="column" flex="20" layout-align="center center">{{detail.deviation | number:0}}%</div>
                             </md-list-item>
                         </md-list>

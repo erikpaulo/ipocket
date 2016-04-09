@@ -56,15 +56,21 @@ public class Category extends BaseEntity<Integer> implements Serializable {
 	protected String fullName;
 
     public enum Type {
-        EXP ( "Despesas" ), INC ( "Entradas" ), INV ( "Investimentos" );
+        INC ( "Entradas" ), EXP ( "Despesas" ), INV ( "Investimentos" );
         private String name;
+		private Boolean positive = true;
 
         Type(String name) {
-            this.name = name;
+			this.name = name;
+			if (this.name.equalsIgnoreCase( "Despesas" )){
+				this.positive = false;
+			}
         }
 
         public String getName() {
             return this.name;
         }
+
+        public Boolean isPositive() { return this.positive;}
     }
 }

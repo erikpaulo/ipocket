@@ -18,7 +18,8 @@ import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
         "com.softb.system.security.provider",
         "com.softb.ipocket.account.service",
         "com.softb.ipocket.dashboard.service",
-        "com.softb.ipocket.bill.service"})
+        "com.softb.ipocket.bill.service",
+        "com.softb.ipocket.budget.service"})
 @Import(value={RepositoryConfig.class, LocaleConfig.class})
 public class ServiceConfig {
 

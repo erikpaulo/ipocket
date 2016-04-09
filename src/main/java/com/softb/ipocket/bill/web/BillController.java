@@ -7,7 +7,6 @@ import com.softb.ipocket.bill.model.Bill;
 import com.softb.ipocket.bill.repository.BillRepository;
 import com.softb.ipocket.bill.service.BillService;
 import com.softb.ipocket.bill.web.resource.CashFlowProjectionResource;
-import com.softb.ipocket.categorization.model.Category;
 import com.softb.ipocket.categorization.model.SubCategory;
 import com.softb.ipocket.categorization.repository.SubCategoryRepository;
 import com.softb.system.errorhandler.exception.BusinessException;
@@ -22,7 +21,7 @@ import java.util.List;
 
 @RestController("AppBillController")
 @RequestMapping("/api/bill")
-public class BillController extends AbstractRestController<Category, Integer> {
+public class BillController extends AbstractRestController<Bill, Integer> {
 
 	public static final String BILL_OBJECT_NAME = "Bill";
 
@@ -48,8 +47,8 @@ public class BillController extends AbstractRestController<Category, Integer> {
      */
     @RequestMapping(method = RequestMethod.GET)
     public List<Bill> listAll() {
-        List<Bill> bills = billRepository.findAllByUser( getGroupId() );
-        return bills;
+//        List<Bill> bills = billRepository.findAllByUser( getGroupId() );
+        return new ArrayList<>(  );
     }
 
     /**

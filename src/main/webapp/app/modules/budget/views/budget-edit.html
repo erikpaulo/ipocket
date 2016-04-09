@@ -1,5 +1,5 @@
 <section ng-controller="BudgetEditController">
-    <div layout="row">
+    <div layout="row" ng-if="budget">
         <div layout="column" flex="60">
             <md-card>
                 <md-card-header class="md-title">
@@ -10,19 +10,19 @@
                     <div layout="row">
                         <div layout="column" flex="100">
                             <md-tabs md-selected="selectedIndex" md-border-bottom md-autoselect  style="min-height:465px;">
-                                <md-tab ng-repeat="group in budget.groups" label="{{group.group.name}}">
-                                    <md-list ng-repeat="category in group.categories">
+                                <md-tab ng-repeat="group in budget.data" md-active="$first" label="{{group.name}}">
+                                    <md-list ng-repeat="category in group.data">
                                         <fieldset class="standard">
                                             <md-list-item layout="row" flex="100" layout-align="center center" style="font-weight:600;min-height: 0px;">
                                                 <div layout="column" flex="40">Categoria</div>
                                                 <div layout="column" flex="20" layout-align="center center">Planejado Mês</div>
                                                 <div layout="column" flex="20" layout-align="center center">Planejado Ano</div>
-                                                <div layout="column" flex="20" layout-align="center center">Média 3M</div>
+                                                <div layout="column" flex="20" layout-align="center center">Média U3M</div>
                                             </md-list-item>
-                                            <legend class="md-subhead">{{category.category.name}}</legend>
-                                            <md-list-item layout="row" ng-repeat="subcategory in category.subcategories">
+                                            <legend class="md-subhead">{{category.name}}</legend>
+                                            <md-list-item layout="row" ng-repeat="subcategory in category.data">
                                                 <div layout="column" flex="40">
-                                                    <span>{{subcategory.subcategory.name}}</span>
+                                                    <span>{{subcategory.name}}</span>
                                                 </div>
                                                 <div layout="column" flex="20" layout-align="center center">
                                                     <md-input-container class="c-input-container-no-error c-no-margin">
@@ -30,15 +30,14 @@
                                                     </md-input-container>
                                                 </div>
                                                 <div layout="column" flex="20" layout-align="center center">
-                                                    <span>{{subcategory.anualPlan | currency}}</span>
+                                                    <span>{{subcategory.annualPlan | currency}}</span>
                                                 </div>
                                                 <div layout="column" flex="20" layout-align="center center">
-                                                    <span>R$346,98</span>
+                                                    <span>{{subcategory.averageL3M | currency}}</span>
                                                 </div>
                                                 <md-divider></md-divider>
                                             </md-list-item>
                                         </fieldset>
-                                        <!--<md-subheader class="md-no-sticky">{{categorization.categorization.name}}</md-subheader>-->
                                     </md-list>
                                 </md-tab>
                             </md-tabs>
@@ -48,7 +47,7 @@
                 <md-divider></md-divider>
                 <md-dialog-actions layout="row" layout-align="end center" class="mdl-color--blue-grey-50">
                     <md-button class="md-warn" ng-click="delete()">Remover</md-button>
-                    <md-button class="md-primary" type="submit" ng-disabled="myForm.$invalid">Gravar</md-button>
+                    <md-button class="md-primary" type="submit" ng-disabled="myForm.$invalid" ng-click="save()">Gravar</md-button>
                 </md-dialog-actions>
             </md-card>
         </div>

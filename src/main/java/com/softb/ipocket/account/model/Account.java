@@ -74,4 +74,5 @@ public class Account extends BaseEntity<Integer> implements Serializable {
             return this.name;
         }
     }
+
 }

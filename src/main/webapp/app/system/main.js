@@ -31,8 +31,8 @@ require.config({
 
         // CHARTS
         'highcharts': 'resources/lib/highcharts/highcharts',
-        'highcharts-more': 'http://code.highcharts.com/highcharts-more',
-        'highcharts-solidgauge': 'http://code.highcharts.com/modules/solid-gauge.src',
+        'highcharts-more': 'resources/lib/highcharts/highcharts-more',
+        'highcharts-solidgauge': 'resources/lib/highcharts/modules/solid-gauge',
         'highcharts-ng': 'resources/lib/highcharts-ng/dist/highcharts-ng.min',
 
         // FILE UPLOAD

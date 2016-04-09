@@ -40,25 +40,25 @@
     "name":"Planejamento",
     "icon": "local_library",
     "originalPath": "/budget",
-    "templateUrl": "modules/budget/views/budget.html",
-    "dependencies": ["modules/budget/controllers/budget-controller"],
+    "templateUrl": "modules/budget/views/budget-view.html",
+    "dependencies": ["modules/budget/controllers/budget-view-controller"],
     "hasSubMenu": true,
     "items" : [
+      {
+        "id": "budgetEdit",
+        "name":"",
+        "originalPath": "/budget/edit/:budgetId",
+        "templateUrl": "modules/budget/views/budget-edit.html",
+        "visible": false,
+        "dependencies": ["modules/budget/controllers/budget-edit-controller"]
+      },
       {
         "id": "budgetNew",
         "name":"",
         "originalPath": "/budget/new",
         "templateUrl": "modules/budget/views/budget-edit.html",
         "visible": false,
-        "dependencies": ["modules/budget/controllers/budget-controller"]
-      },
-      {
-        "id": "budgetEdit",
-        "name":"",
-        "originalPath": "/budget/:budgetId/edit",
-        "templateUrl": "modules/budget/views/budget-edit.html",
-        "visible": false,
-        "dependencies": ["modules/budget/controllers/budget-controller"]
+        "dependencies": ["modules/budget/controllers/budget-edit-controller"]
       }
     ]
   },
