@@ -6,7 +6,10 @@ import com.softb.ipocket.account.repository.AccountEntryRepository;
 import com.softb.ipocket.account.repository.AccountRepository;
 import com.softb.ipocket.bill.model.Bill;
 import com.softb.ipocket.bill.repository.BillRepository;
+import com.softb.ipocket.budget.service.BudgetService;
+import com.softb.ipocket.budget.web.resource.BudgetNodeRoot;
 import com.softb.ipocket.categorization.model.SubCategory;
+import com.softb.ipocket.dashboard.web.resource.BudgetTrackResource;
 import com.softb.ipocket.dashboard.web.resource.SavingResource;
 import com.softb.ipocket.dashboard.web.resource.SumarizedInfosResource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +29,9 @@ public class DashboardService {
 
     @Autowired
     private BillRepository billRepository;
+
+    @Autowired
+    private BudgetService budgetService;
 
     public SavingResource getSavingInfo(Integer groupId) {
         List<Double> monthly = new ArrayList<Double>(  );
@@ -131,5 +137,11 @@ public class DashboardService {
         if (count > 0) fixedCostAverage = fixedCostAverage / count;
 
         return new SumarizedInfosResource( patrimony, accumulatedLastMonth, fixedCostAverage );
+    }
+
+    public BudgetTrackResource getBudgetTrackInfo(Integer groupId){
+        BudgetNodeRoot budget = budgetService.loadCurrentActiveBudget( groupId );
+
+        return new BudgetTrackResource( budget.getTotalPlanned(), budget.getTotalSpent() );
     }
 }

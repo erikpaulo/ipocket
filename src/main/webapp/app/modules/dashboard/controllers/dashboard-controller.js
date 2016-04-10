@@ -14,17 +14,16 @@ define(['app',
             $scope.savingChartConfig.series.push({id:"series-0", name: "Acumulado", data: $scope.dashboard.savings.accumulated});
             $scope.savingChartConfig.series.push({id:"series-1", name: "Mensal", data: $scope.dashboard.savings.monthly, type:"column"});
 
+            $scope.savingPlanChartConfig.series[0].data.push($scope.dashboard.budgetTrack.currentSaving);
+            $scope.savingPlanChartConfig.yAxis.currentMax = $scope.dashboard.budgetTrack.expectedSaving;
+
+
             $scope.dashboard.todoList = {text: null}
             $scope.dashboard.todos = [
                 {done: false, description: 'Planejamento Financeiro 2016'},
                 {done: true, description: 'Verificar valor do seguro do golzim e lançar'},
                 {done: false, description: 'Movimentar saldo de 2015 para Maxime DI - Melhor opção?'}
             ]
-//            $scope.dashboard.nextBills = [
-//                {date: new Date(2016, 0, 5), category:'Household:Condomínio', amount:1256},
-//                {date: new Date(2016, 0, 12), category:'Educação : Escola de Inglês', amount:310},
-//                {date: new Date(2016, 0, 28), category:'House:Financiamento Santander', amount:6000}
-//            ]
 
             $scope.addTodo = function(){
                 $scope.dashboard.todos.push({done:false, description:$scope.todoList.text});
@@ -66,8 +65,7 @@ define(['app',
                 labels: {
                     enabled: true
                 },
-                categories: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun',
-                                 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'
+                categories: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'
                 ],
                 lineWidth: 1
             },
@@ -109,7 +107,7 @@ define(['app',
                 }
             },
             series: [{
-                data: [8348.87],
+                data: [],
                 dataLabels: {
                     enabled: false,
                     format: '<div style="text-align:center">' +
@@ -131,9 +129,8 @@ define(['app',
             },
             yAxis: {
                 currentMin: 0,
-                currentMax: 23000,
+                currentMax: 8000,
                 title: {
-//                    y: 220
                 },
                 stops: [
                     [0.3, '#DF5353'], // red
@@ -150,6 +147,7 @@ define(['app',
                 }
             },
             loading: false
-            }
+        }
+
 	}]);
 });

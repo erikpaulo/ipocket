@@ -20,4 +20,5 @@ public class DashboardResource implements Serializable {
     private SavingResource savings;
     private SumarizedInfosResource sumarized;
     private List<Bill> nextBills;
+    private BudgetTrackResource budgetTrack;
 }

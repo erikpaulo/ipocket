@@ -2,6 +2,7 @@ package com.softb.ipocket.dashboard.web;
 
 import com.softb.ipocket.bill.model.Bill;
 import com.softb.ipocket.dashboard.service.DashboardService;
+import com.softb.ipocket.dashboard.web.resource.BudgetTrackResource;
 import com.softb.ipocket.dashboard.web.resource.DashboardResource;
 import com.softb.ipocket.dashboard.web.resource.SavingResource;
 import com.softb.ipocket.dashboard.web.resource.SumarizedInfosResource;
@@ -43,7 +44,10 @@ public class DashboardController extends AbstractRestController<DashboardResourc
         // Next Bills
         List<Bill> bills = dashboardService.getNextBills( getGroupId() );
 
-        return new DashboardResource(savings, sumarized, bills);
+        // Budget plan Track
+        BudgetTrackResource budgetTrack =  dashboardService.getBudgetTrackInfo( getGroupId() );
+
+        return new DashboardResource(savings, sumarized, bills, budgetTrack);
     }
 
 }

@@ -17,4 +17,7 @@ public interface BudgetRepository extends JpaRepository<Budget, Integer> {
 
     @Query("select b from Budget b where b.id = :id and b.groupId = :groupId")
     Budget findOneByUser(@Param("id") Integer id, @Param("groupId") Integer groupId) throws DataAccessException;
+
+    @Query("select b from Budget b where b.year = :year and b.active = true and b.groupId = :groupId")
+    Budget findActiveByYearUser(@Param("year") Integer year, @Param("groupId") Integer groupId) throws DataAccessException;
 }

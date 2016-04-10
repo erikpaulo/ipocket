@@ -32,6 +32,13 @@ public class BudgetService {
     @Autowired
     private CategoryController categoryController;
 
+    public BudgetNodeRoot loadCurrentActiveBudget(Integer groupId){
+        Calendar today = Calendar.getInstance();
+
+        Budget budget = budgetRepository.findActiveByYearUser( today.get( Calendar.YEAR ), groupId );
+        return loadBudget( budget, groupId );
+    }
+
     public BudgetNodeRoot loadBudget(Integer id, Integer groupId){
         // Get user Budget and load its data.
         Budget budget = budgetRepository.findOneByUser( id, groupId );
@@ -157,13 +164,13 @@ public class BudgetService {
                                     value  = nodeGroup.getPerMonthSpent().get( i ) + valueSpent;
                                     nodeGroup.getPerMonthSpent().set( i, value );
 
-                                    value  = nodeBudget.getPerMonthSpent().get( i ) + valueSpent;
+                                    value  = nodeBudget.getPerMonthSpent().get( i ) + (valueSpent * multi);
                                     nodeBudget.getPerMonthSpent().set( i, value );
 
                                     totalSubCategory += valueSpent;
                                     totalCategory += valueSpent;
                                     totalGroup += valueSpent;
-                                    totalBudget += valueSpent;
+                                    totalBudget += (valueSpent * multi); // turn the signal back, becouse totalBudget needs to consider the original sign.
                                 }
                             }
                         }
@@ -237,7 +244,7 @@ public class BudgetService {
             total = map.get( subCatName ) + entry.getMonthPlan();
             map.put( subCatName,  total );
 
-            totalBudget += entry.getMonthPlan();
+            totalBudget += (entry.getMonthPlan() * (entry.getSubCategory().getCategory().getType().isPositive() ? 1 : -1) );
         }
 
         map.put( "Budget - "+ budget.getYear(), totalBudget);
@@ -269,6 +276,12 @@ public class BudgetService {
                     }
                 }
 
+            }
+        }
+
+        for (int i=budgetDeviation.size()-1;i>=0;i--) {
+            if (budgetDeviation.get( i ).getName() == null){
+                budgetDeviation.remove( i );
             }
         }
 
