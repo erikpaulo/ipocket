@@ -47,8 +47,8 @@ public class BillController extends AbstractRestController<Bill, Integer> {
      */
     @RequestMapping(method = RequestMethod.GET)
     public List<Bill> listAll() {
-//        List<Bill> bills = billRepository.findAllByUser( getGroupId() );
-        return new ArrayList<>(  );
+        List<Bill> bills = billRepository.findAllByUser( getGroupId() );
+        return bills;
     }
 
     /**
