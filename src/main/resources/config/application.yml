@@ -10,7 +10,7 @@ DATABASE_URL: postgres://eriklacerda@localhost:5432/eriklacerda
 spring:
     application:
         name: ipocket
-        version: 0.2.0
+        version: 0.2.1
 
     jpa:
         database: HSQL

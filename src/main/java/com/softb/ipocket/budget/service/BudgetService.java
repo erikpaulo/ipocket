@@ -36,7 +36,12 @@ public class BudgetService {
         Calendar today = Calendar.getInstance();
 
         Budget budget = budgetRepository.findActiveByYearUser( today.get( Calendar.YEAR ), groupId );
-        return loadBudget( budget, groupId );
+        BudgetNodeRoot bdgetNode = null;
+        if (budget != null){
+            bdgetNode = loadBudget( budget, groupId );
+        }
+
+        return bdgetNode;
     }
 
     public BudgetNodeRoot loadBudget(Integer id, Integer groupId){
@@ -48,11 +53,16 @@ public class BudgetService {
     private BudgetNodeRoot loadBudget(Budget budget, Integer groupId){
         BudgetNodeRoot nodeBudget = initBudgetNode( groupId );
 
-        Map<String, Double> mapBudget = parseBudgetToMap(budget);
+        Map<String, Double> mapBudget = new HashMap<>(  );
+        if (budget != null){
+            mapBudget = parseBudgetToMap(budget);
+        }
 
         setAmountPlanned(nodeBudget,  mapBudget.get( nodeBudget.getName() ));
         nodeBudget.setDeviation( setDeviation( nodeBudget.getTotalSpent(), nodeBudget.getTotalPlanned() ) );
-        nodeBudget.setId( budget.getId() );
+        if (budget != null){
+            nodeBudget.setId( budget.getId() );
+        }
 
         for (BudgetNodeGroup nodeG: nodeBudget.getData()) {
             setAmountPlanned(nodeG,  mapBudget.get( nodeG.getName() ));

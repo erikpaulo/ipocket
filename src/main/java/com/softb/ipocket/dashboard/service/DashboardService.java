@@ -142,6 +142,14 @@ public class DashboardService {
     public BudgetTrackResource getBudgetTrackInfo(Integer groupId){
         BudgetNodeRoot budget = budgetService.loadCurrentActiveBudget( groupId );
 
-        return new BudgetTrackResource( budget.getTotalPlanned(), budget.getTotalSpent() );
+        Double totalPlanned = null;
+        Double totalSpent = null;
+
+        if (budget != null){
+            totalPlanned = budget.getTotalPlanned();
+            totalSpent = budget.getTotalSpent();
+        }
+
+        return new BudgetTrackResource( totalPlanned, totalSpent );
     }
 }

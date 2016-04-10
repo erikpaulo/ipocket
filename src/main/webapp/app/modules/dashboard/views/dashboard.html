@@ -55,9 +55,19 @@
                 </md-card-content>
             </md-card>
             <md-card class="">
-                <md-card-content>
-                    <highchart id="savingPlanEvaluation" config="savingPlanChartConfig"></highchart>
-                    <span style="color: #7A7A7A;">Economia Acumulada: {{dashboard.budgetTrack.currentSaving | currency}}</span>
+                <md-card-content layout style="min-height: 236px;">
+                    <div layout layout-align="center center" flex>
+                        <md-progress-circular class="md-hue-2" ng-show="!dashboard.sumarized.fixedCostAverage" md-diameter="40"></md-progress-circular>
+                    </div>
+                    <div ng-if="dashboard.budgetTrack.currentSaving">
+                        <highchart id="savingPlanEvaluation" config="savingPlanChartConfig"></highchart>
+                        <span style="color: #7A7A7A;">Economia Acumulada: {{dashboard.budgetTrack.currentSaving | currency}}</span>
+                    </div>
+                    <div layout="column" flex="100" layout-align="center center" ng-if="!dashboard.budgetTrack.currentSaving && dashboard.budgetTrack">
+                        <md-icon class="material-icons md-48">local_library</md-icon>
+                        <span class="c-caption">Planeje suas entradas e despesas.</span>
+                        <md-button class="md-primary" ng-click="goToBudget()">Planejar</md-button>
+                    </div>
                 </md-card-content>
             </md-card>
         </div>

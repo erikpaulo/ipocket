@@ -1,10 +1,9 @@
 define(['app',
         '../services/dashboard-resources' ], function(app) {
-	app.controller('DashboardController', ['$rootScope', '$scope', '$timeout', '$filter', '$locale', 'DashboardResource',
-	function($rootScope, $scope, $timeout, $filter, $locale, Dashboard) {
-	$rootScope.appContext.contextPage = 'Dashboard';
-
-    $scope.appContext.contextMenu.actions = [];
+	app.controller('DashboardController', ['$rootScope', '$location', '$scope', '$timeout', '$filter', '$locale', 'DashboardResource',
+	function($rootScope, $location, $scope, $timeout, $filter, $locale, Dashboard) {
+	    $rootScope.appContext.contextPage = 'Dashboard';
+        $scope.appContext.contextMenu.actions = [];
 
         $scope.dashboard = {};
 
@@ -30,6 +29,10 @@ define(['app',
                 $scope.dashboard.todoList.text = null;
             }
         });
+
+        $scope.goToBudget = function(){
+            $location.path('/budget');
+        }
 
         $scope.savingChartConfig = {
             options:{
