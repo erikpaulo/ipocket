@@ -59,22 +59,24 @@ public class BudgetService {
         }
 
         setAmountPlanned(nodeBudget,  mapBudget.get( nodeBudget.getName() ));
-        nodeBudget.setDeviation( setDeviation( nodeBudget.getTotalSpent(), nodeBudget.getTotalPlanned() ) );
+        nodeBudget.setDeviation( setDeviation( nodeBudget.getTotalSpent(), nodeBudget.getTotalPlanned() , true) );
         if (budget != null){
             nodeBudget.setId( budget.getId() );
         }
 
         for (BudgetNodeGroup nodeG: nodeBudget.getData()) {
+            // @TODO: Encontrar uma maneira melhor de definir se este lançamento tem natureza positiva ou negativa.
+            Boolean positiveKind = !nodeG.getName().equalsIgnoreCase( "Despesas" );
             setAmountPlanned(nodeG,  mapBudget.get( nodeG.getName() ));
-            nodeG.setDeviation( setDeviation( nodeG.getTotalSpent(), nodeG.getTotalPlanned() ) );
+            nodeG.setDeviation( setDeviation( nodeG.getTotalSpent(), nodeG.getTotalPlanned() , positiveKind) );
 
             for (BudgetNodeCategory nodeCat: nodeG.getData()) {
                 setAmountPlanned(nodeCat,  mapBudget.get( nodeCat.getName() ));
-                nodeCat.setDeviation( setDeviation( nodeCat.getTotalSpent(), nodeCat.getTotalPlanned() ) );
+                nodeCat.setDeviation( setDeviation( nodeCat.getTotalSpent(), nodeCat.getTotalPlanned(), positiveKind ) );
 
                 for (BudgetNodeSubCategory nodeSC: nodeCat.getData()) {
                     setAmountPlanned(nodeSC,  mapBudget.get( nodeSC.getName() ));
-                    nodeSC.setDeviation( setDeviation( nodeSC.getTotalSpent(), nodeSC.getTotalPlanned() ) );
+                    nodeSC.setDeviation( setDeviation( nodeSC.getTotalSpent(), nodeSC.getTotalPlanned(), positiveKind ) );
 
                     if (budget != null){
                         for (BudgetEntry entry: budget.getEntries()) {
@@ -207,11 +209,11 @@ public class BudgetService {
         return nodeBudget;
     }
 
-    private Double setDeviation(Double totalExecuted, Double totalPlanned) {
+    private Double setDeviation(Double totalExecuted, Double totalPlanned, Boolean positiveKind) {
         Double deviation = 100.0;
 
         if (totalPlanned != null && totalPlanned != 0.0){
-            deviation = Math.round( ((totalExecuted - totalPlanned) / totalPlanned) * 100 ) + 0.0;
+            deviation = Math.round( ((positiveKind ? (totalPlanned - totalExecuted) : (totalExecuted - totalPlanned) ) / totalPlanned) * 100 ) + 0.0;
         }
 
         return deviation;

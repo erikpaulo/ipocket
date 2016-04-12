@@ -15,7 +15,7 @@
                             <div layout="column" flex="100" class="md-padding" layout-align="center center">
                                 <div layout="row" layout-align="center center">
                                     <md-icon class="material-icons md-48" style="margin-right:10px">local_library</md-icon>
-                                    <span class="md-display-1">{{dashboard.data.deviation | number:0}} %</span>
+                                    <span class="md-display-1">{{ (dashboard.data.totalSpent / dashboard.data.totalPlanned * 100) | number:0}} %</span>
                                 </div>
                                 <div layout="row">
                                     <span class="md-caption c-caption"><strong>Economia</strong> planejada</span>
@@ -27,7 +27,7 @@
                             <div layout="column" flex="50" class="md-padding" layout-align="center center">
                                 <div layout="row" layout-align="center center">
                                     <md-icon class="material-icons md-36 md-primary" style="margin-right:10px">add_circle</md-icon>
-                                    <span class="md-headline">{{dashboard.data.data[0].deviation | number:0}} %</span>
+                                    <span class="md-headline">{{ (dashboard.data.data[0].totalSpent / dashboard.data.data[0].totalPlanned * 100 ) | number:0}} %</span>
                                 </div>
                                 <div layout="row">
                                     <span class="md-caption c-caption"><strong>{{dashboard.data.data[0].name}}</strong> planejadas</span>
@@ -38,7 +38,7 @@
                             <div layout="column" flex="50" class="md-padding" layout-align="center center">
                                 <div layout="row" layout-align="center center">
                                     <md-icon class="material-icons md-36 md-warn" style="margin-right:10px">remove_circle</md-icon>
-                                    <span class="md-headline">{{dashboard.data.data[1].deviation | number:0}} %</span>
+                                    <span class="md-headline">{{ (dashboard.data.data[1].totalSpent / dashboard.data.data[1].totalPlanned * 100 ) | number:0}} %</span>
                                 </div>
                                 <div layout="row">
                                     <span class="md-caption c-caption"><strong>{{dashboard.data.data[1].name}}</strong> planejadas</span>
