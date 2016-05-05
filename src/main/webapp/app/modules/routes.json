@@ -32,7 +32,7 @@
     "name":"Investimentos",
     "icon": "account_balance",
     "originalPath": "/investment",
-    "templateUrl": "modules/investment/views/investments.html",
+    "templateUrl": "modules/investment/views/investment.html",
     "dependencies": ["modules/investment/controllers/investment-controller",
                      "modules/shared/services/app-filters",
                      "modules/shared/services/constants",
