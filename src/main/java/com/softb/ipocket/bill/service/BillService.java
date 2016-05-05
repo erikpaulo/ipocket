@@ -48,7 +48,7 @@ public class BillService {
 			}
 		}
 
-		// Goes over the accounts, calculating its balance.
+		// Goes over the accounts, calculating its amountCurrent.
 		for (Account account: accounts){
 			// Atualiza a soma do agrupamento.
 			doSum(series, labels, account.getName(), account.getCreateDate(), startDate, endDate, account.getStartBalance(), groupBy);

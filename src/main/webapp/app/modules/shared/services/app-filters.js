@@ -27,4 +27,14 @@ define(['./module'], function (app) {
             return (typeNameHash[input] ? typeNameHash[input] : 'Not Found');
         };
     });
+
+    app.filter('investEntryTypeName', function () {
+        var typeNameHash = {
+            B:  'Compra',
+            S:  'Venda'
+        }
+        return function (input) {
+            return (typeNameHash[input] ? typeNameHash[input] : 'Not Found');
+        };
+    });
 });

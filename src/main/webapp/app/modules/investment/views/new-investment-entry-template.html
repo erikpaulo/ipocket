@@ -1,0 +1,66 @@
+<md-dialog flex="50">
+    <form name="myForm" ng-submit="submit()">
+    <md-toolbar layout="row" layout-align="center center" class="header">
+        <div class="md-toolbar-tools">
+            <h2>Novo Lançamento</h2>
+        </div>
+        <div flex></div>
+        <div>
+            <md-button class="md-icon-button" layout="row" layout-align="right center" ng-click="hide()">X</md-button>
+        </div>
+    </md-toolbar>
+    <md-dialog-content class="md-padding">
+        <div layout="row">
+            <md-datepicker name="date" ng-model="entry.date" md-placeholder="Data" required>
+                <div class="errors" ng-messages="entryForm.date.$error" ng-if="myForm.$dirty">
+                    <div ng-message="required">Obrigatório</div>
+                </div>
+            </md-datepicker>
+            <div layout flex="5"></div>
+            <md-input-container>
+                <label>Vlr Cota *</label>
+                <input type="number" name="indexValue" ng-model="entry.indexValue" step="0.0000001" required>
+                <div class="errors" ng-messages="myForm.indexValue.$error" ng-if="myForm.$dirty">
+                    <div ng-message="required">Obrigatório</div>
+                </div>
+            </md-input-container>
+            <div layout flex="5"></div>
+            <md-input-container class="md-block" flex="30">
+                <label>Valor *</label>
+                <input name="amount" ng-model="entry.amount" type="text" required format="number">
+
+                <div class="errors" ng-messages="entryForm.amount.$error" ng-if="myForm.$dirty">
+                    <div ng-message="required">Obrigatório</div>
+                </div>
+            </md-input-container>
+        </div>
+        <div layout="row" flex="100" style="min-height:94px;">
+            <md-input-container flex="35">
+                <label>Tipo *</label>
+                <md-select name="type" ng-model="entry.type" required>
+                    <md-option ng-repeat="type in entryTypes" ng-value="type.id" required>
+                        {{type.name}}
+                    </md-option>
+                </md-select>
+                <div class="errors" ng-messages="myForm.type.$error" ng-if="myForm.$dirty">
+                    <div ng-message="required">Obrigatório</div>
+                </div>
+            </md-input-container>
+            <div layout flex></div>
+            <md-input-container class="" flex="15" ng-if="entry.type == 'S'">
+                <label>IR</label>
+                <input name="incomeTax" ng-model="entry.incomeTax" type="text" format="number">
+            </md-input-container>
+            <div layout flex="5"></div>
+            <md-input-container class="" flex="15" ng-if="entry.type == 'S'">
+                <label>IOF</label>
+                <input name="iof" ng-model="entry.iof" type="text" format="number">
+            </md-input-container>
+        </div>
+    </md-dialog-content>
+    <md-dialog-actions layout="row" layout-align="end center">
+        <md-button class="md-accent" ng-click="cancel()">Cancelar</md-button>
+        <md-button class="md-primary" type="submit" ng-disabled="myForm.$invalid">Incluir</md-button>
+    </md-dialog-actions>
+    </form>
+</md-dialog>

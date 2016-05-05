@@ -4,6 +4,10 @@ import com.softb.ipocket.account.model.Account;
 import com.softb.ipocket.account.model.AccountEntry;
 import com.softb.ipocket.account.repository.AccountEntryRepository;
 import com.softb.ipocket.account.repository.AccountRepository;
+import com.softb.ipocket.investment.model.Investment;
+import com.softb.ipocket.investment.service.InvestmentService;
+import com.softb.ipocket.investment.web.resource.InvestmentSummaryResource;
+import com.softb.ipocket.investment.web.resource.InvestmentTypeResource;
 import com.softb.system.security.service.UserAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,6 +33,9 @@ public class AccountService {
 
     @Inject
     private UserAccountService userAccountService;
+
+    @Inject
+    private InvestmentService investmentService;
 
     public Account getAccountStatement(Integer accountId, Date start, Date end){
 
@@ -141,5 +148,32 @@ public class AccountService {
         }
 
         return mapAverage;
+    }
+
+    /**
+     * Transform the user investments into user accounts;
+     * @param groupId
+     * @return
+     */
+    public List<Account> createInvestmentAccounts(Integer groupId) {
+        List<Account> accounts = new ArrayList<>(  );
+        InvestmentSummaryResource investSummary = investmentService.getSummary( groupId );
+
+        for (Map.Entry<String, InvestmentTypeResource> type: investSummary.getTypes().entrySet()) {
+            InvestmentTypeResource investType = type.getValue();
+
+            for (Investment investment: investType.getInvestments()) {
+
+                Account account = new Account( investment.getName(), Account.Type.INV, new ArrayList<AccountEntry>(  ),
+                                               investment.getCreateDate(), true, groupId, 0.0, null, 0.0 );
+
+                    account.getEntries().add( new AccountEntry( null, null, investment.getAmountCurrent(), false,
+                                              investment.getId(), null, null, groupId, investment.getAmountCurrent(), null ));
+
+                accounts.add( account );
+            }
+        }
+
+        return accounts;
     }
 }

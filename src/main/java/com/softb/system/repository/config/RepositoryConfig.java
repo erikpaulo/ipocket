@@ -19,6 +19,7 @@ import java.net.URISyntaxException;
 @EnableJpaRepositories(basePackages = { 
 		"com.softb.system.security.repository", 
 		"com.softb.ipocket.account.repository",
+		"com.softb.ipocket.investment.repository",
 		"com.softb.ipocket.bill.repository",
 		"com.softb.ipocket.budget.repository",
         "com.softb.ipocket.categorization.repository"
@@ -26,6 +27,7 @@ import java.net.URISyntaxException;
 @EntityScan(basePackages = { 
 		"com.softb.system.security.model", 
 		"com.softb.ipocket.account.model",
+		"com.softb.ipocket.investment.model",
 		"com.softb.ipocket.bill.model",
 //		"com.softb.ipocket.dashboard.model",
 		"com.softb.ipocket.budget.model",

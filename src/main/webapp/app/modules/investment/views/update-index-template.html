@@ -1,0 +1,40 @@
+<md-dialog flex="50">
+    <form name="myForm" ng-submit="submit()">
+    <md-toolbar layout="row" layout-align="center center" class="header">
+        <div class="md-toolbar-tools">
+            <h2>Atualizar Valor do Índice</h2>
+        </div>
+        <div flex></div>
+        <div>
+            <md-button class="md-icon-button" layout="row" layout-align="right center" ng-click="hide()">X</md-button>
+        </div>
+    </md-toolbar>
+    <md-dialog-content class="md-padding">
+        <div layout="row" layout-align="center center">
+            <md-input-container flex="25">
+                <label>Valor *</label>
+                <input name="value" ng-model="indexUpdate.value" type="number" step="0.0000001" required>
+                <div class="errors" ng-messages="myForm.value.$error" ng-if="myForm.$dirty">
+                    <div ng-message="required">Obrigatório</div>
+                </div>
+            </md-input-container>
+        </div>
+        <div layout="row" layout-align="center center">
+            <div layout="column" flex="50" style="overflow:auto;max-height:185px">
+                <div layout="row" class="table-head">
+                    <div layout="column" flex="50" layout-align="center center">Data</div>
+                    <div layout="column" flex="50" layout-align="center end">Valor</div>
+                </div>
+                <div layout="row" ng-repeat="i in indexes | orderBy:'-date'" class="table-row">
+                    <div layout="column" flex="50" layout-align="center center">{{i.date | date:'dd/MM/yyyy'}}</div>
+                    <div layout="column" flex="50" layout-align="center end">{{i.value | currency}}</div>
+                </div>
+            </div>
+        </div>
+    </md-dialog-content>
+    <md-dialog-actions layout="row" layout-align="end center">
+        <md-button class="md-accent" ng-click="cancel()">Cancelar</md-button>
+        <md-button class="md-primary" type="submit" ng-disabled="myForm.$invalid">Incluir</md-button>
+    </md-dialog-actions>
+    </form>
+</md-dialog>

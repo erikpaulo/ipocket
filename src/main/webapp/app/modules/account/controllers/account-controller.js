@@ -101,7 +101,7 @@ define(['./module',
             function updateChart(){
                 $scope.moneyDistributionChartConfig.series[0].data = [];
                 angular.forEach($scope.summary.groups, function(group){
-                    if (group.id != Constants.ACCOUNT.TYPE.CCA.id && group.balance >= 0)
+                    if (group.id != Constants.ACCOUNT.TYPE.CHECKING_ACCOUNT && group.balance >= 0)
                         $scope.moneyDistributionChartConfig.series[0].data.push({name: group.name, y:group.balance});
                 });
 

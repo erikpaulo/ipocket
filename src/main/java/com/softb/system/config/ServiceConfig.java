@@ -16,6 +16,7 @@ import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 @ComponentScan(basePackages = { 
 		"com.softb.system.security.service",
         "com.softb.system.security.provider",
+        "com.softb.ipocket.investment.service",
         "com.softb.ipocket.account.service",
         "com.softb.ipocket.dashboard.service",
         "com.softb.ipocket.bill.service",

@@ -6,6 +6,7 @@ import com.softb.ipocket.account.repository.AccountRepository;
 import com.softb.ipocket.account.service.AccountService;
 import com.softb.ipocket.account.web.resource.AccountGroupResource;
 import com.softb.ipocket.account.web.resource.AccountSummaryResource;
+import com.softb.ipocket.investment.service.InvestmentService;
 import com.softb.system.errorhandler.exception.EntityNotFoundException;
 import com.softb.system.errorhandler.exception.FormValidationError;
 import com.softb.system.rest.AbstractRestController;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -30,6 +32,8 @@ public class AccountController extends AbstractRestController<Account, Integer> 
     @Inject
     private AccountService accountService;
 
+    @Inject
+    private InvestmentService investmentService;
 
 
 
@@ -69,6 +73,11 @@ public class AccountController extends AbstractRestController<Account, Integer> 
 
         // Gets all accounts of the logged user, grouping by account types
         List<Account> accounts = accountRepository.findAllByUser( getGroupId() );
+
+        // translate the user investments into accounts to show its balances.
+        List<Account> investAccounts = accountService.createInvestmentAccounts(getGroupId());
+        accounts.addAll( accounts.size()-1, investAccounts );
+
         Iterator<Account> accs = accounts.iterator ();
         while (accs.hasNext ()){
             Account account = accs.next ();
@@ -83,7 +92,7 @@ public class AccountController extends AbstractRestController<Account, Integer> 
                 }
             }
 
-            //calculate account balance.
+            //calculate account amountCurrent.
             calculateAccountBalance( account );
             groupR.setBalance( groupR.getBalance() + account.getBalance() );
             summary.setBalance( summary.getBalance() + account.getBalance() );
@@ -94,6 +103,8 @@ public class AccountController extends AbstractRestController<Account, Integer> 
         summary.setGroups( groups );
         return summary;
     }
+
+
 
     /**
      * Lists the account statement for the selected period
@@ -126,6 +137,7 @@ public class AccountController extends AbstractRestController<Account, Integer> 
      * @throws FormValidationError
      */
     @RequestMapping(method = RequestMethod.POST)
+    @Transactional
 	public Account create(@RequestBody Account account) throws FormValidationError {
 
         account.setGroupId( getGroupId() );

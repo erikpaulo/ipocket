@@ -93,7 +93,7 @@ public class DashboardService {
         // Gets all accounts
         List<Account> accounts = accountRepository.findAllByUser( groupId );
         for (Account account: accounts) {
-            // Gets the balance of each account.
+            // Gets the amountCurrent of each account.
             Double balance = accountEntryRepository.getBalanceByDateAccount( account.getId(), new Date(), groupId );
             patrimony += ((balance != null ? balance : 0.0) + account.getStartBalance());
         }

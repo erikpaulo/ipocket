@@ -4,7 +4,6 @@ define(['./module',
         '../services/account-entry-resources',
         '../../shared/services/utils-service.js'], function (app) {
 
-
 	app.controller('AccountEntryController', ['$scope', '$http', '$window', '$filter', '$routeParams', 'AccountResource', 'SubCategoryResource', 'AccountEntryResource', '$mdDialog', 'Utils',
         function($scope, $http, $window, $filter, $routeParams, Account, SubCategory, AccountEntry, $mdDialog, Utils) {
             $scope.appContext.contextMenu.actions = [];
@@ -47,11 +46,6 @@ define(['./module',
 			    	return end;
 			    }},
 			]
-
-            // Get the account being detailed
-//            new Account({id: $routeParams.accountID}).$get(function(account){
-//                $scope.account = account;
-//            });
 
             SubCategory.listAll(function(data){
                 $scope.subCategories = data;

@@ -1,0 +1,79 @@
+<section ng-controller="InvestmentFRDController" layout>
+    <div layout="column" flex="65">
+        <div layout="row">
+            <md-card layout="row" class="summary-card" flex="33">
+                <md-card-content layout="column" flex>
+                    <div layout layout-align="center center" flex>
+                        <md-progress-circular class="md-hue-2" ng-show="!investment.amountCurrent" md-diameter="40"></md-progress-circular>
+                    </div>
+                    <div ng-show="investment.amountCurrent" layout="column">
+                        <span class="md-headline">{{investment.amountCurrent | currency}}</span>
+                        <span class="c-caption">Saldo Bruto</span>
+                    </div>
+                </md-card-content>
+            </md-card>
+            <md-card layout="row" class="summary-card" flex="33">
+                <md-divider></md-divider>
+                <md-card-content layout="column" flex>
+                    <div layout layout-align="center center" flex>
+                        <md-progress-circular class="md-hue-2" ng-show="!investment.amountCurrent" md-diameter="40"></md-progress-circular>
+                    </div>
+                    <div ng-show="investment.amountCurrent" layout="column">
+                        <span class="md-headline">{{investment.amountCurrent - investment.amountInvested | currency}} ({{((investment.amountCurrent / investment.amountInvested) - 1)*100 | number:2}}%)</span>
+                        <span class="c-caption">Rendimento Bruto</span>
+                    </div>
+                </md-card-content>
+            </md-card>
+            <md-card layout="row" class="summary-card" flex="33">
+                <md-divider></md-divider>
+                <md-card-content layout="column" flex>
+                    <div layout layout-align="center center" flex>
+                        <md-progress-circular class="md-hue-2" ng-show="!investment.amountCurrent" md-diameter="40"></md-progress-circular>
+                    </div>
+                    <div ng-show="investment.amountCurrent" layout="column">
+                        <span class="md-headline">{{investment.netIncome | currency}} ({{ investment.netIncomePercent | number:2 }}%)</span>
+                        <span class="c-caption">Rendimento Real</span>
+                    </div>
+                </md-card-content>
+            </md-card>
+        </div>
+        <div layout="row">
+            <div layout="column" flex="100">
+                <md-card>
+                    <md-card-content style="height: 397px;overflow: auto;">
+                        <div layout="row" class="table-head">
+                            <div layout="column" flex="15" layout-align="center center">Data</div>
+                            <div layout="column" flex="10" layout-align="center center">Operação</div>
+                            <div layout="column" flex="10" layout-align="center center">Qtd Cotas</div>
+                            <div layout="column" flex="20" layout-align="center end">Valor Investido</div>
+                            <div layout="column" flex="10" layout-align="center end">IR</div>
+                            <div layout="column" flex="10" layout-align="center end">IOF</div>
+                            <div layout="column" flex="20" layout-align="center end">Valor Bruto</div>
+                        </div>
+                        <div layout="row" class="table-row" ng-repeat="entry in investment.entries" ng-class="{'mdl-color--grey-200':$odd}">
+                            <div layout="column" flex="15" layout-align="center center">{{entry.date | date: 'dd/MM/yyyy'}}</div>
+                            <div layout="column" flex="10" layout-align="center center">{{entry.type | investEntryTypeName}}</div>
+                            <div layout="column" flex="10" layout-align="center center">{{entry.qtdQuotes}}</div>
+                            <div layout="column" flex="20" layout-align="center end">{{entry.amount | currency}}</div>
+                            <div layout="column" flex="10" layout-align="center end">{{entry.incomeTax | currency}}</div>
+                            <div layout="column" flex="10" layout-align="center end">{{entry.iof | currency}}</div>
+                            <div layout="column" flex="20" layout-align="center end">{{(entry.qtdQuotes * investment.index) | currency}}</div>
+                        </div>
+                    </md-card-content>
+                </md-card>
+            </div>
+        </div>
+    </div>
+    <div layout="column" flex="35">
+        <md-card layout="column">
+            <md-card-content>
+                <highchart id="investIncome" config="investIncomeCfg"></highchart>
+            </md-card-content>
+        </md-card>
+        <md-card layout="column" >
+            <md-card-content>
+                <highchart id="indexIncome" config="indexIncomeCfg"></highchart>
+            </md-card-content>
+        </md-card>
+    </div>
+</section>

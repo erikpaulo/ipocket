@@ -1,0 +1,49 @@
+<md-dialog flex="50">
+    <form name="myForm" ng-submit="submit()">
+    <md-toolbar layout="row" layout-align="center center" class="header">
+        <div class="md-toolbar-tools">
+            <h2>Incluir Nova Conta</h2>
+        </div>
+        <div flex></div>
+        <div>
+            <md-button class="md-icon-button" layout="row" layout-align="right center" ng-click="hide()">X</md-button>
+        </div>
+    </md-toolbar>
+    <md-dialog-content class="md-padding">
+        <div layout="row" flex="100">
+            <md-input-container flex="55">
+                <label>Nome *</label>
+                <input name="name" ng-model="newInvestment.name" required md-maxlength="50">
+                <div class="errors" ng-messages="myForm.name.$error" ng-if="myForm.$dirty">
+                    <div ng-message="required">Obrigatório</div>
+                </div>
+            </md-input-container>
+            <div flex></div>
+            <md-input-container flex="35" required>
+                <label>Tipo *</label>
+                <md-select name="type" ng-model="newInvestment.type" required>
+                    <md-option ng-repeat="(key, value) in investmentTypes" ng-value="value.id" required>
+                        {{value.name}}
+                    </md-option>
+                </md-select>
+                <div class="errors" ng-messages="myForm.type.$error" ng-if="myForm.$dirty">
+                    <div ng-message="required">Obrigatório</div>
+                </div>
+            </md-input-container>
+        </div>
+        <div layout="row" flex="100">
+            <md-input-container flex="25">
+                <label>Taxa Administração (ao ano)</label>
+                <input name="adminFee" ng-model="newInvestment.adminFee" type="number" step="0.01" required>
+                <div class="errors" ng-messages="myForm.amount.$error" ng-if="myForm.$dirty">
+                    <div ng-message="required">Obrigatório</div>
+                </div>
+            </md-input-container>
+        </div>
+    </md-dialog-content>
+    <md-dialog-actions layout="row" layout-align="end center">
+        <md-button class="md-accent" ng-click="cancel()">Cancelar</md-button>
+        <md-button class="md-primary" type="submit" ng-disabled="myForm.$invalid">Incluir</md-button>
+    </md-dialog-actions>
+    </form>
+</md-dialog>

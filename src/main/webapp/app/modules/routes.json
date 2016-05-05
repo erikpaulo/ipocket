@@ -21,9 +21,36 @@
         "id": "accountEntry",
         "name":"Lançamentos",
         "originalPath": "/account/:accountID/entries",
-        "templateUrl": "modules/account/views/account-entry.html",
+        "templateUrl": "modules/account/views/account-detail.html",
         "visible": false,
-        "dependencies": ["modules/account/controllers/account-entry-controller"]
+        "dependencies": ["modules/account/controllers/account-detail-controller"]
+      }
+    ]
+  },
+  {
+    "id": "investment",
+    "name":"Investimentos",
+    "icon": "account_balance",
+    "originalPath": "/investment",
+    "templateUrl": "modules/investment/views/investments.html",
+    "dependencies": ["modules/investment/controllers/investment-controller",
+                     "modules/shared/services/app-filters",
+                     "modules/shared/services/constants",
+                     "modules/investment/services/investment-resources"],
+    "hasSubMenu": true,
+    "items" : [
+      {
+        "id": "investmentEntry",
+        "name":"Lançamentos",
+        "originalPath": "/investment/FRD/:investmentID/entries",
+        "templateUrl": "modules/investment/views/investment-frd-detail.html",
+        "visible": false,
+        "dependencies": ["modules/investment/controllers/investment-frd-controller",
+                         "modules/investment/services/investment-resources",
+                         "modules/investment/services/investment-entry-resources",
+                         "modules/shared/services/constants",
+                         "modules/shared/services/app-filters",
+                         "modules/shared/services/utils-service"]
       }
     ]
   },

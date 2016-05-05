@@ -49,7 +49,7 @@
                             <span layout="row" flex="20">{{entry.date | date: 'dd/MM/yyyy'}}</span>
                             <span layout="row" flex>{{entry.subCategory.fullName}}</span>
                             <span layout="row" flex="20" layout-align="end center" ng-class="{'c-number-negative': entry.amount<0}">{{entry.amount | currency}}</span>
-                            <span layout="row" flex="20" layout-align="end center" ng-class="{'c-number-negative': entry.balance<0}">{{entry.balance | currency}}</span>
+                            <span layout="row" flex="20" layout-align="end center" ng-class="{'c-number-negative': entry.amountCurrent<0}">{{entry.amountCurrent | currency}}</span>
                         </md-list-item>
                     </md-list>
                 </md-card-content>
@@ -66,10 +66,10 @@
                 <md-divider></md-divider>
                 <md-card-content layout="column" flex>
                     <div layout layout-align="center center" flex>
-                        <md-progress-circular class="md-hue-2" ng-show="account.balance == null" md-diameter="40"></md-progress-circular>
+                        <md-progress-circular class="md-hue-2" ng-show="account.amountCurrent == null" md-diameter="40"></md-progress-circular>
                     </div>
-                    <div layout="column" ng-show="account.balance != null">
-                        <span class="md-display-1">{{account.balance | currency}}</span>
+                    <div layout="column" ng-show="account.amountCurrent != null">
+                        <span class="md-display-1">{{account.amountCurrent | currency}}</span>
                         <span style="color: #7A7A7A;">Última atualização: {{account.lastUpdate | date: 'dd/MM/yyyy'}}</span>
                     </div>
                 </md-card-content>

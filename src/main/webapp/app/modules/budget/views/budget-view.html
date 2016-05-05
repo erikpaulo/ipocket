@@ -54,9 +54,9 @@
             <md-card-header>
                 <span class="md-title">Acompanhamento Plano Macro</span>
             </md-card-header>
-            <md-card-content ng-init="balance = dashboard.data.totalSpent - dashboard.data.totalPlanned">
+            <md-card-content ng-init="amountCurrent = dashboard.data.totalSpent - dashboard.data.totalPlanned">
                 <highchart id="budgetTrackReport" config="budgetTrackReport"></highchart>
-                <span class="md-caption c-caption">Você está <span ng-if="balance<0">atrasado</span><span ng-if="balance>0">adiantado</span> <strong>{{(balance * (balance<0 ? -1 : 1)) | currency}}</strong> do plano original.</span>
+                <span class="md-caption c-caption">Você está <span ng-if="amountCurrent<0">atrasado</span><span ng-if="amountCurrent>0">adiantado</span> <strong>{{(amountCurrent * (amountCurrent<0 ? -1 : 1)) | currency}}</strong> do plano original.</span>
             </md-card-content>
         </md-card>
 
@@ -69,7 +69,7 @@
                     <md-card-header>
                         <span class="md-title">Principais Desvios</span>
                     </md-card-header>
-                    <md-card-content style="min-height: 136px;">
+                    <md-card-content style="min-height: 137px;">
                         <md-list>
                             <md-list-item class="table-head" style="min-height:30px !important">
                                 <div layout="column" flex="40">Categoria</div>
@@ -94,7 +94,7 @@
                     <md-card-header class="md-title">
                         Plano Detalhado
                     </md-card-header>
-                    <md-card-content style="height: 251px;overflow: auto;">
+                    <md-card-content style="height: 250px;overflow: auto;">
                         <div layout="row" class="md-subhead" layout-align="start center">
                             <div style="padding:8px;">
                                 <span><strong>Trail:</strong></span>

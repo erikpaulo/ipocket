@@ -78,13 +78,13 @@ md-card.summary-card{
     height: 95px;
 }
 
-md-card.report-card, md-card.report-card md-icon{
+md-card.report-card.white, md-card.report-card md-icon{
     color:white !important;
 }
 md-card.report-card md-card-title-text span.md-subhead {
     font-style: italic;
 }
-md-card.report-card:hover{
+md-card.card-hover:hover{
     box-shadow: 0 8px 9px -5px rgba(0,0,0,.2),0 15px 22px 2px rgba(0,0,0,.14),0 6px 28px 5px rgba(0,0,0,.12);
     cursor:pointer;
 }
@@ -264,6 +264,12 @@ calendar-md md-content{
     background-color: #90a4ae !important;
     color:white;
     font-weight:600;
+    padding: 8px;
+    min-height:34px;
+}
+.table-row{
+    padding: 8px;
+    min-height:34px;
 }
 
 /********** >>> ACCORDION <<< ***********/
