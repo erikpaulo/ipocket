@@ -1,0 +1,110 @@
+<section ng-controller="InvestmentController" ng-cloak>
+    <div layout="row" layout-xs="column" class="ng-cloak" ng-cloak>
+        <div layout="column" flex="60" flex-xs="100">
+            <md-card>
+                <md-card-content style="min-height:517px;overflow:auto;">
+
+                    <md-list ng-repeat="(key, type) in summary.types">
+                        <span class="md-subhead">{{key}}</span>
+                        <md-divider class="blue"></md-divider>
+                        <md-list-item ng-if="summary.types.length<=0">
+                            <span class="c-caption">Não há contas cadastradas.</span>
+                        </md-list-item>
+                        <md-list-item>
+                            <div layout="row" flex layout-wrap>
+                                <md-card layout="column" class="card-hover mdl-color--grey-200" flex="45" ng-repeat="investment in type.investments" ng-click="detail(investment)">
+                                    <div layout="row">
+                                        <div layout="column" flex="100">
+                                            <md-card-header>
+                                                <md-card-header-text>
+                                                    <span class="md-subhead">{{investment.name}}</span>
+                                                </md-card-header-text>
+                                            </md-card-header>
+                                            <md-card-content>
+                                                <div layout="row" flex="100">
+                                                    <div layout="column" flex="40" layout-align="center center" class="md-title">
+                                                        <span>{{investment.perGrossIncome | number:1}} %</span>
+                                                        <md-tooltip md-direction="top">
+                                                            <span>Rendimento Bruto (%)</span>
+                                                        </md-tooltip>
+                                                    </div>
+                                                    <div layout="column" flex="60">
+                                                        <div layout="row" layout-align="end center">
+                                                            <span>{{investment.amountCurrent - investment.amountInvested| currency}}</span> <span class="c-caption" style="margin-left:2px;"> (RB)</span>
+                                                            <md-tooltip md-direction="right">
+                                                                <span>Rendimento Bruto ($)</span>
+                                                            </md-tooltip>
+                                                        </div>
+                                                        <div layout="row" layout-align="end center">
+                                                            <span>{{investment.amountCurrent | currency}}</span> <span class="c-caption" style="margin-left:2px;"> (Sld)</span>
+                                                            <md-tooltip md-direction="right">
+                                                                <span>Saldo Atual</span>
+                                                            </md-tooltip>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </md-card-content>
+                                        </div>
+                                        <md-divider class="blue"></md-divider>
+                                        <div layout="column">
+                                            <md-card-actions layout="column" layout-align="end center">
+                                                <md-button aria-label="Account Details" class="md-icon-button md-accent c-hover">
+                                                    <md-icon class="material-icons md-18" ng-click="delete(account)">cached</md-icon>
+                                                    <md-tooltip md-direction="right">
+                                                        <span>Atualizar Índice</span>
+                                                    </md-tooltip>
+                                                </md-button>
+                                                <md-button aria-label="Account Details" class="md-icon-button md-accent c-hover">
+                                                    <md-icon class="material-icons md-18" ng-click="delete(account)">delete</md-icon>
+                                                    <md-tooltip md-direction="right">
+                                                        <span>Inativar</span>
+                                                    </md-tooltip>
+                                                </md-button>
+                                            </md-card-actions>
+                                        </div>
+                                    </div>
+                                </md-card>
+                            </div>
+                        </md-list-item>
+                    </md-list>
+                </md-card-content>
+            </md-card>
+        </div>
+        <div layout="column" flex="50" hide-xs>
+            <md-card>
+                <md-card-header>
+                    <md-card-header-text>
+                        <span class="md-title">Resumo</span>
+                    </md-card-header-text>
+                </md-card-header>
+                <md-content>
+                    <md-list>
+                        <div layout="row">
+                            <div layout="column" flex="60">
+                                <md-list-item ng-repeat="group in summary.types" style="min-height:30px;margin-right:10px;">
+                                    <span layout="row" flex>{{group.id | accountTypeName}}</span>
+                                    <span layout="row" flex="30" layout-align="end center">{{group.amountCurrent | currency}}</span>
+                                </md-list-item>
+                            </div>
+                            <md-divider class="blue"></md-divider>
+                            <div layout="column" flex layout-align="center center">
+                                <span class="md-headline">{{summary.amountCurrent | currency}}</span>
+                                <span class="md-subhead c-caption">Total Geral</span>
+                            </div>
+                        </div>
+                    </md-list>
+                </md-content>
+            </md-card>
+            <md-card>
+                <md-card-header>
+                    <md-card-header-text>
+                        <span class="md-title">Meu Dinheiro</span>
+                    </md-card-header-text>
+                </md-card-header>
+                <md-card-content>
+                    <!--<highchart id="moneyDistribution" config="moneyDistributionChartConfig"></highchart>-->
+                </md-card-content>
+            </md-card>
+        </div>
+    </div>
+</section>

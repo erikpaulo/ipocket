@@ -34,7 +34,6 @@ define(['angular-resource', 'jquery'], function (resource, $) {
                         var toast = $mdToast.simple()
                             .textContent(msg)
                             .parent(angular.element('#main-content'))
-//                            .position('top right')
                             .hideDelay(3000);
 
                         $mdToast.show(toast);
@@ -50,7 +49,6 @@ define(['angular-resource', 'jquery'], function (resource, $) {
                         var toast = $mdToast.simple()
                             .textContent(msg)
                             .parent(angular.element('#main-content'))
-//                            .position('bottom left')
                             .theme("error-toast")
                             .action('OK')
                             .hideDelay(false);
@@ -118,7 +116,7 @@ define(['angular-resource', 'jquery'], function (resource, $) {
                 if (!$scope.appContext.currentUser.authenticated){
                     $location.path('login');
                 } else {
-//                    $location.path('dashboard');
+                    $location.path('dashboard');
                 }
             });
 
