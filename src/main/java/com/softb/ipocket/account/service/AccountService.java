@@ -4,6 +4,8 @@ import com.softb.ipocket.account.model.Account;
 import com.softb.ipocket.account.model.AccountEntry;
 import com.softb.ipocket.account.repository.AccountEntryRepository;
 import com.softb.ipocket.account.repository.AccountRepository;
+import com.softb.ipocket.categorization.model.SubCategory;
+import com.softb.ipocket.investment.model.Investment;
 import com.softb.ipocket.investment.model.InvestmentEntry;
 import com.softb.ipocket.investment.service.InvestmentService;
 import com.softb.system.security.service.UserAccountService;
@@ -128,12 +130,23 @@ public class AccountService {
      * @return
      */
     public List<AccountEntry> getAllEntriesByPeriod(Date start, Date end, Integer groupId){
+        Map<Integer, Account> mapAccounts = new HashMap<>(  );
+
         List<AccountEntry> accEntries = accountEntryRepository.listAllByUserPeriod( start, end, groupId );
 
         List<InvestmentEntry> invEntries = investmentService.getAllEntriesByPeriod( start, end, groupId );
         for (InvestmentEntry entry: invEntries) {
-            accEntries.add( new AccountEntry( entry.getDate(), null, entry.getAmount(), false, entry.getInvestmentId(),
-                                              null, null, groupId, entry.getAmount(), null) );
+            if (mapAccounts.get( entry.getInvestmentId()) == null ) {
+                Investment investment = investmentService.getInvestment( entry.getInvestmentId(), groupId );
+                Account account = new Account(investment.getName(), Account.Type.INV, null, investment.getCreateDate(),
+                        true, groupId, 0.0, null, 0.0);
+
+                mapAccounts.put( entry.getInvestmentId(), account );
+            }
+            SubCategory sc = investmentService.getDefaultSubCategory( groupId );
+
+            accEntries.add( new AccountEntry( entry.getDate(), sc, entry.getAmount(), false, entry.getInvestmentId(),
+                                              null, null, groupId, entry.getAmount(), mapAccounts.get( entry.getInvestmentId() )) );
         }
 
         return accEntries;

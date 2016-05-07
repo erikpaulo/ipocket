@@ -2,6 +2,8 @@ package com.softb.ipocket.investment.service;
 
 import com.softb.ipocket.account.model.Account;
 import com.softb.ipocket.account.model.AccountEntry;
+import com.softb.ipocket.categorization.model.Category;
+import com.softb.ipocket.categorization.model.SubCategory;
 import com.softb.ipocket.general.model.utils.AppMaths;
 import com.softb.ipocket.investment.model.Index;
 import com.softb.ipocket.investment.model.Investment;
@@ -257,6 +259,21 @@ public class InvestmentService {
         }
 
         return balance;
+    }
+
+    /**
+     * Get the investment specified.
+     * @param id
+     * @param groupId
+     * @return
+     */
+    public Investment getInvestment(Integer id, Integer groupId){
+        return investmentRepository.findOne( id, groupId );
+    }
+
+    public SubCategory  getDefaultSubCategory(Integer groupId){
+        Category category = new Category("Investimento", null, null, groupId, null);
+        return new SubCategory( "Investimento", true, null, category, groupId, 9999, "Investimento: Investimento" );
     }
 
     private Double getSignal(InvestmentEntry entry) {

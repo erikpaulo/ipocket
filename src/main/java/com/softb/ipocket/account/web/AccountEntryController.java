@@ -5,6 +5,7 @@ import com.softb.ipocket.account.model.AccountEntry;
 import com.softb.ipocket.account.repository.AccountEntryRepository;
 import com.softb.ipocket.account.repository.AccountRepository;
 import com.softb.ipocket.account.service.AccountEntryUploadService;
+import com.softb.ipocket.account.service.AccountService;
 import com.softb.ipocket.account.web.resource.AccountEntryFilterResource;
 import com.softb.ipocket.account.web.resource.AccountEntryImport;
 import com.softb.ipocket.account.web.resource.AccountEntryReportResource;
@@ -54,6 +55,9 @@ public class AccountEntryController extends AbstractRestController<AccountEntry,
     @Inject
     private AccountEntryUploadService uploadService;
 
+    @Inject
+    private AccountService accountService;
+
 
     @RequestMapping(value="/listByFilter", method = RequestMethod.POST)
     public AccountEntryReportResource listAllByFilter (@RequestBody AccountEntryFilterResource filter){
@@ -63,7 +67,7 @@ public class AccountEntryController extends AbstractRestController<AccountEntry,
         start.setTime( filter.getStart() );
 
         // Filter the account entries according to te parameters informed
-        List<AccountEntry> entries = accountEntryRepository.listAllByUserPeriod( start.getTime(), filter.getEnd(), getGroupId() );
+        List<AccountEntry> entries = accountService.getAllEntriesByPeriod( start.getTime(), filter.getEnd(), getGroupId() );
         for (int i=0;i<entries.size();) {
             AccountEntry entry = entries.get( i );
 
@@ -99,9 +103,11 @@ public class AccountEntryController extends AbstractRestController<AccountEntry,
                 }
             }
 
-            // Add the related account in case the view wants to show the account name.
-            Account account = accountRepository.findOne( entry.getAccountId(), getGroupId() );
-            entry.setAccount( account );
+            // Add the related account in case the view want to show the account name.
+            if (entry.getAccount() == null){
+                Account account = accountRepository.findOne( entry.getAccountId(), getGroupId() );
+                entry.setAccount( account );
+            }
 
             balance += entry.getAmount();
             i++;

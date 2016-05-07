@@ -1,15 +1,10 @@
 package com.softb.system.errorhandler.web;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-
-import javax.annotation.Resource;
-
+import com.softb.system.errorhandler.exception.BusinessException;
+import com.softb.system.errorhandler.exception.EntityNotFoundException;
+import com.softb.system.errorhandler.exception.FormValidationError;
+import com.softb.system.errorhandler.web.resource.FormValidationErrorResource;
+import com.softb.system.locale.LocaleContextHolderWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
@@ -21,11 +16,10 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import com.softb.system.errorhandler.exception.BusinessException;
-import com.softb.system.errorhandler.exception.EntityNotFoundException;
-import com.softb.system.errorhandler.exception.FormValidationError;
-import com.softb.system.errorhandler.web.resource.FormValidationErrorResource;
-import com.softb.system.locale.LocaleContextHolderWrapper;
+import javax.annotation.Resource;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.util.*;
 
 /**
  * Exceptions handler que captura as exception de negócio para transformar a exception em
@@ -133,6 +127,7 @@ public class ErrorHandlerController {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Map<String, Object> handleException(Exception ex) {
         logger.debug("handling Exception.class");
+        ex.printStackTrace();
         
         return extract(ex, HttpStatus.BAD_REQUEST.value(), false, false);
     }    
