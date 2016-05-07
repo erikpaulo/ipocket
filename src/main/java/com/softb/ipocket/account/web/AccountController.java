@@ -75,7 +75,7 @@ public class AccountController extends AbstractRestController<Account, Integer> 
         List<Account> accounts = accountRepository.findAllByUser( getGroupId() );
 
         // translate the user investments into accounts to show its balances.
-        List<Account> investAccounts = accountService.createInvestmentAccounts(getGroupId());
+        List<Account> investAccounts = investmentService.getInvestmentsAsAccounts(getGroupId());
         accounts.addAll( accounts.size()-1, investAccounts );
 
         Iterator<Account> accs = accounts.iterator ();

@@ -1,9 +1,12 @@
 package com.softb.ipocket.investment.service;
 
+import com.softb.ipocket.account.model.Account;
+import com.softb.ipocket.account.model.AccountEntry;
 import com.softb.ipocket.general.model.utils.AppMaths;
 import com.softb.ipocket.investment.model.Index;
 import com.softb.ipocket.investment.model.Investment;
 import com.softb.ipocket.investment.model.InvestmentEntry;
+import com.softb.ipocket.investment.repository.InvestmentEntryRepository;
 import com.softb.ipocket.investment.repository.InvestmentRepository;
 import com.softb.ipocket.investment.web.resource.InvestmentFRDResource;
 import com.softb.ipocket.investment.web.resource.InvestmentSummaryResource;
@@ -24,6 +27,9 @@ public class InvestmentService {
 
     @Autowired
     private InvestmentRepository investmentRepository;
+
+    @Autowired
+    private InvestmentEntryRepository investmentEntryRepository;
 
     /**
      * Generate a summary of all user investments.
@@ -82,7 +88,7 @@ public class InvestmentService {
     private void calculateInvestmentBalance(Investment investment) {
         Double indexValue = 0.0;
         if (investment.getIndexUpdates() != null && investment.getIndexUpdates().size() > 0){
-            indexValue = getLastIndexUpdate( investment );
+            indexValue = investment.getLastIndex().getValue();
         }
 
         Double qtdQuotes = 0.0, amountInvested = 0.0;
@@ -123,7 +129,7 @@ public class InvestmentService {
 
         Double index = 0.0;
         if (investment.getIndexUpdates().size() > 0){
-            index = getLastIndexUpdate( investment );
+            index = investment.getLastIndex().getValue();
         }
 
         Double grossIncome = 0.0;
@@ -183,12 +189,78 @@ public class InvestmentService {
                                          qtdQuotes, index, indexIncome, investment.getIndexUpdates(), investment.getEntries(), amountUpdates);
     }
 
-    private Double getSignal(InvestmentEntry entry) {
-        return (entry.getType().equalsIgnoreCase( "B" ) ? 1.0 : -1.0);
+    /**
+     * Transform the user investments into user accounts;
+     * @param groupId
+     * @return
+     */
+    public List<Account> getInvestmentsAsAccounts(Integer groupId) {
+        List<Account> accounts = new ArrayList<>(  );
+        InvestmentSummaryResource investSummary = getSummary( groupId );
+
+        for (Map.Entry<String, InvestmentTypeResource> type: investSummary.getTypes().entrySet()) {
+            InvestmentTypeResource investType = type.getValue();
+
+            for (Investment investment: investType.getInvestments()) {
+                Account account = new Account( investment.getName(), Account.Type.INV, new ArrayList<AccountEntry>(  ),
+                        investment.getCreateDate(), true, groupId, 0.0, null, 0.0 );
+
+                for (InvestmentEntry entry: investment.getEntries()) {
+                    Double amount = entry.getQtdQuotes() * investment.getLastIndex().getValue() * getSignal( entry );
+                    account.getEntries().add( new AccountEntry( entry.getDate(), null, amount, false,
+                            investment.getId(), null, null, groupId, amount, null ));
+                }
+                accounts.add( account );
+            }
+        }
+
+        return accounts;
     }
 
-    private Double getLastIndexUpdate(Investment investment) {
-        return investment.getIndexUpdates().get( investment.getIndexUpdates().size()-1 ).getValue();
+    /**
+     * Gets all user investment entries. This entries will be returned with its amounts updated considering
+     * the last index inserted.
+     * @param start
+     * @param end
+     * @param groupId
+     * @return
+     */
+    public List<InvestmentEntry> getAllEntriesByPeriod(Date start, Date end, Integer groupId){
+        List<InvestmentEntry> entries = investmentEntryRepository.findAllByUserPeriod( start, end, groupId );
+
+        for (InvestmentEntry entry: entries) {
+            Investment invest = investmentRepository.findOne( entry.getInvestmentId(), groupId );
+            Double index = invest.getLastIndex().getValue();
+
+            entry.setAmount( entry.getQtdQuotes() * index * getSignal( entry ) );
+            entry.setIndexValue( index );
+        }
+
+        return entries;
+    }
+
+    /**
+     * Return the current investment balance until the date informed.
+     * @param date
+     * @param groupId
+     * @return
+     */
+    public Double getBalanceUntilDate(Date date, Integer groupId){
+        Calendar start = Calendar.getInstance();
+        start.set( 1900, 1, 1 );
+
+        List<InvestmentEntry> entries = getAllEntriesByPeriod(start.getTime(), new Date(), groupId );
+
+        Double balance = 0.0;
+        for (InvestmentEntry entry: entries) {
+            balance += entry.getAmount();
+        }
+
+        return balance;
+    }
+
+    private Double getSignal(InvestmentEntry entry) {
+        return (entry.getType().equalsIgnoreCase( "B" ) ? 1.0 : -1.0);
     }
 
     private Double getProgressiveTaxTable (){

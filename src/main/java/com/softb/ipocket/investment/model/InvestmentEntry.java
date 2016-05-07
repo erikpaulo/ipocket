@@ -30,6 +30,10 @@ public class InvestmentEntry extends BaseEntity<Integer> implements Serializable
     @Column(name = "INVESTMENT_ID")
     protected Integer investmentId;
 
+//    @ManyToOne(fetch = FetchType.EAGER)
+//    @JoinColumn(name = "INVESTMENT_ID", referencedColumnName = "ID")
+//    protected Investment investment;
+
     @Column(name = "DATE")
     @NotNull
     protected Date date;

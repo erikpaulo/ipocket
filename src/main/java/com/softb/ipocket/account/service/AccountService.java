@@ -4,10 +4,8 @@ import com.softb.ipocket.account.model.Account;
 import com.softb.ipocket.account.model.AccountEntry;
 import com.softb.ipocket.account.repository.AccountEntryRepository;
 import com.softb.ipocket.account.repository.AccountRepository;
-import com.softb.ipocket.investment.model.Investment;
+import com.softb.ipocket.investment.model.InvestmentEntry;
 import com.softb.ipocket.investment.service.InvestmentService;
-import com.softb.ipocket.investment.web.resource.InvestmentSummaryResource;
-import com.softb.ipocket.investment.web.resource.InvestmentTypeResource;
 import com.softb.system.security.service.UserAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -122,6 +120,25 @@ public class AccountService {
         return map;
     }
 
+    /**
+     * Gets all entries inserted by user, including his investments.
+     * @param start
+     * @param end
+     * @param groupId
+     * @return
+     */
+    public List<AccountEntry> getAllEntriesByPeriod(Date start, Date end, Integer groupId){
+        List<AccountEntry> accEntries = accountEntryRepository.listAllByUserPeriod( start, end, groupId );
+
+        List<InvestmentEntry> invEntries = investmentService.getAllEntriesByPeriod( start, end, groupId );
+        for (InvestmentEntry entry: invEntries) {
+            accEntries.add( new AccountEntry( entry.getDate(), null, entry.getAmount(), false, entry.getInvestmentId(),
+                                              null, null, groupId, entry.getAmount(), null) );
+        }
+
+        return accEntries;
+    }
+
     public Map<String, Double> getAverageSpent(Date start, Date end, Integer groupId, String groupBy){
         Map<String, Map<String, Double>> mapExecuted = this.getEntriesGroupedByCategory( start, end, groupId, AccountService.GROUP_ENTRIES_BY_MONTH );
         Calendar startCal = Calendar.getInstance();
@@ -132,7 +149,6 @@ public class AccountService {
 
         int diffYear = endCal.get(Calendar.YEAR) - startCal.get(Calendar.YEAR);
         int divisor = diffYear * 12 + endCal.get(Calendar.MONTH) - startCal.get(Calendar.MONTH);
-
 
         // Calculate the average based on the entries registered in the System.
         Map<String, Double> mapAverage = new HashMap<>(  );
@@ -150,30 +166,29 @@ public class AccountService {
         return mapAverage;
     }
 
+
     /**
-     * Transform the user investments into user accounts;
+     * Return the user balance, considering all his accounts, including his investments.
+     * @param date
      * @param groupId
      * @return
      */
-    public List<Account> createInvestmentAccounts(Integer groupId) {
-        List<Account> accounts = new ArrayList<>(  );
-        InvestmentSummaryResource investSummary = investmentService.getSummary( groupId );
+    public Double getBalanceUntilDate(Date date, Integer groupId) {
+        Double balance = accountEntryRepository.getBalanceByDate( new Date(), groupId );
+        balance += investmentService.getBalanceUntilDate( new Date(), groupId );
+        return balance;
+    }
 
-        for (Map.Entry<String, InvestmentTypeResource> type: investSummary.getTypes().entrySet()) {
-            InvestmentTypeResource investType = type.getValue();
 
-            for (Investment investment: investType.getInvestments()) {
-
-                Account account = new Account( investment.getName(), Account.Type.INV, new ArrayList<AccountEntry>(  ),
-                                               investment.getCreateDate(), true, groupId, 0.0, null, 0.0 );
-
-                    account.getEntries().add( new AccountEntry( null, null, investment.getAmountCurrent(), false,
-                                              investment.getId(), null, null, groupId, investment.getAmountCurrent(), null ));
-
-                accounts.add( account );
-            }
-        }
-
-        return accounts;
+    /**
+     * Return the amount of money saved by the current user between the two informed dates.
+     * @param start
+     * @param end
+     * @param groupId
+     * @return
+     */
+    public Double getSavingsByPeriod(Date start, Date end, Integer groupId) {
+        Double balance = accountEntryRepository.getBalanceByPeriod( start, end, groupId );
+        return balance;
     }
 }

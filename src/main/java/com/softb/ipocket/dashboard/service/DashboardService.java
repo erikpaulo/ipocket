@@ -1,9 +1,9 @@
 package com.softb.ipocket.dashboard.service;
 
-import com.softb.ipocket.account.model.Account;
 import com.softb.ipocket.account.model.AccountEntry;
 import com.softb.ipocket.account.repository.AccountEntryRepository;
 import com.softb.ipocket.account.repository.AccountRepository;
+import com.softb.ipocket.account.service.AccountService;
 import com.softb.ipocket.bill.model.Bill;
 import com.softb.ipocket.bill.repository.BillRepository;
 import com.softb.ipocket.budget.service.BudgetService;
@@ -12,6 +12,7 @@ import com.softb.ipocket.categorization.model.SubCategory;
 import com.softb.ipocket.dashboard.web.resource.BudgetTrackResource;
 import com.softb.ipocket.dashboard.web.resource.SavingResource;
 import com.softb.ipocket.dashboard.web.resource.SumarizedInfosResource;
+import com.softb.ipocket.investment.service.InvestmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,6 +34,12 @@ public class DashboardService {
     @Autowired
     private BudgetService budgetService;
 
+    @Autowired
+    private InvestmentService investmentService;
+
+    @Autowired
+    private AccountService accountService;
+
     public SavingResource getSavingInfo(Integer groupId) {
         List<Double> monthly = new ArrayList<Double>(  );
         for (int i=0;i<12;i++) monthly.add( 0.0 );
@@ -42,12 +49,13 @@ public class DashboardService {
         Calendar start = Calendar.getInstance();
         Calendar end = Calendar.getInstance();
         start.set( start.get( Calendar.YEAR), Calendar.JANUARY, 1,0,0,0 ); // first day of this year
-        end.set( end.get( Calendar.YEAR ), Calendar.DECEMBER, 31,0,0,0 ); // last day of the year
+        end.set( end.get( Calendar.YEAR ), Calendar.DECEMBER, 31,23,59,59 ); // last day of the year
 
-        List<AccountEntry> entries = accountEntryRepository.listAllByUserPeriod( start.getTime(), end.getTime(), groupId );
+//        List<AccountEntry> entries = accountEntryRepository.listAllByUserPeriod( start.getTime(), end.getTime(), groupId );
+        List<AccountEntry> entries = accountService.getAllEntriesByPeriod( start.getTime(), end.getTime(), groupId );
 
         for (AccountEntry entry: entries) {
-            monthly.set( getIndex( entry.getDate() ) , monthly.get( getIndex( entry.getDate() )) + entry.getAmount() );
+            monthly.set( getIndex( entry.getDate() ), monthly.get( getIndex( entry.getDate() )) + entry.getAmount() );
         }
 
         Double accBalance = 0.0;
@@ -90,13 +98,15 @@ public class DashboardService {
         Double fixedCostAverage = 0.0;
 
 
-        // Gets all accounts
-        List<Account> accounts = accountRepository.findAllByUser( groupId );
-        for (Account account: accounts) {
-            // Gets the amountCurrent of each account.
-            Double balance = accountEntryRepository.getBalanceByDateAccount( account.getId(), new Date(), groupId );
-            patrimony += ((balance != null ? balance : 0.0) + account.getStartBalance());
-        }
+//        // Gets all accounts
+//        List<Account> accounts = accountRepository.findAllByUser( groupId );
+//        for (Account account: accounts) {
+//            // Gets the amountCurrent of each account.
+//            Double balance = accountEntryRepository.getBalanceByDateAccount( account.getId(), new Date(), groupId );
+//            patrimony += ((balance != null ? balance : 0.0) + account.getStartBalance());
+//        }
+
+        patrimony = accountService.getBalanceUntilDate(new Date(), groupId);
 
         // Accumulated Last month
         Calendar lastMonthStart = Calendar.getInstance();
@@ -114,10 +124,11 @@ public class DashboardService {
         lastMonthEnd.set( Calendar.SECOND, 59 );
         lastMonthEnd.set( Calendar.MILLISECOND, 0 );
 
-        List<AccountEntry> entriesLastMonth = accountEntryRepository.listAllByUserPeriod( lastMonthStart.getTime(), lastMonthEnd.getTime(), groupId );
-        for (AccountEntry entry: entriesLastMonth) {
-            accumulatedLastMonth += entry.getAmount();
-        }
+//        List<AccountEntry> entriesLastMonth = accountEntryRepository.listAllByUserPeriod( lastMonthStart.getTime(), lastMonthEnd.getTime(), groupId );
+//        for (AccountEntry entry: entriesLastMonth) {
+//            accumulatedLastMonth += entry.getAmount();
+//        }
+        accumulatedLastMonth = accountService.getSavingsByPeriod( lastMonthStart.getTime(), lastMonthEnd.getTime(), groupId );
 
         // Average Fixed Cost
         Calendar averageStart = Calendar.getInstance();

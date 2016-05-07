@@ -23,6 +23,12 @@ public interface AccountEntryRepository extends JpaRepository<AccountEntry, Inte
     @Query("select sum(ae.amount) from AccountEntry ae where ae.groupId = :groupId and ae.date < :date and ae.accountId = :accountId")
     Double getBalanceByDateAccount(@Param("accountId") Integer accountId, @Param("date") Date date, @Param("groupId") Integer groupId) throws DataAccessException;
 
+    @Query("select sum(ae.amount) from AccountEntry ae where ae.groupId = :groupId and ae.date < :date")
+    Double getBalanceByDate(@Param("date") Date date, @Param("groupId") Integer groupId) throws DataAccessException;
+
+    @Query("select sum(ae.amount) from AccountEntry ae where ae.groupId = :groupId and ae.date between :start and :end")
+    Double getBalanceByPeriod(@Param("start") Date start, @Param("end") Date end, @Param("groupId") Integer groupId) throws DataAccessException;
+
     @Query("select ae from AccountEntry ae, Account a where ae.accountId = a.id and ae.groupId = :groupId and ae.date >= :dateStart and a.id = :accountId order by ae.date ASC")
     List<AccountEntry> listAllByUserDateAccount(@Param("accountId") Integer accountId, @Param("dateStart") Date dateStart, @Param("groupId") Integer groupId) throws DataAccessException;
 
