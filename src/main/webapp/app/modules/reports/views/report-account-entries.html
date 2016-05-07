@@ -92,8 +92,8 @@
             <md-divider></md-divider>
             <md-card-content layout="column" flex>
                 <div layout="column">
-                    <span class="md-display-1" ng-if="report.amountCurrent">{{report.amountCurrent | currency}}</span>
-                    <span class="md-display-1" ng-if="!report.amountCurrent">R$ 0,00</span>
+                    <span class="md-display-1" ng-if="report.balance">{{report.balance | currency}}</span>
+                    <span class="md-display-1" ng-if="!report.balance">R$ 0,00</span>
                     <span class="c-caption">Saldo do filtro.</span>
                 </div>
             </md-card-content>
