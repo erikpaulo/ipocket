@@ -187,8 +187,9 @@ public class AccountService {
      * @return
      */
     public Double getBalanceUntilDate(Date date, Integer groupId) {
-        Double balance = accountEntryRepository.getBalanceByDate( new Date(), groupId );
-        balance += investmentService.getBalanceUntilDate( new Date(), groupId );
+        Double accBalance = accountEntryRepository.getBalanceByDate( date, groupId );
+        Double balance = (accBalance != null ? accBalance : 0);
+        balance += investmentService.getBalanceUntilDate( date, groupId );
         return balance;
     }
 
