@@ -96,7 +96,13 @@ public class Investment extends BaseEntity<Integer> implements Serializable {
     }
 
     public Index getLastIndex(){
-        return this.indexUpdates.get( this.indexUpdates.size()-1 );
+        Index index = null;
+
+        if (this.indexUpdates != null && this.indexUpdates.size() > 0){
+            index = this.indexUpdates.get( this.indexUpdates.size()-1 );
+        }
+
+        return index;
     }
 
 }

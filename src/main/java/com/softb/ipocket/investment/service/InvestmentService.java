@@ -251,7 +251,7 @@ public class InvestmentService {
         Calendar start = Calendar.getInstance();
         start.set( 1900, 1, 1 );
 
-        List<InvestmentEntry> entries = getAllEntriesByPeriod(start.getTime(), new Date(), groupId );
+        List<InvestmentEntry> entries = getAllEntriesByPeriod(start.getTime(), date, groupId );
 
         Double balance = 0.0;
         for (InvestmentEntry entry: entries) {

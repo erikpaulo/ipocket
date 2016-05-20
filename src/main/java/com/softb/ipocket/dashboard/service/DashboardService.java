@@ -51,14 +51,13 @@ public class DashboardService {
         start.set( start.get( Calendar.YEAR), Calendar.JANUARY, 1,0,0,0 ); // first day of this year
         end.set( end.get( Calendar.YEAR ), Calendar.DECEMBER, 31,23,59,59 ); // last day of the year
 
-//        List<AccountEntry> entries = accountEntryRepository.listAllByUserPeriod( start.getTime(), end.getTime(), groupId );
         List<AccountEntry> entries = accountService.getAllEntriesByPeriod( start.getTime(), end.getTime(), groupId );
 
         for (AccountEntry entry: entries) {
             monthly.set( getIndex( entry.getDate() ), monthly.get( getIndex( entry.getDate() )) + entry.getAmount() );
         }
 
-        Double accBalance = 0.0;
+        Double accBalance = accountService.getBalanceUntilDate( start.getTime(), groupId );
         for (int i=0;i<12;i++) {
             accBalance += monthly.get( i );
             accumulated.set( i, accBalance );

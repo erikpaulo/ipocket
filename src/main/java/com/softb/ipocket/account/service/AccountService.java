@@ -71,7 +71,8 @@ public class AccountService {
         DateFormat formatter = (groupBy.compareToIgnoreCase( GROUP_ENTRIES_BY_MONTH ) == 0 ? new SimpleDateFormat( "MM/yyyy" ) : new SimpleDateFormat( "dd/MM/yyyy" ));
 
         // Gets all account entries inserted this year.
-        List<AccountEntry> entries = accountEntryRepository.listAllByUserPeriod( start, end, groupId );
+//        List<AccountEntry> entries = accountEntryRepository.listAllByUserPeriod( start, end, groupId );
+        List<AccountEntry> entries = getAllEntriesByPeriod( start, end, groupId );
 
         // Group all account entries by its subcategories
         Map<String, Map<String, Double>> map = new HashMap<>(  );
