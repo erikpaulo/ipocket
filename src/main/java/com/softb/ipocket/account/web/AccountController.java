@@ -45,7 +45,7 @@ public class AccountController extends AbstractRestController<Account, Integer> 
     @RequestMapping(method = RequestMethod.GET)
     public List<Account> listAll() {
         List<Account> accounts = accountRepository.findAllByUser( getGroupId() );
-        for (Account account: accounts.subList( 0, accounts.size()-1 )) {
+        for (Account account: accounts.subList( 0, (accounts.size() > 0 ? accounts.size()-1 : 0) )) {
             account.setEntries( null );
         }
 
@@ -76,7 +76,7 @@ public class AccountController extends AbstractRestController<Account, Integer> 
 
         // translate the user investments into accounts to show its balances.
         List<Account> investAccounts = investmentService.getInvestmentsAsAccounts(getGroupId());
-        accounts.addAll( accounts.size()-1, investAccounts );
+        accounts.addAll( (accounts.size() > 0 ? accounts.size()-1 : 0), investAccounts );
 
         Iterator<Account> accs = accounts.iterator ();
         while (accs.hasNext ()){
