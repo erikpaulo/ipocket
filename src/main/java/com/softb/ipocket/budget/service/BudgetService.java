@@ -129,6 +129,16 @@ public class BudgetService {
         // Get all categories, grouped by its types
         List<CategoryGroupResource> groups = categoryController.listAllCategories();
 
+        // Filter the groups of categories removing investments
+        int index = 0;
+        for (CategoryGroupResource group: groups) {
+            if (group.getId().equals( Category.Type.INV )){
+                break;
+            }
+            index++;
+        }
+        groups.remove( index );
+
         // Create budget
         BudgetNodeRoot nodeBudget = new BudgetNodeRoot(today.get( Calendar.YEAR ), true);
         nodeBudget.setName( "Budget - "+ nodeBudget.getYear() );
