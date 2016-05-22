@@ -11,3 +11,6 @@ copy ACCOUNT_ENTRY from '/Users/eriklacerda/Projects/ipocket/heroku-db/ACCOUNT_E
 copy BILL from '/Users/eriklacerda/Projects/ipocket/heroku-db/BILL.csv' WITH (DELIMITER ',', NULL '');
 copy BUDGET from '/Users/eriklacerda/Projects/ipocket/heroku-db/BUDGET.csv' WITH (DELIMITER ',', NULL '');
 copy BUDGET_ENTRY from '/Users/eriklacerda/Projects/ipocket/heroku-db/BUDGET_ENTRY.csv' WITH (DELIMITER ',', NULL '');
+copy INVESTMENT from '/Users/eriklacerda/Projects/ipocket/heroku-db/INVESTMENT.csv' WITH (DELIMITER ',', NULL '');
+copy INVESTMENT_ENTRY from '/Users/eriklacerda/Projects/ipocket/heroku-db/INVESTMENT_ENTRY.csv' WITH (DELIMITER ',', NULL '');
+copy INDEX from '/Users/eriklacerda/Projects/ipocket/heroku-db/INDEX.csv' WITH (DELIMITER ',', NULL '');
