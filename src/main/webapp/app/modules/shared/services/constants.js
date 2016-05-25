@@ -53,7 +53,10 @@ define(['./module'], function (app) {
                         name: 'Fundo Multimercado'
                     }
 	            }
-	        }
+	        },
+	        MONTHS: [
+	            "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
+	        ]
 	    }
 	});
 });

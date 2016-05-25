@@ -90,6 +90,33 @@
     ]
   },
   {
+    "id": "budget2",
+    "name":"Planejamento2",
+    "icon": "local_library",
+    "originalPath": "/budget2",
+    "templateUrl": "modules/budget/views/budget2-view.html",
+    "dependencies": ["modules/budget/controllers/budget2-view-controller"],
+    "hasSubMenu": true,
+    "items" : [
+      {
+        "id": "budget2Edit",
+        "name":"",
+        "originalPath": "/budget2/edit/:budgetId",
+        "templateUrl": "modules/budget/views/budget2-edit.html",
+        "visible": false,
+        "dependencies": ["modules/budget/controllers/budget2-edit-controller"]
+      },
+      {
+        "id": "budgetNew",
+        "name":"",
+        "originalPath": "/budget2/new",
+        "templateUrl": "modules/budget/views/budget2-edit.html",
+        "visible": false,
+        "dependencies": ["modules/budget/controllers/budget2-edit-controller"]
+      }
+    ]
+  },
+  {
     "id": "categorization",
     "name": "Categorização",
     "icon": "list",

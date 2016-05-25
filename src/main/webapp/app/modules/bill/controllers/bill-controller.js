@@ -275,6 +275,27 @@ define(['./module'
             $scope.selectedBills = $filter('orderBy')($scope.selectedBills, 'date', false);
             $scope.label = $filter('date')(new Date($scope.currentMonth+'/01'), 'MMMM/yyyy')
         }
+
+        $scope.income = 0.0;
+        $scope.expenses = 0.0;
+        $scope.accTotal = {
+            CKA: 0.0,
+            CCA: 0.0,
+            others: 0.0
+        }
+        angular.forEach($scope.selectedBills, function(bill){
+            if (bill.amount < 0) {
+                $scope.expenses += (bill.amount*-1);
+            } else {
+                $scope.income += bill.amount;
+            }
+
+            if ($scope.accTotal[bill.accountTo.type] != undefined) {
+                $scope.accTotal[bill.accountTo.type] += bill.amount;
+            } else {
+                $scope.accTotal.others += bill.amount;
+            }
+        });
     }
 
 

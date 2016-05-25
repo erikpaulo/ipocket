@@ -52,7 +52,7 @@ define(['./module',
                 }
 
                 $scope.edit = function(id){
-                    $location.path('/budget/edit' +'/'+ id );
+                    $location.path('/budget2/edit' +'/'+ id );
                 }
 
                 function updateChart(){

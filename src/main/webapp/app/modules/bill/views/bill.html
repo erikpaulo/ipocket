@@ -1,6 +1,58 @@
 <section ng-controller="BillController">
-    <div layout="row" layout-align="center top" layout-padding>
+    <div layout="row" layout-align="center top">
         <div layout="column" flex="65">
+            <md-card layout style="max-height: 100px;min-height: 100px;">
+                <div layout="column">
+                    <md-toolbar layout flex="100" layout-align="center center">
+                        <div class="md-toolbar-tools">
+                            <div class="c-vertical-title">
+                                <span class="">Infos</span>
+                            </div>
+                        </div>
+                    </md-toolbar>
+                </div>
+                <md-card-content layout="column" flex>
+                    <div layout="row">
+                        <div layout="column" flex="25">
+                            <div layout="row" class="c-padding-5">
+                                <div layout="column" flex="50" layout-align="center start">Entradas</div>
+                                <div layout="column" flex="50" layout-align="center start">{{income | currency}}</div>
+                            </div>
+                            <md-divider></md-divider>
+                            <div layout="row" class="c-padding-5">
+                                <div layout="column" flex="50" layout-align="center start">Despesas</div>
+                                <div layout="column" flex="50" layout-align="center start">{{expenses | currency}}</div>
+                            </div>
+                        </div>
+                        <div layout="column" flex="5"></div>
+                        <md-divider></md-divider>
+                        <div layout="column" flex="70">
+                            <div layout="row">
+                                <div layout="column" flex="33">
+                                    <div layout="row" layout-align="center center" class="table-head">Conta Corrente</div>
+                                    <md-divider></md-divider>
+                                    <div layout="row" layout-align="center center" class="md-padding">{{accTotal.CKA | currency}}</div>
+                                </div>
+                                <md-divider></md-divider>
+                                <div layout="column" flex="33">
+                                    <div layout="row" layout-align="center center" class="table-head">Cartão de Crédito</div>
+                                    <md-divider></md-divider>
+                                    <div layout="row" layout-align="center center" class="md-padding">{{accTotal.CCA | currency}}</div>
+                                </div>
+                                <md-divider></md-divider>
+                                <div layout="column" flex="33">
+                                    <div layout="row" layout-align="center center" class="table-head">Outros</div>
+                                    <md-divider></md-divider>
+                                    <div layout="row" layout-align="center center" class="md-padding">{{accTotal.others | currency}}</div>
+                                </div>
+                                <md-divider></md-divider>
+                            </div>
+                            <md-divider></md-divider>
+                        </div>
+                    </div>
+                </md-card-content>
+            </md-card>
+
             <md-card>
                 <md-card-header class="md-title" style="min-height: 20px;">
                     <span>Lançamentos de {{label}}</span>
@@ -127,7 +179,7 @@
                 </md-card-content>
             </md-card>
         </div>
-        <div layout="column" flex>
+        <div layout="column" flex style="padding: 0px 5px 0px 5px;">
             <calendar-md flex layout
                          on-day-click="dayClick"
                          title-format="'MMMM y'"

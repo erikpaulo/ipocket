@@ -1,0 +1,52 @@
+<section ng-controller="Budget2EditController">
+    <div layout="column" flex="100">
+        <md-card>
+            <md-card-header>
+                <spam>Planejamento 2016</spam>
+            </md-card-header>
+            <md-card-content style="height: 433px; overflow: auto;" layout>
+
+                <div layout="column" flex="20">
+                    <div layout="row">
+                        Categoria
+                    </div>
+                    <div ng-repeat="group in budget.data">
+                        <div ng-repeat="category in group.data">
+                            <div layout="row" ng-repeat="subcategory in category.data">
+                                <div layout="column" layout-align="center start">
+                                    {{subcategory.name}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div layout="column" flex="10">
+                    <div layout="row">
+                        Conta
+                    </div>
+                    <div ng-repeat="group in budget.data">
+                        <div ng-repeat="category in group.data">
+                            <div layout="row" ng-repeat="subcategory in category.data">
+                                <div layout="column" layout-align="center start">
+                                    Conta
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div layout="column" flex="60">
+                    <div layout="row">
+                        <div layout="column" ng-repeat="month in months" flex="10" layout-align="center end">
+                            {{month}}
+                        </div>
+                    </div>
+                </div>
+            </md-card-content>
+            <md-divider></md-divider>
+            <md-dialog-actions layout="row" layout-align="end center" class="mdl-color--blue-grey-50">
+                <md-button class="md-warn" ng-click="delete()">Remover</md-button>
+                <md-button class="md-primary" type="submit" ng-disabled="myForm.$invalid" ng-click="save()">Gravar</md-button>
+            </md-dialog-actions>
+        </md-card>
+    </div>
+</section>
