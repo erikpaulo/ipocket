@@ -1,0 +1,86 @@
+<section ng-controller="ReportBudgetSyntheticController">
+    <md-card>
+        <md-card-content>
+            <!--Header-->
+            <div layout="row">
+                <div layout="column" flex="30"></div>
+                <div layout="column" flex="60">
+                    <div layout="row" layout-align="center center" class="table-head">
+                        <div layout="column" flex="5" class="c-hover">
+                            <span ng-show="semester>1" ng-click="setSemester(semester-1)"><<</span></div>
+                        <div layout="column" flex layout-align="center center">Semestre {{semester | number:0}} de {{budget.year}}</div>
+                        <div layout="column" flex="5" layout-align="center end" class="c-hover">
+                            <span ng-show="semester==1" ng-click="setSemester(semester+1)">>></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div layout="row">
+                <div layout="column" flex="30" class="table-head">
+                    <span>Categoria</span>
+                </div>
+
+                <div layout="column"
+                     ng-repeat="month in months"
+                     layout-align="center center"
+                     class="table-head"
+                     flex="10">{{month}}</div>
+
+                <div layout="column" class="table-head" flex="10" layout-align="center center">Total</div>
+            </div>
+
+            <!--Body-->
+            <div layout="row">
+                <div layout="column" flex="100" style="overflow:auto">
+
+                    <!--Lines-->
+                    <div ng-repeat="group in budget.data" layout-align="start start">
+                        <div ng-repeat="category in group.data">
+                            <div layout="row" class="mdl-color--blue-grey-50">
+                                <md-divider></md-divider>
+                                <div layout="column" flex="20" layout-align="center start" class="md-title c-padding-5" class="table-row">
+                                    {{category.name}}
+                                </div>
+                                <div layout="column" flex="10" layout-align="center end" class="c-padding-5" class="table-row">
+                                    <div layout="row" layout-align="center center">Planejado</div>
+                                    <div layout="row" layout-align="center center">Realizado</div>
+                                </div>
+                                <div layout="column" flex="10" ng-repeat="t in months" layout-align="center center" class="table-row">
+                                    <div layout="row" layout-align="center center">{{category.perMonthPlanned[$index+(6*(semester-1))] | currency}}</div>
+                                    <div layout="row" layout-align="center center">{{category.perMonthSpent[$index+(6*(semester-1))] | currency}}</div>
+                                </div>
+                                <md-divider></md-divider>
+                                <div layout="column" flex="10" class="table-row" layout-align="center center">
+                                    <div layout="row" layout-align="center center"><strong>{{category.totalPlanned | currency}}</strong></div>
+                                    <div layout="row" layout-align="center center"><strong>{{category.totalSpent | currency}}</strong></div>
+                                </div>
+                                <md-divider></md-divider>
+                            </div>
+                            <div layout="row" ng-repeat="subcategory in category.data">
+                                <md-divider></md-divider>
+                                <div layout="column" flex="20" layout-align="center start" class="table-row">
+                                    {{subcategory.name}}
+                                </div>
+                                <div layout="column" flex="10" layout-align="center end" class="c-padding-5" class="table-row">
+                                    <div layout="row" layout-align="center center">Planejado</div>
+                                    <div layout="row" layout-align="center center">Realizado</div>
+                                </div>
+                                <div layout="column" flex="10" ng-repeat="sc in months" layout-align="center center" class="table-row">
+                                    <div layout="row" layout-align="center center">{{subcategory.perMonthPlanned[$index+(6*(semester-1))] | currency}}</div>
+                                    <div layout="row" layout-align="center center">{{subcategory.perMonthSpent[$index+(6*(semester-1))] | currency}}</div>
+                                </div>
+                                <md-divider></md-divider>
+                                <div layout="column" flex="10" class="table-row" layout-align="center center">
+                                    <div layout="row" layout-align="center center"><strong>{{subcategory.totalPlanned | currency}}</strong></div>
+                                    <div layout="row" layout-align="center center"><strong>{{subcategory.totalSpent | currency}}</strong></div>
+                                </div>
+                                <md-divider></md-divider>
+                            </div>
+                            <md-divider></md-divider>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </md-card-content>
+    </md-card>
+</section>

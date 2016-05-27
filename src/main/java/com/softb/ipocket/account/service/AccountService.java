@@ -15,7 +15,10 @@ import org.springframework.stereotype.Service;
 import javax.inject.Inject;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by eriklacerda on 3/1/16.
@@ -135,7 +138,7 @@ public class AccountService {
 
         List<AccountEntry> accEntries = accountEntryRepository.listAllByUserPeriod( start, end, groupId );
 
-        List<InvestmentEntry> invEntries = investmentService.getAllEntriesByPeriod( start, end, groupId );
+        List<InvestmentEntry> invEntries = investmentService.getAllOriginalEntriesByPeriod( start, end, groupId );
         for (InvestmentEntry entry: invEntries) {
             if (mapAccounts.get( entry.getInvestmentId()) == null ) {
                 Investment investment = investmentService.getInvestment( entry.getInvestmentId(), groupId );
@@ -153,32 +156,32 @@ public class AccountService {
         return accEntries;
     }
 
-    public Map<String, Double> getAverageSpent(Date start, Date end, Integer groupId, String groupBy){
-        Map<String, Map<String, Double>> mapExecuted = this.getEntriesGroupedByCategory( start, end, groupId, AccountService.GROUP_ENTRIES_BY_MONTH );
-        Calendar startCal = Calendar.getInstance();
-        Calendar endCal = Calendar.getInstance();
-        startCal.setTime( start );
-        endCal.setTime( end );
-
-
-        int diffYear = endCal.get(Calendar.YEAR) - startCal.get(Calendar.YEAR);
-        int divisor = diffYear * 12 + endCal.get(Calendar.MONTH) - startCal.get(Calendar.MONTH);
-
-        // Calculate the average based on the entries registered in the System.
-        Map<String, Double> mapAverage = new HashMap<>(  );
-        for (Map.Entry<String, Map<String, Double>> entryL1: mapExecuted.entrySet()) {
-            Map<String, Double> monthEntry = entryL1.getValue();
-            Double average = 0.0;
-
-            for (Map.Entry<String, Double> entryL2: monthEntry.entrySet()) {
-                average += entryL2.getValue();
-            }
-            average = average / divisor;
-            mapAverage.put( entryL1.getKey(), average );
-        }
-
-        return mapAverage;
-    }
+//    public Map<String, Double> getAverageSpent(Date start, Date end, Integer groupId, String groupBy){
+//        Map<String, Map<String, Double>> mapExecuted = this.getEntriesGroupedByCategory( start, end, groupId, AccountService.GROUP_ENTRIES_BY_MONTH );
+//        Calendar startCal = Calendar.getInstance();
+//        Calendar endCal = Calendar.getInstance();
+//        startCal.setTime( start );
+//        endCal.setTime( end );
+//
+//
+//        int diffYear = endCal.get(Calendar.YEAR) - startCal.get(Calendar.YEAR);
+//        int divisor = diffYear * 12 + endCal.get(Calendar.MONTH) - startCal.get(Calendar.MONTH);
+//
+//        // Calculate the average based on the entries registered in the System.
+//        Map<String, Double> mapAverage = new HashMap<>(  );
+//        for (Map.Entry<String, Map<String, Double>> entryL1: mapExecuted.entrySet()) {
+//            Map<String, Double> monthEntry = entryL1.getValue();
+//            Double average = 0.0;
+//
+//            for (Map.Entry<String, Double> entryL2: monthEntry.entrySet()) {
+//                average += entryL2.getValue();
+//            }
+//            average = average / divisor;
+//            mapAverage.put( entryL1.getKey(), average );
+//        }
+//
+//        return mapAverage;
+//    }
 
 
     /**

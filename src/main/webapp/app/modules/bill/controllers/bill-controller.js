@@ -18,6 +18,11 @@ define(['./module'
                         templateUrl: 'modules/bill/views/bills-projection-template.html',
                         controller: 'ChartBottomSheetCtrl'
                     });
+               }},
+               {icon: 'archive', tooltip: 'Gravar Baseline', onClick: function() {
+                   Bill.saveBaseline(function(){
+                        addSuccess($scope);
+                   });
                }}
             ]);
 

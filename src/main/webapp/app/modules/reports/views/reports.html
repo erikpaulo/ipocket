@@ -1,5 +1,5 @@
 <div ng-controller="ReportsController" layout="row" class="md-padding">
-    <div layout="column" flex="35">
+    <div layout="column" flex="33">
         <md-card class="mdl-color--indigo-600 card-hover report-card" ng-click="open('accountEntries')">
             <md-card-header>
                 <md-card-title>
@@ -10,6 +10,23 @@
                     <md-card-title-media>
                         <div class="md-media-md card-media" layout layout-align="center center">
                             <md-icon class="md-48 material-icons">account_balance</md-icon>
+                        </div>
+                    </md-card-title-media>
+                </md-card-title>
+            </md-card-header>
+        </md-card>
+    </div>
+    <div layout="column" flex="33">
+        <md-card class="mdl-color--green-600 card-hover report-card" ng-click="open('budgetSynthetic')">
+            <md-card-header>
+                <md-card-title>
+                    <md-card-title-text>
+                        <span class="md-headline">Acompanhamento de Planejamento</span>
+                        <span class="md-subhead">Apresenta os lançamentos realizados comparando-os com o plano original.</span>
+                    </md-card-title-text>
+                    <md-card-title-media>
+                        <div class="md-media-md card-media" layout layout-align="center center">
+                            <md-icon class="md-48 material-icons">local_library</md-icon>
                         </div>
                     </md-card-title-media>
                 </md-card-title>

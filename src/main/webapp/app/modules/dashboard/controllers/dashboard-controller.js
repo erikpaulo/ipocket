@@ -5,7 +5,7 @@ define(['app',
 	    $rootScope.appContext.contextPage = 'Dashboard';
         $scope.appContext.contextMenu.actions = [];
 
-        $scope.dashboard = {};
+        $scope.dashboard = null;
 
         Dashboard.get(function(dashboard){
             $scope.dashboard = dashboard;
@@ -31,7 +31,7 @@ define(['app',
         });
 
         $scope.goToBudget = function(){
-            $location.path('/budget');
+            $location.path('/bills');
         }
 
         $scope.savingChartConfig = {

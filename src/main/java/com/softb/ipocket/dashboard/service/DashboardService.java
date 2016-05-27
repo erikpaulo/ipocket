@@ -6,8 +6,8 @@ import com.softb.ipocket.account.repository.AccountRepository;
 import com.softb.ipocket.account.service.AccountService;
 import com.softb.ipocket.bill.model.Bill;
 import com.softb.ipocket.bill.repository.BillRepository;
-import com.softb.ipocket.budget.service.BudgetService;
-import com.softb.ipocket.budget.web.resource.BudgetNodeRoot;
+import com.softb.ipocket.bill.service.BillService;
+import com.softb.ipocket.bill.web.resource.BudgetNodeRoot;
 import com.softb.ipocket.categorization.model.SubCategory;
 import com.softb.ipocket.dashboard.web.resource.BudgetTrackResource;
 import com.softb.ipocket.dashboard.web.resource.SavingResource;
@@ -32,7 +32,7 @@ public class DashboardService {
     private BillRepository billRepository;
 
     @Autowired
-    private BudgetService budgetService;
+    private BillService billService;
 
     @Autowired
     private InvestmentService investmentService;
@@ -129,6 +129,9 @@ public class DashboardService {
 //            accumulatedLastMonth += entry.getAmount();
 //        }
         accumulatedLastMonth = accountService.getSavingsByPeriod( lastMonthStart.getTime(), lastMonthEnd.getTime(), groupId );
+        if (accumulatedLastMonth == null){
+            accumulatedLastMonth = 0.0;
+        }
 
         // Average Fixed Cost
         Calendar averageStart = Calendar.getInstance();
@@ -151,7 +154,8 @@ public class DashboardService {
     }
 
     public BudgetTrackResource getBudgetTrackInfo(Integer groupId){
-        BudgetNodeRoot budget = budgetService.loadCurrentActiveBudget( groupId );
+//        BudgetNodeRoot budget = budgetService.loadCurrentActiveBudget( groupId );
+        BudgetNodeRoot budget = billService.genBudget( groupId );
 
         Double totalPlanned = null;
         Double totalSpent = null;

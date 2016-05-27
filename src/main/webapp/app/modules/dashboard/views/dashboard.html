@@ -10,9 +10,9 @@
                 <md-divider></md-divider>
                 <md-card-content layout="column" flex>
                     <div layout layout-align="center center" flex>
-                        <md-progress-circular class="md-hue-2" ng-show="!dashboard.sumarized.patrimony" md-diameter="40"></md-progress-circular>
+                        <md-progress-circular class="md-hue-2" ng-show="!dashboard" md-diameter="40"></md-progress-circular>
                     </div>
-                    <div ng-show="dashboard.sumarized.patrimony" layout="column">
+                    <div ng-show="dashboard" layout="column">
                         <span class="md-display-1">{{dashboard.sumarized.patrimony | currency}}</span>
                         <span style="color: #7A7A7A;">Patrimônio</span>
                     </div>
@@ -28,9 +28,9 @@
                 <md-divider></md-divider>
                 <md-card-content layout="column" flex>
                     <div layout layout-align="center center" flex>
-                        <md-progress-circular class="md-hue-2" ng-show="!dashboard.sumarized.accumulatedLastMonth" md-diameter="40"></md-progress-circular>
+                        <md-progress-circular class="md-hue-2" ng-show="!dashboard" md-diameter="40"></md-progress-circular>
                     </div>
-                    <div ng-show="dashboard.sumarized.accumulatedLastMonth" layout="column">
+                    <div ng-show="dashboard" layout="column">
                         <span class="md-display-1">{{dashboard.sumarized.accumulatedLastMonth | currency}}</span>
                         <span style="color: #7A7A7A;">Acumulado ultimo mês</span>
                     </div>
@@ -46,9 +46,9 @@
                 <md-divider></md-divider>
                 <md-card-content layout="column" flex>
                     <div layout layout-align="center center" flex>
-                        <md-progress-circular class="md-hue-2" ng-show="!dashboard.sumarized.fixedCostAverage" md-diameter="40"></md-progress-circular>
+                        <md-progress-circular class="md-hue-2" ng-show="!dashboard" md-diameter="40"></md-progress-circular>
                     </div>
-                    <div ng-show="dashboard.sumarized.fixedCostAverage" layout="column">
+                    <div ng-show="dashboard" layout="column">
                         <span class="md-display-1">{{dashboard.sumarized.fixedCostAverage * -1 | currency}}</span>
                         <span style="color: #7A7A7A;">Custo fixo médio</span>
                     </div>
@@ -57,13 +57,13 @@
             <md-card class="">
                 <md-card-content layout style="min-height: 236px;">
                     <div layout layout-align="center center" flex>
-                        <md-progress-circular class="md-hue-2" ng-show="!dashboard.sumarized.fixedCostAverage" md-diameter="40"></md-progress-circular>
+                        <md-progress-circular class="md-hue-2" ng-show="!dashboard.sumarized" md-diameter="40"></md-progress-circular>
                     </div>
-                    <div ng-if="dashboard.budgetTrack.currentSaving">
+                    <div ng-if="dashboard.budgetTrack.expectedSaving">
                         <highchart id="savingPlanEvaluation" config="savingPlanChartConfig"></highchart>
                         <span style="color: #7A7A7A;">Economia Acumulada: {{dashboard.budgetTrack.currentSaving | currency}}</span>
                     </div>
-                    <div layout="column" flex="100" layout-align="center center" ng-if="!dashboard.budgetTrack.currentSaving && dashboard.budgetTrack">
+                    <div layout="column" flex="100" layout-align="center center" ng-if="!dashboard.budgetTrack.expectedSaving && dashboard.budgetTrack">
                         <md-icon class="material-icons md-48">local_library</md-icon>
                         <span class="c-caption">Planeje suas entradas e despesas.</span>
                         <md-button class="md-primary" ng-click="goToBudget()">Planejar</md-button>

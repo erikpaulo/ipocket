@@ -6,6 +6,7 @@ import com.softb.ipocket.account.web.AccountController;
 import com.softb.ipocket.bill.model.Bill;
 import com.softb.ipocket.bill.repository.BillRepository;
 import com.softb.ipocket.bill.service.BillService;
+import com.softb.ipocket.bill.web.resource.BudgetNodeRoot;
 import com.softb.ipocket.bill.web.resource.CashFlowProjectionResource;
 import com.softb.ipocket.categorization.model.SubCategory;
 import com.softb.ipocket.categorization.repository.SubCategoryRepository;
@@ -136,6 +137,16 @@ public class BillController extends AbstractRestController<Bill, Integer> {
 
         return billService.genCachFlowProjection( start.getTime() , end.getTime(), BillService.CASHFLOW_GROUP_DAY,
                                                   accounts, bills);
+    }
+
+    @RequestMapping(value = "/saveBaseline", method = RequestMethod.GET)
+    public void saveBaseline() {
+        billService.saveBaseline( getGroupId() );
+    }
+
+    @RequestMapping(value = "/budget", method = RequestMethod.GET)
+    public BudgetNodeRoot genBudget() {
+        return billService.genBudget( getGroupId() );
     }
 }
 

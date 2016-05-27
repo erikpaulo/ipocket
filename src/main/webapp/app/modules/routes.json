@@ -30,7 +30,7 @@
   {
     "id": "investment",
     "name":"Investimentos",
-    "icon": "account_balance",
+    "icon": "trending_up",
     "originalPath": "/investment",
     "templateUrl": "modules/investment/views/investment.html",
     "dependencies": ["modules/investment/controllers/investment-controller",
@@ -56,76 +56,11 @@
   },
   {
     "id": "bills",
-    "name":"Pagamentos",
+    "name":"Planejamento",
     "icon": "today",
     "originalPath": "/bills",
     "templateUrl": "modules/bill/views/bill.html",
     "dependencies": ["modules/bill/controllers/bill-controller"]
-  },
-  {
-    "id": "budget",
-    "name":"Planejamento",
-    "icon": "local_library",
-    "originalPath": "/budget",
-    "templateUrl": "modules/budget/views/budget-view.html",
-    "dependencies": ["modules/budget/controllers/budget-view-controller"],
-    "hasSubMenu": true,
-    "items" : [
-      {
-        "id": "budgetEdit",
-        "name":"",
-        "originalPath": "/budget/edit/:budgetId",
-        "templateUrl": "modules/budget/views/budget-edit.html",
-        "visible": false,
-        "dependencies": ["modules/budget/controllers/budget-edit-controller"]
-      },
-      {
-        "id": "budgetNew",
-        "name":"",
-        "originalPath": "/budget/new",
-        "templateUrl": "modules/budget/views/budget-edit.html",
-        "visible": false,
-        "dependencies": ["modules/budget/controllers/budget-edit-controller"]
-      }
-    ]
-  },
-  {
-    "id": "budget2",
-    "name":"Planejamento2",
-    "icon": "local_library",
-    "originalPath": "/budget2",
-    "templateUrl": "modules/budget/views/budget2-view.html",
-    "dependencies": ["modules/budget/controllers/budget2-view-controller"],
-    "hasSubMenu": true,
-    "items" : [
-      {
-        "id": "budget2Edit",
-        "name":"",
-        "originalPath": "/budget2/edit/:budgetId",
-        "templateUrl": "modules/budget/views/budget2-edit.html",
-        "visible": false,
-        "dependencies": ["modules/budget/controllers/budget2-edit-controller"]
-      },
-      {
-        "id": "budgetNew",
-        "name":"",
-        "originalPath": "/budget2/new",
-        "templateUrl": "modules/budget/views/budget2-edit.html",
-        "visible": false,
-        "dependencies": ["modules/budget/controllers/budget2-edit-controller"]
-      }
-    ]
-  },
-  {
-    "id": "categorization",
-    "name": "Categorização",
-    "icon": "list",
-    "originalPath": "/configuration",
-    "templateUrl": "modules/categorization/views/categorization.html",
-    "dependencies": [
-      "modules/categorization/controllers/categorization-controller"
-    ],
-    "hasSubMenu": false
   },
   {
     "id": "reports",
@@ -145,7 +80,27 @@
         "templateUrl": "modules/reports/views/report-account-entries.html",
         "visible": false,
         "dependencies": ["modules/reports/controllers/report-account-entries-controller"]
+      },
+      {
+        "id": "budgetSynthetic",
+        "name":"",
+        "originalPath": "/reports/budgetSynthetic",
+        "templateUrl": "modules/reports/views/report-budget-synthetic.html",
+        "visible": false,
+        "dependencies": ["modules/reports/controllers/report-budget-synthetic-controller",
+                        "modules/shared/services/constants"]
       }
     ]
+  },
+  {
+    "id": "categorization",
+    "name": "Categorização",
+    "icon": "list",
+    "originalPath": "/configuration",
+    "templateUrl": "modules/categorization/views/categorization.html",
+    "dependencies": [
+      "modules/categorization/controllers/categorization-controller"
+    ],
+    "hasSubMenu": false
   }
 ]

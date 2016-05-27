@@ -9,7 +9,9 @@ function (module) {
 	            listAll:	  { method : 'GET',  params: {}, isArray : true  },
 	            new:		  { method : 'POST', params: {}, isArray : false },
 	            save:		  { method : 'PUT',  params: {}, isArray : false },
-	            listCashFlow: { method : 'GET',  params: {action: 'cashFlow'}, isArray : false }
+	            listCashFlow: { method : 'GET',  params: {action: 'cashFlow'}, isArray : false },
+	            saveBaseline: { method : 'GET',  params: {action: 'saveBaseline'}, isArray : false },
+	            budget:       { method : 'GET',  params: {action: 'budget'}, isArray : false }
 	        }
 	    );
 

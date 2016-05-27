@@ -245,6 +245,19 @@ public class InvestmentService {
     }
 
     /**
+     * Gets all user investment entries.
+     * @param start
+     * @param end
+     * @param groupId
+     * @return
+     */
+    public List<InvestmentEntry> getAllOriginalEntriesByPeriod(Date start, Date end, Integer groupId){
+        List<InvestmentEntry> entries = investmentEntryRepository.findAllByUserPeriod( start, end, groupId );
+
+        return entries;
+    }
+
+    /**
      * Return the current investment balance until the date informed.
      * @param date
      * @param groupId
