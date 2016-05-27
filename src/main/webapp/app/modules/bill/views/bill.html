@@ -82,10 +82,10 @@
                                     date:'dd/MM/yyyy'}}
                                 </div>
                                 <div layout="column" flex>{{bill.subCategory.fullName}}</div>
-                                <div layout="column" flex="25">{{bill.accountTo.name}}</div>
+                                <div layout="column" flex="20">{{bill.accountTo.name}}</div>
                                 <div layout="column" flex="10" layout-align="center end">{{bill.amount | currency}}
                                 </div>
-                                <div layout="column" flex="15">
+                                <div layout="column" flex="20">
                                     <div layout="row">
                                         <md-button aria-label="delete" class="md-icon-button c-hover"
                                                    ng-click="delete(bill)">
@@ -94,6 +94,10 @@
                                         <md-button aria-label="edit" class="md-icon-button c-hover"
                                                    ng-click="edit(bill)">
                                             <md-icon class="material-icons">create</md-icon>
+                                        </md-button>
+                                        <md-button aria-label="done" class="md-icon-button c-hover"
+                                                   ng-click="done(bill)">
+                                            <md-icon class="material-icons">done</md-icon>
                                         </md-button>
                                     </div>
                                 </div>

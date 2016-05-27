@@ -111,6 +111,22 @@ public class BillController extends AbstractRestController<Bill, Integer> {
     }
 
     /**
+     * Set a bill as done.
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "/{id}/done", method = RequestMethod.GET)
+    public Bill save(@PathVariable Integer id) {
+
+        Bill bill = billRepository.findOneByUser( id, getGroupId() );
+
+        bill.setDone( true );
+        bill = billRepository.save( bill );
+
+        return bill;
+    }
+
+    /**
      * This point remove the specified bill from system. This bill needs to belong to the current user.
      * @param id
      */

@@ -43,6 +43,10 @@ public class Bill extends BaseEntity<Integer> implements Serializable {
 	@ColumnDefault( value="false" )
 	protected Boolean transfer;
 
+	@Column(name = "DONE")
+	@ColumnDefault( value="false" )
+	protected Boolean done;
+
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "ACCOUNT_TO_ID", referencedColumnName = "ID")
     @NotNull
@@ -64,6 +68,6 @@ public class Bill extends BaseEntity<Integer> implements Serializable {
 
     @Override
     public Bill clone() throws CloneNotSupportedException {
-        return new Bill(this.date, this.amount, this.subCategory, this.transfer, this.accountTo, this.accountFrom, this.groupId, this.events, null);
+        return new Bill(this.date, this.amount, this.subCategory, this.transfer, this.done, this.accountTo, this.accountFrom, this.groupId, this.events, null);
     }
 }

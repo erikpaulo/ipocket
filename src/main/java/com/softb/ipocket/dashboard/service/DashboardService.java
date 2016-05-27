@@ -68,7 +68,7 @@ public class DashboardService {
     }
 
     public List<Bill> getNextBills(Integer groupId){
-        List<Bill> bills = billRepository.findAllByUser( groupId );
+        List<Bill> bills = billRepository.findAllUndoneByUser( groupId );
         List<Bill> nextBills;
         if (bills.size() > 3){
             nextBills = bills.subList( 0, 3 );

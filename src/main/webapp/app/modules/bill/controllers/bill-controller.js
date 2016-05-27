@@ -96,20 +96,17 @@ define(['./module'
                 bill.date = new Date(bill.date);
 
                 new Bill(bill).$delete(function(){
-                    var billsThisDay = $scope.billsHash[getFormattedDate($filter, bill.date)];
-                    for (var i in billsThisDay){
-                        if (billsThisDay[i].id == bill.id){
-                            billsThisDay.splice(i,1);
-                        }
-                    }
+                    removeBillFromView(bill);
 
-                    // if there is no more bills in this day, remove the icon from calendar.
-                    if (billsThisDay.length ==0){
-                        MaterialCalendarData.data[MaterialCalendarData.getDayKey(bill.date)] = "";
-                        delete $scope.billsHash[getFormattedDate($filter, bill.date)];
-                    }
+                    addSuccess($scope);
+                });
+            }
 
-                    selectBills($scope, $filter);
+            $scope.done = function(bill){
+                bill.date = new Date(bill.date);
+
+                new Bill(bill).$done(function(){
+                    removeBillFromView(bill);
 
                     addSuccess($scope);
                 });
@@ -128,6 +125,23 @@ define(['./module'
                 $scope.currentMonth = getFormattedMonth($filter, new Date( date.year +'/'+ date.month +'/01' ))
                 selectBills($scope, $filter);
             };
+
+            function removeBillFromView(bill){
+                var billsThisDay = $scope.billsHash[getFormattedDate($filter, bill.date)];
+                for (var i in billsThisDay){
+                    if (billsThisDay[i].id == bill.id){
+                        billsThisDay.splice(i,1);
+                    }
+                }
+
+                // if there is no more bills in this day, remove the icon from calendar.
+                if (billsThisDay.length ==0){
+                    MaterialCalendarData.data[MaterialCalendarData.getDayKey(bill.date)] = "";
+                    delete $scope.billsHash[getFormattedDate($filter, bill.date)];
+                }
+
+                selectBills($scope, $filter);
+            }
 
 	    }
 	]);
