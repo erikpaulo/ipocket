@@ -61,6 +61,7 @@ public class BillController extends AbstractRestController<Bill, Integer> {
     public Bill create(@RequestBody Bill json) throws CloneNotSupportedException {
 
         json.setGroupId( getGroupId() );
+        json.setDone( false );
         validate( BILL_OBJECT_NAME, json );
 
         SubCategory subCategory = subCategoryRepository.findOneByUser( json.getSubCategory().getId(), getGroupId() );
@@ -116,7 +117,7 @@ public class BillController extends AbstractRestController<Bill, Integer> {
      * @return
      */
     @RequestMapping(value = "/{id}/done", method = RequestMethod.GET)
-    public Bill save(@PathVariable Integer id) {
+    public Bill done(@PathVariable Integer id) {
 
         Bill bill = billRepository.findOneByUser( id, getGroupId() );
 
