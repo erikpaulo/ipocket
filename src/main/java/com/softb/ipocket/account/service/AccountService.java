@@ -143,7 +143,7 @@ public class AccountService {
             accEntries = accountEntryRepository.listAllByUserPeriodAccountType( start, end, groupId, accountTypes );
         }
 
-        if (accountTypes != null && accountTypes.contains( Account.Type.INV )){
+        if (accountTypes == null || accountTypes.contains( Account.Type.INV )){
             List<InvestmentEntry> invEntries = investmentService.getAllOriginalEntriesByPeriod( start, end, groupId );
             for (InvestmentEntry entry: invEntries) {
                 if (mapAccounts.get( entry.getInvestmentId()) == null ) {
