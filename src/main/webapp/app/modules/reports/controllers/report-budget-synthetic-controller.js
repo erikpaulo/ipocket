@@ -6,6 +6,15 @@ define(['app',
 
             Bill.budget(function(data){
                 $scope.budget = data;
+
+                $scope.totalNotPlanned = 0.0;
+                angular.forEach($scope.budget.data, function(group){
+                    if (group.name == "Entradas"){
+                        $scope.totalNotPlanned += group.totalPlanned;
+                    } else {
+                        $scope.totalNotPlanned -= group.totalPlanned;
+                    }
+                })
             });
 
             $scope.setSemester = function(number){

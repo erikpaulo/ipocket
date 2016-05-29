@@ -3,7 +3,16 @@
         <md-card-content>
             <!--Header-->
             <div layout="row">
-                <div layout="column" flex="30"></div>
+                <div layout="column" flex="30">
+                    <div layout="row">
+                        <div layout="column" flex="50">
+                            <span>Valor não planejado:</span>
+                        </div>
+                        <div layout="column" flex="50">
+                            {{totalNotPlanned | currency}}
+                        </div>
+                    </div>
+                </div>
                 <div layout="column" flex="60">
                     <div layout="row" layout-align="center center" class="table-head">
                         <div layout="column" flex="5" class="c-hover">

@@ -201,14 +201,33 @@ public class BillService {
 
         DateFormat formatter = new SimpleDateFormat( "MM/yyyy" );
 
+        // Account Types to be considered.
+        List<Account.Type> accountTypes = new ArrayList<>(  );
+        accountTypes.add( Account.Type.CKA );
+        accountTypes.add( Account.Type.CCA );
+
         // Gets all entries registered for this user in this year.
-        Map<String, Map<String, Double>> mapSpent = accountService.getEntriesGroupedByCategory( startYear.getTime(), today.getTime(), groupId, AccountService.GROUP_ENTRIES_BY_MONTH );
+        Map<String, Map<String, Double>> mapSpent = accountService.getEntriesGroupedByCategory( startYear.getTime(), today.getTime(), groupId, AccountService.GROUP_ENTRIES_BY_MONTH, accountTypes );
 
         // Get all entries planned for this user and registered as a baseline.
         Map<String, Map<String, Double>> mapBaseline = getBaselineGroupedByCategory( startYear.getTime(), endYear.getTime(), groupId, AccountService.GROUP_ENTRIES_BY_MONTH );
 
         // Get all categories, grouped by its types
         List<CategoryGroupResource> groups = categoryController.listAllCategories();
+
+        // Filter the groups of categories removing.
+        for (CategoryGroupResource group: groups) {
+            int index = 0;
+            for (Category category: group.getCategories()) {
+                if (category.getName().equalsIgnoreCase( "Cartão de Crédito" )){
+                    break;
+                }
+                index++;
+            }
+            if (index < group.getCategories().size()){
+                group.getCategories().remove( index );
+            }
+        }
 
         // Create budget
         BudgetNodeRoot nodeBudget = new BudgetNodeRoot(today.get( Calendar.YEAR ), true);

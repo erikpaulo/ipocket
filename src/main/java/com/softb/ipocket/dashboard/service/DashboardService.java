@@ -51,7 +51,7 @@ public class DashboardService {
         start.set( start.get( Calendar.YEAR), Calendar.JANUARY, 1,0,0,0 ); // first day of this year
         end.set( end.get( Calendar.YEAR ), Calendar.DECEMBER, 31,23,59,59 ); // last day of the year
 
-        List<AccountEntry> entries = accountService.getAllEntriesByPeriod( start.getTime(), end.getTime(), groupId );
+        List<AccountEntry> entries = accountService.getAllEntriesByPeriod( start.getTime(), end.getTime(), groupId, null );
 
         for (AccountEntry entry: entries) {
             monthly.set( getIndex( entry.getDate() ), monthly.get( getIndex( entry.getDate() )) + entry.getAmount() );
@@ -154,14 +154,23 @@ public class DashboardService {
     }
 
     public BudgetTrackResource getBudgetTrackInfo(Integer groupId){
-//        BudgetNodeRoot budget = budgetService.loadCurrentActiveBudget( groupId );
         BudgetNodeRoot budget = billService.genBudget( groupId );
 
         Double totalPlanned = null;
         Double totalSpent = null;
 
+        Calendar cal = Calendar.getInstance();
+
         if (budget != null){
-            totalPlanned = budget.getTotalPlanned();
+            totalPlanned = 0.0;
+            Integer i=0;
+            for (Double planned: budget.getPerMonthPlanned()) {
+                if (i>cal.get( Calendar.MONTH )){
+                    break;
+                }
+                totalPlanned += planned;
+                i++;
+            }
             totalSpent = budget.getTotalSpent();
         }
 

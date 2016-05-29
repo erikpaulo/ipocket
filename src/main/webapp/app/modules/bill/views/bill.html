@@ -78,8 +78,7 @@
                         </md-list-item>
                         <md-list-item ng-repeat="bill in selectedBills track by $index" class="bill-item" ng-class="{open: bill.edit}">
                             <div layout="row" flex="100" layout-align="center center" ng-if="!bill.edit">
-                                <div layout="column" flex="15" layout-align="center center">{{bill.date |
-                                    date:'dd/MM/yyyy'}}
+                                <div layout="column" flex="15" layout-align="center center">{{bill.date | date:'dd/MM/yyyy'}}
                                 </div>
                                 <div layout="column" flex>{{bill.subCategory.fullName}}</div>
                                 <div layout="column" flex="20">{{bill.accountTo.name}}</div>

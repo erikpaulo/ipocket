@@ -67,7 +67,7 @@ public class AccountEntryController extends AbstractRestController<AccountEntry,
         start.setTime( filter.getStart() );
 
         // Filter the account entries according to te parameters informed
-        List<AccountEntry> entries = accountService.getAllEntriesByPeriod( start.getTime(), filter.getEnd(), getGroupId() );
+        List<AccountEntry> entries = accountService.getAllEntriesByPeriod( start.getTime(), filter.getEnd(), getGroupId(), null );
         for (int i=0;i<entries.size();) {
             AccountEntry entry = entries.get( i );
 

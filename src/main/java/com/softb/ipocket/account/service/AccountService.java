@@ -70,12 +70,11 @@ public class AccountService {
      * @param groupId
      * @return
      */
-    public Map<String, Map<String, Double>> getEntriesGroupedByCategory(Date start, Date end, Integer groupId, String groupBy){
+    public Map<String, Map<String, Double>> getEntriesGroupedByCategory(Date start, Date end, Integer groupId, String groupBy, List<Account.Type> accountTypes){
         DateFormat formatter = (groupBy.compareToIgnoreCase( GROUP_ENTRIES_BY_MONTH ) == 0 ? new SimpleDateFormat( "MM/yyyy" ) : new SimpleDateFormat( "dd/MM/yyyy" ));
 
         // Gets all account entries inserted this year.
-//        List<AccountEntry> entries = accountEntryRepository.listAllByUserPeriod( start, end, groupId );
-        List<AccountEntry> entries = getAllEntriesByPeriod( start, end, groupId );
+        List<AccountEntry> entries = getAllEntriesByPeriod( start, end, groupId, accountTypes );
 
         // Group all account entries by its subcategories
         Map<String, Map<String, Double>> map = new HashMap<>(  );
@@ -133,56 +132,36 @@ public class AccountService {
      * @param groupId
      * @return
      */
-    public List<AccountEntry> getAllEntriesByPeriod(Date start, Date end, Integer groupId){
+    public List<AccountEntry> getAllEntriesByPeriod(Date start, Date end, Integer groupId, List<Account.Type> accountTypes){
         Map<Integer, Account> mapAccounts = new HashMap<>(  );
 
-        List<AccountEntry> accEntries = accountEntryRepository.listAllByUserPeriod( start, end, groupId );
+        List<AccountEntry> accEntries;
+        if (accountTypes == null){
+            accEntries = accountEntryRepository.listAllByUserPeriod( start, end, groupId );
 
-        List<InvestmentEntry> invEntries = investmentService.getAllOriginalEntriesByPeriod( start, end, groupId );
-        for (InvestmentEntry entry: invEntries) {
-            if (mapAccounts.get( entry.getInvestmentId()) == null ) {
-                Investment investment = investmentService.getInvestment( entry.getInvestmentId(), groupId );
-                Account account = new Account(investment.getName(), Account.Type.INV, null, investment.getCreateDate(),
-                        true, groupId, 0.0, null, 0.0);
+        } else {
+            accEntries = accountEntryRepository.listAllByUserPeriodAccountType( start, end, groupId, accountTypes );
+        }
 
-                mapAccounts.put( entry.getInvestmentId(), account );
+        if (accountTypes != null && accountTypes.contains( Account.Type.INV )){
+            List<InvestmentEntry> invEntries = investmentService.getAllOriginalEntriesByPeriod( start, end, groupId );
+            for (InvestmentEntry entry: invEntries) {
+                if (mapAccounts.get( entry.getInvestmentId()) == null ) {
+                    Investment investment = investmentService.getInvestment( entry.getInvestmentId(), groupId );
+                    Account account = new Account(investment.getName(), Account.Type.INV, null, investment.getCreateDate(),
+                            true, groupId, 0.0, null, 0.0);
+
+                    mapAccounts.put( entry.getInvestmentId(), account );
+                }
+                SubCategory sc = investmentService.getDefaultSubCategory( groupId );
+
+                accEntries.add( new AccountEntry( entry.getDate(), sc, entry.getAmount(), false, entry.getInvestmentId(),
+                                                  null, null, groupId, entry.getAmount(), mapAccounts.get( entry.getInvestmentId() )) );
             }
-            SubCategory sc = investmentService.getDefaultSubCategory( groupId );
-
-            accEntries.add( new AccountEntry( entry.getDate(), sc, entry.getAmount(), false, entry.getInvestmentId(),
-                                              null, null, groupId, entry.getAmount(), mapAccounts.get( entry.getInvestmentId() )) );
         }
 
         return accEntries;
     }
-
-//    public Map<String, Double> getAverageSpent(Date start, Date end, Integer groupId, String groupBy){
-//        Map<String, Map<String, Double>> mapExecuted = this.getEntriesGroupedByCategory( start, end, groupId, AccountService.GROUP_ENTRIES_BY_MONTH );
-//        Calendar startCal = Calendar.getInstance();
-//        Calendar endCal = Calendar.getInstance();
-//        startCal.setTime( start );
-//        endCal.setTime( end );
-//
-//
-//        int diffYear = endCal.get(Calendar.YEAR) - startCal.get(Calendar.YEAR);
-//        int divisor = diffYear * 12 + endCal.get(Calendar.MONTH) - startCal.get(Calendar.MONTH);
-//
-//        // Calculate the average based on the entries registered in the System.
-//        Map<String, Double> mapAverage = new HashMap<>(  );
-//        for (Map.Entry<String, Map<String, Double>> entryL1: mapExecuted.entrySet()) {
-//            Map<String, Double> monthEntry = entryL1.getValue();
-//            Double average = 0.0;
-//
-//            for (Map.Entry<String, Double> entryL2: monthEntry.entrySet()) {
-//                average += entryL2.getValue();
-//            }
-//            average = average / divisor;
-//            mapAverage.put( entryL1.getKey(), average );
-//        }
-//
-//        return mapAverage;
-//    }
-
 
     /**
      * Return the user balance, considering all his accounts, including his investments.
