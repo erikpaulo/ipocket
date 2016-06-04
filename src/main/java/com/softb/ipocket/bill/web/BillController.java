@@ -48,7 +48,7 @@ public class BillController extends AbstractRestController<Bill, Integer> {
      */
     @RequestMapping(method = RequestMethod.GET)
     public List<Bill> listAll() {
-        List<Bill> bills = billRepository.findAllByUser( getGroupId() );
+        List<Bill> bills = billRepository.findAllUndoneByUser( getGroupId() );
         return bills;
     }
 
@@ -151,7 +151,7 @@ public class BillController extends AbstractRestController<Bill, Integer> {
 
         // Gets user accounts (all)
         List<Account> accounts =  accountRepository.findAllByUser( getGroupId() );
-        List<Bill> bills = billRepository.findAllByUser( getGroupId() );
+        List<Bill> bills = billRepository.findAllUndoneByUser( getGroupId() );
 
         return billService.genCachFlowProjection( start.getTime() , end.getTime(), BillService.CASHFLOW_GROUP_DAY,
                                                   accounts, bills);
