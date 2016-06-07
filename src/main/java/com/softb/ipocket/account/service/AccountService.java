@@ -155,7 +155,7 @@ public class AccountService {
                 }
                 SubCategory sc = investmentService.getDefaultSubCategory( groupId );
 
-                Double amount = entry.getAmount() * (entry.getType().compareToIgnoreCase( "B" ) > 0 ? 1 : -1);
+                Double amount = entry.getAmount() * (entry.getType().compareToIgnoreCase( "B" ) >= 0 ? 1 : -1);
                 accEntries.add( new AccountEntry( entry.getDate(), sc, amount, false, entry.getInvestmentId(),
                                                   null, null, groupId, amount, mapAccounts.get( entry.getInvestmentId() )) );
             }
