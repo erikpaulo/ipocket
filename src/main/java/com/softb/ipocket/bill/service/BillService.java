@@ -267,7 +267,8 @@ public class BillService {
                         if (subCatSpentMap != null || subCatBaselineMap != null){
 
                             Double value = 0.0, valueSpent = 0.0, valueBaseline = 0.0;
-                            Calendar cal = Calendar.getInstance();
+//                            Calendar cal = Calendar.getInstance();
+                            Calendar cal = today;
                             for (int i=0;i<12;i++){
                                 cal.set( Calendar.MONTH, i );
 
