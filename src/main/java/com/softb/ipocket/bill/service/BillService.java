@@ -194,10 +194,11 @@ public class BillService {
      */
     public BudgetNodeRoot genBudget(Integer groupId) {
         Calendar today = Calendar.getInstance();
+        today.set(2016, Calendar.JANUARY, 1, 0, 0);
         Calendar startYear = Calendar.getInstance();
         Calendar endYear = Calendar.getInstance();
-        startYear.set( 2016, Calendar.JANUARY, 1, 0, 0, 1 );
-        endYear.set( 2016, Calendar.DECEMBER, 31, 23, 59, 59 );
+        startYear.set( today.get( Calendar.YEAR ), Calendar.JANUARY, 1, 0, 0, 1 );
+        endYear.set( today.get( Calendar.YEAR ), Calendar.DECEMBER, 31, 23, 59, 59 );
 
         DateFormat formatter = new SimpleDateFormat( "MM/yyyy" );
 
