@@ -1,0 +1,125 @@
+<section ng-controller="BudgetNewController">
+    <div layout="row">
+        <div layout="column" flex="25">
+            <md-card layout="row" class="summary-card">
+                <md-card-header class="mdl-color--indigo-600">
+                    <md-icon class="material-icons step md-48" style="color:white;">
+                        attach_money
+                    </md-icon>
+                </md-card-header>
+                <md-divider></md-divider>
+                <md-card-content layout="column" flex>
+                    <div layout="column">
+                        <span class="md-display-1">{{budget.totalIncome | currency}}</span>
+                        <span style="color: #7A7A7A;">Entradas</span>
+                    </div>
+                </md-card-content>
+            </md-card>
+        </div>
+        <div layout="column" flex="25">
+            <md-card layout="row" class="summary-card">
+                <md-card-header class="mdl-color--red-600">
+                    <md-icon class="material-icons step md-48" style="color:white;">
+                        remove_circle
+                    </md-icon>
+                </md-card-header>
+                <md-divider></md-divider>
+                <md-card-content layout="column" flex>
+                    <div layout="column">
+                        <span class="md-display-1">{{budget.totalExpense | currency}}</span>
+                        <span style="color: #7A7A7A;">Saídas</span>
+                    </div>
+                </md-card-content>
+            </md-card>
+        </div>
+        <div layout="column" flex="25">
+            <md-card layout="row" class="summary-card">
+                <md-card-header class="mdl-color--green-600">
+                    <md-icon class="material-icons step md-48" style="color:white;">
+                        trending_up
+                    </md-icon>
+                </md-card-header>
+                <md-divider></md-divider>
+                <md-card-content layout="column" flex>
+                    <div layout="column">
+                        <span class="md-display-1">{{budget.totalInvested | currency}}</span>
+                        <span style="color: #7A7A7A;">Investimentos</span>
+                    </div>
+                </md-card-content>
+            </md-card>
+        </div>
+        <div layout="column" flex="25">
+            <md-card layout="row" class="summary-card">
+                <md-card-header class="mdl-color--red-600">
+                    <md-icon class="material-icons step md-48" style="color:white;">
+                        add_alert
+                    </md-icon>
+                </md-card-header>
+                <md-divider></md-divider>
+                <md-card-content layout="column" flex>
+                    <div layout="column">
+                        <span class="md-display-1">{{budget.totalNotAllocated | currency}}</span>
+                        <span style="color: #7A7A7A;">Valor não alocado</span>
+                    </div>
+                </md-card-content>
+            </md-card>
+        </div>
+    </div>
+    <md-card>
+        <md-card-content>
+            <div layout="row" flex="100">
+                <div layout="column" flex>
+                    <div layout="row">
+                        <div layout="column" flex="20" class="table-head md-caption">Categoria</div>
+                        <div layout="column" layout-align="center center" class="table-head md-caption" flex="10">Janeiro</div>
+                        <div layout="column" layout-align="center center" class="table-head md-caption" flex="10">Fevereiro</div>
+                        <div layout="column" layout-align="center center" class="table-head md-caption" flex="10">Março</div>
+                        <div layout="column" layout-align="center center" class="table-head md-caption" flex="10">Abril</div>
+                        <div layout="column" layout-align="center center" class="table-head md-caption" flex="10">Maio</div>
+                        <div layout="column" layout-align="center center" class="table-head md-caption" flex="10">Junho</div>
+                        <div layout="column" layout-align="center center" class="table-head md-caption" flex="10">Julho</div>
+                        <div layout="column" layout-align="center center" class="table-head md-caption" flex="10">Agosto</div>
+                        <div layout="column" layout-align="center center" class="table-head md-caption" flex="10">Setembro</div>
+                        <div layout="column" layout-align="center center" class="table-head md-caption" flex="10">Outubro</div>
+                        <div layout="column" layout-align="center center" class="table-head md-caption" flex="10">Novembro</div>
+                        <div layout="column" layout-align="center center" class="table-head md-caption" flex="10">Dezembro</div>
+                        <div layout="column" layout-align="center center" class="table-head md-caption" flex="10">Total</div>
+                    </div>
+                </div>
+            </div>
+            <div ng-repeat="group in budget.data">
+                <div ng-repeat="category in group.data">
+
+
+                    <div layout="row" flex="100" class="mdl-color--blue-grey-50">
+                        <div layout="column" flex>
+                            <div layout="row">
+                                <md-divider></md-divider>
+                                <div layout="column" flex="20" class="table-row c-padding-5"><strong>{{category.name}}</strong></div>
+                                <div layout="column" layout-align="center center" class="md-caption table-row" flex="10" ng-repeat="value in category.perMonthPlanned track by $index"><strong>{{value | currency}}</strong></div>
+                                <div layout="column" layout-align="center center" class="md-caption table-row" flex="15"><strong>{{category.totalPlanned | currency}}</strong></div>
+                                <md-divider></md-divider>
+                            </div>
+                        </div>
+                    </div>
+                    <md-divider></md-divider>
+                    <div layout="row" flex="100" ng-repeat="subcategory in category.data">
+                        <div layout="column" flex>
+                            <div layout="row">
+                                <md-divider></md-divider>
+                                <div layout="column" flex="20" class="md-caption table-row c-padding-5">{{subcategory.name}}</div>
+                                <md-divider></md-divider>
+                                <div layout="column" layout-align="center center" class="md-caption table-row" flex="10" ng-repeat="valueSC in subcategory.perMonthPlanned track by $index">{{valueSC | currency}}</div>
+                                <md-divider></md-divider>
+                                <div layout="column" layout-align="center center" class="md-caption table-row" flex="15"><strong>{{subcategory.totalPlanned | currency}}</strong></div>
+                                <md-divider></md-divider>
+                            </div>
+                        </div>
+                    </div>
+
+                    <md-divider></md-divider>
+                </div>
+            </div>
+        </md-card-content>
+    </md-card>
+</section>

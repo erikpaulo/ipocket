@@ -1,0 +1,149 @@
+<md-dialog flex="50" ng-cloak>
+    <form name="myForm" ng-submit="submit()">
+        <md-toolbar layout="row" layout-align="center center" class="header">
+            <div class="md-toolbar-tools">
+                <h2>Incluir Novo Pagamento</h2>
+            </div>
+            <div flex></div>
+            <div>
+                <md-button class="md-icon-button" layout="row" layout-align="right center" ng-click="hide()">X
+                </md-button>
+            </div>
+        </md-toolbar>
+        <md-dialog-content class="md-padding" style="min-height: 328px;">
+
+            <!--Line-->
+            <div layout="row" layout-align="center center">
+                <div layout="column" flex="70">
+                    <md-autocomplete
+                            md-selected-item="newBudget.subCategoryId"
+                            md-search-text="searchText"
+                            md-items="subCategory in querySearch(searchText)"
+                            md-min-length="0"
+                            md-floating-label="Categoria"
+                            md-autoselect="true"
+                            md-no-cache="true"
+                            md-item-text="subCategory.name"
+                            required>
+                        <md-item-template>
+                            <span md-highlight-text="searchText" md-highlight-flags="^i">{{subCategory.name}}</span>
+                        </md-item-template>
+                        <md-not-found>
+                            No matches found.
+                        </md-not-found>
+                    </md-autocomplete>
+                </div>
+                <div flex></div>
+                <md-radio-group ng-model="newBudget.option" class="md-caption" required>
+                    <md-radio-button value="sv" class="md-primary">Valores Iguais</md-radio-button>
+                    <md-radio-button value="dv" class="md-primary">Valores Distintos</md-radio-button>
+                </md-radio-group>
+            </div>
+            <div layout="row" flex layout-align="center center" ng-show="newBudget.option=='sv'">
+                <md-input-container class="md-block" flex="40">
+                    <label>Valor</label>
+                    <input name="amount" ng-model="newBudget.sameValue" type="text" format="number">
+
+                    <div class="errors" ng-messages="entryForm.amount.$error" ng-if="myForm.$dirty">
+                        <div ng-message="required">Obrigatório</div>
+                    </div>
+                </md-input-container>
+            </div>
+            <div layout="row" layout-align="center center" ng-show="newBudget.option=='dv'">
+                <div layout="column" flex="30">
+                    <md-input-container class="c-input-container-no-error">
+                        <label>Janeiro</label>
+                        <input name="newBudget.jan" ng-model="newBudget.jan" type="text"
+                               format="number">
+                    </md-input-container>
+                </div>
+                <div layout="column" flex="30">
+                    <md-input-container class="c-input-container-no-error">
+                        <label>Fevereiro</label>
+                        <input name="newBudget.feb" ng-model="newBudget.feb" type="text"
+                               format="number">
+                    </md-input-container>
+                </div>
+                <div layout="column" flex="30">
+                    <md-input-container class="c-input-container-no-error">
+                        <label>Março</label>
+                        <input name="newBudget.mar" ng-model="newBudget.mar" type="text"
+                               format="number">
+                    </md-input-container>
+                </div>
+                <div layout="column" flex="30">
+                    <md-input-container class="c-input-container-no-error">
+                        <label>Abril</label>
+                        <input name="newBudget.apr" ng-model="newBudget.apr" type="text"
+                               format="number">
+                    </md-input-container>
+                </div>
+            </div>
+            <div layout="row" layout-align="center center" ng-show="newBudget.option=='dv'">
+                <div layout="column" flex="30">
+                    <md-input-container class="c-input-container-no-error">
+                        <label>Maio</label>
+                        <input name="newBudget.may" ng-model="newBudget.may" type="text"
+                               format="number">
+                    </md-input-container>
+                </div>
+                <div layout="column" flex="30">
+                    <md-input-container class="c-input-container-no-error">
+                        <label>Junho</label>
+                        <input name="newBudget.jun" ng-model="newBudget.jun" type="text"
+                               format="number">
+                    </md-input-container>
+                </div>
+                <div layout="column" flex="30">
+                    <md-input-container class="c-input-container-no-error">
+                        <label>Julho</label>
+                        <input name="newBudget.jul" ng-model="newBudget.jul" type="text"
+                               format="number">
+                    </md-input-container>
+                </div>
+                <div layout="column" flex="30">
+                    <md-input-container class="c-input-container-no-error">
+                        <label>Agosto</label>
+                        <input name="newBudget.aug" ng-model="newBudget.aug" type="text"
+                               format="number">
+                    </md-input-container>
+                </div>
+            </div>
+            <div layout="row" layout-align="center center" ng-show="newBudget.option=='dv'">
+                <div layout="column" flex="30">
+                    <md-input-container class="c-input-container-no-error">
+                        <label>Setembro</label>
+                        <input name="newBudget.sep" ng-model="newBudget.sep" type="text"
+                               format="number">
+                    </md-input-container>
+                </div>
+                <div layout="column" flex="30">
+                    <md-input-container class="c-input-container-no-error">
+                        <label>Outubro</label>
+                        <input name="newBudget.oct" ng-model="newBudget.oct" type="text"
+                               format="number">
+                    </md-input-container>
+                </div>
+                <div layout="column" flex="30">
+                    <md-input-container class="c-input-container-no-error">
+                        <label>Novembro</label>
+                        <input name="newBudget.nov" ng-model="newBudget.nov" type="text"
+                               format="number">
+                    </md-input-container>
+                </div>
+                <div layout="column" flex="30">
+                    <md-input-container class="c-input-container-no-error">
+                        <label>Dezembro</label>
+                        <input name="newBudget.dec" ng-model="newBudget.dec" type="text"
+                               format="number">
+                    </md-input-container>
+                </div>
+            </div>
+
+        </md-dialog-content>
+        <md-dialog-actions layout="row" layout-align="end center">
+            <md-button class="md-accent" ng-click="cancel()">Cancelar</md-button>
+            <md-button class="md-primary" type="submit" ng-disabled="myForm.$invalid">Incluir</md-button>
+        </md-dialog-actions>
+    </form>
+</md-dialog>

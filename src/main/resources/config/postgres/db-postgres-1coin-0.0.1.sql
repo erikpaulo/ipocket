@@ -2,7 +2,7 @@
 * Changeset 0.0.1
 * Criação da aplicação.
 * heroku pg:psql --app ipocket < /Users/eriklacerda/Projects/ipocket/src/main/resources/config/postgres/db-postgres-1coin-0.0.1.sql
-* Localhost  -- \i /Users/eriklacerda/Projects/ipocket/src/main/resources/config/postgres/db-postgres-1coin-0.0.1.sql
+* Localhost  -- \i /Users/eriklacerda/Dev-Projects/ipocket/src/main/resources/config/postgres/db-postgres-1coin-0.0.1.sql
 */
 
 DROP TABLE IF EXISTS BILL;

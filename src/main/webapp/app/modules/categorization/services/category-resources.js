@@ -3,7 +3,7 @@ function (module) {
 	
 	module.factory('CategoryResource', ['$resource','$q', function($resource, $q) {
 	    return $resource(
-	        'api/categorization/category/:id/',
+	        'api/categorization/:id/',
 	        {id: '@id'},
 	        {
 	            listAll:	{ method : 'GET', params: {}, isArray : true },

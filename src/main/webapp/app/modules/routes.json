@@ -63,6 +63,24 @@
     "dependencies": ["modules/bill/controllers/bill-controller"]
   },
   {
+    "id": "budget-followup",
+    "name":"Orçamento",
+    "icon": "today",
+    "originalPath": "/budget/followup",
+    "templateUrl": "modules/budget/views/budget-followup.html",
+    "dependencies": ["modules/budget/controllers/budget-followup-controller"],
+    "hasSubMenu": true,
+    "items" : [
+      {
+        "id": "budget-new",
+        "name":"",
+        "originalPath": "/budget/new",
+        "templateUrl": "modules/budget/views/budget-new.html",
+        "visible": false,
+        "dependencies": ["modules/budget/controllers/budget-new-controller"]
+      }]
+  },
+  {
     "id": "reports",
     "name": "Relatórios",
     "icon": "insert_chart",

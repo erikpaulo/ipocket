@@ -12,3 +12,5 @@ heroku pg:psql --app ipocket
 \copy (SELECT * FROM INVESTMENT_ENTRY) TO INVESTMENT_ENTRY.csv CSV DELIMITER ','
 \copy (SELECT * FROM INDEX) TO INDEX.csv CSV DELIMITER ','
 
+heroku pg:psql --app ipocket << "\copy (SELECT * FROM CATEGORY) TO CATEGORY.csv CSV DELIMITER ','"
+
