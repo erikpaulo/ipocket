@@ -8,8 +8,8 @@ function (module) {
 	        {
 	            listAll:	{ method : 'GET', params: {}, isArray : true },
 	            new: 		{ method : 'POST', params: {action:'category'}, isArray : false },
-	            delete: 	{ method : 'DELETE', params: {}, isArray : false },
-	            save: 		{ method : 'PUT', params: {}, isArray : false }
+	            delete: 	{ method : 'DELETE', params: {action: 'category'}, isArray : false },
+	            save: 		{ method : 'PUT', params: {action:'category'}, isArray : false }
 	        }
 	    );
 	}]);
