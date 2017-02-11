@@ -12,12 +12,10 @@ import com.softb.ipocket.categorization.model.SubCategory;
 import com.softb.ipocket.categorization.repository.SubCategoryRepository;
 import com.softb.ipocket.categorization.web.CategoryController;
 import com.softb.ipocket.categorization.web.resource.CategoryGroupResource;
+import com.softb.system.errorhandler.exception.BusinessException;
 import com.softb.system.rest.AbstractRestController;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
 import java.util.*;
@@ -64,6 +62,32 @@ public class BudgetController extends AbstractRestController<Budget, Integer> {
         json.setSubCategory(subCategory);
 
         validate( BUDGET_ENTRY_OBJECT_NAME, json );
+        budgetEntryRepository.save(json);
+
+        return this.getCurrentBudget();
+    }
+
+    @RequestMapping(value = "/entry/{id}", method = RequestMethod.DELETE)
+    public BudgetNodeRoot delete(@PathVariable Integer id) throws CloneNotSupportedException {
+
+        BudgetEntry budgetEntry = budgetEntryRepository.findOne(id);
+        if ( !budgetEntry.getGroupId().equals(getGroupId()) ){
+            throw new BusinessException("This budget entry doesn't belong to current user");
+        }
+        budgetEntryRepository.delete(budgetEntry);
+
+        return this.getCurrentBudget();
+    }
+
+    @RequestMapping(value = "/entry/{id}", method = RequestMethod.PUT)
+    public BudgetNodeRoot save(@RequestBody BudgetEntry json) throws CloneNotSupportedException {
+
+        SubCategory subCategory = subCategoryRepository.findOneByUser(json.getSubCategoryId(), getGroupId());
+        json.setSubCategory(subCategory);
+
+        json.setGroupId( getGroupId() );
+        validate(BUDGET_ENTRY_OBJECT_NAME, json);
+
         budgetEntryRepository.save(json);
 
         return this.getCurrentBudget();

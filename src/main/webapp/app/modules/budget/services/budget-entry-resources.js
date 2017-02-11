@@ -6,7 +6,9 @@ function (module) {
 	        'api/budget/entry/:id/:action',
 	        {id: '@id'},
 	        {
-	            new:	  { method : 'POST',  params: {}, isArray : false  }
+	            new:	{ method: 'POST',   params: {}, isArray: false },
+	            delete: { method: 'DELETE', params: {}, isArray: false },
+	            save:   { method: 'PUT',    params: {}, isArray: false }
 	        }
 	    );
 

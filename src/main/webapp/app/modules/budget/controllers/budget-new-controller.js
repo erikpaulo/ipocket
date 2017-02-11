@@ -10,7 +10,7 @@ define(['./module'
                     $scope.appContext.contextPage = 'Novo Orçamento';
                     $scope.appContext.contextMenu.setActions([
                         {icon: 'add_circle', tooltip: 'Nova Entrada', onClick: function() {
-                            openDialog($scope, $filter, $mdDialog, BudgetEntryResource);
+                            openDialogNew($scope, $filter, $mdDialog, BudgetEntryResource);
                         }}
                     ]);
 
@@ -18,71 +18,26 @@ define(['./module'
                         $scope.budget = budget;
                     });
 
-//                    $scope.budget = {
-//                        year: 2016,
-//                        totalIncome: 290010,
-//                        totalExpense: 120200,
-//                        totalInvested: 80300,
-//                        totalNotAllocated: 90040,
-//                        categories: [
-//                            {
-//                                id: 1,
-//                                name: 'Moradia',
-//                                budgeted: [300, 300, 300, 3600, 3500, 3080, 300, 300, 300, 300, 300, 300],
-//                                totalBudgeted: 3600,
-//                                subCategories: [
-//                                    {
-//                                         id: 2,
-//                                         name: 'Cemig',
-//                                         budgeted: [100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100],
-//                                         totalBudgeted: 1200
-//                                    },
-//                                    {
-//                                         id: 3,
-//                                         name: 'Condomínio',
-//                                         budgeted: [1000, 100, 1500, 100, 100, 100, 100, 100, 100, 100, 100, 100],
-//                                         totalBudgeted: 1200
-//                                    },
-//                                    {
-//                                         id: 4,
-//                                         name: 'Diarista',
-//                                         budgeted: [100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100],
-//                                         totalBudgeted: 1200
-//                                    }
-//                                ]
-//                            },
-//                            {
-//                                id: 5,
-//                                name: 'Salário CI&T',
-//                                budgeted: [1200, 3000, 1300, 23600, 3500, 3080, 300, 300, 300, 300, 300, 300],
-//                                totalBudgeted: 53600,
-//                                subCategories: [
-//                                    {
-//                                         id: 6,
-//                                         name: 'RemVar CI&T - Carol',
-//                                         budgeted: [1500, 100, 100, 100, 100, 55100, 100, 100, 100, 100, 100, 100],
-//                                         totalBudgeted: 15200
-//                                    }
-//                                ]
-//                            }
-//                        ]
-//                    }
+                    $scope.editBudgetEntry = function (subcategory){
+                        openDialogEdit($scope, $mdDialog, BudgetEntryResource, subcategory);
+                    }
                 }
             ]);
 
-            function openDialog($scope, $filter, $mdDialog, BudgetEntryResource){
+
+            function openDialogNew($scope, $filter, $mdDialog, BudgetEntryResource){
                 $mdDialog.show({
-                    controller: DialogController,
+                    controller: DialogNewController,
                     templateUrl: 'modules/budget/views/new-budget-entry-template.html',
                     parent: angular.element(document.body),
                     locals: {
                         budget: $scope.budget
                     },
                     clickOutsideToClose:true
-                }).then(function(newBudgetEntry){
+                }).then(function(editBudgetEntry){
 
-                    newBudgetEntry.budgetYear = $scope.budget.year;
-                    new BudgetEntryResource(newBudgetEntry).$new(function(data){
+                    editBudgetEntry.budgetYear = $scope.budget.year;
+                    new BudgetEntryResource(editBudgetEntry).$new(function(data){
 
                         $scope.budget = data;
                         addSuccess($scope);
@@ -90,7 +45,33 @@ define(['./module'
                 });
             }
 
-            function DialogController($scope, $filter, $mdDialog, BudgetResource, Utils, budget) {
+            function openDialogEdit($scope, $mdDialog, BudgetEntryResource, budgetEntry){
+                $mdDialog.show({
+                    controller: DialogEditController,
+                    templateUrl: 'modules/budget/views/edit-budget-entry-template.html',
+                    parent: angular.element(document.body),
+                    locals: {
+                        budget: $scope.budget,
+                        budgetEntry: budgetEntry
+                    },
+                    clickOutsideToClose:true
+                }).then(function(result){
+                var budgetEntry = new BudgetEntryResource(result.data);
+                    if ( result.operation == 'delete' ){
+                        budgetEntry.$delete(function(data){
+                            $scope.budget = data;
+                            addSuccess($scope);
+                        });
+                    } else {
+                        budgetEntry.$save(function(data){
+                            $scope.budget = data;
+                            addSuccess($scope);
+                        });
+                    }
+                });
+            }
+
+            function DialogNewController($scope, $filter, $mdDialog, BudgetResource, Utils, budget) {
                 $scope.newBudget = {
                     option: 'sv',
                     budgetID: budget.id
@@ -138,6 +119,60 @@ define(['./module'
                     $scope.newBudget.subCategoryId = $scope.newBudget.subCategoryId.subCategoryId;
 
                     $mdDialog.hide($scope.newBudget);
+                };
+            }
+            function DialogEditController($scope, $mdDialog, Utils, budget, budgetEntry) {
+                $scope.editBudget = {}
+
+                $scope.editBudget.id = budgetEntry.id;
+                $scope.editBudget.budgetID = budget.id;
+                $scope.editBudget.subCategoryId = budgetEntry.subCategory.id;
+                $scope.editBudget.jan = budgetEntry.perMonthPlanned[0];
+                $scope.editBudget.feb = budgetEntry.perMonthPlanned[1];
+                $scope.editBudget.mar = budgetEntry.perMonthPlanned[2];
+                $scope.editBudget.apr = budgetEntry.perMonthPlanned[3];
+                $scope.editBudget.may = budgetEntry.perMonthPlanned[4];
+                $scope.editBudget.jun = budgetEntry.perMonthPlanned[5];
+                $scope.editBudget.jul = budgetEntry.perMonthPlanned[6];
+                $scope.editBudget.aug = budgetEntry.perMonthPlanned[7];
+                $scope.editBudget.sep = budgetEntry.perMonthPlanned[8];
+                $scope.editBudget.oct = budgetEntry.perMonthPlanned[9];
+                $scope.editBudget.nov = budgetEntry.perMonthPlanned[10];
+                $scope.editBudget.dec = budgetEntry.perMonthPlanned[11];
+
+                $scope.categoryName = budgetEntry.subCategory.fullName;
+
+                $scope.hide = function() {
+                    $mdDialog.hide();
+                };
+                $scope.cancel = function() {
+                    $mdDialog.cancel();
+                };
+                $scope.delete = function(){
+                    $scope.submit('delete');
+                }
+                $scope.save = function(){
+                    $scope.submit('save');
+                }
+                $scope.submit = function(operation) {
+
+                    $scope.editBudget.jan = Utils.currencyToNumber($scope.editBudget.jan);
+                    $scope.editBudget.feb = Utils.currencyToNumber($scope.editBudget.feb);
+                    $scope.editBudget.mar = Utils.currencyToNumber($scope.editBudget.mar);
+                    $scope.editBudget.apr = Utils.currencyToNumber($scope.editBudget.apr);
+                    $scope.editBudget.may = Utils.currencyToNumber($scope.editBudget.may);
+                    $scope.editBudget.jun = Utils.currencyToNumber($scope.editBudget.jun);
+                    $scope.editBudget.jul = Utils.currencyToNumber($scope.editBudget.jul);
+                    $scope.editBudget.aug = Utils.currencyToNumber($scope.editBudget.aug);
+                    $scope.editBudget.sep = Utils.currencyToNumber($scope.editBudget.sep);
+                    $scope.editBudget.oct = Utils.currencyToNumber($scope.editBudget.oct);
+                    $scope.editBudget.nov = Utils.currencyToNumber($scope.editBudget.nov);
+                    $scope.editBudget.dec = Utils.currencyToNumber($scope.editBudget.dec);
+
+                    $mdDialog.hide({
+                        operation: operation,
+                        data: $scope.editBudget
+                    });
                 };
             }
         }

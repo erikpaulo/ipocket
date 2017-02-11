@@ -1,0 +1,137 @@
+<md-dialog flex="50" ng-cloak>
+    <form name="myForm" ng-submit="save()">
+        <md-toolbar layout="row" layout-align="center center" class="header">
+            <div class="md-toolbar-tools">
+                <h2>Editar Entrada do Orçamento</h2>
+            </div>
+            <div flex></div>
+            <div>
+                <md-button class="md-icon-button" layout="row" layout-align="right center" ng-click="hide()">X
+                </md-button>
+            </div>
+        </md-toolbar>
+        <md-dialog-content class="md-padding" style="min-height: 328px;">
+
+            <!--Line-->
+            <div layout="row" layout-align="center center">
+                <div layout="column" flex="70">
+                    <md-autocomplete
+                            md-selected-item="editBudget.subCategoryId"
+                            md-search-text="searchText"
+                            md-items="subCategory in querySearch(searchText)"
+                            md-min-length="0"
+                            md-floating-label="Categoria"
+                            md-autoselect="true"
+                            md-no-cache="true"
+                            md-item-text="subCategory.name"
+                            required>
+                        <md-item-template>
+                            <span md-highlight-text="searchText" md-highlight-flags="^i">{{subCategory.name}}</span>
+                        </md-item-template>
+                        <md-not-found>
+                            No matches found.
+                        </md-not-found>
+                    </md-autocomplete>
+                </div>
+                <div flex></div>
+            </div>
+
+            <div layout="row" layout-align="center center">
+                <div layout="column" flex="30">
+                    <md-input-container class="c-input-container-no-error">
+                        <label>Janeiro</label>
+                        <input name="editBudget.jan" ng-model="editBudget.jan" type="text"
+                               format="number">
+                    </md-input-container>
+                </div>
+                <div layout="column" flex="30">
+                    <md-input-container class="c-input-container-no-error">
+                        <label>Fevereiro</label>
+                        <input name="editBudget.feb" ng-model="editBudget.feb" type="text"
+                               format="number">
+                    </md-input-container>
+                </div>
+                <div layout="column" flex="30">
+                    <md-input-container class="c-input-container-no-error">
+                        <label>Março</label>
+                        <input name="editBudget.mar" ng-model="editBudget.mar" type="text"
+                               format="number">
+                    </md-input-container>
+                </div>
+                <div layout="column" flex="30">
+                    <md-input-container class="c-input-container-no-error">
+                        <label>Abril</label>
+                        <input name="editBudget.apr" ng-model="editBudget.apr" type="text"
+                               format="number">
+                    </md-input-container>
+                </div>
+            </div>
+            <div layout="row" layout-align="center center">
+                <div layout="column" flex="30">
+                    <md-input-container class="c-input-container-no-error">
+                        <label>Maio</label>
+                        <input name="editBudget.may" ng-model="editBudget.may" type="text"
+                               format="number">
+                    </md-input-container>
+                </div>
+                <div layout="column" flex="30">
+                    <md-input-container class="c-input-container-no-error">
+                        <label>Junho</label>
+                        <input name="editBudget.jun" ng-model="editBudget.jun" type="text"
+                               format="number">
+                    </md-input-container>
+                </div>
+                <div layout="column" flex="30">
+                    <md-input-container class="c-input-container-no-error">
+                        <label>Julho</label>
+                        <input name="editBudget.jul" ng-model="editBudget.jul" type="text"
+                               format="number">
+                    </md-input-container>
+                </div>
+                <div layout="column" flex="30">
+                    <md-input-container class="c-input-container-no-error">
+                        <label>Agosto</label>
+                        <input name="editBudget.aug" ng-model="editBudget.aug" type="text"
+                               format="number">
+                    </md-input-container>
+                </div>
+            </div>
+            <div layout="row" layout-align="center center">
+                <div layout="column" flex="30">
+                    <md-input-container class="c-input-container-no-error">
+                        <label>Setembro</label>
+                        <input name="editBudget.sep" ng-model="editBudget.sep" type="text"
+                               format="number">
+                    </md-input-container>
+                </div>
+                <div layout="column" flex="30">
+                    <md-input-container class="c-input-container-no-error">
+                        <label>Outubro</label>
+                        <input name="editBudget.oct" ng-model="editBudget.oct" type="text"
+                               format="number">
+                    </md-input-container>
+                </div>
+                <div layout="column" flex="30">
+                    <md-input-container class="c-input-container-no-error">
+                        <label>Novembro</label>
+                        <input name="editBudget.nov" ng-model="editBudget.nov" type="text"
+                               format="number">
+                    </md-input-container>
+                </div>
+                <div layout="column" flex="30">
+                    <md-input-container class="c-input-container-no-error">
+                        <label>Dezembro</label>
+                        <input name="editBudget.dec" ng-model="editBudget.dec" type="text"
+                               format="number">
+                    </md-input-container>
+                </div>
+            </div>
+
+        </md-dialog-content>
+        <md-dialog-actions layout="row" layout-align="end center">
+            <md-button class="md-accent" ng-click="cancel()">Cancelar</md-button>
+            <md-button class="md-alert" ng-disabled="myForm.$invalid" ng-click="delete()">Excluir</md-button>
+            <md-button class="md-primary" type="submit" ng-disabled="myForm.$invalid">Salvar</md-button>
+        </md-dialog-actions>
+    </form>
+</md-dialog>
