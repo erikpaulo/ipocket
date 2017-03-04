@@ -171,6 +171,12 @@ public class AccountService {
      * @return
      */
     public Double getBalanceUntilDate(Date date, Integer groupId) {
+        List<Account> accounts = accountRepository.findAllByUser(groupId);
+        Double initialBalance = 0.0;
+        for (Account account: accounts) {
+            initialBalance+= account.getStartBalance();
+        }
+
         Double accBalance = accountEntryRepository.getBalanceByDate( date, groupId );
         Double balance = (accBalance != null ? accBalance : 0);
         balance += investmentService.getBalanceUntilDate( date, groupId );

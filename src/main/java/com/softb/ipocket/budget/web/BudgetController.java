@@ -53,6 +53,18 @@ public class BudgetController extends AbstractRestController<Budget, Integer> {
     }
 
 
+    @RequestMapping(value = "/followup", method = RequestMethod.GET)
+    public BudgetNodeRoot getCurrentBudgetFollowUp() {
+        Integer year = Calendar.getInstance().get(Calendar.YEAR);
+
+        BudgetNodeRoot budget = budgetService.getBudget(year, getGroupId());
+
+        budget = budgetService.fillsSpentInformation(budget, getGroupId());
+
+        return budget;
+    }
+
+
     @RequestMapping(value = "/entry", method = RequestMethod.POST)
     public BudgetNodeRoot create(@RequestBody BudgetEntry json) throws CloneNotSupportedException {
 
@@ -60,6 +72,7 @@ public class BudgetController extends AbstractRestController<Budget, Integer> {
 
         SubCategory subCategory = subCategoryRepository.findOneByUser(json.getSubCategoryId(), getGroupId());
         json.setSubCategory(subCategory);
+        json.setPositive(subCategory.getCategory().getType().isPositive());
 
         validate( BUDGET_ENTRY_OBJECT_NAME, json );
         budgetEntryRepository.save(json);

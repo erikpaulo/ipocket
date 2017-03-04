@@ -57,6 +57,9 @@ public class DashboardService {
             monthly.set( getIndex( entry.getDate() ), monthly.get( getIndex( entry.getDate() )) + entry.getAmount() );
         }
 
+        // Get Initial Balance
+
+
 //        Double accBalance = accountService.getBalanceUntilDate( start.getTime(), groupId );
         Double accBalance = 0.0;
         for (int i=0;i<12;i++) {

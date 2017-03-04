@@ -18,6 +18,8 @@ public class BudgetNodeSubCategory extends BudgetNode implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    private String fullName;
+
     private SubCategory subCategory;
     private List<BudgetNodeSubCategory> data;
 
@@ -33,6 +35,8 @@ public class BudgetNodeSubCategory extends BudgetNode implements Serializable {
 
         super.setId(id);
         super.setName(name);
+
+        fullName = subCategory.getFullName();
         this.subCategory = subCategory;
 
         this.data = new ArrayList<>(  );

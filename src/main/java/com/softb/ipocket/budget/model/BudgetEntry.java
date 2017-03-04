@@ -66,6 +66,9 @@ public class BudgetEntry extends BaseEntity<Integer> implements Serializable {
     @Column(name = "DEC")
     protected Double dec = 0.0;
 
+    @Column(name = "POSITIVE")
+    protected Boolean positive = true;
+
     @Column(name="USER_GROUP_ID")
     protected Integer groupId;
 

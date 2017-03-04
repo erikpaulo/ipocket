@@ -25,11 +25,11 @@ public class BudgetNode implements Serializable {
     private List<Double> perMonthPlanned;
     private Double totalSpent;
     private List<Double> perMonthSpent;
-    private Double averageL3M;
+//    private Double averageL3M;
     private Double deviation;
-    private Boolean isPositive;
-    private Double annualPlan;
-    private Double monthPlan;
+//    private Boolean isPositive;
+//    private Double annualPlan;
+//    private Double monthPlan;
 
     public BudgetNode(){
         this.id = null;
@@ -40,11 +40,11 @@ public class BudgetNode implements Serializable {
         this.perMonthPlanned = InitArray.initMonthValues();
         this.totalSpent = 0.0;
         this.perMonthSpent = InitArray.initMonthValues();
-        this.averageL3M = 0.0;
+//        this.averageL3M = 0.0;
         this.deviation = 0.0;
-        this.isPositive = false;
-        this.annualPlan = 0.0;
-        this.monthPlan = 0.0;
+//        this.isPositive = false;
+//        this.annualPlan = 0.0;
+//        this.monthPlan = 0.0;
     }
 
 }

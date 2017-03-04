@@ -7,7 +7,8 @@ function (module) {
 	        {id: '@id'},
 	        {
 	            listNonAllocatedCategories:	  { method : 'GET',  params: {action: 'nonAllocatedCategories'}, isArray : true  },
-	            getCurrent: { method : 'GET',  params: {}, isArray : false  }
+	            getCurrent: { method : 'GET',  params: {}, isArray : false  },
+	            getBudgetFollowUp: { method : 'GET',  params: {action: "followup"}, isArray : false  }
 	        }
 	    );
 

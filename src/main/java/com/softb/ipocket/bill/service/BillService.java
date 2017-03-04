@@ -322,26 +322,26 @@ public class BillService {
                             }
                         }
 
-                        nodeSubCategory.setAverageL3M( totalSubCategorySpent / 3 );
+//                        nodeSubCategory.setAverageL3M( totalSubCategorySpent / 3 );
                         nodeSubCategory.setTotalSpent( totalSubCategorySpent );
                         nodeSubCategory.setTotalPlanned( totalSubCategoryPlanned );
                         nodeCategory.getData().add( nodeSubCategory );
                     }
                 }
 
-                nodeCategory.setAverageL3M( totalCategorySpent / 3 );
+//                nodeCategory.setAverageL3M( totalCategorySpent / 3 );
                 nodeCategory.setTotalSpent( totalCategorySpent );
                 nodeCategory.setTotalPlanned( totalCategoryPlanned );
                 nodeGroup.getData().add( nodeCategory );
             }
 
-            nodeGroup.setAverageL3M( totalGroupSpent / 3 );
+//            nodeGroup.setAverageL3M( totalGroupSpent / 3 );
             nodeGroup.setTotalSpent( totalGroupSpent );
             nodeGroup.setTotalPlanned( totalGroupPlanned );
             nodeBudget.getData().add( nodeGroup );
         }
 
-        nodeBudget.setAverageL3M( totalBudgetSpent / 3 );
+//        nodeBudget.setAverageL3M( totalBudgetSpent / 3 );
         nodeBudget.setTotalSpent( totalBudgetSpent );
         nodeBudget.setTotalPlanned( totalBudgetPlanned );
 
@@ -436,5 +436,66 @@ public class BillService {
 				series.get(serieName).put(getGroupId(start, groupBy), balance);
 			}
 		}
+	}
+
+	/**
+	 * This service returns all bills planned to be paid until the end date. They are all grouped into categories;
+	 * @param start Usually today
+	 * @param end End date
+	 * @param groupId
+	 * @return
+	 */
+	public Map<String,Map<String,Double>> getEntriesGroupedByCategory(Date start, Date end, Integer groupId) {
+		DateFormat formatter = new SimpleDateFormat( "MM/yyyy" );
+
+		List<Bill> bills =  billRepository.findAllByUserPeriod(start, end, groupId);
+
+		// Group all planned entries by its subcategories
+		Map<String, Map<String, Double>> map = new HashMap<>(  );
+		for (Bill bill: bills) {
+
+			String groupName = bill.getSubCategory().getCategory().getType().getName();
+			String catName = bill.getSubCategory().getCategory().getName();
+			String subCatName = bill.getSubCategory().getFullName();
+			String group = formatter.format( bill.getDate() );
+
+			// Group
+			if ( map.get( groupName ) == null ){
+				map.put( groupName, new HashMap<String, Double>(  ) );
+			}
+			if ( map.get( groupName ).get( group ) == null ){
+				map.get( groupName ).put( group, 0.0 );
+			}
+
+			// Categories
+			if ( map.get( catName ) == null ){
+				map.put( catName, new HashMap<String, Double>(  ) );
+			}
+			if ( map.get( catName ).get( group ) == null ){
+				map.get( catName ).put( group, 0.0 );
+			}
+
+			// Subcategories
+			if ( map.get( subCatName ) == null ){
+				map.put( subCatName, new HashMap<String, Double>(  ) );
+			}
+			if ( map.get( subCatName ).get( group ) == null ){
+				map.get( subCatName ).put( group, 0.0 );
+			}
+
+			// Group
+			Double total = map.get( groupName ).get( group );
+			map.get( groupName ).put( group, bill.getAmount() + total );
+
+			// Category
+			total = map.get( catName ).get( group );
+			map.get( catName ).put( group, bill.getAmount() + total );
+
+			// Subcategory
+			total = map.get( subCatName ).get( group );
+			map.get( subCatName ).put( group, bill.getAmount() + total );
+		}
+
+		return map;
 	}
 }
