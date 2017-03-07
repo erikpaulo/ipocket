@@ -62,7 +62,7 @@ public class Category extends BaseEntity<Integer> implements Serializable {
 
         Type(String name) {
 			this.name = name;
-			if (this.name.equalsIgnoreCase( "Despesas" )){
+			if (this.name.equalsIgnoreCase( "Despesas" ) || this.name.equalsIgnoreCase( "Investimentos" )){
 				this.positive = false;
 			}
         }
