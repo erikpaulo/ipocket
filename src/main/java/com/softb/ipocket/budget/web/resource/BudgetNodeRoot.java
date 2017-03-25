@@ -1,5 +1,6 @@
 package com.softb.ipocket.budget.web.resource;
 
+import com.softb.ipocket.bill.model.Bill;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -26,6 +27,7 @@ public class BudgetNodeRoot extends BudgetNode implements Serializable {
     private Double totalNotAllocated;
 
     private List<BudgetNodeGroup> data;
+    private List<Bill> bills;
 
     public BudgetNodeRoot(Integer id, Integer year){
         super();
@@ -33,6 +35,7 @@ public class BudgetNodeRoot extends BudgetNode implements Serializable {
         this.setId(id);
         this.year = year;
         this.data = new ArrayList<>(  );
+        this.bills = new ArrayList<>(  );
 
         this.totalIncome = 0.0;
         this.totalExpense = 0.0;

@@ -16,6 +16,9 @@ public interface BillRepository extends JpaRepository<Bill, Integer> {
     @Query("select b from Bill b where b.groupId = :groupId order by b.date")
     List<Bill> findAllByUser(@Param("groupId") Integer groupId) throws DataAccessException;
 
+    @Query("select b from Bill b where b.done = false and b.date between :start and :end and b.groupId = :groupId order by b.date")
+    List<Bill> findAllByUserPeriodUndone(@Param("start") Date start, @Param("end") Date end, @Param("groupId") Integer groupId) throws DataAccessException;
+
     @Query("select b from Bill b where b.date between :start and :end and b.groupId = :groupId order by b.date")
     List<Bill> findAllByUserPeriod(@Param("start") Date start, @Param("end") Date end, @Param("groupId") Integer groupId) throws DataAccessException;
 

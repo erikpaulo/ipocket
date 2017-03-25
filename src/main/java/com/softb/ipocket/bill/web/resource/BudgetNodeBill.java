@@ -14,7 +14,7 @@ import java.util.List;
  */
 @Data
 @AllArgsConstructor
-public class BudgetNode implements Serializable {
+public class BudgetNodeBill implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -31,7 +31,7 @@ public class BudgetNode implements Serializable {
 //    private Double annualPlan;
 //    private Double monthPlan;
 
-    public BudgetNode(){
+    public BudgetNodeBill(){
         this.id = null;
         this.name = "";
 

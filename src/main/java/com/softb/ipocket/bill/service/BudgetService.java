@@ -1,23 +1,24 @@
-package com.softb.ipocket.budget.service;
+package com.softb.ipocket.bill.service;
 
 
 import com.softb.ipocket.account.service.AccountService;
-import com.softb.ipocket.bill.service.BillService;
+import com.softb.ipocket.bill.model.Bill;
+import com.softb.ipocket.bill.repository.BillRepository;
 import com.softb.ipocket.budget.model.Budget;
 import com.softb.ipocket.budget.model.BudgetEntry;
+import com.softb.ipocket.budget.repository.BudgetEntryRepository;
 import com.softb.ipocket.budget.repository.BudgetRepository;
 import com.softb.ipocket.budget.web.resource.*;
 import com.softb.ipocket.categorization.model.Category;
+import com.softb.ipocket.categorization.model.SubCategory;
 import com.softb.ipocket.categorization.web.CategoryController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Service for some rules related to budget.
@@ -28,6 +29,9 @@ public class BudgetService {
 	@Autowired
 	private BudgetRepository budgetRepository;
 
+	@Autowired
+	private BudgetEntryRepository budgetEntryRepository;
+
     @Autowired
     private CategoryController categoryController;
 
@@ -37,6 +41,9 @@ public class BudgetService {
     @Autowired
     protected BillService billService;
 
+    @Autowired
+    protected BillRepository billRepository;
+
     /**
      * Get user budget with its categories
      * @param year
@@ -44,20 +51,17 @@ public class BudgetService {
      * @return
      */
 	public BudgetNodeRoot getBudget(Integer year, Integer userId){
-
-	    Budget budget = budgetRepository.findAllByUser(year, userId);
-        if (budget == null){
-            budget = new Budget(year, userId);
-            budget = budgetRepository.save(budget);
-        }
-
         // Create hierarchical tree structureMap
-        Map<String, Map<String, ArrayList<BudgetEntry>>> groupMap = new HashMap<>();
-        Map<String, ArrayList<BudgetEntry>> categoryMap;
-        ArrayList<BudgetEntry> subCategories;
-        for (BudgetEntry entry: budget.getEntries()) {
-            String groupName = entry.getSubCategory().getCategory().getType().getName();
-            String categoryName = entry.getSubCategory().getCategory().getName();
+        Map<String, Map<String, Map<String, BudgetEntry>>> groupMap = new HashMap<>();
+        Map<String, Map<String, BudgetEntry>> categoryMap;
+        Map<String, BudgetEntry> subCategoryMap;
+
+        // Add other categories. To cover those cases that bills or entries spent in categories with no budget.
+        List<SubCategory> subCategories =  categoryController.listAllSubcategories();
+        for (SubCategory subCategory: subCategories) {
+            String groupName = subCategory.getCategory().getType().getName();
+            String categoryName = subCategory.getCategory().getName();
+            String subCategoryName = subCategory.getFullName();
 
             if (groupMap.get(groupName) == null){
                 groupMap.put(groupName, new HashMap());
@@ -65,23 +69,47 @@ public class BudgetService {
             categoryMap = groupMap.get(groupName);
 
             if (categoryMap.get(categoryName) == null){
-                categoryMap.put(categoryName, new ArrayList<BudgetEntry>());
+                categoryMap.put(categoryName, new HashMap());
             }
-            subCategories = categoryMap.get(categoryName);
-            subCategories.add(entry);
+            subCategoryMap = categoryMap.get(categoryName);
+            subCategoryMap.put(subCategoryName, new BudgetEntry(subCategory));
         }
+
+        Budget budget = budgetRepository.findAllByUser(year, userId);
+        if (budget == null){
+            budget = new Budget(year, userId);
+            budget = budgetRepository.save(budget);
+        }
+
+        for (BudgetEntry entry: budget.getEntries()) {
+            String groupName = entry.getSubCategory().getCategory().getType().getName();
+            String categoryName = entry.getSubCategory().getCategory().getName();
+            String subCategoryName = entry.getSubCategory().getFullName();
+
+            if (groupMap.get(groupName) == null){
+                groupMap.put(groupName, new HashMap());
+            }
+            categoryMap = groupMap.get(groupName);
+
+            if (categoryMap.get(categoryName) == null){
+                categoryMap.put(categoryName, new HashMap());
+            }
+            subCategoryMap = categoryMap.get(categoryName);
+            subCategoryMap.put(subCategoryName, entry);
+        }
+
 
         // Construct the budget structure
         BudgetNodeRoot budgetRoot = new BudgetNodeRoot(budget.getId(), year);
         for (String keyG: groupMap.keySet()) {
             BudgetNodeGroup budgetGroup = new BudgetNodeGroup(keyG);
 
-            Map<String, ArrayList<BudgetEntry>> catMap = groupMap.get(keyG);
+            Map<String, Map<String, BudgetEntry>> catMap = groupMap.get(keyG);
             for (String keyC: catMap.keySet()) {
                 BudgetNodeCategory budgetCategory = new BudgetNodeCategory(keyC);
 
-                subCategories = catMap.get(keyC);
-                for (BudgetEntry entry: subCategories.subList(0, subCategories.size())) {
+                subCategoryMap = catMap.get(keyC);
+                for (BudgetEntry entry: subCategoryMap.values()) {
                     BudgetNodeSubCategory budgetSubCategory = new BudgetNodeSubCategory(entry.getId(), entry.getSubCategory().getName(), entry.getSubCategory());
                     budgetCategory.getData().add(budgetSubCategory);
                     budgetCategory.setIsPositive(entry.getPositive());
@@ -105,7 +133,10 @@ public class BudgetService {
             budgetRoot.getData().add(budgetGroup);
         }
 
-        budgetRoot.setTotalNotAllocated( budgetRoot.getTotalIncome() - budgetRoot.getTotalExpense() - budgetRoot.getTotalInvested());
+        budgetRoot.setTotalNotAllocated( budgetRoot.getTotalIncome() + budgetRoot.getTotalExpense() + budgetRoot.getTotalInvested());
+
+        List<Bill> bills = billRepository.findAllUndoneByUser( userId );
+        budgetRoot.setBills(bills);
 
         return budgetRoot;
 	}
@@ -129,7 +160,7 @@ public class BudgetService {
 
         // Get all bills registered until the end of the current year.
         // The future is considered through bills projected by the user.
-        Map<String, Map<String, Double>> mapBill = billService.getEntriesGroupedByCategory(today.getTime(), endYear.getTime(), groupId);
+        Map<String, Map<String, Double>> mapBill = billService.getUndoneEntriesGroupedByCategory(today.getTime(), endYear.getTime(), groupId);
 
         Double totalGroupSpent, totalCategorySpent, totalSubCategorySpent, totalDeviation=0.0, totalBudgetSpent=0.0;
         Double groupDeviation;
@@ -141,7 +172,8 @@ public class BudgetService {
 
                 // subcategories
                 totalCategorySpent = 0.0;
-                Double multi = (category.getIsPositive() ? 1.0 : -1.0);
+//                Double multi = (category.getIsPositive() ? 1.0 : -1.0);
+                Double multi = 1.0;
                 for (BudgetNodeSubCategory subCategory: category.getData()) {
 
                     totalSubCategorySpent = 0.0;
@@ -160,9 +192,21 @@ public class BudgetService {
                                 if (subCatBillMap != null){
                                     valueSpent = subCatBillMap.get( formatter.format( cal.getTime() ) );
                                 }
-                            } else {
+                            } else if (i < today.get(Calendar.MONTH)) {
                                 if (subCatSpentMap != null) {
                                    valueSpent = subCatSpentMap.get( formatter.format( cal.getTime() ) );
+                                }
+                            } else { // current month, sum whats planned and whats ocurred
+                                if (subCatBillMap != null && subCatBillMap.get( formatter.format( cal.getTime() ) ) != null){
+                                    valueSpent = subCatBillMap.get( formatter.format( cal.getTime() ) );
+                                }
+
+                                if (subCatSpentMap != null && subCatSpentMap.get( formatter.format( cal.getTime() ) ) != null){
+                                    if (valueSpent != null){
+                                        valueSpent += subCatSpentMap.get( formatter.format( cal.getTime() ) );
+                                    } else {
+                                        valueSpent = subCatSpentMap.get( formatter.format( cal.getTime() ) );
+                                    }
                                 }
                             }
 
@@ -190,58 +234,62 @@ public class BudgetService {
                         }
                     }
                     subCategory.setTotalSpent( totalSubCategorySpent );
-                    if (subCategory.getIsPositive()){
-                        subCategory.setDeviation(subCategory.getTotalSpent() - subCategory.getTotalPlanned());
-                    } else {
-                        subCategory.setDeviation(subCategory.getTotalPlanned() - subCategory.getTotalSpent());
-                    }
+//                    if (subCategory.getIsPositive()){
+                    subCategory.setDeviation(subCategory.getTotalPlanned() - subCategory.getTotalSpent());
+                    subCategory.setDeviationPercent( subCategory.getDeviation() / Math.abs(subCategory.getTotalPlanned()) );
+//                    } else {
+//                        subCategory.setDeviation(subCategory.getTotalSpent() - subCategory.getTotalPlanned());
+//                    }
 
                 }
                 category.setAverageL3M( totalCategorySpent / 3 );
                 category.setTotalSpent( totalCategorySpent );
-                if (category.getIsPositive()){
-                    category.setDeviation(category.getTotalSpent() - category.getTotalPlanned());
-                } else {
-                    category.setDeviation(category.getTotalPlanned() - category.getTotalSpent());
-                }
+//                if (category.getIsPositive()){
+                category.setDeviation(category.getTotalPlanned() - category.getTotalSpent());
+                category.setDeviationPercent( category.getDeviation() / Math.abs(category.getTotalPlanned()) );
+//                } else {
+//                    category.setDeviation(category.getTotalSpent() - category.getTotalPlanned());
+//                }
 
             }
             group.setAverageL3M( totalGroupSpent / 3 );
             group.setTotalSpent( totalGroupSpent );
-            if (group.getIsPositive()){
-                groupDeviation = group.getTotalSpent() - group.getTotalPlanned();
-            } else {
+//            if (group.getIsPositive()){
                 groupDeviation = group.getTotalPlanned() - group.getTotalSpent();
-            }
+//            } else {
+//                groupDeviation = group.getTotalSpent() - group.getTotalPlanned();
+//            }
             group.setDeviation(groupDeviation);
+            group.setDeviationPercent( group.getDeviation() / Math.abs(group.getTotalPlanned()) );
             totalDeviation += groupDeviation;
 
         }
         budget.setAverageL3M( totalBudgetSpent / 3 );
         budget.setTotalSpent( totalBudgetSpent );
         budget.setDeviation(totalDeviation);
+        budget.setDeviationPercent(budget.getDeviation() / Math.abs(budget.getTotalPlanned()) );
 
         return budget;
     }
 
-    /**
-     * Fills the current user bills and projections.
-     * @param budget
-     * @param groupId
-     * @return
-     */
-    public BudgetNodeRoot fillsBillInformation (BudgetNodeRoot budget, Integer groupId){
-        Calendar today = Calendar.getInstance();
-        Calendar startYear = Calendar.getInstance();
-        Calendar endYear = Calendar.getInstance();
-        startYear.set( today.get( Calendar.YEAR ), Calendar.JANUARY, 1, 0, 0, 1 );
-        endYear.set( today.get( Calendar.YEAR ), Calendar.DECEMBER, 31, 23, 59, 59 );
-
-        // Get all bills registered until the end of the current year
-        Map<String, Map<String, Double>> mapSpent = billService.getEntriesGroupedByCategory(today.getTime(), endYear.getTime(), groupId);
-
-	    return budget;
-    }
+//    /**
+//     * Fills the current user bills and projections.
+//     * @param budget
+//     * @param groupId
+//     * @return
+//     */
+//    public BudgetNodeRoot fillsBillInformation (BudgetNodeRoot budget, Integer groupId){
+//        Calendar today = Calendar.getInstance();
+//        Calendar startYear = Calendar.getInstance();
+//        Calendar endYear = Calendar.getInstance();
+//        startYear.set( today.get( Calendar.YEAR ), Calendar.JANUARY, 1, 0, 0, 1 );
+//        endYear.set( today.get( Calendar.YEAR ), Calendar.DECEMBER, 31, 23, 59, 59 );
+//
+//        // Get all bills registered until the end of the current year
+//        Map<String, Map<String, Double>> mapSpent = billService.getEntriesGroupedByCategory(today.getTime(), endYear.getTime(), groupId);
+//
+//	    return budget;
+//    }
 
     private void setPerMonthPlanned(BudgetNode node, BudgetEntry entry) {
         node.getPerMonthPlanned().set(0,  node.getPerMonthPlanned().get(0)  + entry.getJan());
@@ -262,5 +310,119 @@ public class BudgetService {
                                entry.getSep() + entry.getOct() + entry.getNov() + entry.getDec();
 
         node.setTotalPlanned( node.getTotalPlanned() + totalPlanned );
+    }
+
+    /**
+     * Get the current budget registered for the user.
+     * @param groupId
+     * @return
+     */
+    public BudgetNodeRoot getCurrentBudget(Integer groupId) {
+        Integer year = Calendar.getInstance().get(Calendar.YEAR);
+
+        BudgetNodeRoot budget = getBudget(year, groupId);
+
+        budget = fillsSpentInformation(budget, groupId);
+
+        return budget;
+    }
+
+    /**
+     * remove all entries in he current  budget
+     */
+    @Transactional(readOnly = false)
+    public void resetBudget(Integer year, Integer groupId){
+        // Reset the current budget
+
+        return;
+    }
+
+    /**
+     * Save a baseline with the bills registered for the current user.
+     * @param year
+     * @param groupId
+     */
+    @Transactional(readOnly = false)
+    public void saveBaseline(Integer year, Integer groupId) {
+        Calendar today = Calendar.getInstance();
+        Calendar startYear = Calendar.getInstance();
+        Calendar endYear = Calendar.getInstance();
+        startYear.set( today.get( Calendar.YEAR ), Calendar.JANUARY, 1, 0, 0, 1 );
+        endYear.set( today.get( Calendar.YEAR ), Calendar.DECEMBER, 31, 23, 59, 59 );
+
+        Budget budget = budgetRepository.findAllByUser(year, groupId);
+        budgetEntryRepository.deleteInBatch(budget.getEntries());
+        budgetRepository.delete(budget);
+        budget = new Budget(year, groupId);
+        budget = budgetRepository.save(budget);
+
+
+        List<Bill> bills = billRepository.findAllByUser(groupId);
+
+        Map<String, BudgetEntry> mapEntry = new HashMap<>();
+        for (Bill bill: bills) {
+            String catName = bill.getSubCategory().getFullName();
+            if ( mapEntry.get(catName) == null ) {
+                mapEntry.put(catName, new BudgetEntry());
+            }
+            BudgetEntry entry = mapEntry.get(catName);
+
+            entry.setSubCategory(bill.getSubCategory());
+            entry.setBudgetID(budget.getId());
+            entry.setPositive(bill.getSubCategory().getCategory().getType().isPositive());
+            entry.setGroupId(groupId);
+
+            setMonthBudget(entry, bill.getDate(), bill.getAmount());
+
+        }
+        budgetEntryRepository.save(mapEntry.values());
+
+        budget.setEntries(new ArrayList<BudgetEntry>(mapEntry.values()));
+        budgetRepository.saveAndFlush(budget);
+    }
+
+    private void  setMonthBudget(BudgetEntry entry, Date date, Double amount){
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        Integer month = cal.get(Calendar.MONTH);
+
+        switch (month) {
+            case 0:
+                entry.setJan(entry.getJan() + amount);
+                break;
+            case 1:
+                entry.setFeb(entry.getFeb() + amount);
+                break;
+            case 2:
+                entry.setMar(entry.getMar() + amount);
+                break;
+            case 3:
+                entry.setApr(entry.getApr() + amount);
+                break;
+            case 4:
+                entry.setMay(entry.getMay() + amount);
+                break;
+            case 5:
+                entry.setJun(entry.getJun() + amount);
+                break;
+            case 6:
+                entry.setJul(entry.getJul() + amount);
+                break;
+            case 7:
+                entry.setAug(entry.getAug() + amount);
+                break;
+            case 8:
+                entry.setSep(entry.getSep() + amount);
+                break;
+            case 9:
+                entry.setOct(entry.getOct() + amount);
+                break;
+            case 10:
+                entry.setNov(entry.getNov() + amount);
+                break;
+            case 11:
+                entry.setDec(entry.getDec() + amount);
+                break;
+        }
     }
 }

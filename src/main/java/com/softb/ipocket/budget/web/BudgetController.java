@@ -4,7 +4,7 @@ import com.softb.ipocket.budget.model.Budget;
 import com.softb.ipocket.budget.model.BudgetEntry;
 import com.softb.ipocket.budget.repository.BudgetEntryRepository;
 import com.softb.ipocket.budget.repository.BudgetRepository;
-import com.softb.ipocket.budget.service.BudgetService;
+import com.softb.ipocket.bill.service.BudgetService;
 import com.softb.ipocket.budget.web.resource.BudgetNodeRoot;
 import com.softb.ipocket.budget.web.resource.NonAllocatedCategory;
 import com.softb.ipocket.categorization.model.Category;

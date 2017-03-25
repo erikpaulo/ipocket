@@ -7,7 +7,7 @@ import com.softb.ipocket.account.service.AccountService;
 import com.softb.ipocket.bill.model.Bill;
 import com.softb.ipocket.bill.repository.BillRepository;
 import com.softb.ipocket.bill.service.BillService;
-import com.softb.ipocket.bill.web.resource.BudgetNodeRoot;
+import com.softb.ipocket.bill.web.resource.BudgetNodeRootBill;
 import com.softb.ipocket.categorization.model.SubCategory;
 import com.softb.ipocket.dashboard.web.resource.BudgetTrackResource;
 import com.softb.ipocket.dashboard.web.resource.SavingResource;
@@ -157,7 +157,7 @@ public class DashboardService {
     }
 
     public BudgetTrackResource getBudgetTrackInfo(Integer groupId){
-        BudgetNodeRoot budget = billService.genBudget( groupId );
+        BudgetNodeRootBill budget = billService.genBudget( groupId );
 
         Double totalPlanned = null;
         Double totalSpent = null;

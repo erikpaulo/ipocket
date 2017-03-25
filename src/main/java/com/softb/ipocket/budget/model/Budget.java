@@ -28,7 +28,7 @@ public class Budget extends BaseEntity<Integer> implements Serializable {
 	@NotNull
 	protected Integer year;
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "BUDGET_ID", referencedColumnName = "ID")
 	protected List<BudgetEntry> entries;
 

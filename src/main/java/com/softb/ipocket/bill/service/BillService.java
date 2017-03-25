@@ -148,7 +148,7 @@ public class BillService {
 		// Generate accumulated projection
 		CashFlowProjectionResource cashFlow = new CashFlowProjectionResource();
 		for (Entry<String, Map<String, Double>> serie: series.entrySet()){
-			AccountCashFlowResource accountCF = new AccountCashFlowResource(serie.getKey(), new ArrayList<Double>(  ));
+			AccountCashFlowResourceBill accountCF = new AccountCashFlowResourceBill(serie.getKey(), new ArrayList<Double>(  ));
 //			accountCF.setName(serie.getKey());
 
 			Double balance = 0.0;
@@ -169,21 +169,24 @@ public class BillService {
      * @param groupId
      */
 	public void saveBaseline(Integer groupId){
-        List<Baseline> newBaseline = new ArrayList<>(  );
 
-        // Removes the current baseline if there is one.
-        List<Baseline> curBaseline =  baselineRepository.findAllByUser( groupId );
-        if (curBaseline != null){
-            baselineRepository.deleteInBatch( curBaseline );
-        }
 
-        // Save the current plan
-        List<Bill> bills = billRepository.findAllByUser( groupId );
-        for (Bill bill: bills) {
-            newBaseline.add( new Baseline( bill.getDate(), bill.getAmount(), bill.getSubCategory(), bill.getTransfer(),
-                             bill.getAccountTo(), bill.getAccountFrom(), bill.getGroupId() ) );
-        }
-        baselineRepository.save( newBaseline );
+
+//		budget
+
+//        List<Baseline> newBaseline = new ArrayList<>(  );
+//
+//        // Removes the current baseline if there is one.
+//        List<Baseline> curBaseline =  baselineRepository.findAllByUser( groupId );
+//        if (curBaseline != null){
+//            baselineRepository.deleteInBatch( curBaseline );
+//        }
+
+//        for (Bill bill: bills) {
+//            newBaseline.add( new Baseline( bill.getDate(), bill.getAmount(), bill.getSubCategory(), bill.getTransfer(),
+//                             bill.getAccountTo(), bill.getAccountFrom(), bill.getGroupId() ) );
+//        }
+//        baselineRepository.save( newBaseline );
     }
 
     /**
@@ -192,7 +195,7 @@ public class BillService {
      * @param groupId
      * @return
      */
-    public BudgetNodeRoot genBudget(Integer groupId) {
+    public BudgetNodeRootBill genBudget(Integer groupId) {
         Calendar today = Calendar.getInstance();
         today.set(2016, Calendar.DECEMBER, 31, 23, 59);
         Calendar startYear = Calendar.getInstance();
@@ -231,7 +234,7 @@ public class BillService {
         }
 
         // Create budget
-        BudgetNodeRoot nodeBudget = new BudgetNodeRoot(today.get( Calendar.YEAR ), true);
+        BudgetNodeRootBill nodeBudget = new BudgetNodeRootBill(today.get( Calendar.YEAR ), true);
         nodeBudget.setName( "Budget - "+ nodeBudget.getYear() );
 
         // Build the budget full structure from the active user categories.
@@ -239,14 +242,14 @@ public class BillService {
         Double totalBudgetSpent=0.0, totalGroupSpent, totalCategorySpent, totalSubCategorySpent;
         Double totalBudgetPlanned=0.0, totalGroupPlanned, totalCategoryPlanned, totalSubCategoryPlanned;
         for (CategoryGroupResource group: groups) {
-            BudgetNodeGroup nodeGroup = new BudgetNodeGroup();
+            BudgetNodeGroupBill nodeGroup = new BudgetNodeGroupBill();
             nodeGroup.setName( group.getName() );
 
             // categories
             totalGroupSpent = 0.0;
             totalGroupPlanned = 0.0;
             for (Category category: group.getCategories()) {
-                BudgetNodeCategory nodeCategory = new BudgetNodeCategory();
+                BudgetNodeCategoryBill nodeCategory = new BudgetNodeCategoryBill();
                 nodeCategory.setName( category.getName() );
 
                 // subcategories
@@ -255,7 +258,7 @@ public class BillService {
                 Double multi = (category.getType().isPositive() ? 1.0 : -1.0);
                 for (SubCategory subCategory: category.getSubcategories()) {
                     if (subCategory.getActivated()) {
-                        BudgetNodeSubCategory nodeSubCategory = new BudgetNodeSubCategory(  );
+                        BudgetNodeSubCategoryBill nodeSubCategory = new BudgetNodeSubCategoryBill(  );
                         nodeSubCategory.setName( subCategory.getFullName() );
                         nodeSubCategory.setSubCategory( subCategory );
 
@@ -445,10 +448,25 @@ public class BillService {
 	 * @param groupId
 	 * @return
 	 */
-	public Map<String,Map<String,Double>> getEntriesGroupedByCategory(Date start, Date end, Integer groupId) {
-		DateFormat formatter = new SimpleDateFormat( "MM/yyyy" );
+	public Map<String,Map<String,Double>> getUndoneEntriesGroupedByCategory(Date start, Date end, Integer groupId) {
+		List<Bill> bills =  billRepository.findAllByUserPeriodUndone(start, end, groupId);
+		return groupbyCategory(bills);
+	}
 
+	/**
+	 * Returns all bills registered. They are all grouped into categories;
+	 * @param start
+	 * @param end
+	 * @param groupId
+	 * @return
+	 */
+	public Map<String,Map<String,Double>> getEntriesGroupedByCategory(Date start, Date end, Integer groupId){
 		List<Bill> bills =  billRepository.findAllByUserPeriod(start, end, groupId);
+		return groupbyCategory(bills);
+	}
+
+	private Map<String, Map<String, Double>> groupbyCategory(List<Bill> bills) {
+		DateFormat formatter = new SimpleDateFormat( "MM/yyyy" );
 
 		// Group all planned entries by its subcategories
 		Map<String, Map<String, Double>> map = new HashMap<>(  );
@@ -495,7 +513,7 @@ public class BillService {
 			total = map.get( subCatName ).get( group );
 			map.get( subCatName ).put( group, bill.getAmount() + total );
 		}
-
 		return map;
 	}
+
 }

@@ -2,7 +2,6 @@ package com.softb.ipocket.bill.web.resource;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -14,23 +13,14 @@ import java.util.List;
  */
 @Data
 @AllArgsConstructor
-@NoArgsConstructor
-public class BudgetNodeRoot extends BudgetNode implements Serializable {
+public class BudgetNodeCategoryBill extends BudgetNodeBill implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private Integer year;
-    private Boolean active;
+    private List<BudgetNodeSubCategoryBill> data;
 
-    private Double totalIncome;
-    private Double totalExpense;
-
-    private List<BudgetNodeGroup> data;
-
-    public BudgetNodeRoot(Integer year, Boolean active){
+    public BudgetNodeCategoryBill(){
         super();
 
-        this.year = year;
-        this.active = active;
         this.data = new ArrayList<>(  );
     }
 }

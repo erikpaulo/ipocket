@@ -6,8 +6,8 @@ define(['./module'
 
         function (app) {
 
-	app.controller('BillController', ['$scope', '$filter', '$http', '$timeout', '$mdBottomSheet', '$mdDialog', 'MaterialCalendarData', 'BillResource', 'SubCategoryResource', 'AccountResource', 'Utils',
-        function($scope, $filter, $http, $timeout, $mdBottomSheet, $mdDialog, MaterialCalendarData, Bill, SubCategory, Account, Util) {
+	app.controller('BillController', ['$scope', '$filter', '$timeout', '$mdBottomSheet', '$mdDialog', 'MaterialCalendarData', 'BillResource', 'SubCategoryResource', 'AccountResource', 'Utils',
+        function($scope, $filter, $timeout, $mdBottomSheet, $mdDialog, MaterialCalendarData, Bill, SubCategory, Account, Util) {
             $scope.appContext.contextPage = 'Pagamentos Programados';
             $scope.appContext.contextMenu.setActions([
                 {icon: 'add_circle', tooltip: 'Novo Pagamento', onClick: function() {
@@ -20,9 +20,7 @@ define(['./module'
                     });
                }},
                {icon: 'archive', tooltip: 'Gravar Baseline', onClick: function() {
-                   Bill.saveBaseline(function(){
-                        addSuccess($scope);
-                   });
+                    $scope.saveBaseline();
                }}
             ]);
 
@@ -30,16 +28,18 @@ define(['./module'
                 return $filter('filter')($scope.subCategories, query);
             }
 
-            // gets all bills
-            $scope.billsHash = [];
-            Bill.listAll(function(bills){
-
-                // Use CalendarData to setup the bills in the correct date.
-                var billsHash = [];
-                angular.forEach(bills, function(bill){
-                    addBillHash($scope, $filter, MaterialCalendarData, bill)
+            $scope.saveBaseline = function(){
+                Bill.saveBaseline(function(budget){
+                    $timeout(function() {
+                        setCurrentBudget($scope, $filter, MaterialCalendarData, budget);
+                        addSuccess($scope);
+                    }, 0);
                 });
-                selectBills($scope, $filter);
+            }
+
+            // gets all bills
+            Bill.getCurrent(function(budget){
+                setCurrentBudget($scope, $filter, MaterialCalendarData, budget);
             });
 
             // To select a single date, make sure the ngModel is not an array.
@@ -83,10 +83,12 @@ define(['./module'
                 delete billToSave.edit
                 delete billToSave.bill
 
-                billToSave.$save(function(data){
-                    angular.extend(bill, data);
-                    bill.edit = false;
-                    $scope.inEdit = null;
+                billToSave.$save(function(budget){
+//                    angular.extend(bill, data);
+//                    bill.edit = false;
+//                    $scope.inEdit = null;
+
+                    setCurrentBudget($scope, $filter, MaterialCalendarData, budget);
 
                     addSuccess($scope);
                 });
@@ -95,9 +97,9 @@ define(['./module'
             $scope.delete = function(bill){
                 bill.date = new Date(bill.date);
 
-                new Bill(bill).$delete(function(){
-                    removeBillFromView(bill);
-
+                new Bill(bill).$delete(function(budget){
+//                    removeBillFromView(bill);
+                    setCurrentBudget($scope, $filter, MaterialCalendarData, budget);
                     addSuccess($scope);
                 });
             }
@@ -105,9 +107,9 @@ define(['./module'
             $scope.done = function(bill){
                 bill.date = new Date(bill.date);
 
-                new Bill(bill).$done(function(){
-                    removeBillFromView(bill);
-
+                new Bill(bill).$done(function(budget){
+//                    removeBillFromView(bill);
+                    setCurrentBudget($scope, $filter, MaterialCalendarData, budget);
                     addSuccess($scope);
                 });
             }
@@ -181,7 +183,6 @@ define(['./module'
                     }, 0);
                 },
                 series:[
-//                    {name:"Acumulado", data:[1200,2776,3121,7653,12653, 18085, 20430, 24214, 24448, 24641, 32276, 34276],id:"series-0"},
                 ],
                 title:{text:""},
                 credits:{enabled:false},
@@ -195,7 +196,6 @@ define(['./module'
                         enabled: true
                     },
                     categories: [],
-//                    categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
                     lineWidth: 1
                 },
                 yAxis: {
@@ -224,16 +224,16 @@ define(['./module'
             clickOutsideToClose:true
         }).then(function(newBill){
 
-            new Bill(newBill).$new(function(data){
-                var bills = data.relatedBills;
-                bills.push(data);
-
-                angular.forEach(bills, function(bill){
-                    bill.date = new Date(bill.date);
-                    addBillHash($scope, $filter, MaterialCalendarData, bill)
-                });
-                selectBills($scope, $filter)
-
+            new Bill(newBill).$new(function(budget){
+//                var bills = data.relatedBills;
+//                bills.push(data);
+//
+//                angular.forEach(bills, function(bill){
+//                    bill.date = new Date(bill.date);
+//                    addBillHash($scope, $filter, MaterialCalendarData, bill)
+//                });
+//                selectBills($scope, $filter)
+                setCurrentBudget($scope, $filter, MaterialCalendarData, budget);
                 addSuccess($scope);
             });
         });
@@ -327,6 +327,22 @@ define(['./module'
         }
 
         $scope.billsHash[key].push(bill);
+    }
+
+    function setCurrentBudget($scope, $filter, MaterialCalendarData, budget){
+        $scope.budget = budget;
+
+        // reset controls
+        $scope.billsHash = [];
+        MaterialCalendarData.data = [];
+
+
+        // Use CalendarData to setup the bills in the correct date.
+        var billsHash = [];
+        angular.forEach(budget.bills, function(bill){
+            addBillHash($scope, $filter, MaterialCalendarData, bill)
+        });
+        selectBills($scope, $filter);
     }
 
     function getFormattedDate($filter, date){

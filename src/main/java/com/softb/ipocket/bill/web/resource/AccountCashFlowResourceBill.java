@@ -14,7 +14,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AccountCashFlowResource implements Serializable {
+public class AccountCashFlowResourceBill implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

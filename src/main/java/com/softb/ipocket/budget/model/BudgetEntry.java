@@ -4,7 +4,6 @@ import com.softb.ipocket.categorization.model.SubCategory;
 import com.softb.system.repository.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -16,7 +15,6 @@ import java.io.Serializable;
  *
  */
 @AllArgsConstructor
-@NoArgsConstructor
 @Data
 @Entity
 @Table(name = "BUDGET_ENTRY")
@@ -77,4 +75,38 @@ public class BudgetEntry extends BaseEntity<Integer> implements Serializable {
 
     @Transient
     private Integer subCategoryId;
+
+    public BudgetEntry(){
+        this.subCategory = null;
+        this.budgetID = null;
+        this.jan = 0.0;
+        this.feb = 0.0;
+        this.mar = 0.0;
+        this.apr = 0.0;
+        this.may = 0.0;
+        this.jun = 0.0;
+        this.jul = 0.0;
+        this.aug = 0.0;
+        this.sep = 0.0;
+        this.oct = 0.0;
+        this.nov = 0.0;
+        this.dec = 0.0;
+    }
+
+    public BudgetEntry(SubCategory subCategory){
+        this.subCategory = subCategory;
+        this.budgetID = null;
+        this.jan = 0.0;
+        this.feb = 0.0;
+        this.mar = 0.0;
+        this.apr = 0.0;
+        this.may = 0.0;
+        this.jun = 0.0;
+        this.jul = 0.0;
+        this.aug = 0.0;
+        this.sep = 0.0;
+        this.oct = 0.0;
+        this.nov = 0.0;
+        this.dec = 0.0;
+    }
 }

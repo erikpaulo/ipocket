@@ -27,6 +27,7 @@ public class BudgetNode implements Serializable {
     private List<Double> perMonthSpent;
     private Double averageL3M;
     private Double deviation;
+    private Double deviationPercent;
     private Boolean isPositive;
     private Double annualPlan;
     private Double monthPlan;

@@ -6,7 +6,7 @@ function (module) {
 	        'api/bill/:id/:action',
 	        {id: '@id'},
 	        {
-	            listAll:	  { method : 'GET',  params: {}, isArray : true  },
+	            getCurrent:   { method : 'GET',  params: {}, isArray : false  },
 	            new:		  { method : 'POST', params: {}, isArray : false },
 	            save:		  { method : 'PUT',  params: {}, isArray : false },
 	            done:		  { method : 'GET',  params: {action: 'done'}, isArray : false },

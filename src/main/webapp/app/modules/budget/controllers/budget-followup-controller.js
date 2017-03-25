@@ -31,6 +31,54 @@ define(['./module'
                         $location.path('/budget/new');
                     }
 
+                    $scope.billProjectionChartConfig = {
+                        options:{
+                            chart:{
+                                type:"areaspline"
+                            },
+                            plotOptions:{
+                                series:{
+                                    stacking:""
+                                }
+                            },
+                            tooltip: {
+                                shared: true,
+                                pointFormat: '<span style="color:{point.color}">\u25CF</span> {series.name}: <b>R$ {point.y: ,.2f}</b><br/>',
+                                headerFormat: ''
+                            }
+                        },
+                        func: function(chart) {
+                            $timeout(function() {
+                                chart.reflow();
+                            }, 0);
+                        },
+                        series:[
+                        ],
+                        title:{text:""},
+                        credits:{enabled:false},
+                        loading:false,
+                        size:{
+                            height:300,
+                            width:800
+                        },
+                        xAxis: {
+                            labels: {
+                                enabled: true
+                            },
+                            categories: [],
+                            lineWidth: 1
+                        },
+                        yAxis: {
+                            title: {
+                                enabled: false
+                            },
+                            labels: {
+                                enabled: true
+                            },
+                            gridLineWidth: 1
+                        }
+                    }
+
                     function summarize (node){
                         calcLastMonthsData(node);
                         calcLastMonthData(node);
