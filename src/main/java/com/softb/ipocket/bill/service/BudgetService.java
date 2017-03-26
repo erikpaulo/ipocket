@@ -366,18 +366,19 @@ public class BudgetService {
         Map<String, BudgetEntry> mapEntry = new HashMap<>();
         for (Bill bill: bills) {
             String catName = bill.getSubCategory().getFullName();
-            if ( mapEntry.get(catName) == null ) {
-                mapEntry.put(catName, new BudgetEntry());
+            if (!catName.equals("Cartão de Crédito : Pagamento")){
+                if ( mapEntry.get(catName) == null ) {
+                    mapEntry.put(catName, new BudgetEntry());
+                }
+                BudgetEntry entry = mapEntry.get(catName);
+
+                entry.setSubCategory(bill.getSubCategory());
+                entry.setBudgetID(budget.getId());
+                entry.setPositive(bill.getSubCategory().getCategory().getType().isPositive());
+                entry.setGroupId(groupId);
+
+                setMonthBudget(entry, bill.getDate(), bill.getAmount());
             }
-            BudgetEntry entry = mapEntry.get(catName);
-
-            entry.setSubCategory(bill.getSubCategory());
-            entry.setBudgetID(budget.getId());
-            entry.setPositive(bill.getSubCategory().getCategory().getType().isPositive());
-            entry.setGroupId(groupId);
-
-            setMonthBudget(entry, bill.getDate(), bill.getAmount());
-
         }
         budgetEntryRepository.save(mapEntry.values());
 
