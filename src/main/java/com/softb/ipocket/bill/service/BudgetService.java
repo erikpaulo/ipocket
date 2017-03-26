@@ -59,20 +59,24 @@ public class BudgetService {
         // Add other categories. To cover those cases that bills or entries spent in categories with no budget.
         List<SubCategory> subCategories =  categoryController.listAllSubcategories();
         for (SubCategory subCategory: subCategories) {
-            String groupName = subCategory.getCategory().getType().getName();
-            String categoryName = subCategory.getCategory().getName();
-            String subCategoryName = subCategory.getFullName();
 
-            if (groupMap.get(groupName) == null){
-                groupMap.put(groupName, new HashMap());
-            }
-            categoryMap = groupMap.get(groupName);
+            // @TODO do better solution when i have time
+            if (!subCategory.getName().equals("Pagamento")){
+                String groupName = subCategory.getCategory().getType().getName();
+                String categoryName = subCategory.getCategory().getName();
+                String subCategoryName = subCategory.getFullName();
 
-            if (categoryMap.get(categoryName) == null){
-                categoryMap.put(categoryName, new HashMap());
+                if (groupMap.get(groupName) == null){
+                    groupMap.put(groupName, new HashMap());
+                }
+                categoryMap = groupMap.get(groupName);
+
+                if (categoryMap.get(categoryName) == null){
+                    categoryMap.put(categoryName, new HashMap());
+                }
+                subCategoryMap = categoryMap.get(categoryName);
+                subCategoryMap.put(subCategoryName, new BudgetEntry(subCategory));
             }
-            subCategoryMap = categoryMap.get(categoryName);
-            subCategoryMap.put(subCategoryName, new BudgetEntry(subCategory));
         }
 
         Budget budget = budgetRepository.findAllByUser(year, userId);
