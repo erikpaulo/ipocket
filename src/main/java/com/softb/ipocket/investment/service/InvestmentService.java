@@ -288,7 +288,7 @@ public class InvestmentService {
     }
 
     public SubCategory  getDefaultSubCategory(Integer groupId){
-        return subCategoryRepository.findOneByUser( 25, groupId );
+        return subCategoryRepository.findOneByUser( 79, groupId );
 //        Category category = new Category("Investimento", Category.Type.INV, null, groupId, null);
 //        return new SubCategory( "Investimento", true, null, category, groupId, 9999, "Investimento: Investimento" );
     }
