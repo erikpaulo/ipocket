@@ -13,7 +13,6 @@ import com.softb.ipocket.investment.repository.InvestmentRepository;
 import com.softb.ipocket.investment.web.resource.InvestmentFRDResource;
 import com.softb.ipocket.investment.web.resource.InvestmentSummaryResource;
 import com.softb.ipocket.investment.web.resource.InvestmentTypeResource;
-import com.softb.system.errorhandler.exception.BusinessException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -120,9 +119,9 @@ public class InvestmentService {
      */
     public InvestmentFRDResource getFRDStatement(Investment investment, Integer groupId) {
 
-        if (investment.getType().compareTo( Investment.Type.FRD ) != 0){
-            throw new BusinessException( "This investment should be of type FRD, but its "+ investment.getType() );
-        }
+//        if (investment.getType().compareTo( Investment.Type.FRD ) != 0){
+//            throw new BusinessException( "This investment should be of type FRD, but its "+ investment.getType() );
+//        }
 
         // Sort indexes by date
         Collections.sort(investment.getIndexUpdates(), new Comparator<Index>() {
