@@ -1,7 +1,7 @@
 <section ng-controller="BillController">
     <div layout="row" layout-fill>
         <div layout="column" flex="65">
-            <md-card layout="row">
+            <md-card layout="row" style="min-height:90px;">
                 <div layout="column">
                     <md-toolbar layout flex layout-align="center center">
                         <div class="md-toolbar-tools">
@@ -21,10 +21,6 @@
                         <div layout="column" flex="30" layout-align="end center" class="">
                             <span class="md-display-1" style="color: #7A7A7A;">{{budget.deviation | currency}}</span>
                             <span style="color: #7A7A7A;">&nbsp; Desvio Total</span>
-                        </div>
-                        <md-divider></md-divider>
-                        <div layout="column" flex="20" layout-align="center center" class="">
-                            <span class="md-display-3" style="color: #7A7A7A;">{{ (budget.deviation/budget.totalPlanned)*100 | number:0 }}%</span>
                         </div>
                         <md-divider></md-divider>
                         <div layout="column" flex="20" layout-align="center center" class="">
@@ -174,70 +170,7 @@
             </md-card>
         </div>
         <div layout="column" flex="35">
-            <!--<div layout="row">-->
-                <!--<div layout="column" flex="50">-->
-                    <!--<md-card layout="row">-->
-                        <!--<md-card-header class="mdl-color&#45;&#45;indigo-600" layout="column">-->
-                            <!--<md-icon class="material-icons step md-36" style="color:white;">-->
-                                <!--attach_money-->
-                            <!--</md-icon>-->
-                        <!--</md-card-header>-->
-                        <!--<md-divider></md-divider>-->
-                        <!--<md-card-content layout="row" flex class="c-padding-5" layout-align="start center">-->
-                            <!--<div layout="column" flex="65">-->
-                                <!--<div layout="row" layout-align="start center" class="c-padding-5">-->
-                                    <!--<span class="md-subhead">{{budget.totalIncome | currency}}</span>-->
-                                <!--</div>-->
-                                <!--<md-divider></md-divider>-->
-                                <!--<div layout="row" layout-align="start center" class="c-padding-5">-->
-                                    <!--<span class="md-subhead">{{budget.totalIncome | currency}}</span>-->
-                                <!--</div>-->
-                            <!--</div>-->
-                            <!--<md-divider></md-divider>-->
-                            <!--&lt;!&ndash;<div layout="column" flex="35" layout-align="center center">&ndash;&gt;-->
-                                <!--&lt;!&ndash;<span class="md-headline">95%</span>&ndash;&gt;-->
-                            <!--&lt;!&ndash;</div>&ndash;&gt;-->
-                        <!--</md-card-content>-->
-                    <!--</md-card>-->
-                <!--</div>-->
-                <!--<div layout="column" flex="50">-->
-                    <!--<md-card layout="row">-->
-                        <!--<md-card-header class="mdl-color&#45;&#45;red-600" layout="column">-->
-                            <!--<md-icon class="material-icons step md-36" style="color:white;">-->
-                                <!--remove_circle-->
-                            <!--</md-icon>-->
-                        <!--</md-card-header>-->
-                        <!--<md-divider></md-divider>-->
-                        <!--<md-card-content layout="row" flex class="c-padding-5" layout-align="start center">-->
-                            <!--<div layout="column" flex="100">-->
-                                <!--<div layout="row" layout-align="start center" class="c-padding-5">-->
-                                    <!--<span class="md-subhead">{{budget.totalIncome | currency}}</span>-->
-                                <!--</div>-->
-                                <!--<md-divider></md-divider>-->
-                                <!--<div layout="row" layout-align="start center" class="c-padding-5">-->
-                                    <!--<span class="md-subhead">{{budget.totalIncome | currency}}</span>-->
-                                <!--</div>-->
-                            <!--</div>-->
-                            <!--<md-divider></md-divider>-->
-                            <!--&lt;!&ndash;<div layout="column" flex="35" layout-align="center center">&ndash;&gt;-->
-                                <!--&lt;!&ndash;<span class="md-subhead">95%</span>&ndash;&gt;-->
-                            <!--&lt;!&ndash;</div>&ndash;&gt;-->
-                        <!--</md-card-content>-->
-                    <!--</md-card>-->
-                <!--</div>-->
-            <!--</div>-->
-            <div layout="row">
-                <div layout="column" flex style="padding: 0px 5px 0px 5px;">
-                    <calendar-md
-                                  on-day-click="dayClick"
-                                  title-format="'MMMM y'"
-                                  on-prev-month="monthClick"
-                                  on-next-month="monthClick"
-                                  ng-model='selectedDate'>
-                    </calendar-md>
-                </div>
-            </div>
-            <md-card layout="row">
+            <md-card layout="row" flex="35">
                 <div layout="column">
                     <md-toolbar layout flex layout-align="center center">
                         <div class="md-toolbar-tools">
@@ -313,137 +246,21 @@
                                     <span class="md-display-1" style="color: #7A7A7A;" ng-show="budget.data[2]">{{ (budget.data[2].deviationPercent*100) | number:0 }}%</span>
                                 </div>
                             </div>
-                            <!--<div layout="row" class="md-padding" layout-align="start center">-->
-                                <!--<div layout="column" flex="70">-->
-                                    <!--<div layout="row" layout-align="start center">-->
-                                        <!--<span class="md-headline" ng-show="budget.data[1]">{{budget.data[1].deviation | currency}}</span>-->
-                                        <!--<span class="md-headline" ng-hide="budget.data[1]">{{0 | currency}}</span>-->
-                                    <!--</div>-->
-                                    <!--<div layout="row" layout-align="end center">-->
-                                        <!--<div layout="column" flex="50" layout-align="center start">-->
-                                            <!--<span style="color: #7A7A7A;" ng-show="budget.data[1]">{{budget.data[1].name}}</span>-->
-                                            <!--<span style="color: #7A7A7A;" ng-hide="budget.data[1]">Não definido</span>-->
-                                        <!--</div>-->
-                                    <!--</div>-->
-                                <!--</div>-->
-                                <!--<md-divider></md-divider>-->
-                                <!--<div layout="column" flex="30" layout-align="center center">-->
-                                    <!--<span class="md-display-1"  style="color: #7A7A7A;" ng-show="budget.data[1]">{{ (budget.data[1].deviation/budget.data[1].totalPlanned)*100 | number:0 }}%</span>-->
-                                <!--</div>-->
-                            <!--</div>-->
-                            <!--<md-divider></md-divider>-->
-                            <!--<div layout="row" class="md-padding" layout-align="center center">-->
-                                <!--<div layout="column" flex="100">-->
-                                    <!--<div layout="row" layout-align="start center">-->
-                                        <!--<span class="md-headline" ng-show="budget.data[2]">{{budget.data[2].deviation | currency}}</span>-->
-                                        <!--<span class="md-headline" ng-hide="budget.data[2]">{{0 | currency}}</span>-->
-                                    <!--</div>-->
-                                    <!--<div layout="row" layout-align="end center">-->
-                                        <!--<div layout="column" flex="50" layout-align="center start">-->
-                                            <!--<span style="color: #7A7A7A;" ng-hide="budget.data[2]">{{budget.data[2].name}}</span>-->
-                                            <!--<span style="color: #7A7A7A;" ng-hide="budget.data[2]">Não definido</span>-->
-                                        <!--</div>-->
-                                        <!--<md-divider></md-divider>-->
-                                        <!--<div layout="column" flex="50" layout-align="center end">-->
-                                            <!--<span style="color: #7A7A7A;" ng-show="data.budget[2]">&nbsp;({{ (budget.data[2].deviation/budget.data[2].totalPlanned)*100 | number:0 }}%)</span>-->
-                                        <!--</div>-->
-                                    <!--</div>-->
-                                <!--</div>-->
-                            <!--</div>-->
                         </div>
                     </div>
                 </md-card-content>
             </md-card>
+            <div layout="row">
+                <div layout="column" flex style="padding: 0px 5px 0px 5px;">
+                    <calendar-md
+                            on-day-click="dayClick"
+                            title-format="'MMMM y'"
+                            on-prev-month="monthClick"
+                            on-next-month="monthClick"
+                            ng-model='selectedDate'>
+                    </calendar-md>
+                </div>
+            </div>
         </div>
     </div>
-                <!--<div layout="column" flex="20">-->
-                    <!--<md-card layout="row">-->
-                        <!--<md-card-header class="mdl-color&#45;&#45;green-600" layout="column">-->
-                            <!--<md-icon class="material-icons step md-36" style="color:white;">-->
-                                <!--trending_up-->
-                            <!--</md-icon>-->
-                            <!--<span style="color:white">invests</span>-->
-                        <!--</md-card-header>-->
-                        <!--<md-divider></md-divider>-->
-                        <!--<md-card-content layout="row" flex class="c-padding-5" layout-align="start center">-->
-                            <!--<div layout="column" flex="65">-->
-                                <!--<div layout="row" layout-align="start center" class="c-padding-5">-->
-                                    <!--<span class="md-subhead">{{budget.totalIncome | currency}}</span>-->
-                                <!--</div>-->
-                                <!--<md-divider></md-divider>-->
-                                <!--<div layout="row" layout-align="start center" class="c-padding-5">-->
-                                    <!--<span class="md-subhead">{{budget.totalIncome | currency}}</span>-->
-                                <!--</div>-->
-                            <!--</div>-->
-                            <!--<md-divider></md-divider>-->
-                            <!--<div layout="column" flex="35" layout-align="center center">-->
-                                <!--<span class="md-headline">95%</span>-->
-                            <!--</div>-->
-                        <!--</md-card-content>-->
-                    <!--</md-card>-->
-                <!--</div>-->
-
-
-
-    <!--<div layout="row">-->
-        <!--<div layout="column" flex="100">-->
-            <!--<md-card layout flex="15">-->
-                <!--<div layout="column">-->
-                    <!--<md-toolbar layout flex="100" layout-align="center center">-->
-                        <!--<div class="md-toolbar-tools">-->
-                            <!--<div class="c-vertical-title">-->
-                                <!--<span class="">2017</span>-->
-                            <!--</div>-->
-                        <!--</div>-->
-                    <!--</md-toolbar>-->
-                <!--</div>-->
-                <!--<md-card-content layout="column" flex="100">-->
-                    <!--<div layout="row">-->
-                        <!--<div layout="column" flex="100">-->
-                            <!--<div layout="row">-->
-                                <!--<md-divider></md-divider>-->
-                                <!--<div layout="column" flex="30">-->
-                                    <!--<div layout="row" layout-align="center center" class="table-head">Entradas</div>-->
-                                    <!--<md-divider></md-divider>-->
-                                    <!--<div layout="row">-->
-                                        <!--<div layout="column" flex="50" class="c-padding-5" layout-align="center center">{{budget.totalIncome | currency}}</div>-->
-                                        <!--<md-divider></md-divider>-->
-                                        <!--<div layout="column" flex="50" class="c-padding-5" layout-align="center center">{{budget.totalIncome | currency}}</div>-->
-                                    <!--</div>-->
-                                <!--</div>-->
-                                <!--<md-divider></md-divider>-->
-                                <!--<div layout="column" flex="30">-->
-                                    <!--<div layout="row" layout-align="center center" class="table-head">Saídas</div>-->
-                                    <!--<md-divider></md-divider>-->
-                                    <!--<div layout="row">-->
-                                        <!--<div layout="column" flex="50" class="c-padding-5" layout-align="center center">{{budget.totalIncome | currency}}</div>-->
-                                        <!--<md-divider></md-divider>-->
-                                        <!--<div layout="column" flex="50" class="c-padding-5" layout-align="center center">{{budget.totalIncome | currency}}</div>-->
-                                    <!--</div>-->
-                                <!--</div>-->
-                                <!--<md-divider></md-divider>-->
-                                <!--<div layout="column" flex="30">-->
-                                    <!--<div layout="row" layout-align="center center" class="table-head">Investimentos</div>-->
-                                    <!--<md-divider></md-divider>-->
-                                    <!--<div layout="row">-->
-                                        <!--<div layout="column" flex="50" class="c-padding-5" layout-align="center center">{{budget.totalIncome | currency}}</div>-->
-                                        <!--<md-divider></md-divider>-->
-                                        <!--<div layout="column" flex="50" class="c-padding-5" layout-align="center center">{{budget.totalIncome | currency}}</div>-->
-                                    <!--</div>-->
-                                <!--</div>-->
-                                <!--<md-divider></md-divider>-->
-                                <!--<div layout="column" flex="15">-->
-                                    <!--<div layout="row" layout-align="center center" class="table-head">Não Alocado</div>-->
-                                    <!--<md-divider></md-divider>-->
-                                    <!--<div layout="row" layout-align="center center" class="c-padding-5">{{budget.totalNotAllocated | currency}}</div>-->
-                                <!--</div>-->
-                                <!--<md-divider></md-divider>-->
-                            <!--</div>-->
-                            <!--<md-divider></md-divider>-->
-                        <!--</div>-->
-                    <!--</div>-->
-                <!--</md-card-content>-->
-            <!--</md-card>-->
-        <!--</div>-->
-    <!--</div>-->
 </section>

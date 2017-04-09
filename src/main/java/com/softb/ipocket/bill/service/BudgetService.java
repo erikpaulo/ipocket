@@ -354,19 +354,21 @@ public class BudgetService {
         startYear.set( today.get( Calendar.YEAR ), Calendar.JANUARY, 1, 0, 0, 1 );
         endYear.set( today.get( Calendar.YEAR ), Calendar.DECEMBER, 31, 23, 59, 59 );
 
+        // Reset budget - create a new budget
         Budget budget = budgetRepository.findAllByUser(year, groupId);
-        budgetEntryRepository.deleteInBatch(budget.getEntries());
-        budgetRepository.delete(budget);
+        if (budget != null){
+            budgetEntryRepository.deleteInBatch(budget.getEntries());
+            budgetRepository.delete(budget);
+        }
         budget = new Budget(year, groupId);
         budget = budgetRepository.save(budget);
 
-
         List<Bill> bills = billRepository.findAllByUser(groupId);
-
         Map<String, BudgetEntry> mapEntry = new HashMap<>();
         for (Bill bill: bills) {
-            String catName = bill.getSubCategory().getFullName();
-            if (!catName.equals("Cartão de Crédito : Pagamento")){
+            // Do not consider investments as expenses. Investments are excluded from budget.
+            if ( !bill.getSubCategory().getCategory().getType().equals(Category.Type.INV) && (bill.getTransfer() == null) ){
+                String catName = bill.getSubCategory().getFullName();
                 if ( mapEntry.get(catName) == null ) {
                     mapEntry.put(catName, new BudgetEntry());
                 }
