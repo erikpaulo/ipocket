@@ -1,4 +1,4 @@
-package com.softb.ipocket.budget.web;
+package com.softb.ipocket.bill.web;
 
 import com.softb.ipocket.budget.model.Budget;
 import com.softb.ipocket.budget.model.BudgetEntry;

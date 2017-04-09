@@ -11,8 +11,8 @@ function (module) {
 	            save:		  { method : 'PUT',  params: {}, isArray : false },
 	            done:		  { method : 'GET',  params: {action: 'done'}, isArray : false },
 	            listCashFlow: { method : 'GET',  params: {action: 'cashFlow'}, isArray : false },
-	            saveBaseline: { method : 'GET',  params: {action: 'saveBaseline'}, isArray : false },
-	            budget:       { method : 'GET',  params: {action: 'budget'}, isArray : false }
+	            saveBaseline: { method : 'GET',  params: {action: 'saveBaseline'}, isArray : false }
+//	            budget:       { method : 'GET',  params: {action: 'budget'}, isArray : false }
 	        }
 	    );
 

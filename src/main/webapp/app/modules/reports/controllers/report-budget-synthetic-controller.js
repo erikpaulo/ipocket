@@ -1,10 +1,10 @@
 define(['app',
-        '../../bill/services/bill-resources.js'
+        '../../bill/services/budget-resources.js'
         ], function(app) {
-	app.controller('ReportBudgetSyntheticController', ['$scope', 'Constants', 'BillResource',
-        function($scope, Constants, Bill) {
+	app.controller('ReportBudgetSyntheticController', ['$scope', 'Constants', 'BudgetResource',
+        function($scope, Constants, Budget) {
 
-            Bill.budget(function(data){
+            Budget.getBudgetFollowUp(function(data){
                 $scope.budget = data;
 
                 $scope.totalNotPlanned = 0.0;

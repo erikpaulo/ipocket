@@ -7,7 +7,6 @@ import com.softb.ipocket.bill.model.Bill;
 import com.softb.ipocket.bill.repository.BillRepository;
 import com.softb.ipocket.bill.service.BillService;
 import com.softb.ipocket.bill.service.BudgetService;
-import com.softb.ipocket.bill.web.resource.BudgetNodeRootBill;
 import com.softb.ipocket.bill.web.resource.CashFlowProjectionResource;
 import com.softb.ipocket.budget.web.resource.BudgetNodeRoot;
 import com.softb.ipocket.categorization.model.SubCategory;
@@ -53,6 +52,7 @@ public class BillController extends AbstractRestController<Bill, Integer> {
      */
     @RequestMapping(method = RequestMethod.GET)
     public BudgetNodeRoot getCurrentBudget() {
+
         return budgetService.getCurrentBudget(getGroupId());
     }
 
@@ -172,9 +172,9 @@ public class BillController extends AbstractRestController<Bill, Integer> {
         return budgetService.getCurrentBudget(getGroupId());
     }
 
-    @RequestMapping(value = "/budget", method = RequestMethod.GET)
-    public BudgetNodeRootBill genBudget() {
-        return billService.genBudget( getGroupId() );
-    }
+//    @RequestMapping(value = "/budget", method = RequestMethod.GET)
+//    public BudgetNodeRootBill genBudget() {
+//        return billService.genBudget( getGroupId() );
+//    }
 }
 
