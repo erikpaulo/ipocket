@@ -1,6 +1,7 @@
 package com.softb.ipocket.bill.service;
 
 
+import com.softb.ipocket.account.model.Account;
 import com.softb.ipocket.account.service.AccountService;
 import com.softb.ipocket.bill.model.Bill;
 import com.softb.ipocket.bill.repository.BillRepository;
@@ -160,7 +161,7 @@ public class BudgetService {
         DateFormat formatter = new SimpleDateFormat( "MM/yyyy" );
 
         // Gets all entries registered for this user in this year.
-        Map<String, Map<String, Double>> mapSpent = accountService.getEntriesGroupedByCategory( startYear.getTime(), today.getTime(), groupId, AccountService.GROUP_ENTRIES_BY_MONTH, null );
+        Map<String, Map<String, Double>> mapSpent = accountService.getEntriesGroupedByCategory( startYear.getTime(), today.getTime(), groupId, AccountService.GROUP_ENTRIES_BY_MONTH, Arrays.asList(Account.Type.CKA, Account.Type.CCA) );
 
         // Get all bills registered until the end of the current year.
         // The future is considered through bills projected by the user.
