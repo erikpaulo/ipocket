@@ -3,10 +3,12 @@ package com.softb.ipocket.bill.service;
 
 import com.softb.ipocket.account.model.Account;
 import com.softb.ipocket.account.model.AccountEntry;
+import com.softb.ipocket.account.service.AccountService;
 import com.softb.ipocket.bill.model.Bill;
 import com.softb.ipocket.bill.repository.BillRepository;
 import com.softb.ipocket.bill.web.resource.AccountCashFlowResource;
 import com.softb.ipocket.bill.web.resource.CashFlowProjectionResource;
+import com.softb.ipocket.categorization.web.CategoryController;
 import com.softb.system.errorhandler.exception.BusinessException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,7 +26,7 @@ import java.util.Map.Entry;
 public class BillService {
 
 	public static final String CASHFLOW_GROUP_DAY = "Day";
-//    private static final String GROUP_ENTRIES_BY_MONTH = "MONTH";
+    private static final String GROUP_ENTRIES_BY_MONTH = "MONTH";
 
 //    @Autowired
 //    protected BaselineRepository baselineRepository;
@@ -32,11 +34,11 @@ public class BillService {
     @Autowired
     protected BillRepository billRepository;
 
-//    @Autowired
-//    protected AccountService accountService;
+    @Autowired
+    protected AccountService accountService;
 
-//    @Autowired
-//    private CategoryController categoryController;
+    @Autowired
+    private CategoryController categoryController;
 
 	/**
 	 * This service generates the impact the bills does into the accounts. Calculating the cashflow.
