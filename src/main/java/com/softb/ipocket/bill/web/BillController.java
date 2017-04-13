@@ -159,7 +159,7 @@ public class BillController extends AbstractRestController<Bill, Integer> {
         List<Account> accounts =  accountRepository.findAllByUser( getGroupId() );
         List<Bill> bills = billRepository.findAllUndoneByUser( getGroupId() );
 
-        return billService.genCachFlowProjection( start.getTime() , end.getTime(), BillService.CASHFLOW_GROUP_DAY,
+        return budgetService.genCachFlowProjection( start.getTime() , end.getTime(), budgetService.CASHFLOW_GROUP_DAY,
                                                   accounts, bills);
     }
 
