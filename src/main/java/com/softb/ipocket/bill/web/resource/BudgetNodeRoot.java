@@ -1,4 +1,4 @@
-package com.softb.ipocket.budget.web.resource;
+package com.softb.ipocket.bill.web.resource;
 
 import com.softb.ipocket.bill.model.Bill;
 import lombok.AllArgsConstructor;

@@ -13,14 +13,20 @@ import java.util.List;
  */
 @Data
 @AllArgsConstructor
-public class BudgetNodeCategoryBill extends BudgetNodeBill implements Serializable {
+public class BudgetNodeGroup extends BudgetNode implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private List<BudgetNodeSubCategoryBill> data;
+    private List<BudgetNodeCategory> data;
 
-    public BudgetNodeCategoryBill(){
+    public BudgetNodeGroup(){
+        super();
+        this.data = new ArrayList<>(  );
+    }
+
+    public BudgetNodeGroup (String name){
         super();
 
+        super.setName(name);
         this.data = new ArrayList<>(  );
     }
 }

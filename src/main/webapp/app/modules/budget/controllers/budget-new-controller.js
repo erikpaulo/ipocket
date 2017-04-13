@@ -1,7 +1,7 @@
 define(['./module'
         , '../../shared/services/utils-service',
-        , '../services/budget-entry-resources',
-        , '../services/budget-resources'],
+        , '../../bill/services/budget-entry-resources',
+        , '../../bill/services/budget-resources'],
 
         function (app) {
 

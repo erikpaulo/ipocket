@@ -8,7 +8,7 @@ import com.softb.ipocket.bill.repository.BillRepository;
 import com.softb.ipocket.bill.service.BillService;
 import com.softb.ipocket.bill.service.BudgetService;
 import com.softb.ipocket.bill.web.resource.CashFlowProjectionResource;
-import com.softb.ipocket.budget.web.resource.BudgetNodeRoot;
+import com.softb.ipocket.bill.web.resource.BudgetNodeRoot;
 import com.softb.ipocket.categorization.model.SubCategory;
 import com.softb.ipocket.categorization.repository.SubCategoryRepository;
 import com.softb.system.errorhandler.exception.BusinessException;

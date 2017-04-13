@@ -23,5 +23,5 @@ public class CashFlowProjectionResource implements Serializable {
     }
 
     private List<String> labels;
-    private List<AccountCashFlowResourceBill> series;
+    private List<AccountCashFlowResource> series;
 }

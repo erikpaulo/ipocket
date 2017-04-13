@@ -6,8 +6,7 @@ import com.softb.ipocket.account.repository.AccountRepository;
 import com.softb.ipocket.account.service.AccountService;
 import com.softb.ipocket.bill.model.Bill;
 import com.softb.ipocket.bill.repository.BillRepository;
-import com.softb.ipocket.bill.service.BillService;
-import com.softb.ipocket.bill.web.resource.BudgetNodeRootBill;
+import com.softb.ipocket.bill.service.BudgetService;
 import com.softb.ipocket.categorization.model.SubCategory;
 import com.softb.ipocket.dashboard.web.resource.BudgetTrackResource;
 import com.softb.ipocket.dashboard.web.resource.SavingResource;
@@ -32,7 +31,7 @@ public class DashboardService {
     private BillRepository billRepository;
 
     @Autowired
-    private BillService billService;
+    private BudgetService budgetService;
 
     @Autowired
     private InvestmentService investmentService;
@@ -157,26 +156,27 @@ public class DashboardService {
     }
 
     public BudgetTrackResource getBudgetTrackInfo(Integer groupId){
-        BudgetNodeRootBill budget = billService.genBudget( groupId );
-
-        Double totalPlanned = null;
-        Double totalSpent = null;
-
-        Calendar cal = Calendar.getInstance();
-
-        if (budget != null){
-            totalPlanned = 0.0;
-            Integer i=0;
-            for (Double planned: budget.getPerMonthPlanned()) {
-                if (i>cal.get( Calendar.MONTH )){
-                    break;
-                }
-                totalPlanned += planned;
-                i++;
-            }
-            totalSpent = budget.getTotalSpent();
-        }
-
-        return new BudgetTrackResource( totalPlanned, totalSpent );
+//        BudgetNodeRootBill budget = budgetService.genBudget( groupId );
+//
+//        Double totalPlanned = null;
+//        Double totalSpent = null;
+//
+//        Calendar cal = Calendar.getInstance();
+//
+//        if (budget != null){
+//            totalPlanned = 0.0;
+//            Integer i=0;
+//            for (Double planned: budget.getPerMonthPlanned()) {
+//                if (i>cal.get( Calendar.MONTH )){
+//                    break;
+//                }
+//                totalPlanned += planned;
+//                i++;
+//            }
+//            totalSpent = budget.getTotalSpent();
+//        }
+//
+//        return new BudgetTrackResource( totalPlanned, totalSpent );
+        return null;
     }
 }

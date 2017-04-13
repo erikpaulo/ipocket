@@ -14,7 +14,7 @@ import java.util.List;
  */
 @Data
 @AllArgsConstructor
-public class BudgetNodeBill implements Serializable {
+public class BudgetNode implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -25,13 +25,14 @@ public class BudgetNodeBill implements Serializable {
     private List<Double> perMonthPlanned;
     private Double totalSpent;
     private List<Double> perMonthSpent;
-//    private Double averageL3M;
+    private Double averageL3M;
     private Double deviation;
-//    private Boolean isPositive;
-//    private Double annualPlan;
-//    private Double monthPlan;
+    private Double deviationPercent;
+    private Boolean isPositive;
+    private Double annualPlan;
+    private Double monthPlan;
 
-    public BudgetNodeBill(){
+    public BudgetNode(){
         this.id = null;
         this.name = "";
 
@@ -40,11 +41,11 @@ public class BudgetNodeBill implements Serializable {
         this.perMonthPlanned = InitArray.initMonthValues();
         this.totalSpent = 0.0;
         this.perMonthSpent = InitArray.initMonthValues();
-//        this.averageL3M = 0.0;
+        this.averageL3M = 0.0;
         this.deviation = 0.0;
-//        this.isPositive = false;
-//        this.annualPlan = 0.0;
-//        this.monthPlan = 0.0;
+        this.isPositive = false;
+        this.annualPlan = 0.0;
+        this.monthPlan = 0.0;
     }
 
 }
