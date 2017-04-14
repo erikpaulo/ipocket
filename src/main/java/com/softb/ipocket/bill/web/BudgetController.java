@@ -24,7 +24,6 @@ import java.util.*;
 @RequestMapping("/api/budget")
 public class BudgetController extends AbstractRestController<Budget, Integer> {
 
-	public static final String BUDGET_OBJECT_NAME = "Budget";
 	public static final String BUDGET_ENTRY_OBJECT_NAME = "BudgetEntry";
 
     @Autowired
