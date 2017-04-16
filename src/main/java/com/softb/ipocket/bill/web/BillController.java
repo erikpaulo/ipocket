@@ -158,14 +158,5 @@ public class BillController extends AbstractRestController<Bill, Integer> {
         return budgetService.genCachFlowProjection( start.getTime() , end.getTime(), budgetService.CASHFLOW_GROUP_DAY,
                                                   accounts, bills);
     }
-
-    @RequestMapping(value = "/saveBaseline", method = RequestMethod.GET)
-    public BudgetNodeRoot saveBaseline() {
-        Integer year = Calendar.getInstance().get(Calendar.YEAR);
-        budgetService.resetBudget(year, getGroupId());
-        budgetService.saveBaseline(year, getGroupId() );
-
-        return budgetService.getCurrentBudget(getGroupId());
-    }
 }
 

@@ -30,6 +30,7 @@ import java.util.*;
 @Service
 public class BudgetService {
     public static final String CASHFLOW_GROUP_DAY = "Day";
+    private static final String INVESTMENT_CATEGORY_NAME = "Investimentos";
 
 	@Autowired
 	private BudgetRepository budgetRepository;
@@ -124,7 +125,7 @@ public class BudgetService {
                     setPerMonthPlanned(budgetSubCategory, entry);
                     setPerMonthPlanned(budgetCategory, entry);
                     setPerMonthPlanned(budgetGroup, entry);
-                    setPerMonthPlanned(budgetRoot, entry);
+                    if (!keyG.equals(INVESTMENT_CATEGORY_NAME)) setPerMonthPlanned(budgetRoot, entry);
 
                     if (entry.getSubCategory().getCategory().getType().equals(Category.Type.EXP)){
                         budgetRoot.setTotalExpense( budgetRoot.getTotalExpense() + budgetSubCategory.getTotalPlanned() );
@@ -254,7 +255,7 @@ public class BudgetService {
                 groupDeviation = group.getTotalPlanned() - group.getTotalSpent();
             group.setDeviation(groupDeviation);
             group.setDeviationPercent( group.getDeviation() / Math.abs(group.getTotalPlanned()) );
-            totalDeviation += groupDeviation;
+            totalDeviation += (group.getName().equals(INVESTMENT_CATEGORY_NAME) ? 0 : groupDeviation);
 
         }
         budget.setAverageL3M( totalBudgetSpent / 3 );
@@ -447,7 +448,7 @@ public class BudgetService {
         Map<String, BudgetEntry> mapEntry = new HashMap<>();
         for (Bill bill: bills) {
             // Do not consider investments as expenses. Investments are excluded from budget.
-            if ( !bill.getSubCategory().getCategory().getType().equals(Category.Type.INV) && (bill.getTransfer() == null) ){
+            if ( (bill.getTransfer() == null) ){
                 String catName = bill.getSubCategory().getFullName();
                 if ( mapEntry.get(catName) == null ) {
                     mapEntry.put(catName, new BudgetEntry());

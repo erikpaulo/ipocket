@@ -63,6 +63,14 @@ public class BudgetController extends AbstractRestController<Budget, Integer> {
         return budget;
     }
 
+    @RequestMapping(value = "/saveBaseline", method = RequestMethod.GET)
+    public BudgetNodeRoot saveBaseline() {
+        Integer year = Calendar.getInstance().get(Calendar.YEAR);
+        budgetService.resetBudget(year, getGroupId());
+        budgetService.saveBaseline(year, getGroupId() );
+
+        return budgetService.getCurrentBudget(getGroupId());
+    }
 
     @RequestMapping(value = "/entry", method = RequestMethod.POST)
     public BudgetNodeRoot create(@RequestBody BudgetEntry json) throws CloneNotSupportedException {
