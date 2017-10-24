@@ -63,7 +63,9 @@ public class InvestmentController extends AbstractRestController<Account, Intege
     public InvestmentStatementResource statement(@PathVariable Integer id) {
         Investment investment = investmentRepository.findOne( id, getGroupId() );
 
-        if (investment.getType().compareTo( Investment.Type.FRD ) == 0 || investment.getType().compareTo( Investment.Type.FRF ) == 0){
+        if (investment.getType().compareTo( Investment.Type.FRD ) == 0 
+        		|| investment.getType().compareTo( Investment.Type.FRF ) == 0 
+        		|| investment.getType().compareTo( Investment.Type.FMM ) == 0){
             return investmentService.getFRDStatement( investment, getGroupId() );
         }
 

@@ -151,7 +151,7 @@ public class InvestmentService {
 
         }
 
-        List amountUpdates = new ArrayList(  );
+        List<Double> amountUpdates = new ArrayList<Double>(  );
         List<Double> lastIndexByMonth = new ArrayList<>(  );
         DateFormat formatter = new SimpleDateFormat("MM/yyyy");
         String dateTemp = null;

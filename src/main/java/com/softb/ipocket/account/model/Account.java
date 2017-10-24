@@ -14,7 +14,7 @@ import java.util.List;
 
 /**
  * Classe que representa as Contas bancárias do usuário
- * @author Erik Lacerda
+ * @author Erik Lacerda 
  *
  */
 @AllArgsConstructor

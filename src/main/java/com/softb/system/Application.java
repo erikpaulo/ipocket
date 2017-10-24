@@ -22,7 +22,7 @@ import java.util.Arrays;
 
 /**
  * Startup spring boot
- * @author marcuslacerda
+ * @author marcuslacerda 
  *
  */
 @Configuration
