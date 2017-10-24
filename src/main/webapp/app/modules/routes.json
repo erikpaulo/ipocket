@@ -64,6 +64,19 @@
                          "modules/shared/services/constants",
                          "modules/shared/services/app-filters",
                          "modules/shared/services/utils-service"]
+      },
+      {
+        "id": "investmentEntry",
+        "name":"Multimercado",
+        "originalPath": "/investment/FMM/:investmentID/entries",
+        "templateUrl": "modules/investment/views/investment-frd-detail.html",
+        "visible": false,
+        "dependencies": ["modules/investment/controllers/investment-frd-controller",
+                         "modules/investment/services/investment-resources",
+                         "modules/investment/services/investment-entry-resources",
+                         "modules/shared/services/constants",
+                         "modules/shared/services/app-filters",
+                         "modules/shared/services/utils-service"]
       }
     ]
   },
